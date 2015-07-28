@@ -196,6 +196,9 @@
           "version": "2.4.1"
         }
       }
+    },
+    "react-tap-event-plugin": {
+      "version": "0.1.7"
     }
   }
 }

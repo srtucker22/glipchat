@@ -1,4 +1,5 @@
 {
   "react-router": "0.13.3",
+  "react-tap-event-plugin": "0.1.7",
   "externalify": "0.1.0"
 }
