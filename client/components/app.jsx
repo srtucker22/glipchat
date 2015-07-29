@@ -1,7 +1,7 @@
 const {RouteHandler} = Router;
 
 App = React.createClass({
-  render () {
+  render() {
     return (
       <div>
         <h1>App</h1>

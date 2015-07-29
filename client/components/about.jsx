@@ -1,5 +1,5 @@
 About = React.createClass({
-  render: function () {
+  render() {
     return <h2>About</h2>;
   }
 });

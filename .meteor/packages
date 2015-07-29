@@ -20,3 +20,7 @@ alanning:roles
 cosmos:browserify
 accounts-ui
 accounts-password
+meteorhacks:kadira
+accounts-facebook
+accounts-google
+service-configuration
