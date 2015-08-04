@@ -1,40 +1,42 @@
-var UserActions = () => {
-  var self = this;
+var UserActions = ()=> {
+  var self = {};
 
   _.extend(self, {
-    login(user, password){
+    login(user, password) {
       Dispatcher.dispatch({ actionType: 'USER_WANTS_TO_LOGIN'});
-      Meteor.loginWithPassword(payload.user, payload.password, (err)=>{
-        if(!err){
+      Meteor.loginWithPassword(payload.user, payload.password, (err)=> {
+        if (!err) {
           Dispatcher.dispatch({ actionType: 'LOGIN_SUCCESS'});
-        }else{
+        } else {
           Dispatcher.dispatch({ actionType: 'LOGIN_FAILED', error: err});
         }
       });
     },
-    loginWithFacebook(){
+
+    loginWithFacebook() {
       Dispatcher.dispatch({ actionType: 'USER_WANTS_TO_LOGIN'});
       Meteor.loginWithFacebook({
         requestPermissions: ['public_profile', 'email'],
-        loginStyle: 'redirect'
-      }, (err)=>{
-        if(!err){
+        loginStyle: 'redirect',
+      }, (err)=> {
+        if (!err) {
           Dispatcher.dispatch({ actionType: 'LOGIN_SUCCESS'});
-        }else{
+        } else {
           Dispatcher.dispatch({ actionType: 'LOGIN_FAILED', error: err});
         }
       });
     },
-    logout(){
+
+    logout() {
       Dispatcher.dispatch({ actionType: 'USER_WANTS_TO_LOGOUT'});
-      Meteor.logout((err)=>{
-        if(!err){
+      Meteor.logout((err)=> {
+        if (!err) {
           Dispatcher.dispatch({ actionType: 'LOGOUT_SUCCESS'});
-        }else{
+        } else {
           Dispatcher.dispatch({ actionType: 'LOGOUT_FAILED', error: err});
         }
       });
-    }
+    },
   });
 
   return self;

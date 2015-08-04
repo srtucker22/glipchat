@@ -1,16 +1,16 @@
 // first, remove configuration entry in case service is already configured
 ServiceConfiguration.configurations.remove({
-  service: {"$exists": true}
+  service: {$exists: true},
 });
 
 ServiceConfiguration.configurations.insert({
-  service: "facebook",
+  service: 'facebook',
   appId: Meteor.settings.facebook.appId,
-  secret: Meteor.settings.facebook.secret
+  secret: Meteor.settings.facebook.secret,
 });
 
 ServiceConfiguration.configurations.insert({
-  service: "google",
-  clientId: Meteor.settings.google.client_id,
-  secret: Meteor.settings.google.client_secret,
+  service: 'google',
+  clientId: Meteor.settings.google.clientId,
+  secret: Meteor.settings.google.clientSecret,
 });

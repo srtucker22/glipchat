@@ -5,5 +5,5 @@ NotFoundComponent = React.createClass({
         <p>Page not found</p>
       </div>
     );
-  }
+  },
 });

@@ -5,5 +5,5 @@ InboxComponent = React.createClass({
         <p>This is the inbox</p>
       </div>
     );
-  }
+  },
 });

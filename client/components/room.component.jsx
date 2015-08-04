@@ -7,20 +7,14 @@ Dependency.autorun(()=> {
   RoomActions = Dependency.get('RoomActions');
 });
 
-HomeComponent = React.createClass({
-  createRoom() {
-    RoomActions.createRoom();
-  },
-
+RoomComponent = React.createClass({
   render() {
     return (
       <div>
-        <HeaderComponent />
         <div>
-          <p>welcome to meteor react webrtc</p>
-          <button onClick={this.createRoom}>start room</button>
+          I am a room
         </div>
-        <FooterComponent />
+        <VideoComponent />
       </div>
     );
   },

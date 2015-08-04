@@ -154,6 +154,20 @@
         }
       }
     },
+    "peerjs": {
+      "version": "0.3.14",
+      "dependencies": {
+        "eventemitter3": {
+          "version": "0.1.6"
+        },
+        "js-binarypack": {
+          "version": "0.0.9"
+        },
+        "reliable": {
+          "version": "git+https://github.com/michelle/reliable.git#f09ba29d57a05beaa07990171f3fe7b746587aaa"
+        }
+      }
+    },
     "react": {
       "version": "0.13.3",
       "dependencies": {
@@ -188,6 +202,9 @@
     },
     "react-tap-event-plugin": {
       "version": "0.1.7"
+    },
+    "webrtc-adapter-test": {
+      "version": "0.2.1"
     }
   }
 }

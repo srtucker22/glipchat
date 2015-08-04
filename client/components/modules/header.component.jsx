@@ -1,48 +1,48 @@
 // Dependencies
-var UserStore   = null,
-    UserActions = null;
+var UserStore   = null;
+var UserActions = null;
 
-Dependency.autorun(function(){
+Dependency.autorun(()=> {
   UserStore   = Dependency.get('UserStore');
   UserActions = Dependency.get('UserActions');
 });
 
 LoginButtonComponent = React.createClass({
-  loginWithFacebook: function() {
+  loginWithFacebook() {
     UserActions.loginWithFacebook();
   },
 
-  render(){
+  render() {
     return (
       <button onClick={this.loginWithFacebook}>Login with Facebook</button>
     );
-  }
+  },
 });
 
 LogoutButtonComponent = React.createClass({
-  logout: function() {
+  logout() {
     UserActions.logout();
   },
 
-  render(){
+  render() {
     return (
       <button onClick={this.logout}>Logout</button>
     );
-  }
+  },
 });
 
-WelcomeComponent = React.createClass({
+HeaderComponent = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
     return {
-      currentUser: Meteor.user()
+      currentUser: Meteor.user(),
     };
   },
 
   render() {
     var loginButton;
-    if (!Meteor.loggingIn()){
+    if (!Meteor.loggingIn()) {
       if (Meteor.user()) {
         loginButton = <LogoutButtonComponent />;
       } else {
@@ -52,9 +52,9 @@ WelcomeComponent = React.createClass({
 
     return (
       <div>
-        <p>Welcome Page</p>
-        {loginButton}
+        <div>Header</div>
+        <div>{loginButton}</div>
       </div>
     );
-  }
+  },
 });

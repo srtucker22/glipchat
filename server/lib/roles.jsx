@@ -16,7 +16,7 @@ Meteor.methods({
 
     if (!loggedInUser ||
         !Roles.userIsInRole(loggedInUser, ['manage-users','admin'], group)) {
-      throw new Meteor.Error(403, "Access denied");
+      throw new Meteor.Error(403, 'Access denied');
     }
 
     Roles.setUserRoles(targetUser, roles, group);
@@ -37,7 +37,7 @@ Meteor.methods({
 
     if (!loggedInUser ||
         (!Roles.userIsInRole(loggedInUser, ['manage-users','admin'], group) && Meteor.userId() != targetUserId)) {
-      throw new Meteor.Error(403, "Access denied");
+      throw new Meteor.Error(403, 'Access denied');
     }
 
     // remove permissions for target group
@@ -45,17 +45,17 @@ Meteor.methods({
 
     // do other actions required when a user is removed...
     return Meteor.users.remove({_id: targetUserId});
-  }
+  },
 });
 
 // don't allow existing low level user to create new users other than themselves
-Accounts.validateNewUser( user => {
+Accounts.validateNewUser((user) => {
 
   let loggedInUser = this.userId;
 
   if (!loggedInUser || Roles.userIsInRole(loggedInUser, ['admin','manage-users'])) {
     return true;
   }
-  
-  throw new Meteor.Error(403, "Not authorized to create new users");
+
+  throw new Meteor.Error(403, 'Not authorized to create new users');
 });

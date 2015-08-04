@@ -3,32 +3,32 @@ var Schema = {};
 Schema.UserProfile = new SimpleSchema({
   name: {
     type: String,
-    label: "name",
+    label: 'name',
     regEx: /^[a-z0-9A-z . -]{3,30}$/,
-    optional: true
+    optional: true,
   },
   birthday: {
     type: Date,
-    optional: true
+    optional: true,
   },
   gender: {
     type: String,
     allowedValues: ['Male', 'Female'],
-    optional: true
+    optional: true,
   },
-  organization : {
+  organization: {
     type: String,
     regEx: /^[a-z0-9A-z . -]{3,30}$/,
-    optional: true
+    optional: true,
   },
   website: {
     type: String,
     regEx: SimpleSchema.RegEx.Url,
-    optional: true
+    optional: true,
   },
   bio: {
     type: String,
-    optional: true
+    optional: true,
   },
   updatedAt: {
     type: Date,
@@ -37,42 +37,45 @@ Schema.UserProfile = new SimpleSchema({
         return new Date();
       }
     },
+
     denyInsert: true,
-    optional: true
-  }
+    optional: true,
+  },
 });
 
 Schema.User = new SimpleSchema({
   username: {
     type: String,
     regEx: /^[a-z0-9A-Z_]{3,15}$/,
-    optional: true
+    optional: true,
   },
   emails: {
     type: [Object],
+
     // this must be optional if you also use other login services like facebook,
     // but if you use only accounts-password, then it can be required
-    optional: true
+    optional: true,
   },
-  "emails.$.address": {
+  'emails.$.address': {
     type: String,
-    regEx: SimpleSchema.RegEx.Email
+    regEx: SimpleSchema.RegEx.Email,
   },
-  "emails.$.verified": {
-    type: Boolean
+  'emails.$.verified': {
+    type: Boolean,
   },
   createdAt: {
-    type: Date
+    type: Date,
   },
   profile: {
     type: Schema.UserProfile,
-    optional: true
+    optional: true,
   },
   services: {
     type: Object,
     optional: true,
-    blackbox: true
+    blackbox: true,
   },
+
   // Add `roles` to your schema if you use the meteor-roles package.
   // Note that when using this package, you must also specify the
   // `Roles.GLOBAL_GROUP` group whenever you add a user to a role.
@@ -82,34 +85,34 @@ Schema.User = new SimpleSchema({
   roles: {
     type: Object,
     optional: true,
-    blackbox: true
-  }
+    blackbox: true,
+  },
 });
 
 Meteor.users.attachSchema(Schema.User);
 
 Meteor.users.allow({
   insert(userId, user, fields, modifier) {
-    if(userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])){
+    if (userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])) {
       return true;
-    }else{
+    } else {
       return false;
     }
   },
 
   remove(userId, user, fields, modifier) {
-    if(userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])){
+    if (userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])) {
       return true;
-    }else{
+    } else {
       return false;
     }
   },
 
   update(userId, user, fields, modifier) {
-    if(userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])){
+    if (userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])) {
       return true;
-    }else{
+    } else {
       return false;
     }
-  }
+  },
 });
