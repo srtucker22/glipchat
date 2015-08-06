@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "bowser": {
+      "version": "1.0.0"
+    },
     "externalify": {
       "version": "0.1.0",
       "dependencies": {
