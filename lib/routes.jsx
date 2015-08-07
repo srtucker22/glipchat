@@ -5,10 +5,8 @@ MainRouter = () => {
   let routes = {
     home:     '/',
     inbox:    '/inbox',
-    room:     '/room',
+    room:     '/room/:roomId',
   };
-
-  let privateRoutes = ['room']; // rooms that require authentication
 
   // Getters
   self.getRoute = (route) => {
@@ -16,20 +14,32 @@ MainRouter = () => {
   };
 
   // If user is not logged in, redirect to 'home'
-  self.checkLoggedInUser = () => {
-    let path = FlowRouter.current().path;
-    if (Meteor.loggingIn() || Meteor.user()) {
-      FlowRouter.go(path);
-    } else {
-      FlowRouter.go(self.getRoute('home'));
-    }
-  };
+  self.requireUser = () => {
+    return new Promise((resolve, reject)=> {
+      if (Meteor.user()) {
+        resolve(Meteor.user());
+      } else if (Meteor.loggingIn()) {
 
-  // Require authentication for all private routes
-  console.log(_.map(privateRoutes, route => self.getRoute(route).slice(1)));
-  FlowRouter.triggers.enter([self.checkLoggedInUser], {
-    only: ['room'],
-  });
+        // wait for loggingIn
+        Tracker.autorun((c)=> {
+          if (Meteor.loggingIn())
+            return;
+
+          // stop the tracker
+          c.stop();
+
+          if (Meteor.user()) {
+            resolve(Meteor.user());
+          } else {
+            reject(null);
+          };
+        });
+
+      } else {
+        reject(null);
+      }
+    });
+  };
 
   FlowRouter.route(self.getRoute('home'), {
     name: 'home',
@@ -51,8 +61,18 @@ MainRouter = () => {
 
   FlowRouter.route(self.getRoute('room'), {
     name: 'room',
-    action() {
-      Dispatcher.dispatch({ actionType: 'GOTO_ROOM' });
+
+    action(params) {
+      self.requireUser().then((user)=> {
+        Dispatcher.dispatch({
+          actionType: 'ENTER_ROOM',
+          roomId: params.roomId,
+        });
+      },
+
+      (err)=> {
+        FlowRouter.go('home');
+      });
     },
   });
 

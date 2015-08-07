@@ -11,7 +11,7 @@ var LayoutStore = () => {
         ReactLayout.render(MainComponent, {content: <InboxComponent />});
         break;
       case 'GOTO_ROOM':
-        ReactLayout.render(MainComponent, {content: <RoomComponent />});
+        ReactLayout.render(MainComponent, {content: <RoomComponent {...payload.params} />});
         break;
       case 'GOTO_NOT_FOUND':
         ReactLayout.render(MainComponent, {content: <NotFoundComponent />});

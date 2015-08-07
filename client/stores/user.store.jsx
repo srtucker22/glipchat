@@ -1,6 +1,6 @@
 // UserStore Creator
-var UserStore = () => {
-  var self = {};
+var UserStore = function() {
+  var _this = this;
 
   // UserStore Reactive Vars
   var userIsSigning = new ReactiveVar(false);
@@ -10,7 +10,7 @@ var UserStore = () => {
   var logoutError   = new ReactiveVar('');
 
   // Callbacks
-  self.on = {
+  _this.on = {
     userWantsToLogin() {
       userIsSigning.set(true);
       loginOrCreate.set('login');
@@ -53,7 +53,7 @@ var UserStore = () => {
   };
 
   // Getters
-  self.get = {
+  _this.get = {
     userIsSigning() {
       return userIsSigning.get();
     },
@@ -75,7 +75,7 @@ var UserStore = () => {
     },
   };
 
-  self.tokenId = Dispatcher.register((payload)=> {
+  _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
       case 'USER_WANTS_TO_LOGIN':
         self.on.userWantsToLogin();
@@ -110,7 +110,7 @@ var UserStore = () => {
     }
   });
 
-  return self;
+  return _this;
 };
 
 // Create the instance
