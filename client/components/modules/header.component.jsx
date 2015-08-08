@@ -36,14 +36,15 @@ HeaderComponent = React.createClass({
 
   getMeteorData() {
     return {
-      currentUser: Meteor.user(),
+      user: UserStore.user(),
+      loggingIn: UserStore.loggingIn(),
     };
   },
 
   render() {
     var loginButton;
-    if (!Meteor.loggingIn()) {
-      if (Meteor.user()) {
+    if (!UserStore.loggingIn()) {
+      if (UserStore.user()) {
         loginButton = <LogoutButtonComponent />;
       } else {
         loginButton = <LoginButtonComponent />;

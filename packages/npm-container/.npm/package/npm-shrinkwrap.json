@@ -203,6 +203,17 @@
         }
       }
     },
+    "react-router": {
+      "version": "0.13.3",
+      "dependencies": {
+        "object-assign": {
+          "version": "2.1.1"
+        },
+        "qs": {
+          "version": "2.4.1"
+        }
+      }
+    },
     "react-tap-event-plugin": {
       "version": "0.1.7"
     },

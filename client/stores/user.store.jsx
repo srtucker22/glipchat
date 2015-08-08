@@ -3,109 +3,123 @@ var UserStore = function() {
   var _this = this;
 
   // UserStore Reactive Vars
-  var userIsSigning = new ReactiveVar(false);
-  var loginOrCreate = new ReactiveVar('login');
-  var createError   = new ReactiveVar('');
-  var loginError    = new ReactiveVar('');
-  var logoutError   = new ReactiveVar('');
+  _this.user = Meteor.user;
+  _this.loggingIn = Meteor.loggingIn;
+
+  _this.createError   = new ReactiveVar('');
+  _this.loginError    = new ReactiveVar('');
+  _this.loginOrCreate = new ReactiveVar('login');
+  _this.logoutError   = new ReactiveVar('');
 
   // Callbacks
   _this.on = {
-    userWantsToLogin() {
-      userIsSigning.set(true);
-      loginOrCreate.set('login');
+    loginStart() {
+      _this.loginOrCreate.set('login');
+      _this.loginError.set('');
     },
 
-    userWantsToCreateAccount() {
-      userIsSigning.set(true);
-      loginOrCreate.set('create');
+    createStart() {
+      _this.loginOrCreate.set('create');
+      _this.createError.set('');
     },
 
-    userWantsToLogout() {
-      userIsSigning.set(false);
-    },
-
-    userCanceled() {
-      userIsSigning.set(false);
+    logoutStart() {
+      _this.logoutError.set('');
     },
 
     loginFailed(error) {
-      loginError.set(error);
+      _this.loginError.set(error);
     },
 
-    createAccountFailed(error) {
-      createError.set(error);
+    createFailed(error) {
+      _this.createError.set(error);
     },
 
-    loginOrCreateSuccess() {
-      loginError.set('');
-      createError.set('');
-      userIsSigning.set(false);
+    loginOrCreateSuccess(user) {
+      _this.loginError.set('');
+      _this.createError.set('');
     },
 
     logoutFailed(error) {
-      logoutError.set(error);
+      _this.logoutError.set(error);
     },
 
     logoutSuccess() {
-      logoutError.set('');
+      _this.logoutError.set('');
     },
   };
 
-  // Getters
-  _this.get = {
-    userIsSigning() {
-      return userIsSigning.get();
-    },
+  // If user is not logged in, redirect to 'home'
+  _this.requireUser = ()=> {
+    return new Promise((resolve, reject)=> {
+      if (Meteor.user()) {
+        resolve(Meteor.user());
+      } else if (Meteor.loggingIn()) {
 
-    loginOrCreate() {
-      return loginOrCreate.get();
-    },
+        // wait for loggingIn
+        Tracker.autorun((c)=> {
+          if (Meteor.loggingIn())
+            return;
 
-    loginError() {
-      return loginError.get();
-    },
+          // stop the tracker
+          c.stop();
 
-    createAccountError() {
-      return createError.get();
-    },
+          if (Meteor.user()) {
+            resolve(Meteor.user());
+          } else {
+            reject({status: 401, description: 'UNAUTHORIZED'});
+          };
+        });
 
-    logoutError() {
-      return logoutError.get();
-    },
+      } else {
+        reject({status: 401, description: 'UNAUTHORIZED'});
+      }
+    });
   };
 
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
-      case 'USER_WANTS_TO_LOGIN':
-        self.on.userWantsToLogin();
+      case 'USER_LOGIN_PASSWORD':
+        _this.on.loginStart();
+        Meteor.loginWithPassword(payload.user, payload.password, (err)=> {
+          if (!err) {
+            _this.on.loginOrCreateSuccess();
+          } else {
+            _this.on.loginFailed(err);
+          }
+        });
+
         break;
-      case 'USER_WANTS_TO_CREATE_ACCOUNT':
-        self.on.userWantsToCreateAccount();
+
+      case 'USER_LOGIN_FACEBOOK':
+        _this.on.loginStart();
+        Meteor.loginWithFacebook({
+          requestPermissions: ['public_profile', 'email'],
+          loginStyle: 'redirect',
+        }, (err)=> {
+          if (!err) {
+            _this.on.loginOrCreateSuccess();
+          } else {
+            _this.on.loginFailed(err);
+          }
+        });
+
         break;
-      case 'USER_WANTS_TO_LOGOUT':
-        self.on.userWantsToLogout();
+
+      case 'USER_CREATE':
+        _this.on.createStart();
         break;
-      case 'USER_CANCELED':
-        self.on.userCanceled();
-        break;
-      case 'CREATE_ACCOUNT_FAILED':
-        self.on.createAccountFailed(payload.error);
-        break;
-      case 'LOGIN_FAILED':
-        self.on.loginFailed(payload.error);
-        break;
-      case 'LOGIN_SUCCESS':
-        self.on.loginOrCreateSuccess();
-        break;
-      case 'CREATE_ACCOUNT_SUCCEED':
-        self.on.loginOrCreateSuccess();
-        break;
-      case 'LOGOUT_FAILED':
-        self.on.logoutFailed(payload.error);
-        break;
-      case 'LOGOUT_SUCCESS':
-        self.on.logoutSuccess();
+
+      case 'USER_LOGOUT':
+        _this.on.logoutStart();
+        Meteor.logout((err)=> {
+          if (!err) {
+            _this.on.logoutSuccess();
+          } else {
+            _this.on.logoutFailed(err);
+          }
+        });
+
         break;
     }
   });

@@ -1,45 +1,21 @@
-var UserActions = ()=> {
-  var self = {};
+var UserActions = function() {
+  var _this = this;
 
-  _.extend(self, {
+  _.extend(_this, {
     login(user, password) {
-      Dispatcher.dispatch({ actionType: 'USER_WANTS_TO_LOGIN'});
-      Meteor.loginWithPassword(payload.user, payload.password, (err)=> {
-        if (!err) {
-          Dispatcher.dispatch({ actionType: 'LOGIN_SUCCESS'});
-        } else {
-          Dispatcher.dispatch({ actionType: 'LOGIN_FAILED', error: err});
-        }
-      });
+      Dispatcher.dispatch({ actionType: 'USER_LOGIN_PASSWORD'});
     },
 
     loginWithFacebook() {
-      Dispatcher.dispatch({ actionType: 'USER_WANTS_TO_LOGIN'});
-      Meteor.loginWithFacebook({
-        requestPermissions: ['public_profile', 'email'],
-        loginStyle: 'redirect',
-      }, (err)=> {
-        if (!err) {
-          Dispatcher.dispatch({ actionType: 'LOGIN_SUCCESS'});
-        } else {
-          Dispatcher.dispatch({ actionType: 'LOGIN_FAILED', error: err});
-        }
-      });
+      Dispatcher.dispatch({ actionType: 'USER_LOGIN_FACEBOOK'});
     },
 
     logout() {
-      Dispatcher.dispatch({ actionType: 'USER_WANTS_TO_LOGOUT'});
-      Meteor.logout((err)=> {
-        if (!err) {
-          Dispatcher.dispatch({ actionType: 'LOGOUT_SUCCESS'});
-        } else {
-          Dispatcher.dispatch({ actionType: 'LOGOUT_FAILED', error: err});
-        }
-      });
+      Dispatcher.dispatch({ actionType: 'USER_LOGOUT'});
     },
   });
 
-  return self;
+  return _this;
 };
 
 Dependency.add('UserActions', new UserActions());

@@ -1,6 +1,9 @@
 // Dependencies
 var RoomStore   = null;
 var RoomActions = null;
+var {
+  Navigation
+} = Router;
 
 Dependency.autorun(()=> {
   RoomStore   = Dependency.get('RoomStore');
@@ -8,6 +11,20 @@ Dependency.autorun(()=> {
 });
 
 HomeComponent = React.createClass({
+  mixins: [ReactMeteorData, Navigation],
+
+  getMeteorData() {
+    return {
+      currentRoom: RoomStore.currentRoom.get(),
+    };
+  },
+
+  componentWillUpdate(nextProps, nextState) {
+    if (this.data.currentRoom) {
+      this.transitionTo('room', {roomId: this.data.currentRoom._id});
+    }
+  },
+
   createRoom() {
     RoomActions.createRoom();
   },

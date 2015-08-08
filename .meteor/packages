@@ -25,9 +25,6 @@ accounts-facebook
 accounts-google
 service-configuration
 meteorflux:dispatcher
-kadira:flow-router
-kadira:react-layout
-meteorhacks:fast-render
 reactive-var
 meteorflux:reactive-dependency
 fourseven:scss
