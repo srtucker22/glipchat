@@ -16,7 +16,6 @@ var RoomStore = function() {
 
   // auto-update the subscription to the room and store the room
   Tracker.autorun(function(c) {
-    _this.gettingCurrentRoom.set(true);
     Meteor.subscribe('room', _this.currentRoomId.get(), {
       onReady() {
         _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
@@ -36,6 +35,7 @@ var RoomStore = function() {
           if (err) {
             _this.createError.set(err);
           } else {
+            _this.gettingCurrentRoom.set(true);
             _this.currentRoomId.set(id);
           }
         });
@@ -45,15 +45,17 @@ var RoomStore = function() {
     },
 
     enterRoom(roomId) {
-      _this.enterError.set('');
-      _this.currentRoomId.set(roomId);
+      if (_this.currentRoomId.get() !== roomId) {
+        _this.gettingCurrentRoom.set(true);
+        _this.currentRoomId.set(roomId);
+      }
     },
   };
 
   _this.requireRoom = (roomId)=> {
     return new Promise((resolve, reject)=> {
       Tracker.autorun(function(c) {
-        if (_this.gettingCurrentRoom.get())
+        if (_this.gettingCurrentRoom.get() || !_this.currentRoomId.get())
           return;
 
         // stop the tracker

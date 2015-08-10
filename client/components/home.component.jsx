@@ -30,9 +30,11 @@ HomeComponent = React.createClass({
   },
 
   render() {
+    var { ...other } = this.props;
+
     return (
       <div>
-        <HeaderComponent />
+        <HeaderComponent appName={this.props.appName}/>
         <div>
           <p>welcome to meteor react webrtc</p>
           <button onClick={this.createRoom}>start room</button>

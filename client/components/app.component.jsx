@@ -4,7 +4,7 @@ AppComponent = React.createClass({
   render() {
     return (
       <div>
-        <RouteHandler/>
+        <RouteHandler appName='Meteor React WebRTC'/>
       </div>
     );
   },

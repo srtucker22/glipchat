@@ -14,6 +14,12 @@ RoomComponent = React.createClass({
     // async transition requirements
     willTransitionTo: function(transition, params, query, callback) {
       UserStore.requireUser().then((user)=> {
+
+        Dispatcher.dispatch({
+          actionType: 'ENTER_ROOM',
+          roomId: params.roomId,
+        });
+
         RoomStore.requireRoom(params.roomId).then((room)=> {
           callback();
         })
