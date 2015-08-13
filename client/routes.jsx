@@ -21,7 +21,7 @@ Meteor.startup(function() {
 });
 
 // MainRouter = () => {
-//   var self = {};
+//   var _this = {};
 //
 //   // Routes
 //   let routes = {
@@ -31,12 +31,12 @@ Meteor.startup(function() {
 //   };
 //
 //   // Getters
-//   self.getRoute = (route) => {
+//   _this.getRoute = (route) => {
 //     return routes[route];
 //   };
 //
 //   // If user is not logged in, redirect to 'home'
-//   self.requireUser = () => {
+//   _this.requireUser = () => {
 //     return new Promise((resolve, reject)=> {
 //       if (Meteor.user()) {
 //         resolve(Meteor.user());
@@ -63,14 +63,14 @@ Meteor.startup(function() {
 //     });
 //   };
 //
-//   FlowRouter.route(self.getRoute('home'), {
+//   FlowRouter.route(_this.getRoute('home'), {
 //     name: 'home',
 //     action() {
 //       Dispatcher.dispatch({ actionType: 'GOTO_HOME' });
 //     },
 //   });
 //
-//   FlowRouter.route(self.getRoute('inbox'), {
+//   FlowRouter.route(_this.getRoute('inbox'), {
 //     name: 'inbox',
 //     triggersEnter: [(context) => {
 //       console.log('triggersEnter');
@@ -81,11 +81,11 @@ Meteor.startup(function() {
 //     },
 //   });
 //
-//   FlowRouter.route(self.getRoute('room'), {
+//   FlowRouter.route(_this.getRoute('room'), {
 //     name: 'room',
 //
 //     action(params) {
-//       self.requireUser().then((user)=> {
+//       _this.requireUser().then((user)=> {
 //         Dispatcher.dispatch({
 //           actionType: 'ENTER_ROOM',
 //           roomId: params.roomId,
@@ -104,7 +104,7 @@ Meteor.startup(function() {
 //     },
 //   };
 //
-//   return self;
+//   return _this;
 // };
 //
 // var Router = new MainRouter();

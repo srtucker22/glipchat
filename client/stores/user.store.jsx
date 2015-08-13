@@ -95,7 +95,22 @@ var UserStore = function() {
         _this.on.loginStart();
         Meteor.loginWithFacebook({
           requestPermissions: ['public_profile', 'email'],
-          loginStyle: 'redirect',
+          loginStyle: Browser.mobile ? 'redirect' : 'popup',
+        }, (err)=> {
+          if (!err) {
+            _this.on.loginOrCreateSuccess();
+          } else {
+            _this.on.loginFailed(err);
+          }
+        });
+
+        break;
+
+      case 'USER_LOGIN_GOOGLE':
+        _this.on.loginStart();
+        Meteor.loginWithGoogle({
+          requestPermissions: ['https://www.googleapis.com/auth/contacts.readonly'],
+          loginStyle: Browser.mobile ? 'redirect' : 'popup',
         }, (err)=> {
           if (!err) {
             _this.on.loginOrCreateSuccess();

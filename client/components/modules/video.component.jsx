@@ -1,7 +1,7 @@
 VideoComponent = React.createClass({
   render() {
     return (
-      <video></video>
+      <video src={URL.createObjectURL(this.props.src)} autoPlay></video>
     );
   },
 });

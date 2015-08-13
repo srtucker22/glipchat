@@ -8,7 +8,7 @@ Schema.Rooms = new SimpleSchema({
   },
 
   // list of userIds currently connected to room
-  guests: {
+  connected: {
     type: [String],
     optional: true,
   },

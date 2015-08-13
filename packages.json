@@ -2,7 +2,6 @@
   "react-tap-event-plugin": "0.1.7",
   "react-router": "0.13.3",
   "externalify": "0.1.0",
-  "peerjs": "0.3.14",
   "webrtc-adapter-test": "0.2.1",
   "bowser": "1.0.0"
 }

@@ -10,6 +10,10 @@ var UserActions = function() {
       Dispatcher.dispatch({ actionType: 'USER_LOGIN_FACEBOOK'});
     },
 
+    loginWithGoogle() {
+      Dispatcher.dispatch({ actionType: 'USER_LOGIN_GOOGLE'});
+    },
+
     logout() {
       Dispatcher.dispatch({ actionType: 'USER_LOGOUT'});
     },

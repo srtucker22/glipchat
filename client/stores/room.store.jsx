@@ -1,7 +1,9 @@
 // Dependencies
+var RTCStore = null;
 var UserStore = null;
 
 Dependency.autorun(()=> {
+  RTCStore = Dependency.get('RTCStore');
   UserStore = Dependency.get('UserStore');
 });
 
@@ -18,6 +20,7 @@ var RoomStore = function() {
   Tracker.autorun(function(c) {
     Meteor.subscribe('room', _this.currentRoomId.get(), {
       onReady() {
+        // set the current room object
         _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
         _this.gettingCurrentRoom.set(false);
       },
@@ -25,12 +28,15 @@ var RoomStore = function() {
   });
 
   // Callbacks
-  _this.on = {
+  _.extend(_this, {
     createRoom() {
       _this.creatingRoom.set(true);
       _this.createError.set('');
-      if (UserStore.user()) {
-        Rooms.insert({ owner: UserStore.user()._id }, (err, id)=> {
+      UserStore.requireUser().then((user)=> {
+        Rooms.insert({
+          owner: user._id,
+          connected: [user._id],
+        }, (err, id)=> {
           _this.creatingRoom.set(false);
           if (err) {
             _this.createError.set(err);
@@ -39,44 +45,55 @@ var RoomStore = function() {
             _this.currentRoomId.set(id);
           }
         });
-      } else {
+      },
+
+      (err)=> {
+        _this.creatingRoom.set(false);
         _this.createError.set({status: 403, description: 'UNAUTHORIZED'});
-      }
-    },
-
-    enterRoom(roomId) {
-      if (_this.currentRoomId.get() !== roomId) {
-        _this.gettingCurrentRoom.set(true);
-        _this.currentRoomId.set(roomId);
-      }
-    },
-  };
-
-  _this.requireRoom = (roomId)=> {
-    return new Promise((resolve, reject)=> {
-      Tracker.autorun(function(c) {
-        if (_this.gettingCurrentRoom.get() || !_this.currentRoomId.get())
-          return;
-
-        // stop the tracker
-        c.stop();
-
-        if (_this.currentRoom.get() && _this.currentRoom.get()._id === roomId) {
-          resolve(_this.currentRoom.get());
-        } else {
-          reject({status: 404, description: 'ROOM_NOT_FOUND'});
-        };
       });
-    });
-  };
+    },
+
+    joinRoom(r) {  // join an existing room
+      if (_this.currentRoomId.get() !== r) {
+        _this.gettingCurrentRoom.set(true);
+        _this.currentRoomId.set(r);
+      }
+    },
+
+    joinRoomStream(r){
+      RTCStore.joinRoomStream(r);
+    },
+
+    // Promise for requested room to load
+    requireRoom(r) {
+      return new Promise((resolve, reject)=> {
+        Tracker.autorun(function(c) {
+          if (_this.gettingCurrentRoom.get() || !_this.currentRoomId.get())
+            return;
+
+          // stop the tracker
+          c.stop();
+
+          if (_this.currentRoom.get() && _this.currentRoom.get()._id === r) {
+            resolve(_this.currentRoom.get());
+          } else {
+            reject({status: 404, description: 'ROOM_NOT_FOUND'});
+          };
+        });
+      });
+    },
+  });
 
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
       case 'CREATE_ROOM':
-        _this.on.createRoom();
+        _this.createRoom();
         break;
-      case 'ENTER_ROOM':
-        _this.on.enterRoom(payload.roomId);
+      case 'JOIN_ROOM':
+        _this.joinRoom(payload.roomId);
+        break;
+      case 'JOIN_ROOM_STREAM':
+        _this.joinRoomStream(payload.roomId);
         break;
     }
   });

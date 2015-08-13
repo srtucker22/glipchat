@@ -1,10 +1,44 @@
 // Dependencies
+var {
+  Link
+} = Router;
 var UserStore   = null;
 var UserActions = null;
 
 Dependency.autorun(()=> {
   UserStore   = Dependency.get('UserStore');
   UserActions = Dependency.get('UserActions');
+});
+
+NotificationDropdownComponent = React.createClass({
+  messages: [
+    {id: '0', text: 'test1'},
+    {id: '1', text: 'test2'},
+  ],
+
+  render() {
+    return (
+      <div className='cell dropdown notification-dropdown text-center'>
+        <a href='javascript:void(0)' data-target='#' className='dropdown-toggle' data-toggle='dropdown'><i className={this.messages.length ? 'mdi-social-notifications' : 'mdi-social-notifications-none'}></i></a>
+        <ul className='dropdown-menu'>
+          {this.messages.length ? _.map(this.messages, (message)=> {
+            return (
+              <li key={message.id}>
+                <a href='javascript:void(0)'>{message.text}</a>
+              </li>
+            );
+          }) :
+
+            <li>
+                <a className='text-center'><i className='mdi-content-inbox'></i>
+                <p>No notifications</p></a>
+            </li>
+          }
+        </ul>
+      </div>
+
+    );
+  },
 });
 
 LoginButtonComponent = React.createClass({
@@ -14,19 +48,40 @@ LoginButtonComponent = React.createClass({
 
   render() {
     return (
-      <a href='javascript:void(0)' onClick={this.loginWithFacebook}>Login with Facebook</a>
+      <div className='cell'><a href='javascript:void(0)' onClick={this.loginWithFacebook}>Login with Facebook</a></div>
     );
   },
 });
 
-LogoutButtonComponent = React.createClass({
+GoogleLoginButtonComponent = React.createClass({
+  loginWithGoogle() {
+    UserActions.loginWithGoogle();
+  },
+
+  render() {
+    return (
+      <div className='cell'><a href='javascript:void(0)' onClick={this.loginWithGoogle}>Login with Google</a></div>
+    );
+  },
+});
+
+ProfileDropdownComponent = React.createClass({
   logout() {
     UserActions.logout();
   },
 
   render() {
+    var user = UserStore.user();
     return (
-      <a href='javascript:void(0)' onClick={this.logout}>Logout</a>
+      <div className='cell dropdown profile-dropdown'>
+        {user.services.facebook ? <img className='dropdown-toggle img-circle' data-toggle='dropdown' data-target='#' src={'https://graph.facebook.com/' + user.services.facebook.id + '/picture'} /> : <div className='dropdown-toggle'>{user.profile.name}</div>}
+        <ul className='dropdown-menu'>
+          <li className='dropdown-header'>{user.profile.name}</li>
+          {user.services.facebook ? <li className='dropdown-header'>{user.services.facebook.email}</li> : '' }
+          <li className='divider'></li>
+          <li className='signout'><div href='javascript:void(0)' className='btn btn-default' onClick={this.logout}>Sign out</div></li>
+        </ul>
+      </div>
     );
   },
 });
@@ -47,38 +102,21 @@ HeaderComponent = React.createClass({
     var loginButton;
     if (!UserStore.loggingIn()) {
       if (UserStore.user()) {
-        loginButton = <LogoutButtonComponent />;
+        loginButton = <ProfileDropdownComponent />;
       } else {
         loginButton = <LoginButtonComponent />;
       }
     }
 
     return (
-      <div className='navbar navbar-default'>
-        <div className='navbar-header'>
-            <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='.navbar-responsive-collapse'>
-              <span className='icon-bar'></span>
-              <span className='icon-bar'></span>
-              <span className='icon-bar'></span>
-            </button>
-            <a className='navbar-brand' href='javascript:void(0)'>{this.props.appName}</a>
+      <header className='table shadow-z-1'>
+        <div className='cell'>
+          <Link className='brand' to='home'>{this.props.appName}</Link>
         </div>
-        <div className='navbar-collapse collapse navbar-responsive-collapse'>
-          <ul className='nav navbar-nav navbar-right'>
-            <li>{loginButton}</li>
-            <li className='dropdown'>
-              <a href='bootstrap-elements.html' data-target='#' className='dropdown-toggle' data-toggle='dropdown'>Dropdown <b className='caret'></b></a>
-              <ul className='dropdown-menu'>
-                <li><a href='javascript:void(0)'>Action</a></li>
-                <li><a href='javascript:void(0)'>Another action</a></li>
-                <li><a href='javascript:void(0)'>Something else here</a></li>
-                <li className='divider'></li>
-                <li><a href='javascript:void(0)'>Separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
+        {UserStore.user() ? <NotificationDropdownComponent /> : ''}
+        {loginButton}
+        {UserStore.user() ? '' : <GoogleLoginButtonComponent />}
+      </header>
     );
   },
 });

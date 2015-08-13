@@ -29,3 +29,4 @@ reactive-var
 meteorflux:reactive-dependency
 fourseven:scss
 fezvrasta:bootstrap-material-design
+lepozepo:streams

@@ -1,0 +1,87 @@
+$footerHeight: 60px;
+$headerHeight: 60px;
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  &> div {
+    height: 100%;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+header {
+  background-color: white;
+  height: $headerHeight;
+  width: 100% !important;
+
+  .brand {
+    font-weight: bold;
+    padding-left: 10px;
+  }
+
+  .notification-dropdown, .profile-dropdown {
+    width: 60px;
+    .dropdown-menu {
+      left: auto;
+      right: 0;
+
+      .btn {
+        margin: 0;
+        padding: 15px;
+        width: 100%;
+      }
+    }
+  }
+
+  .signout {
+    padding: 5px 10px;
+  }
+}
+
+footer {
+  height: $footerHeight;
+  width: 100%;
+
+  &.table {
+    width: 100%;
+  }
+}
+
+#page-home {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto;
+  margin-bottom: -($footerHeight);
+  /* Pad bottom by footer height */
+  padding: 0 0 $footerHeight;
+
+  .center.btn {
+    .cell:first-of-type {
+      padding-right: 10px;
+      text-align: left;
+    }
+  }
+}
+
+.table {
+  display: table;
+  margin: 0;
+  width: initial;
+  .cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
+.center {
+  margin-right: auto;
+  margin-left: auto;
+}

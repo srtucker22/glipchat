@@ -1,0 +1,10 @@
+{
+  "sourceMap": false,
+  "enableAutoprefixer": true,
+  "autoprefixerOptions": {
+    "browsers": ["last 20 versions"],
+    "cascade": false
+  },
+  "useIndex" : true,
+  "indexFilePath" : "client/scss/main.scss"
+}

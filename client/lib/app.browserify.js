@@ -1,4 +1,5 @@
-injectTapEventPlugin = require('react-tap-event-plugin');
-browser = require('bowser');
+Browser = require('bowser');
 Router = require('react-router');
-injectTapEventPlugin();
+
+require('webrtc-adapter-test');
+require('react-tap-event-plugin')();
