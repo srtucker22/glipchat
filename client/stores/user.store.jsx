@@ -77,6 +77,11 @@ var UserStore = function() {
     });
   };
 
+  // is the user a guest user
+  _this.isGuest = ()=> {
+    return Meteor.user() && Meteor.user().username && Meteor.user().username.startsWith('guest-#');
+  }
+
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
       case 'USER_LOGIN_PASSWORD':

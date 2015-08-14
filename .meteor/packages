@@ -28,5 +28,6 @@ meteorflux:dispatcher
 reactive-var
 meteorflux:reactive-dependency
 fourseven:scss
-fezvrasta:bootstrap-material-design
 lepozepo:streams
+artwells:accounts-guest
+twbs:bootstrap

@@ -11,37 +11,19 @@ body {
     height: 100%;
   }
 
-  a {
+  a, a:hover {
     text-decoration: none;
   }
 }
 
 header {
-  background-color: white;
-  height: $headerHeight;
-  width: 100% !important;
-
-  .brand {
-    font-weight: bold;
-    padding-left: 10px;
+  .icon {
+    color: white !important;
   }
 
-  .notification-dropdown, .profile-dropdown {
-    width: 60px;
-    .dropdown-menu {
-      left: auto;
-      right: 0;
-
-      .btn {
-        margin: 0;
-        padding: 15px;
-        width: 100%;
-      }
-    }
-  }
-
-  .signout {
-    padding: 5px 10px;
+  .dropdown-menu {
+    left: inherit;
+    right: 0;
   }
 }
 
@@ -62,13 +44,6 @@ footer {
   margin-bottom: -($footerHeight);
   /* Pad bottom by footer height */
   padding: 0 0 $footerHeight;
-
-  .center.btn {
-    .cell:first-of-type {
-      padding-right: 10px;
-      text-align: left;
-    }
-  }
 }
 
 .table {

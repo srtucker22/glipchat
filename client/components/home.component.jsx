@@ -1,9 +1,9 @@
 // Dependencies
 var RoomStore   = null;
 var RoomActions = null;
-var {
-  Navigation
-} = Router;
+var { Navigation } = Router;
+var { RaisedButton, FontIcon } = MUI;
+var ThemeManager = new MUI.Styles.ThemeManager();
 
 Dependency.autorun(()=> {
   RoomStore   = Dependency.get('RoomStore');
@@ -12,6 +12,16 @@ Dependency.autorun(()=> {
 
 HomeComponent = React.createClass({
   mixins: [ReactMeteorData, Navigation],
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    };
+  },
 
   getMeteorData() {
     return {
@@ -40,10 +50,7 @@ HomeComponent = React.createClass({
             <div className='col-xs-12 text-center'>
               <h1>Welcome to {this.props.appName}</h1>
               <br />
-              <div className='center table btn btn-primary btn-raised' onClick={this.createRoom}>
-                <div className='cell'><i className='mdi-av-videocam'></i></div>
-                <div className='cell'> Start video call</div>
-              </div>
+              <RaisedButton onClick={this.createRoom} label='Start video call' primary={true}/>
             </div>
           </div>
         </div>

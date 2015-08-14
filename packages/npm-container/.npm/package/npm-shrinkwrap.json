@@ -157,6 +157,17 @@
         }
       }
     },
+    "material-ui": {
+      "version": "0.10.4",
+      "dependencies": {
+        "classnames": {
+          "version": "1.2.2"
+        },
+        "react-draggable2": {
+          "version": "0.5.1"
+        }
+      }
+    },
     "react": {
       "version": "0.13.3",
       "dependencies": {

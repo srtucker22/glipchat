@@ -3,5 +3,6 @@
   "react-router": "0.13.3",
   "externalify": "0.1.0",
   "webrtc-adapter-test": "0.2.1",
-  "bowser": "1.0.0"
+  "bowser": "1.0.0",
+  "material-ui": "0.10.4"
 }
