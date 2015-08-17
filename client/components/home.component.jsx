@@ -2,7 +2,7 @@
 var RoomStore   = null;
 var RoomActions = null;
 var { Navigation } = Router;
-var { RaisedButton, FontIcon } = MUI;
+var { FontIcon, RaisedButton } = MUI;
 var ThemeManager = new MUI.Styles.ThemeManager();
 
 Dependency.autorun(()=> {

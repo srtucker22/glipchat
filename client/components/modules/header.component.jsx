@@ -10,6 +10,7 @@ var {
   FontIcon,
   IconButton,
   IconMenu,
+  LeftNav,
   Menu,
   MenuItem
 } = MUI;
@@ -97,6 +98,10 @@ HeaderComponent = React.createClass({
     UserActions.loginWithFacebook();
   },
 
+  toggleNav() {
+    this.refs.leftNav.toggle();
+  },
+
   render() {
     var { ...other } = this.props;
 
@@ -112,6 +117,12 @@ HeaderComponent = React.createClass({
       id: 2, text: 'this is some more text',
     }];
     this.data.messages = testMessages;
+
+    var menuItems = [
+      { route: 'get-started', text: 'Get Started' },
+      { route: 'customization', text: 'Customization' },
+      { route: 'components', text: 'Components' },
+    ];
 
     if (!UserStore.loggingIn()) {
       if (this.data.user && !UserStore.isGuest()) {
@@ -136,7 +147,8 @@ HeaderComponent = React.createClass({
 
     return (
       <header>
-        <AppBar title={this.props.appName} iconElementRight={loginButton? loginButton: profileButtons} />
+        <AppBar title={this.props.appName} iconElementRight={loginButton? loginButton: profileButtons} onLeftIconButtonTouchTap={this.toggleNav}/>
+        <LeftNav ref='leftNav' docked={false} menuItems={menuItems} />
       </header>
     );
   },

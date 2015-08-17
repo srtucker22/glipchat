@@ -1,4 +1,6 @@
 // Dependencies
+var { Colors } = MUI;
+
 var RoomActions = null;
 var RoomStore   = null;
 var RTCActions  = null;
@@ -23,8 +25,11 @@ RoomComponent = React.createClass({
         RoomActions.joinRoom(params.roomId);
 
         RoomStore.requireRoom(params.roomId).then((room)=> {
-          RTCActions.getLocalStream();
-          RoomActions.joinRoomStream(params.roomId);
+          this.room = room;
+          if (!RTCStore.isDuplicateConnection()) {
+            RTCActions.getLocalStream();
+            RoomActions.joinRoomStream(params.roomId);
+          }
           callback();
         })
 
@@ -43,14 +48,8 @@ RoomComponent = React.createClass({
     },
 
     willTransitionFrom: function(transition, component) {
-      console.log('leaving');
-
-      // if (component.formHasUnsavedData()) {
-      //   if (!confirm('You have unsaved information,'+
-      //                'are you sure you want to leave this page?')) {
-      //     transition.abort();
-      //   }
-      // }
+      RTCActions.disconnect();
+      RoomActions.leaveRoom();
     },
   },
 
@@ -61,19 +60,18 @@ RoomComponent = React.createClass({
   getMeteorData() {
     return {
       peers: RTCStore.peers.get(),
+      localStreamError: RTCStore.localStreamError.get(),
       stream: RTCStore.localStream.get(),
-      streamError: RTCStore.localStreamError.get(),
+      streamError: RTCStore.streamError.get(),
     };
   },
 
   render() {
     return (
-      <div>
-        <div>
-          I am room {RoomStore.currentRoomId.get()}
-        </div>
+      <div className='bg-grey-900'>
+        {!!this.data.localStreamError && <div>{this.data.localStreamError.description}</div>}
         {!!this.data.streamError && <div>{this.data.streamError.description}</div>}
-        {!!this.data.stream && <VideoComponent src={this.data.stream}/>}
+        {!!this.data.stream && <VideoComponent className='full-screen' src={this.data.stream} muted={true}/>}
         {_.map(this.data.peers, (val, key)=>{
           return (
             <VideoComponent key={key} src={val}/>

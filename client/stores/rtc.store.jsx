@@ -17,8 +17,8 @@ var RTCStore = function() {
 
   _this.gettingLocalStream = ReactiveVar(false);
   _this.localStream = ReactiveVar(null);
-  _this.localStreamError = ReactiveVar('');
-  _this.streamError = ReactiveVar('');
+  _this.localStreamError = ReactiveVar(null);
+  _this.streamError = ReactiveVar(null);
   _this.peers = ReactiveVar(peers);
 
   function getPeerConnection(id) {
@@ -46,7 +46,7 @@ var RTCStore = function() {
   function makeOffer(id) {
     var pc = getPeerConnection(id);
     pc.createOffer((sdp)=> {
-      pc.setLocalDescription(sdp, function() {
+      pc.setLocalDescription(sdp, ()=> {
         console.log('Creating an offer for', id);
         roomStream.emit('msg', {type: 'sdp-offer', to: id, sdp: {type: sdp.type, sdp: sdp.sdp}, room: RoomStore.currentRoomId.get()});
       }, (e)=> {
@@ -67,11 +67,12 @@ var RTCStore = function() {
         break;
       case 'peer.disconnected':
         console.log('Peer disconnected', data.from);
-        peerConnections[data.from].close();
-        peerConnections[data.from] = null;
-
+        pc.removeStream(peers[data.from]);
         delete peers[data.from];
         _this.peers.set(peers);
+
+        peerConnections[data.from].close();
+        delete peerConnections[data.from];
         break;
       case 'sdp-offer':
         pc.setRemoteDescription(new RTCSessionDescription(data.sdp), ()=> {
@@ -92,21 +93,22 @@ var RTCStore = function() {
 
         break;
       case 'sdp-answer':
+        console.log(data);
+        console.log(pc);
         pc.setRemoteDescription(new RTCSessionDescription(data.sdp), ()=> {
           console.log('Setting remote description by answer');
-        },
-
-        (e)=> {
+        }, (e)=> {
+          _this.streamError.set(e);
           console.error(e);
         });
 
         break;
       case 'ice':
         if (data.ice && data.ice.candidate) {
-          console.log('Adding ice candidates');
+          //console.log('Adding ice candidates');
           pc.addIceCandidate(new RTCIceCandidate(data.ice), ()=> {
             // successfully added candidate
-            console.log('successfully added candidate');
+            //console.log('successfully added candidate');
           },
 
           (err)=> {
@@ -115,11 +117,28 @@ var RTCStore = function() {
         }
 
         break;
+
+      case 'error.duplicate':
+        _this.localStreamError.set(data.error);
+        _this.stopLocalStream();
+        break;
     }
   }
 
+  _this.disconnect = ()=> {
+    roomStream.emit('msg', {
+      type: 'disconnect',
+      room: RoomStore.currentRoomId.get()
+    });
+    roomStream.removeListener(UserStore.user()._id, handleMessage);
+    peers = {};
+    peerConnections = {};
+    _this.peers.set(peers);
+  }
+
   _this.getLocalStream = ()=> {
-    _this.localStreamError.set('');
+    console.log('gettingLocalStream');
+    _this.localStreamError.set(null);
     if (!_this.localStream.get() && !_this.gettingLocalStream.get()) {
       _this.gettingLocalStream.set(true);
       if (!window.RTCPeerConnection || !navigator.getUserMedia) {
@@ -143,23 +162,41 @@ var RTCStore = function() {
     }
   };
 
+  _this.isDuplicateConnection = ()=> {
+    let room = RoomStore.currentRoom.get();
+    let val = room && _.contains(room.connected, UserStore.user()._id);
+    if(val){
+      _this.localStreamError.set({
+        status: 409,
+        description: 'Conflict: user is already connected to this room'
+      });
+    }
+    return val;
+  }
+
   _this.joinRoomStream = (r)=> {
     _this.requireLocalStream().then(()=> {
-      roomStream.emit('join', r);
+      if(!_this.isDuplicateConnection()){
+        roomStream.emit('join', r);
 
-      // handle messages for the current user
-      // this might lead to multiple handling when you switch users. make sure to clear on logout
-      // maybe belongs in userstore
-      roomStream.on(UserStore.user()._id, (data)=> {
-        handleMessage(data);
-      });
+        // handle messages for the current user
+        // this might lead to multiple handling when you switch users. make sure to clear on logout
+        // maybe belongs in userstore
+        roomStream.on(UserStore.user()._id, handleMessage);
+      } else {
+        _this.stopLocalStream();
+      }
     }, (err)=> {
-      _this.streamError.set(err);
+      _this.localStreamError.set(err);
     });
   }
+
   _this.stopLocalStream = ()=> {
-    !!_this.localStream.get() && _this.localStream.get().stop();
-  }
+    if (!!_this.localStream.get()) {
+      _this.localStream.get().stop();
+      _this.localStream.set(null);
+    }
+  };
 
   _this.requireLocalStream = ()=> {
     return new Promise((resolve, reject)=> {
@@ -177,10 +214,13 @@ var RTCStore = function() {
         }
       });
     });
-  }
+  };
 
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
+      case 'DISCONNECT':
+        _this.disconnect();
+        break;
       case 'GET_LOCAL_STREAM':
         _this.getLocalStream();
         break;

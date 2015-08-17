@@ -93,11 +93,11 @@ process.umask = function() { return 0; };
 },{}],2:[function(require,module,exports){
 Browser = require('bowser');
 MUI = require('material-ui');
+MUI.Menu = require('material-ui/lib/menus/menu');
+MUI.MenuItem = require('material-ui/lib/menus/menu-item');
 Router = require('react-router');
 require('webrtc-adapter-test');
 require('react-tap-event-plugin')();
-MUI.Menu = require('material-ui/lib/menus/menu');
-MUI.MenuItem = require('material-ui/lib/menus/menu-item');
 
 },{"bowser":3,"material-ui":38,"material-ui/lib/menus/menu":52,"material-ui/lib/menus/menu-item":51,"react-router":169,"react-tap-event-plugin":187,"webrtc-adapter-test":188}],3:[function(require,module,exports){
 /*!

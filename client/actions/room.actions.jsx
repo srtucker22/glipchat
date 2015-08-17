@@ -13,6 +13,12 @@ var RoomActions = function() {
       });
     },
 
+    leaveRoom(){
+      Dispatcher.dispatch({
+        actionType: 'LEAVE_ROOM',
+      });
+    },
+
     joinRoomStream(roomId) {
       Dispatcher.dispatch({
         actionType: 'JOIN_ROOM_STREAM',

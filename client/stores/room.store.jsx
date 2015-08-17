@@ -18,10 +18,10 @@ var RoomStore = function() {
 
   // auto-update the subscription to the room and store the room
   Tracker.autorun(function(c) {
+    _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
     Meteor.subscribe('room', _this.currentRoomId.get(), {
       onReady() {
         // set the current room object
-        _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
         _this.gettingCurrentRoom.set(false);
       },
     });
@@ -35,7 +35,7 @@ var RoomStore = function() {
       UserStore.requireUser().then((user)=> {
         Rooms.insert({
           owner: user._id,
-          connected: [user._id],
+          connected: [],
         }, (err, id)=> {
           _this.creatingRoom.set(false);
           if (err) {
@@ -62,6 +62,10 @@ var RoomStore = function() {
 
     joinRoomStream(r){
       RTCStore.joinRoomStream(r);
+    },
+
+    leaveRoom(){
+      _this.currentRoomId.set('');
     },
 
     // Promise for requested room to load
@@ -94,6 +98,9 @@ var RoomStore = function() {
         break;
       case 'JOIN_ROOM_STREAM':
         _this.joinRoomStream(payload.roomId);
+        break;
+      case 'LEAVE_ROOM':
+        _this.leaveRoom();
         break;
     }
   });
