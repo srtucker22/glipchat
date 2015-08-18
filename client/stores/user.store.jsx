@@ -49,7 +49,7 @@ var UserStore = function() {
     },
   };
 
-  // If user is not logged in, redirect to 'home'
+  // If user is not logged in, login as guest
   _this.requireUser = ()=> {
     return new Promise((resolve, reject)=> {
       if (Meteor.user()) {
@@ -67,12 +67,24 @@ var UserStore = function() {
           if (Meteor.user()) {
             resolve(Meteor.user());
           } else {
-            reject({status: 401, description: 'UNAUTHORIZED'});
+            Meteor.loginVisitor(null, (err)=>{
+              if (err) {
+                reject(err);
+              } else {
+                resolve(Meteor.user());
+              }
+            });
           };
         });
 
       } else {
-        reject({status: 401, description: 'UNAUTHORIZED'});
+        Meteor.loginVisitor(null, (err)=>{
+          if (err) {
+            reject(err);
+          } else {
+            resolve(Meteor.user());
+          }
+        });
       }
     });
   };

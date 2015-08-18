@@ -12,6 +12,8 @@ var RTCStore = function() {
   var _this = this;
 
   var iceConfig = { iceServers: [{ url: 'stun:stun.l.google.com:19302' }]};
+
+  // private vars for peer connections
   var peerConnections = {};
   var peers = {};
 
@@ -21,6 +23,7 @@ var RTCStore = function() {
   _this.streamError = ReactiveVar(null);
   _this.peers = ReactiveVar(peers);
 
+  // get peer connections, add the local stream to the connection, and wait for onaddstream
   function getPeerConnection(id) {
     if (peerConnections[id]) {
       return peerConnections[id];
@@ -43,6 +46,7 @@ var RTCStore = function() {
     return pc;
   }
 
+  // make an offer to a peer to connect
   function makeOffer(id) {
     var pc = getPeerConnection(id);
     pc.createOffer((sdp)=> {
@@ -57,7 +61,7 @@ var RTCStore = function() {
     }, { mandatory: { offerToReceiveVideo: true, offerToReceiveAudio: true }});
   }
 
-  // handle all roomStream emissions
+  // handle all room stream emissions
   function handleMessage(data) {
     var pc = getPeerConnection(data.from);
     switch (data.type) {
@@ -65,6 +69,7 @@ var RTCStore = function() {
         console.log('Peer connected', data.from);
         makeOffer(data.from);
         break;
+
       case 'peer.disconnected':
         console.log('Peer disconnected', data.from);
         pc.removeStream(peers[data.from]);
@@ -74,6 +79,7 @@ var RTCStore = function() {
         peerConnections[data.from].close();
         delete peerConnections[data.from];
         break;
+
       case 'sdp-offer':
         pc.setRemoteDescription(new RTCSessionDescription(data.sdp), ()=> {
           console.log('Setting remote description by offer');
@@ -92,9 +98,8 @@ var RTCStore = function() {
         });
 
         break;
+
       case 'sdp-answer':
-        console.log(data);
-        console.log(pc);
         pc.setRemoteDescription(new RTCSessionDescription(data.sdp), ()=> {
           console.log('Setting remote description by answer');
         }, (e)=> {
@@ -103,6 +108,7 @@ var RTCStore = function() {
         });
 
         break;
+
       case 'ice':
         if (data.ice && data.ice.candidate) {
           //console.log('Adding ice candidates');
@@ -118,6 +124,7 @@ var RTCStore = function() {
 
         break;
 
+      // the server has detected the user is trying to connect twice
       case 'error.duplicate':
         _this.localStreamError.set(data.error);
         _this.stopLocalStream();
@@ -125,17 +132,25 @@ var RTCStore = function() {
     }
   }
 
+  // disconnect from a room stream, clear all peer data
   _this.disconnect = ()=> {
+
+    // announce disconnect to peers
     roomStream.emit('msg', {
       type: 'disconnect',
       room: RoomStore.currentRoomId.get()
     });
+
+    // clear listener for room messages
     roomStream.removeListener(UserStore.user()._id, handleMessage);
+
+    // clear all peer data
     peers = {};
     peerConnections = {};
     _this.peers.set(peers);
   }
 
+  // get the local stream from legit browsers
   _this.getLocalStream = ()=> {
     console.log('gettingLocalStream');
     _this.localStreamError.set(null);
@@ -162,6 +177,7 @@ var RTCStore = function() {
     }
   };
 
+  // make sure the user isn't connected on multiple tabs or browsers
   _this.isDuplicateConnection = ()=> {
     let room = RoomStore.currentRoom.get();
     let val = room && _.contains(room.connected, UserStore.user()._id);
@@ -174,6 +190,7 @@ var RTCStore = function() {
     return val;
   }
 
+  // join the room stream and announce to peers to start connection process
   _this.joinRoomStream = (r)=> {
     _this.requireLocalStream().then(()=> {
       if(!_this.isDuplicateConnection()){
@@ -191,6 +208,7 @@ var RTCStore = function() {
     });
   }
 
+// stop the local stream
   _this.stopLocalStream = ()=> {
     if (!!_this.localStream.get()) {
       _this.localStream.get().stop();
@@ -198,6 +216,7 @@ var RTCStore = function() {
     }
   };
 
+  // returns a promise that resolves when the local stream is ready
   _this.requireLocalStream = ()=> {
     return new Promise((resolve, reject)=> {
       Tracker.autorun(function(c) {
