@@ -15,6 +15,7 @@ var RoomStore = function() {
   _this.currentRoom = ReactiveVar(null);
   _this.currentRoomId = ReactiveVar('');
   _this.gettingCurrentRoom = ReactiveVar(false);
+  _this.inviteModalVisible = ReactiveVar(false);
 
   // auto-update the subscription to the room and store the room
   Tracker.autorun(function(c) {
@@ -53,6 +54,10 @@ var RoomStore = function() {
       });
     },
 
+    hideInviteModal() {
+      _this.inviteModalVisible.set(false);
+    },
+
     joinRoom(r) {  // join an existing room
       if (_this.currentRoomId.get() !== r) {
         _this.gettingCurrentRoom.set(true);
@@ -66,6 +71,7 @@ var RoomStore = function() {
 
     leaveRoom(){
       _this.currentRoomId.set('');
+      _this.inviteModalVisible.set(false);
     },
 
     // Promise for requested room to load
@@ -86,10 +92,18 @@ var RoomStore = function() {
         });
       });
     },
+
+    showInviteModal(){
+      if(!!_this.currentRoom.get() && !RTCStore.localStreamError.get() && !!RTCStore.localStream.get())
+        _this.inviteModalVisible.set(true);
+    }
   });
 
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
+      case 'HIDE_INVITE_MODAL':
+        _this.hideInviteModal();
+        break;
       case 'CREATE_ROOM':
         _this.createRoom();
         break;
@@ -101,6 +115,9 @@ var RoomStore = function() {
         break;
       case 'LEAVE_ROOM':
         _this.leaveRoom();
+        break;
+      case 'SHOW_INVITE_MODAL':
+        _this.showInviteModal();
         break;
     }
   });

@@ -20,6 +20,8 @@ var RTCStore = function() {
   _this.gettingLocalStream = ReactiveVar(false);
   _this.localStream = ReactiveVar(null);
   _this.localStreamError = ReactiveVar(null);
+  _this.isLocalVideoEnabled = ReactiveVar(false);
+  _this.isLocalAudioEnabled = ReactiveVar(false);
   _this.streamError = ReactiveVar(null);
   _this.peers = ReactiveVar(peers);
 
@@ -157,7 +159,7 @@ var RTCStore = function() {
     if (!_this.localStream.get() && !_this.gettingLocalStream.get()) {
       _this.gettingLocalStream.set(true);
       if (!window.RTCPeerConnection || !navigator.getUserMedia) {
-        _this.localStreamError = {status: 405, description: 'WebRTC is not supported by your browser. You can try the app with Chrome and Firefox.'};
+        _this.localStreamError.set({status: 405, description: 'WebRTC is not supported by your browser. You can try the app with Chrome and Firefox.'});
         _this.gettingLocalStream.set(false);
         return;
       }
@@ -168,6 +170,9 @@ var RTCStore = function() {
       }, (s)=> {
         _this.localStream.set(s);
         _this.gettingLocalStream.set(false);
+
+        _this.isLocalAudioEnabled.set(s.getAudioTracks()[0].enabled);
+        _this.isLocalVideoEnabled.set(s.getVideoTracks()[0].enabled);
       }, (e)=> {
         _this.localStreamError.set({status: e.name, description: (e.message ? e.message: e.name)});
         _this.gettingLocalStream.set(false);
@@ -208,7 +213,23 @@ var RTCStore = function() {
     });
   }
 
-// stop the local stream
+  _this.toggleLocalAudio = ()=> {
+    if(_this.localStream.get()){
+      _this.localStream.get().getAudioTracks()[0].enabled = !_this.localStream.get().getAudioTracks()[0].enabled;
+
+      _this.isLocalAudioEnabled.set(_this.localStream.get().getAudioTracks()[0].enabled);
+    }
+  }
+
+  _this.toggleLocalVideo = ()=> {
+    if(_this.localStream.get()){
+      _this.localStream.get().getVideoTracks()[0].enabled = !_this.localStream.get().getVideoTracks()[0].enabled;
+
+      _this.isLocalVideoEnabled.set(_this.localStream.get().getVideoTracks()[0].enabled);
+    }
+  }
+
+  // stop the local stream
   _this.stopLocalStream = ()=> {
     if (!!_this.localStream.get()) {
       _this.localStream.get().stop();
@@ -242,6 +263,12 @@ var RTCStore = function() {
         break;
       case 'GET_LOCAL_STREAM':
         _this.getLocalStream();
+        break;
+      case 'TOGGLE_LOCAL_AUDIO':
+        _this.toggleLocalAudio();
+        break;
+      case 'TOGGLE_LOCAL_VIDEO':
+        _this.toggleLocalVideo();
         break;
       case 'STOP_LOCAL_STREAM':
         _this.stopLocalStream();

@@ -1,0 +1,146 @@
+(()=>{
+  var RoomActions = null;
+  var RTCActions = null;
+  var RTCStore = null;
+
+  Dependency.autorun(()=> {
+    GlobalStyles = Dependency.get('GlobalStyles');
+    RoomActions = Dependency.get('RoomActions');
+    RTCActions = Dependency.get('RTCActions');
+    RTCStore = Dependency.get('RTCStore');
+  });
+
+  const {
+    FontIcon,
+    FlatButton,
+    IconButton,
+    Paper
+  } = MUI;
+
+  const { Navigation } = Router;
+
+  const Colors = MUI.Styles.Colors;
+
+  const styles = {
+    overlay: {
+      height: '100px',
+      position: 'absolute',
+      width: '100%',
+      zIndex: 3,
+
+      ':hover': {},
+    },
+
+    controls: {
+      base: {
+        backgroundColor: Colors.fullBlack,
+        margin: '50px auto',
+        opacity: 0,
+        overflow: 'hidden',
+      },
+
+      button: {
+        ':hover': {
+          backgroundColor: Colors.grey900,
+        },
+      },
+
+      red: {
+        backgroundColor: Colors.red800,
+        ':hover': {
+          backgroundColor: Colors.red900,
+        },
+      },
+
+      visible: {
+        opacity: 1,
+      },
+
+      buttonEnd: {
+        ':hover': {
+          backgroundColor: Colors.red800,
+        },
+      },
+    },
+  };
+
+  ControlsComponent = Radium(React.createClass({
+    mixins: [ReactMeteorData, Navigation],
+
+    getInitialState: function() {
+      return {visible: false};
+    },
+
+    getMeteorData() {
+      return {
+        isLocalAudioEnabled: RTCStore.isLocalAudioEnabled.get(),
+        isLocalVideoEnabled: RTCStore.isLocalVideoEnabled.get(),
+      };
+    },
+
+    leave(){
+      this.transitionTo('home');
+    },
+
+    toggleLocalAudio(){
+      RTCActions.toggleLocalAudio();
+    },
+
+    toggleLocalVideo(){
+      RTCActions.toggleLocalVideo();
+    },
+
+    toggleVisible(val){
+      this.setState({visible: val})
+    },
+
+    render() {
+      return (
+        <div key='overlay' style={[styles.overlay]} onMouseOver={this.toggleVisible.bind(this, true)} onMouseLeave={this.toggleVisible.bind(this, false)}>
+          <Paper zDepth={1} style={
+            _.extend(
+            {},
+            GlobalStyles.table,
+            styles.controls.base,
+            this.state.visible? styles.controls.visible: {}
+            )
+          }>
+            <div key='invite' onTouchTap={RoomActions.showInviteModal} style={[GlobalStyles.cell, styles.controls.button]}>
+              <IconButton>
+                <FontIcon className='material-icons' color={Colors.fullWhite}>person_add</FontIcon>
+              </IconButton>
+            </div>
+            <div key='video' onTouchTap={this.toggleLocalVideo} style={[
+              GlobalStyles.cell,
+              styles.controls.button,
+              !this.data.isLocalVideoEnabled && styles.controls.red
+            ]}>
+              <IconButton>
+                <FontIcon className='material-icons' color={Colors.fullWhite}>videocam_off</FontIcon>
+              </IconButton>
+            </div>
+            <div key='audio' onTouchTap={this.toggleLocalAudio} style={[
+              GlobalStyles.cell,
+              styles.controls.button,
+              !this.data.isLocalAudioEnabled && styles.controls.red
+            ]}>
+              <IconButton>
+                <FontIcon className='material-icons' color={Colors.fullWhite}> mic_off</FontIcon>
+              </IconButton>
+            </div>
+            <div key='settings' style={[GlobalStyles.cell, styles.controls.button]}>
+              <IconButton>
+                <FontIcon className='material-icons' color={Colors.fullWhite}>settings</FontIcon>
+              </IconButton>
+            </div>
+            <div key='end' style={[GlobalStyles.cell, styles.controls.button, styles.controls.buttonEnd]}>
+              <IconButton>
+                <FontIcon className='material-icons' color={Radium.getState(this.state, 'end', ':hover') ? Colors.fullWhite: Colors.red800} onTouchTap={this.leave}>call_end</FontIcon>
+              </IconButton>
+            </div>
+          </Paper>
+        </div>
+      )
+    }
+  }));
+})();

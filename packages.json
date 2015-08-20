@@ -4,5 +4,7 @@
   "externalify": "0.1.0",
   "webrtc-adapter-test": "0.2.1",
   "bowser": "1.0.0",
-  "material-ui": "0.10.4"
+  "material-ui": "0.10.4",
+  "react-typeahead": "1.1.3",
+  "radium": "0.13.7"
 }

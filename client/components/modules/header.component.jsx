@@ -14,7 +14,6 @@ var {
   Menu,
   MenuItem
 } = MUI;
-var ThemeManager = new MUI.Styles.ThemeManager();
 
 var HeaderActions = null;
 var HeaderStore = null;
@@ -66,7 +65,7 @@ ProfileDropdownComponent = React.createClass({
             {this.props.user.services.facebook && this.props.user.services.facebook.email}
           </CardText>
           <CardActions className='text-center' expandable={false}>
-            <FlatButton onClick={this.logout} label='Sign out'/>
+            <FlatButton onTouchTap={this.logout} label='Sign out'/>
           </CardActions>
         </Card>
       </div>
@@ -76,16 +75,6 @@ ProfileDropdownComponent = React.createClass({
 
 HeaderComponent = React.createClass({
   mixins: [ReactMeteorData],
-
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
-  },
 
   getMeteorData() {
     return {

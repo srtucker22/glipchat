@@ -6,5 +6,8 @@
     "cascade": false
   },
   "useIndex" : true,
+  "includePaths": [
+    ".meteor/local/build/programs/server/assets/packages/wolves_bourbon"
+  ],
   "indexFilePath" : "client/scss/main.scss"
 }

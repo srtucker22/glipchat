@@ -1,3 +1,6 @@
+@import 'bourbon/bourbon';
+@import 'palette';
+
 $footerHeight: 60px;
 $headerHeight: 60px;
 
@@ -7,6 +10,11 @@ html {
 
 body {
   height: 100%;
+
+  .row {
+    margin: 0;
+  }
+
   &> div {
     height: 100%;
   }
@@ -71,7 +79,155 @@ footer {
 
 video {
   &.full-screen {
+    @include transition(opacity 1s ease-in-out);
     height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
     width: 100%;
+  }
+
+  // &.small-screen {
+  //   max-width:
+  // }
+}
+
+$insetShadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
+$z1Shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+
+
+.link-url {
+  box-shadow: $insetShadow;
+  overflow: hidden;
+  padding: 10px;
+  text-overflow: ellipsis;
+}
+
+.invite-content {
+  max-height: 360px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  .invite-row, .link-row {
+    margin: 0;
+  }
+
+  .link-row {
+
+    .link-header {
+      font-size: 12px;
+      font-weight: bold;
+      padding-bottom: 12px;
+    }
+  }
+
+  .invite-row {
+    .name-header{
+      font-size: 12px;
+      font-weight: bold;
+
+      .input-name {
+        padding-left: 10px;
+      }
+    }
+
+    textarea {
+      border: none;
+      box-shadow: $insetShadow;
+      margin-bottom: 10px;
+      padding: 10px;
+      resize: none;
+      width: 100%;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.permission-denied-error {
+  color: white;
+  font-size: 20px;
+  margin: auto;
+  max-width: 800px;
+  min-width: 520px;
+
+  .cell {
+    padding-top: 50px;
+  }
+
+  .arrow {
+    padding: 0;
+    width: 100px;
+  }
+  .material-icons {
+    top: 4px;
+  }
+}
+
+.typeahead {
+
+  .typeahead-chips {
+    .typeahead-chip {
+      box-shadow: $z1Shadow;
+      border-radius: 24px;
+      display: inline-block;
+      margin-right: 15px;
+      .material-icons {
+        width: 24px;
+      }
+      .text {
+        padding: 0 5px;
+        font-size: 12px;
+      }
+      img {
+        border-radius: 50%;
+        border: solid 1px rgba(0, 0, 0, 0.08);
+        display: inline-block;
+        height: 24px;
+        margin-left: 1px;
+        width: 24px;
+      }
+    }
+  }
+
+  .typeahead-input-wrapper {
+    border-radius: 3px;
+    border: 1px solid transparent;
+    border-top: none;
+    border-bottom: 1px solid #DDD;
+    box-shadow: $insetShadow;
+    padding: 15px;
+
+    .typeahead-input {
+      margin-top: 10px;
+      padding: 0;
+
+      input {
+        border: none;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+  .typeahead-menu-wrapper {
+    margin: 0 2px;
+
+    .typeahead-menu {
+      padding: 0;
+
+      .typeahead-menu-item {
+        padding: 10px;
+        .cell {
+          &.right {
+            padding-left: 10px;
+          }
+        }
+      }
+    }
   }
 }

@@ -40,8 +40,6 @@ HomeComponent = React.createClass({
   },
 
   render() {
-    var { ...other } = this.props;
-
     return (
       <div id='wrapper'>
         <div id='page-home'>
@@ -50,7 +48,7 @@ HomeComponent = React.createClass({
             <div className='col-xs-12 text-center'>
               <h1>Welcome to {this.props.appName}</h1>
               <br />
-              <RaisedButton onClick={this.createRoom} label='Start video call' primary={true}/>
+              <RaisedButton onTouchTap={this.createRoom} label='Start video call' primary={true}/>
             </div>
           </div>
         </div>

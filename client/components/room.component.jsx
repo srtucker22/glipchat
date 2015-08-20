@@ -1,5 +1,5 @@
-// Dependencies
-var { Colors } = MUI;
+var { Dialog, FontIcon, FlatButton, IconButton, Paper, RaisedButton } = MUI;
+var Colors = MUI.Styles.Colors;
 
 var RoomActions = null;
 var RoomStore   = null;
@@ -14,6 +14,12 @@ Dependency.autorun(()=> {
   RTCActions  = Dependency.get('RTCActions');
   UserStore   = Dependency.get('UserStore');
 });
+
+//Standard Actions
+let standardActions = [
+  { text: 'Cancel' },
+  { text: 'Submit', onTouchTap: this._onDialogSubmit, ref: 'submit' }
+];
 
 RoomComponent = React.createClass({
   mixins: [ReactMeteorData],
@@ -31,9 +37,7 @@ RoomComponent = React.createClass({
             RoomActions.joinRoomStream(params.roomId);
           }
           callback();
-        })
-
-        .catch((err)=> {
+        }).catch((err)=> {
           console.error(err);
           transition.abort();
           callback();
@@ -53,6 +57,10 @@ RoomComponent = React.createClass({
     },
   },
 
+  componentDidMount() {
+
+  },
+
   componentWillUnmount() {
     RTCActions.stopLocalStream();
   },
@@ -61,20 +69,39 @@ RoomComponent = React.createClass({
     return {
       peers: RTCStore.peers.get(),
       localStreamError: RTCStore.localStreamError.get(),
+      room: RoomStore.currentRoom.get(),
       stream: RTCStore.localStream.get(),
       streamError: RTCStore.streamError.get(),
     };
   },
 
   render() {
+    // log the errors for now
+    if(this.data.localStreamError)
+      console.error(this.data.localStreamError);
+    if(this.data.streamError)
+      console.error(this.data.streamError);
+
+    var { ...other } = this.props;
+
     return (
-      <div className='bg-grey-900'>
-        {!!this.data.localStreamError && <div>{this.data.localStreamError.description}</div>}
-        {!!this.data.streamError && <div>{this.data.streamError.description}</div>}
-        {!!this.data.stream && <VideoComponent className='full-screen' src={this.data.stream} muted={true}/>}
+      <div className='bg-grey-800'>
+        {!!this.data.localStreamError && <LocalStreamErrorComponent error={this.data.localStreamError} {...other}/>}
+
+        <InviteComponent
+          ref='invite'
+          linkUrl={window.location.href}
+          username={UserStore.isGuest() ? '' : UserStore.user().profile.name}
+        />
+
+        {!this.data.localStreamError && !!this.data.stream && <ControlsComponent />}
+
+        {!this.data.localStreamError && !!this.data.stream && (!this.data.peers || !_.keys(this.data.peers).length) && <FirstOverlayComponent linkUrl={window.location.href} />}
+
+        {!this.data.localStreamError && !!this.data.stream && <VideoComponent className='full-screen' src={this.data.stream} muted={true}/>}
         {_.map(this.data.peers, (val, key)=>{
           return (
-            <VideoComponent key={key} src={val}/>
+            <VideoComponent className='small-screen' key={key} src={val}/>
           );
         })}
       </div>
