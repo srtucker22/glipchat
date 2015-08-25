@@ -6,17 +6,7 @@
     TextField,
   } = MUI;
 
-  var GlobalStyles = null;
-  var RoomActions = null;
-  var RoomStore = null;
-
-  Dependency.autorun(()=> {
-    GlobalStyles = Dependency.get('GlobalStyles');
-    RoomActions = Dependency.get('RoomActions');
-    RoomStore = Dependency.get('RoomStore');
-  });
-
-  var styles = {
+  const styles = {
     css: {
       minWidth: '360px',
     },
@@ -84,6 +74,16 @@
       }
     },
   }
+
+  let GlobalStyles = null;
+  let RoomActions = null;
+  let RoomStore = null;
+
+  Dependency.autorun(()=> {
+    GlobalStyles = Dependency.get('GlobalStyles');
+    RoomActions = Dependency.get('RoomActions');
+    RoomStore = Dependency.get('RoomStore');
+  });
 
   InviteComponent = Radium(React.createClass({
     mixins: [ReactMeteorData],

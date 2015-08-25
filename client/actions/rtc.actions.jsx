@@ -2,6 +2,10 @@ var RTCActions = function() {
   var _this = this;
 
   _.extend(_this, {
+    setPrimaryStream(id) {
+      Dispatcher.dispatch({ actionType: 'SET_PRIMARY_STREAM', id: id});
+    },
+
     toggleAudio(id) {
       Dispatcher.dispatch({ actionType: 'TOGGLE_AUDIO', id: id});
     },

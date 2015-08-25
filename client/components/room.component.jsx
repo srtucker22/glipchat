@@ -30,11 +30,11 @@
     },
   };
 
-  var RoomActions = null;
-  var RoomStore   = null;
-  var RTCActions  = null;
-  var RTCStore    = null;
-  var UserStore   = null;
+  let RoomActions = null;
+  let RoomStore   = null;
+  let RTCActions  = null;
+  let RTCStore    = null;
+  let UserStore   = null;
 
   Dependency.autorun(()=> {
     RoomActions = Dependency.get('RoomActions');
@@ -94,6 +94,7 @@
       return {
         localStreamError: RTCStore.localStreamError.get(),
         peers: RTCStore.peers.get(),
+        primaryStream: RTCStore.primaryStream.get(),
         room: RoomStore.currentRoom.get(),
         stream: RTCStore.localStream.get(),
         streamError: RTCStore.streamError.get(),
@@ -110,6 +111,8 @@
 
       var { ...other } = this.props;
 
+      console.log(this.data.primaryStream);
+
       return (
         <div style={[styles.css]}>
           {!!this.data.localStreamError && <LocalStreamErrorComponent error={this.data.localStreamError} {...other}/>}
@@ -124,9 +127,13 @@
 
           {!this.data.localStreamError && !!this.data.stream && (this.data.room.connected.length === 1 && this.data.room.connected[0] === this.data.user._id) && <FirstOverlayComponent linkUrl={window.location.href} />}
 
-          {!this.data.localStreamError && !!this.data.stream && <VideoComponent src={this.data.stream} muted={true} flip={true} fullScreen={true}/>}
+          {!!this.data.primaryStream && <VideoComponent src={(this.data.primaryStream === 'local') ? this.data.stream : this.data.peers[this.data.primaryStream]} muted={(this.data.primaryStream === 'local')} flip={(this.data.primaryStream === 'local')} fullScreen={true}/>}
 
-          <div style={[styles.videos.css]}>
+          {!!this.data.peers && _.keys(this.data.peers).length && <div style={[styles.videos.css]}>
+            <div key='local' style={[styles.videos.video.css]}>
+              <VideoOverlayComponent id='local'/>
+              <VideoComponent src={this.data.stream} muted={true} flip={true}/>
+            </div>
             {_.map(this.data.peers, (val, key)=>{
               return (
                 <div key={key} style={[styles.videos.video.css]}>
@@ -135,7 +142,7 @@
                 </div>
               );
             })}
-          </div>
+          </div>}
         </div>
       );
     },

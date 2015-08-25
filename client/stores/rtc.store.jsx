@@ -18,13 +18,14 @@ var RTCStore = function() {
   var peers = {};
 
   _this.gettingLocalStream = ReactiveVar(false);
+  _this.isAudioEnabled = {};
+  _this.isLocalAudioEnabled = ReactiveVar(false);
+  _this.isLocalVideoEnabled = ReactiveVar(false);
   _this.localStream = ReactiveVar(null);
   _this.localStreamError = ReactiveVar(null);
-  _this.isLocalVideoEnabled = ReactiveVar(false);
-  _this.isLocalAudioEnabled = ReactiveVar(false);
-  _this.streamError = ReactiveVar(null);
   _this.peers = ReactiveVar(peers);
-  _this.isAudioEnabled = {};
+  _this.primaryStream = ReactiveVar(null);
+  _this.streamError = ReactiveVar(null);
 
   // get peer connections, add the local stream to the connection, and wait for onaddstream
   function getPeerConnection(id) {
@@ -47,6 +48,9 @@ var RTCStore = function() {
 
       // create a reactive var for the audio
       _this.isAudioEnabled[id] = ReactiveVar(evnt.stream.getAudioTracks()[0].enabled);
+
+      // set the primaryStream to the newest peer
+      _this.primaryStream.set(id);
     };
 
     pc.onremovestream = (evnt)=> {
@@ -96,6 +100,11 @@ var RTCStore = function() {
 
         peerConnections[data.from].close();
         delete peerConnections[data.from];
+
+        // if the deleted stream was the primaryStream, set it to the last peer or the localStream
+        if(_this.primaryStream.get() === data.from){
+          _.keys(peers).length ? _this.primaryStream.set(_.last(_.keys(peers))) : _this.primaryStream.set('local');
+        }
         break;
 
       case 'sdp-offer':
@@ -186,6 +195,7 @@ var RTCStore = function() {
       }, (s)=> {
         _this.localStream.set(s);
         _this.gettingLocalStream.set(false);
+        _this.primaryStream.set('local');
 
         _this.isLocalAudioEnabled.set(s.getAudioTracks()[0].enabled);
         _this.isLocalVideoEnabled.set(s.getVideoTracks()[0].enabled);
@@ -227,6 +237,10 @@ var RTCStore = function() {
     }, (err)=> {
       _this.localStreamError.set(err);
     });
+  };
+
+  _this.setPrimaryStream = (id)=> {
+    _this.primaryStream.set(id);
   };
 
   _this.toggleAudio = (id)=> {
@@ -287,6 +301,12 @@ var RTCStore = function() {
       case 'GET_LOCAL_STREAM':
         _this.getLocalStream();
         break;
+      case 'SET_PRIMARY_STREAM':
+        _this.setPrimaryStream(payload.id);
+        break;
+      case 'STOP_LOCAL_STREAM':
+        _this.stopLocalStream();
+        break;
       case 'TOGGLE_AUDIO':
         _this.toggleAudio(payload.id);
         break;
@@ -299,8 +319,6 @@ var RTCStore = function() {
       case 'TOGGLE_LOCAL_VIDEO':
         _this.toggleLocalVideo();
         break;
-      case 'STOP_LOCAL_STREAM':
-        _this.stopLocalStream();
     }
   });
 

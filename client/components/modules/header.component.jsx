@@ -129,7 +129,8 @@
           notificationDropdown = (
             <NotificationDropdownComponent messages={this.data.messages}/>
           );
-
+          console.log(UserStore.isGuest());
+          console.log(this.data.user);
           profileDropdown = (
             <ProfileDropdownComponent user={this.data.user} />
           );

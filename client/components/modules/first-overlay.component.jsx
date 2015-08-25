@@ -1,11 +1,4 @@
 (()=> {
-  let GlobalStyles = null;
-  let RoomActions = null;
-
-  Dependency.autorun(()=> {
-    GlobalStyles = Dependency.get('GlobalStyles');
-    RoomActions = Dependency.get('RoomActions');
-  });
 
   const {
     RaisedButton
@@ -48,6 +41,14 @@
       }
     }
   };
+
+  let GlobalStyles = null;
+  let RoomActions = null;
+
+  Dependency.autorun(()=> {
+    GlobalStyles = Dependency.get('GlobalStyles');
+    RoomActions = Dependency.get('RoomActions');
+  });
 
   FirstOverlayComponent = Radium(React.createClass({
     render(){

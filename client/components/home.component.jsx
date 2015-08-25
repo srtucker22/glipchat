@@ -1,8 +1,7 @@
 (()=> {
   // Dependencies
-  let { Navigation } = Router;
-  let { FontIcon, RaisedButton } = MUI;
-  let ThemeManager = new MUI.Styles.ThemeManager();
+  const { Navigation } = Router;
+  const { FontIcon, RaisedButton } = MUI;
 
   let GlobalStyles = null;
   let RoomStore = null;
@@ -16,16 +15,6 @@
 
   HomeComponent = Radium(React.createClass({
     mixins: [ReactMeteorData, Navigation],
-
-    childContextTypes: {
-      muiTheme: React.PropTypes.object
-    },
-
-    getChildContext() {
-      return {
-        muiTheme: ThemeManager.getCurrentTheme()
-      };
-    },
 
     getMeteorData() {
       return {

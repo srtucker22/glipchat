@@ -1,15 +1,15 @@
 (()=> {
-  var GlobalStyles = null;
-
-  Dependency.autorun(()=> {
-    GlobalStyles = Dependency.get('GlobalStyles');
-  });
-
-  var styles = {
+  const styles = {
     css: {
       width: '100%',
     }
   };
+
+  let GlobalStyles = null;
+
+  Dependency.autorun(()=> {
+    GlobalStyles = Dependency.get('GlobalStyles');
+  });
 
   let glipcode = {name: 'Glipcode', href: 'http://glipcode.com/'};
   let meteorFlux = {name: 'MeteorFlux', href: 'https://github.com/meteorflux'};

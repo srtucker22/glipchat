@@ -51,8 +51,8 @@
     },
   };
 
-  var RTCActions = null;
-  var RTCStore = null;
+  let RTCActions = null;
+  let RTCStore = null;
 
   Dependency.autorun(()=> {
     RTCStore    = Dependency.get('RTCStore');
@@ -64,18 +64,22 @@
 
     getMeteorData() {
       return {
-        isAudioEnabled: RTCStore.isAudioEnabled[this.props.id].get(),
+        isAudioEnabled: (this.props.id === 'local') ? RTCStore.isLocalAudioEnabled.get() : RTCStore.isAudioEnabled[this.props.id].get(),
       };
     },
 
+    setPrimaryStream() {
+      RTCActions.setPrimaryStream(this.props.id);
+    },
+
     toggleAudio() {
-      RTCActions.toggleAudio(this.props.id);
+      (this.props.id === 'local') ? RTCActions.toggleLocalAudio(): RTCActions.toggleAudio(this.props.id);
     },
 
     render() {
       return (
         <div key='overlay' style={[styles.css]}>
-          <div style={[styles.shade.css, Radium.getState(this.state, 'overlay', ':hover') && styles.shade.hover.css]}>
+          <div onTouchTap={this.setPrimaryStream} style={[styles.shade.css, Radium.getState(this.state, 'overlay', ':hover') && styles.shade.hover.css]}>
           </div>
           <FloatingActionButton onTouchTap={this.toggleAudio} style={_.extend({}, styles.mute.css, (Radium.getState(this.state, 'overlay', ':hover') || !this.data.isAudioEnabled) ? styles.mute.visible.css : {})} mini={true} primary={false}>
             <FontIcon className='material-icons' color={Colors.fullWhite}>mic_off</FontIcon>

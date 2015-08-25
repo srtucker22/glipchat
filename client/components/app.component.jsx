@@ -1,20 +1,23 @@
-const {RouteHandler} = Router;
-var ThemeManager = new MUI.Styles.ThemeManager();
+(()=> {
+  const {RouteHandler} = Router;
 
-AppComponent = React.createClass({
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
+  let ThemeManager = new MUI.Styles.ThemeManager();
 
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
-  },
-  
-  render() {
-    return (
-      <RouteHandler appName='Meteor React WebRTC'/>
-    );
-  },
-});
+  AppComponent = React.createClass({
+    childContextTypes: {
+      muiTheme: React.PropTypes.object
+    },
+
+    getChildContext() {
+      return {
+        muiTheme: ThemeManager.getCurrentTheme()
+      };
+    },
+
+    render() {
+      return (
+        <RouteHandler appName='Meteor React WebRTC'/>
+      );
+    },
+  });
+})();

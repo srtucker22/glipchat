@@ -1,24 +1,11 @@
 (()=>{
-  var RoomActions = null;
-  var RTCActions = null;
-  var RTCStore = null;
-
-  Dependency.autorun(()=> {
-    GlobalStyles = Dependency.get('GlobalStyles');
-    RoomActions = Dependency.get('RoomActions');
-    RTCActions = Dependency.get('RTCActions');
-    RTCStore = Dependency.get('RTCStore');
-  });
-
+  const { Navigation } = Router;
   const {
     FontIcon,
     FlatButton,
     IconButton,
     Paper
   } = MUI;
-
-  const { Navigation } = Router;
-
   const Colors = MUI.Styles.Colors;
 
   const styles = {
@@ -67,6 +54,17 @@
       },
     },
   };
+
+  let RoomActions = null;
+  let RTCActions = null;
+  let RTCStore = null;
+
+  Dependency.autorun(()=> {
+    GlobalStyles = Dependency.get('GlobalStyles');
+    RoomActions = Dependency.get('RoomActions');
+    RTCActions = Dependency.get('RTCActions');
+    RTCStore = Dependency.get('RTCStore');
+  });
 
   ControlsComponent = Radium(React.createClass({
     mixins: [ReactMeteorData, Navigation],

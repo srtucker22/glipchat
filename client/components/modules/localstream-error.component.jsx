@@ -1,11 +1,5 @@
 (()=> {
 
-  var GlobalStyles = null;
-
-  Dependency.autorun(()=> {
-    GlobalStyles = Dependency.get('GlobalStyles');
-  });
-
   const {FontIcon} = MUI;
   const Colors = MUI.Styles.Colors;
 
@@ -44,7 +38,13 @@
     },
   };
 
-  var permissionDeniedComponent = (appName)=> {
+  let GlobalStyles = null;
+
+  Dependency.autorun(()=> {
+    GlobalStyles = Dependency.get('GlobalStyles');
+  });
+
+  let permissionDeniedComponent = (appName)=> {
     return (
       <div style={[styles.permissionDenied.css]}>
         <div className='row'>

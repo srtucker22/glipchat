@@ -1,5 +1,5 @@
 // Dependencies
-var {
+const {
   Avatar,
   FontIcon,
   Menu,
