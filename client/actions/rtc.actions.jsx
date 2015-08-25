@@ -2,6 +2,10 @@ var RTCActions = function() {
   var _this = this;
 
   _.extend(_this, {
+    toggleAudio(id) {
+      Dispatcher.dispatch({ actionType: 'TOGGLE_AUDIO', id: id});
+    },
+
     toggleLocalAudio() {
       Dispatcher.dispatch({ actionType: 'TOGGLE_LOCAL_AUDIO'});
     },

@@ -24,6 +24,7 @@ var RTCStore = function() {
   _this.isLocalAudioEnabled = ReactiveVar(false);
   _this.streamError = ReactiveVar(null);
   _this.peers = ReactiveVar(peers);
+  _this.isAudioEnabled = {};
 
   // get peer connections, add the local stream to the connection, and wait for onaddstream
   function getPeerConnection(id) {
@@ -43,6 +44,13 @@ var RTCStore = function() {
       console.log('Received new stream', id);
       peers[id] = evnt.stream;
       _this.peers.set(peers);
+
+      // create a reactive var for the audio
+      _this.isAudioEnabled[id] = ReactiveVar(evnt.stream.getAudioTracks()[0].enabled);
+    };
+
+    pc.onremovestream = (evnt)=> {
+      console.log('Removing stream', id);
     };
 
     return pc;
@@ -74,9 +82,17 @@ var RTCStore = function() {
 
       case 'peer.disconnected':
         console.log('Peer disconnected', data.from);
-        pc.removeStream(peers[data.from]);
+        try {
+          pc.removeStream(peers[data.from]);
+        } catch(e) {
+          // Firefox doesn't implement removeStream
+        }
+
         delete peers[data.from];
         _this.peers.set(peers);
+
+        // delete the audioEnabled ReactiveVar
+        delete _this.isAudioEnabled[data.from];
 
         peerConnections[data.from].close();
         delete peerConnections[data.from];
@@ -211,7 +227,14 @@ var RTCStore = function() {
     }, (err)=> {
       _this.localStreamError.set(err);
     });
-  }
+  };
+
+  _this.toggleAudio = (id)=> {
+    if(_.has(_this.peers.get(), id)){
+      _this.peers.get()[id].getAudioTracks()[0].enabled = !_this.peers.get()[id].getAudioTracks()[0].enabled;
+      _this.isAudioEnabled[id].set(_this.peers.get()[id].getAudioTracks()[0].enabled);
+    }
+  };
 
   _this.toggleLocalAudio = ()=> {
     if(_this.localStream.get()){
@@ -219,7 +242,7 @@ var RTCStore = function() {
 
       _this.isLocalAudioEnabled.set(_this.localStream.get().getAudioTracks()[0].enabled);
     }
-  }
+  };
 
   _this.toggleLocalVideo = ()=> {
     if(_this.localStream.get()){
@@ -227,7 +250,7 @@ var RTCStore = function() {
 
       _this.isLocalVideoEnabled.set(_this.localStream.get().getVideoTracks()[0].enabled);
     }
-  }
+  };
 
   // stop the local stream
   _this.stopLocalStream = ()=> {
@@ -263,6 +286,12 @@ var RTCStore = function() {
         break;
       case 'GET_LOCAL_STREAM':
         _this.getLocalStream();
+        break;
+      case 'TOGGLE_AUDIO':
+        _this.toggleAudio(payload.id);
+        break;
+      case 'TOGGLE_VIDEO':
+        _this.toggleVideo(payload.id);
         break;
       case 'TOGGLE_LOCAL_AUDIO':
         _this.toggleLocalAudio();

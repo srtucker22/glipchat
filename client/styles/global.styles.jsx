@@ -1,6 +1,16 @@
 (()=>{
   var GlobalStyles = function(){
+    var footerHeight = '60px';
     return {
+      footerHeight,
+
+      stickyFooterPage: {
+        height: 'auto',
+        margin: '0 auto ' + '-' + footerHeight,
+        minHeight: '100%',
+        padding: '0 0 ' + footerHeight,
+      },
+
       table: {
         display: 'table',
         margin: 0,

@@ -1,59 +1,64 @@
-// Dependencies
-var RoomStore   = null;
-var RoomActions = null;
-var { Navigation } = Router;
-var { FontIcon, RaisedButton } = MUI;
-var ThemeManager = new MUI.Styles.ThemeManager();
+(()=> {
+  // Dependencies
+  let { Navigation } = Router;
+  let { FontIcon, RaisedButton } = MUI;
+  let ThemeManager = new MUI.Styles.ThemeManager();
 
-Dependency.autorun(()=> {
-  RoomStore   = Dependency.get('RoomStore');
-  RoomActions = Dependency.get('RoomActions');
-});
+  let GlobalStyles = null;
+  let RoomStore = null;
+  let RoomActions = null;
 
-HomeComponent = React.createClass({
-  mixins: [ReactMeteorData, Navigation],
+  Dependency.autorun(()=> {
+    GlobalStyles = Dependency.get('GlobalStyles');
+    RoomStore = Dependency.get('RoomStore');
+    RoomActions = Dependency.get('RoomActions');
+  });
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
+  HomeComponent = Radium(React.createClass({
+    mixins: [ReactMeteorData, Navigation],
 
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
-  },
+    childContextTypes: {
+      muiTheme: React.PropTypes.object
+    },
 
-  getMeteorData() {
-    return {
-      currentRoom: RoomStore.currentRoom.get(),
-    };
-  },
+    getChildContext() {
+      return {
+        muiTheme: ThemeManager.getCurrentTheme()
+      };
+    },
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.data.currentRoom) {
-      this.transitionTo('room', {roomId: this.data.currentRoom._id});
-    }
-  },
+    getMeteorData() {
+      return {
+        currentRoom: RoomStore.currentRoom.get(),
+      };
+    },
 
-  createRoom() {
-    RoomActions.createRoom();
-  },
+    componentWillUpdate(nextProps, nextState) {
+      if (this.data.currentRoom) {
+        this.transitionTo('room', {roomId: this.data.currentRoom._id});
+      }
+    },
 
-  render() {
-    return (
-      <div id='wrapper'>
-        <div id='page-home'>
-          <HeaderComponent appName={this.props.appName}/>
-          <div className='row'>
-            <div className='col-xs-12 text-center'>
-              <h1>Welcome to {this.props.appName}</h1>
-              <br />
-              <RaisedButton onTouchTap={this.createRoom} label='Start video call' primary={true}/>
+    createRoom() {
+      RoomActions.createRoom();
+    },
+
+    render() {
+      return (
+        <div>
+          <div style={[GlobalStyles.stickyFooterPage]}>
+            <HeaderComponent appName={this.props.appName}/>
+            <div className='row'>
+              <div className='col-xs-12 text-center'>
+                <h1>Welcome to {this.props.appName}</h1>
+                <br />
+                <RaisedButton onTouchTap={this.createRoom} label='Start video call' primary={true}/>
+              </div>
             </div>
           </div>
+          <FooterComponent />
         </div>
-        <FooterComponent />
-      </div>
-    );
-  },
-});
+      );
+    },
+  }));
+})();

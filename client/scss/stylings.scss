@@ -1,8 +1,4 @@
 @import 'bourbon/bourbon';
-@import 'palette';
-
-$footerHeight: 60px;
-$headerHeight: 60px;
 
 html {
   height: 100%;
@@ -29,10 +25,6 @@ body {
 }
 
 header {
-  .icon {
-    color: white !important;
-  }
-
   .dropdown-menu {
     left: inherit;
     right: 0;
@@ -41,25 +33,6 @@ header {
   .dropdown-toggle {
     cursor: pointer;
   }
-}
-
-footer {
-  height: $footerHeight;
-  width: 100%;
-
-  &.table {
-    width: 100%;
-  }
-}
-
-#page-home {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto;
-  margin-bottom: -($footerHeight);
-  /* Pad bottom by footer height */
-  padding: 0 0 $footerHeight;
 }
 
 .table {
@@ -72,100 +45,8 @@ footer {
   }
 }
 
-.center {
-  margin-right: auto;
-  margin-left: auto;
-}
-
-video {
-  &.full-screen {
-    @include transition(opacity 1s ease-in-out);
-    height: 100%;
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: cover;
-    width: 100%;
-  }
-
-  // &.small-screen {
-  //   max-width:
-  // }
-}
-
 $insetShadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
 $z1Shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-
-
-
-.link-url {
-  box-shadow: $insetShadow;
-  overflow: hidden;
-  padding: 10px;
-  text-overflow: ellipsis;
-}
-
-.invite-content {
-  max-height: 360px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  .invite-row, .link-row {
-    margin: 0;
-  }
-
-  .link-row {
-
-    .link-header {
-      font-size: 12px;
-      font-weight: bold;
-      padding-bottom: 12px;
-    }
-  }
-
-  .invite-row {
-    .name-header{
-      font-size: 12px;
-      font-weight: bold;
-
-      .input-name {
-        padding-left: 10px;
-      }
-    }
-
-    textarea {
-      border: none;
-      box-shadow: $insetShadow;
-      margin-bottom: 10px;
-      padding: 10px;
-      resize: none;
-      width: 100%;
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-}
-
-.permission-denied-error {
-  color: white;
-  font-size: 20px;
-  margin: auto;
-  max-width: 800px;
-  min-width: 520px;
-
-  .cell {
-    padding-top: 50px;
-  }
-
-  .arrow {
-    padding: 0;
-    width: 100px;
-  }
-  .material-icons {
-    top: 4px;
-  }
-}
 
 .typeahead {
 

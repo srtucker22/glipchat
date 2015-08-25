@@ -168,6 +168,9 @@
         }
       }
     },
+    "microevent": {
+      "version": "1.0.0"
+    },
     "radium": {
       "version": "0.13.7",
       "dependencies": {

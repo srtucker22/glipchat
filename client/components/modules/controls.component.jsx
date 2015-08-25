@@ -22,7 +22,7 @@
   const Colors = MUI.Styles.Colors;
 
   const styles = {
-    overlay: {
+    css: {
       height: '100px',
       position: 'absolute',
       width: '100%',
@@ -32,7 +32,7 @@
     },
 
     controls: {
-      base: {
+      css: {
         backgroundColor: Colors.fullBlack,
         margin: '50px auto',
         opacity: 0,
@@ -40,9 +40,11 @@
       },
 
       button: {
-        ':hover': {
-          backgroundColor: Colors.grey900,
-        },
+        css: {
+          ':hover': {
+            backgroundColor: Colors.grey900,
+          },
+        }
       },
 
       red: {
@@ -57,8 +59,10 @@
       },
 
       buttonEnd: {
-        ':hover': {
-          backgroundColor: Colors.red800,
+        css: {
+          ':hover': {
+            backgroundColor: Colors.red800,
+          },
         },
       },
     },
@@ -90,29 +94,25 @@
       RTCActions.toggleLocalVideo();
     },
 
-    toggleVisible(val){
-      this.setState({visible: val})
-    },
-
     render() {
       return (
-        <div key='overlay' style={[styles.overlay]} onMouseOver={this.toggleVisible.bind(this, true)} onMouseLeave={this.toggleVisible.bind(this, false)}>
+        <div key='overlay' style={[styles.css]}>
           <Paper zDepth={1} style={
             _.extend(
             {},
             GlobalStyles.table,
-            styles.controls.base,
-            this.state.visible? styles.controls.visible: {}
+            styles.controls.css,
+            Radium.getState(this.state, 'overlay', ':hover') ? styles.controls.visible: {}
             )
           }>
-            <div key='invite' onTouchTap={RoomActions.showInviteModal} style={[GlobalStyles.cell, styles.controls.button]}>
+            <div key='invite' onTouchTap={RoomActions.showInviteModal} style={[GlobalStyles.cell, styles.controls.button.css]}>
               <IconButton>
                 <FontIcon className='material-icons' color={Colors.fullWhite}>person_add</FontIcon>
               </IconButton>
             </div>
             <div key='video' onTouchTap={this.toggleLocalVideo} style={[
               GlobalStyles.cell,
-              styles.controls.button,
+              styles.controls.button.css,
               !this.data.isLocalVideoEnabled && styles.controls.red
             ]}>
               <IconButton>
@@ -121,21 +121,21 @@
             </div>
             <div key='audio' onTouchTap={this.toggleLocalAudio} style={[
               GlobalStyles.cell,
-              styles.controls.button,
+              styles.controls.button.css,
               !this.data.isLocalAudioEnabled && styles.controls.red
             ]}>
               <IconButton>
                 <FontIcon className='material-icons' color={Colors.fullWhite}> mic_off</FontIcon>
               </IconButton>
             </div>
-            <div key='settings' style={[GlobalStyles.cell, styles.controls.button]}>
+            <div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
               <IconButton>
                 <FontIcon className='material-icons' color={Colors.fullWhite}>settings</FontIcon>
               </IconButton>
             </div>
-            <div key='end' style={[GlobalStyles.cell, styles.controls.button, styles.controls.buttonEnd]}>
+            <div key='end' style={[GlobalStyles.cell, styles.controls.button.css, styles.controls.buttonEnd.css]} onTouchTap={this.leave}>
               <IconButton>
-                <FontIcon className='material-icons' color={Radium.getState(this.state, 'end', ':hover') ? Colors.fullWhite: Colors.red800} onTouchTap={this.leave}>call_end</FontIcon>
+                <FontIcon className='material-icons' color={Radium.getState(this.state, 'end', ':hover') ? Colors.fullWhite: Colors.red800}>call_end</FontIcon>
               </IconButton>
             </div>
           </Paper>

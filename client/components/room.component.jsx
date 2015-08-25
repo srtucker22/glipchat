@@ -1,110 +1,143 @@
-var { Dialog, FontIcon, FlatButton, IconButton, Paper, RaisedButton } = MUI;
-var Colors = MUI.Styles.Colors;
+(()=> {
+  const { Dialog, FontIcon, FlatButton, FloatingActionButton, IconButton, Paper, RaisedButton } = MUI;
+  const Colors = MUI.Styles.Colors;
 
-var RoomActions = null;
-var RoomStore   = null;
-var RTCActions  = null;
-var RTCStore    = null;
-var UserStore   = null;
+  const styles = {
+    css: {
+      backgroundColor: Colors.grey800,
+    },
 
-Dependency.autorun(()=> {
-  RoomActions = Dependency.get('RoomActions');
-  RoomStore   = Dependency.get('RoomStore');
-  RTCStore    = Dependency.get('RTCStore');
-  RTCActions  = Dependency.get('RTCActions');
-  UserStore   = Dependency.get('UserStore');
-});
+    videos: {
+      css: {
+        bottom: 0,
+        left: 0,
+        padding: '0 5px',
+        position: 'absolute',
+        transition: 'all 1s ease-in-out',
+        width: '100%',
+      },
 
-//Standard Actions
-let standardActions = [
-  { text: 'Cancel' },
-  { text: 'Submit', onTouchTap: this._onDialogSubmit, ref: 'submit' }
-];
+      video: {
+        css: {
+          'float': 'right',
+          display: 'inline-block',
+          maxHeight: '20%',
+          maxWidth: '20%',
+          margin: '5px',
+          position: 'relative',
+        },
+      },
+    },
+  };
 
-RoomComponent = React.createClass({
-  mixins: [ReactMeteorData],
+  var RoomActions = null;
+  var RoomStore   = null;
+  var RTCActions  = null;
+  var RTCStore    = null;
+  var UserStore   = null;
 
-  statics: {
-    // async transition requirements
-    willTransitionTo: function(transition, params, query, callback) {
-      UserStore.requireUser().then((user)=> {
-        RoomActions.joinRoom(params.roomId);
+  Dependency.autorun(()=> {
+    RoomActions = Dependency.get('RoomActions');
+    RoomStore   = Dependency.get('RoomStore');
+    RTCStore    = Dependency.get('RTCStore');
+    RTCActions  = Dependency.get('RTCActions');
+    UserStore   = Dependency.get('UserStore');
+  });
 
-        RoomStore.requireRoom(params.roomId).then((room)=> {
-          this.room = room;
-          if (!RTCStore.isDuplicateConnection()) {
-            RTCActions.getLocalStream();
-            RoomActions.joinRoomStream(params.roomId);
-          }
-          callback();
-        }).catch((err)=> {
+  //Standard Actions
+  let standardActions = [
+    { text: 'Cancel' },
+    { text: 'Submit', onTouchTap: this._onDialogSubmit, ref: 'submit' }
+  ];
+
+  RoomComponent = Radium(React.createClass({
+    mixins: [ReactMeteorData],
+
+    statics: {
+      // async transition requirements
+      willTransitionTo: function(transition, params, query, callback) {
+        UserStore.requireUser().then((user)=> {
+          RoomActions.joinRoom(params.roomId);
+
+          RoomStore.requireRoom(params.roomId).then((room)=> {
+            this.room = room;
+            if (!RTCStore.isDuplicateConnection()) {
+              RTCActions.getLocalStream();
+              RoomActions.joinRoomStream(params.roomId);
+            }
+            callback();
+          }).catch((err)=> {
+            console.error(err);
+            transition.abort();
+            callback();
+          });
+        })
+
+        .catch((err)=> {
           console.error(err);
           transition.abort();
           callback();
         });
-      })
+      },
 
-      .catch((err)=> {
-        console.error(err);
-        transition.abort();
-        callback();
-      });
+      willTransitionFrom: function(transition, component) {
+        RTCActions.disconnect();
+        RoomActions.leaveRoom();
+      },
     },
 
-    willTransitionFrom: function(transition, component) {
-      RTCActions.disconnect();
-      RoomActions.leaveRoom();
+    componentWillUnmount() {
+      RTCActions.stopLocalStream();
     },
-  },
 
-  componentDidMount() {
+    getMeteorData() {
+      return {
+        localStreamError: RTCStore.localStreamError.get(),
+        peers: RTCStore.peers.get(),
+        room: RoomStore.currentRoom.get(),
+        stream: RTCStore.localStream.get(),
+        streamError: RTCStore.streamError.get(),
+        user: UserStore.user()
+      };
+    },
 
-  },
+    render() {
+      // log the errors for now
+      if(this.data.localStreamError)
+        console.error(this.data.localStreamError);
+      if(this.data.streamError)
+        console.error(this.data.streamError);
 
-  componentWillUnmount() {
-    RTCActions.stopLocalStream();
-  },
+      var { ...other } = this.props;
 
-  getMeteorData() {
-    return {
-      peers: RTCStore.peers.get(),
-      localStreamError: RTCStore.localStreamError.get(),
-      room: RoomStore.currentRoom.get(),
-      stream: RTCStore.localStream.get(),
-      streamError: RTCStore.streamError.get(),
-    };
-  },
+      return (
+        <div style={[styles.css]}>
+          {!!this.data.localStreamError && <LocalStreamErrorComponent error={this.data.localStreamError} {...other}/>}
 
-  render() {
-    // log the errors for now
-    if(this.data.localStreamError)
-      console.error(this.data.localStreamError);
-    if(this.data.streamError)
-      console.error(this.data.streamError);
+          <InviteComponent
+            ref='invite'
+            linkUrl={window.location.href}
+            username={UserStore.isGuest() ? '' : UserStore.user().profile.name}
+          />
 
-    var { ...other } = this.props;
+          {!this.data.localStreamError && !!this.data.stream && <ControlsComponent />}
 
-    return (
-      <div className='bg-grey-800'>
-        {!!this.data.localStreamError && <LocalStreamErrorComponent error={this.data.localStreamError} {...other}/>}
+          {!this.data.localStreamError && !!this.data.stream && (this.data.room.connected.length === 1 && this.data.room.connected[0] === this.data.user._id) && <FirstOverlayComponent linkUrl={window.location.href} />}
 
-        <InviteComponent
-          ref='invite'
-          linkUrl={window.location.href}
-          username={UserStore.isGuest() ? '' : UserStore.user().profile.name}
-        />
+          {!this.data.localStreamError && !!this.data.stream && <VideoComponent src={this.data.stream} muted={true} flip={true} fullScreen={true}/>}
 
-        {!this.data.localStreamError && !!this.data.stream && <ControlsComponent />}
-
-        {!this.data.localStreamError && !!this.data.stream && (!this.data.peers || !_.keys(this.data.peers).length) && <FirstOverlayComponent linkUrl={window.location.href} />}
-
-        {!this.data.localStreamError && !!this.data.stream && <VideoComponent className='full-screen' src={this.data.stream} muted={true}/>}
-        {_.map(this.data.peers, (val, key)=>{
-          return (
-            <VideoComponent className='small-screen' key={key} src={val}/>
-          );
-        })}
-      </div>
-    );
-  },
-});
+          <div style={[styles.videos.css]}>
+            {_.map(this.data.peers, (val, key)=>{
+              return (
+                <div key={key} style={[styles.videos.video.css]}>
+                  <VideoOverlayComponent id={key}/>
+                  <VideoComponent src={val}/>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    },
+  }));
+})();

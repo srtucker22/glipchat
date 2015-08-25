@@ -1,6 +1,6 @@
-(()=>{
-  var GlobalStyles = null;
-  var RoomActions = null;
+(()=> {
+  let GlobalStyles = null;
+  let RoomActions = null;
 
   Dependency.autorun(()=> {
     GlobalStyles = Dependency.get('GlobalStyles');
@@ -14,7 +14,7 @@
   const Colors = MUI.Styles.Colors;
 
   const styles = {
-    overlay: {
+    css: {
       color: Colors.fullWhite,
       height: '100%',
       left: 0,
@@ -24,40 +24,45 @@
       zIndex: 2,
     },
 
-    linkUrl: {
-      backgroundColor: Colors.fullWhite,
-      color: Colors.fullBlack,
-      margin: '10px auto',
-      overflow: 'hidden',
-      padding: '10px',
-      textOverflow: 'ellipsis',
-    },
-
     invite: {
-      margin: '0 0 20px 0',
-      width: '100%',
+      css: {
+        margin: '0 0 20px 0',
+        width: '100%',
+      },
+      cell: {
+        css: {
+          padding: '10px',
+          width: '50%',
+        }
+      },
     },
 
-    inviteCell: {
-      padding: '10px',
-      width: '50%',
-    },
+    linkUrl: {
+      css: {
+        backgroundColor: Colors.fullWhite,
+        color: Colors.fullBlack,
+        margin: '10px auto',
+        overflow: 'hidden',
+        padding: '10px',
+        textOverflow: 'ellipsis',
+      }
+    }
   };
 
   FirstOverlayComponent = Radium(React.createClass({
     render(){
       return (
-        <div style={[GlobalStyles.table, styles.overlay]}>
+        <div style={[GlobalStyles.table, styles.css]}>
           <div style={[GlobalStyles.cell]}>
-            <div style={[GlobalStyles.table, styles.invite]}>
-              <div style={[GlobalStyles.cell, styles.inviteCell]} className='text-right'>You are the only one here.</div>
-              <div style={[GlobalStyles.cell, styles.inviteCell]} className='text-left'>
+            <div style={[GlobalStyles.table, styles.invite.css]}>
+              <div style={[GlobalStyles.cell, styles.invite.cell.css]} className='text-right'>You are the only one here.</div>
+              <div style={[GlobalStyles.cell, styles.invite.cell.css]} className='text-left'>
                 <RaisedButton label='Invite people' primary={true} onTouchTap={RoomActions.showInviteModal}></RaisedButton>
               </div>
             </div>
             <div>
               <div className='text-center'>Share the permanent link. Bookmark and come back anytime.</div>
-              <div style={[GlobalStyles.table, GlobalStyles.inset, styles.linkUrl]}>{this.props.linkUrl}</div>
+              <div style={[GlobalStyles.table, GlobalStyles.inset, styles.linkUrl.css]}>{this.props.linkUrl}</div>
             </div>
           </div>
         </div>
