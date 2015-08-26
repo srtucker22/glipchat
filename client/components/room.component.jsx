@@ -111,8 +111,6 @@
 
       var { ...other } = this.props;
 
-      console.log(this.data.primaryStream);
-
       return (
         <div style={[styles.css]}>
           {!!this.data.localStreamError && <LocalStreamErrorComponent error={this.data.localStreamError} {...other}/>}

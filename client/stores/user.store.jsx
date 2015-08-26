@@ -10,6 +10,18 @@ var UserStore = function() {
   _this.loginError    = new ReactiveVar('');
   _this.loginOrCreate = new ReactiveVar('login');
   _this.logoutError   = new ReactiveVar('');
+  _this.subscribed = new ReactiveVar(false);
+
+  Tracker.autorun((c)=> {
+    if (Meteor.userId()) {
+      _this.subscribed.set(false);
+      Meteor.subscribe('user', {
+        onReady() {
+          _this.subscribed.set(true);
+        },
+      });
+    }
+  });
 
   // Callbacks
   _this.on = {
@@ -91,7 +103,7 @@ var UserStore = function() {
 
   // is the user a guest user
   _this.isGuest = ()=> {
-    return Meteor.user() && Meteor.user().username && Meteor.user().username.startsWith('guest-#');
+    return this.user() && (!this.user().services || (this.user().username && this.user().username.startsWith('guest-#')));
   }
 
   _this.tokenId = Dispatcher.register((payload)=> {
@@ -111,7 +123,7 @@ var UserStore = function() {
       case 'USER_LOGIN_FACEBOOK':
         _this.on.loginStart();
         Meteor.loginWithFacebook({
-          requestPermissions: ['public_profile', 'email'],
+          requestPermissions: ['public_profile', 'email', 'user_friends'],
           loginStyle: Browser.mobile ? 'redirect' : 'popup',
         }, (err)=> {
           if (!err) {

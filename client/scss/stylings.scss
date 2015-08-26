@@ -49,52 +49,6 @@ $insetShadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
 $z1Shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 
 .typeahead {
-
-  .typeahead-chips {
-    .typeahead-chip {
-      box-shadow: $z1Shadow;
-      border-radius: 24px;
-      display: inline-block;
-      margin-right: 15px;
-      .material-icons {
-        width: 24px;
-      }
-      .text {
-        padding: 0 5px;
-        font-size: 12px;
-      }
-      img {
-        border-radius: 50%;
-        border: solid 1px rgba(0, 0, 0, 0.08);
-        display: inline-block;
-        height: 24px;
-        margin-left: 1px;
-        width: 24px;
-      }
-    }
-  }
-
-  .typeahead-input-wrapper {
-    border-radius: 3px;
-    border: 1px solid transparent;
-    border-top: none;
-    border-bottom: 1px solid #DDD;
-    box-shadow: $insetShadow;
-    padding: 15px;
-
-    .typeahead-input {
-      margin-top: 10px;
-      padding: 0;
-
-      input {
-        border: none;
-
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-  }
   .typeahead-menu-wrapper {
     margin: 0 2px;
 

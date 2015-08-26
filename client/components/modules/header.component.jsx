@@ -91,6 +91,7 @@
       return {
         user: UserStore.user(),
         loggingIn: UserStore.loggingIn(),
+        subscribed: UserStore.subscribed.get(),
       };
     },
 
@@ -124,13 +125,13 @@
         { route: 'components', text: 'Components' },
       ];
 
-      if (!UserStore.loggingIn()) {
+      if (!UserStore.loggingIn() && this.data.subscribed) {
         if (this.data.user && !UserStore.isGuest()) {
+
           notificationDropdown = (
             <NotificationDropdownComponent messages={this.data.messages}/>
           );
-          console.log(UserStore.isGuest());
-          console.log(this.data.user);
+
           profileDropdown = (
             <ProfileDropdownComponent user={this.data.user} />
           );

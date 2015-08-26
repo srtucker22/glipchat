@@ -8,6 +8,21 @@
 
     },
 
+    general: {
+      css: {
+        color: Colors.fullWhite,
+        fontSize: '20px',
+        fontWeight: 'bold',
+      },
+
+      icon: {
+        css: {
+          display: 'block',
+          margin: '20px auto',
+        },
+      },
+    },
+
     permissionDenied: {
       css: {
         color: Colors.fullWhite,
@@ -60,7 +75,25 @@
     );
   };
 
-  LocalStreamErrorComponent = React.createClass({
+  let generalErrorComponent = (
+    <div className='row' style={[styles.general.css]}>
+      <div className='col-xs-12 text-center'>
+        <img src='images/atomic.png' style={[styles.general.icon.css]}/>
+        <p>Uh oh! Something went wrong. Please try refreshing the page.</p>
+      </div>
+    </div>
+  );
+
+  let duplicateErrorComponent = (
+    <div className='row' style={[styles.general.css]}>
+      <div className='col-xs-12 text-center'>
+        <img src='images/camel.png' style={[styles.general.icon.css]}/>
+        <p>Uh oh! You're already connected to this room in a different window, tab, or browser.</p>
+      </div>
+    </div>
+  );
+
+  LocalStreamErrorComponent = Radium(React.createClass({
     render(){
       var { ...other } = this.props;
 
@@ -70,9 +103,15 @@
         case 'PermissionDeniedError':
           errorComponent = permissionDeniedComponent(this.props.appName);
           break;
+        case 409:
+          errorComponent = duplicateErrorComponent;
+          break;
+        default:
+          errorComponent = generalErrorComponent;
+          break;
       }
 
       return errorComponent;
     }
-  });
+  }));
 })();

@@ -3,6 +3,7 @@
   const {
     Dialog,
     FlatButton,
+    RaisedButton,
     TextField,
   } = MUI;
 
@@ -49,13 +50,29 @@
           css: {
             fontSize: '12px',
             fontWeight: 'bold',
+            paddingTop: '20px',
+          },
+
+          label: {
+            css: {
+              paddingRight: '10px',
+            }
           },
 
           inputName: {
             css: {
-              paddingLeft: '10px',
+              display: 'inline-block',
+              marginRight: '20px',
             },
           },
+
+          button: {
+            css: {
+              bottom: '5px',
+              margin: '10px 0 5px',
+              position: 'relative',
+            }
+          }
         },
 
         textarea: {
@@ -76,13 +93,20 @@
   }
 
   let GlobalStyles = null;
+  let FacebookActions = null;
+  let FacebookStore = null;
   let RoomActions = null;
   let RoomStore = null;
+  let UserStore = null;
 
   Dependency.autorun(()=> {
     GlobalStyles = Dependency.get('GlobalStyles');
+    FacebookActions = Dependency.get('FacebookActions');
+    FacebookStore = Dependency.get('FacebookStore');
     RoomActions = Dependency.get('RoomActions');
     RoomStore = Dependency.get('RoomStore');
+    UserActions = Dependency.get('UserActions');
+    UserStore = Dependency.get('UserStore');
   });
 
   InviteComponent = Radium(React.createClass({
@@ -102,9 +126,18 @@
       };
     },
 
+    getFriends() {
+      FacebookActions.getFriends();
+    },
+
+    loginWithFacebook() {
+      UserActions.loginWithFacebook();
+    },
+
     invite() {
       console.log(this.refs.dialog);
       console.log('inviting');
+      this.getFriends();
     },
 
     render() {
@@ -136,14 +169,17 @@
             </div>
             <div className='row' style={[styles.content.inviteRow.css]}>
               <div style={[styles.content.inviteRow.header.css]}>
-                Send invite as
+                <div style={[GlobalStyles.inline, styles.content.inviteRow.header.label.css]}>Send invite as</div>
                 <TextField
                   style={styles.content.inviteRow.header.inputName.css}
                   defaultValue={this.props.username}
                   floatingLabelText='Your name'/>
+                {/*UserStore.isGuest() && <div style={[GlobalStyles.inline, styles.content.inviteRow.header.button.css]}>
+                  <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
+                </div>*/}
               </div>
-              <textarea style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>
               <TypeaheadComponent />
+              <textarea style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>
             </div>
           </div>
         </Dialog>

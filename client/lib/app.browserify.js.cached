@@ -97,13 +97,12 @@ MUI.Menu = require('material-ui/lib/menus/menu');
 MUI.MenuItem = require('material-ui/lib/menus/menu-item');
 Radium = require('radium');
 Router = require('react-router');
-Typeahead = require('react-typeahead');
-MicroEvent = require('microevent');
+TagsInput = require('react-tagsinput');
 
 require('webrtc-adapter-test');
 require('react-tap-event-plugin')();
 
-},{"bowser":3,"material-ui":38,"material-ui/lib/menus/menu":52,"material-ui/lib/menus/menu-item":51,"microevent":145,"radium":153,"react-router":185,"react-tap-event-plugin":203,"react-typeahead":205,"webrtc-adapter-test":213}],3:[function(require,module,exports){
+},{"bowser":3,"material-ui":38,"material-ui/lib/menus/menu":52,"material-ui/lib/menus/menu-item":51,"radium":152,"react-router":184,"react-tagsinput":199,"react-tap-event-plugin":203,"webrtc-adapter-test":204}],3:[function(require,module,exports){
 /*!
   * Bowser - a browser detector
   * https://github.com/ded/bowser
@@ -18526,58 +18525,6 @@ module.exports = React.createClass({
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{}],145:[function(require,module,exports){
-/**
- * MicroEvent - to make any js object an event emitter (server or browser)
- * 
- * - pure javascript - server compatible, browser compatible
- * - dont rely on the browser doms
- * - super simple - you get it immediatly, no mistery, no magic involved
- *
- * - create a MicroEventDebug with goodies to debug
- *   - make it safer to use
-*/
-
-var MicroEvent	= function(){}
-MicroEvent.prototype	= {
-	bind	: function(event, fct){
-		this._events = this._events || {};
-		this._events[event] = this._events[event]	|| [];
-		this._events[event].push(fct);
-	},
-	unbind	: function(event, fct){
-		this._events = this._events || {};
-		if( event in this._events === false  )	return;
-		this._events[event].splice(this._events[event].indexOf(fct), 1);
-	},
-	trigger	: function(event /* , args... */){
-		this._events = this._events || {};
-		if( event in this._events === false  )	return;
-		for(var i = 0; i < this._events[event].length; i++){
-			this._events[event][i].apply(this, Array.prototype.slice.call(arguments, 1))
-		}
-	}
-};
-
-/**
- * mixin will delegate all MicroEvent.js function in the destination object
- *
- * - require('MicroEvent').mixin(Foobar) will make Foobar able to use MicroEvent
- *
- * @param {Object} the object which will support MicroEvent
-*/
-MicroEvent.mixin	= function(destObject){
-	var props	= ['bind', 'unbind', 'trigger'];
-	for(var i = 0; i < props.length; i ++){
-		destObject.prototype[props[i]]	= MicroEvent.prototype[props[i]];
-	}
-}
-
-// export in common js
-if( typeof module !== "undefined" && ('exports' in module)){
-	module.exports	= MicroEvent
-}
-
-},{}],146:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -18623,7 +18570,7 @@ var PrintStyle = React.createClass({
 module.exports = PrintStyle;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../print-styles.js":157,"./style.js":147}],147:[function(require,module,exports){
+},{"../print-styles.js":156,"./style.js":146}],146:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -18713,7 +18660,7 @@ var Style = React.createClass({
 module.exports = Style;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../create-markup-for-styles":149,"../prefixer":156}],148:[function(require,module,exports){
+},{"../create-markup-for-styles":148,"../prefixer":155}],147:[function(require,module,exports){
 /* @flow */
 
 'use strict';
@@ -18737,7 +18684,7 @@ module.exports = {
     _matchMediaFunction = nextMatchMediaFunction;
   }
 };
-},{"exenv":160}],149:[function(require,module,exports){
+},{"exenv":159}],148:[function(require,module,exports){
 /* @flow */
 
 'use strict';
@@ -18750,7 +18697,7 @@ var createMarkupForStyles = function createMarkupForStyles(style, spaces) {
 };
 
 module.exports = createMarkupForStyles;
-},{}],150:[function(require,module,exports){
+},{}],149:[function(require,module,exports){
 (function (process){
 /* @flow */
 
@@ -18845,7 +18792,7 @@ var enhanceWithRadium = function enhanceWithRadium(ComposedComponent) {
 module.exports = enhanceWithRadium;
 }).call(this,require('_process'))
 
-},{"./print-styles.js":157,"./resolve-styles.js":158,"_process":1}],151:[function(require,module,exports){
+},{"./print-styles.js":156,"./resolve-styles.js":157,"_process":1}],150:[function(require,module,exports){
 /* @flow */
 
 'use strict';
@@ -18855,7 +18802,7 @@ var getStateKey = function getStateKey(elementKey) {
 };
 
 module.exports = getStateKey;
-},{}],152:[function(require,module,exports){
+},{}],151:[function(require,module,exports){
 /* @flow */
 
 'use strict';
@@ -18875,7 +18822,7 @@ var getState = function getState(state, elementKey, value) {
 };
 
 module.exports = getState;
-},{"./get-state-key":151}],153:[function(require,module,exports){
+},{"./get-state-key":150}],152:[function(require,module,exports){
 'use strict';
 
 var Enhancer = require('./enhancer');
@@ -18888,7 +18835,7 @@ module.exports.PrintStyleSheet = require('./components/print-style-sheet');
 module.exports.getState = require('./get-state');
 module.exports.keyframes = require('./keyframes');
 module.exports.Config = require('./config');
-},{"./components/print-style-sheet":146,"./components/style":147,"./config":148,"./enhancer":150,"./get-state":152,"./keyframes":154}],154:[function(require,module,exports){
+},{"./components/print-style-sheet":145,"./components/style":146,"./config":147,"./enhancer":149,"./get-state":151,"./keyframes":153}],153:[function(require,module,exports){
 /* @flow */
 
 'use strict';
@@ -18943,7 +18890,7 @@ var keyframes = function keyframes(keyframeRules, component) {
 };
 
 module.exports = keyframes;
-},{"./create-markup-for-styles":149,"./prefixer":156,"exenv":160}],155:[function(require,module,exports){
+},{"./create-markup-for-styles":148,"./prefixer":155,"exenv":159}],154:[function(require,module,exports){
 /* @flow */
 
 'use strict';
@@ -18983,7 +18930,7 @@ var subscribe = function subscribe(callback) {
 module.exports = {
   subscribe: subscribe
 };
-},{}],156:[function(require,module,exports){
+},{}],155:[function(require,module,exports){
 (function (process){
 /**
  * Based on https://github.com/jsstyles/css-vendor, but without having to
@@ -19403,7 +19350,7 @@ module.exports = {
 };
 }).call(this,require('_process'))
 
-},{"_process":1,"array-find":159,"exenv":160}],157:[function(require,module,exports){
+},{"_process":1,"array-find":158,"exenv":159}],156:[function(require,module,exports){
 /* @flow */
 
 "use strict";
@@ -19477,7 +19424,7 @@ module.exports = {
   getPrintStyles: getPrintStyles,
   subscribe: subscribe
 };
-},{}],158:[function(require,module,exports){
+},{}],157:[function(require,module,exports){
 (function (process,global){
 /* @flow */
 
@@ -19851,7 +19798,7 @@ module.exports = resolveStyles;
 // can't know what else to render until you render the parent component).
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./config":148,"./get-state":152,"./get-state-key":151,"./mouse-up-listener":155,"./prefixer":156,"_process":1,"exenv":160}],159:[function(require,module,exports){
+},{"./config":147,"./get-state":151,"./get-state-key":150,"./mouse-up-listener":154,"./prefixer":155,"_process":1,"exenv":159}],158:[function(require,module,exports){
 'use strict';
 
 function find(array, predicate, context) {
@@ -19876,7 +19823,7 @@ function find(array, predicate, context) {
 
 module.exports = find;
 
-},{}],160:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 /*!
   Copyright (c) 2015 Jed Watson.
   Based on code that is Copyright 2013-2015, Facebook, Inc.
@@ -19917,7 +19864,7 @@ module.exports = find;
 
 }());
 
-},{}],161:[function(require,module,exports){
+},{}],160:[function(require,module,exports){
 /**
  * Represents a cancellation caused by navigating away
  * before the previous transition has fully resolved.
@@ -19927,7 +19874,7 @@ module.exports = find;
 function Cancellation() {}
 
 module.exports = Cancellation;
-},{}],162:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -19961,7 +19908,7 @@ var History = {
 module.exports = History;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],163:[function(require,module,exports){
+},{}],162:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -20037,7 +19984,7 @@ var Match = (function () {
 })();
 
 module.exports = Match;
-},{"./PathUtils":165}],164:[function(require,module,exports){
+},{"./PathUtils":164}],163:[function(require,module,exports){
 'use strict';
 
 var PropTypes = require('./PropTypes');
@@ -20108,7 +20055,7 @@ var Navigation = {
 };
 
 module.exports = Navigation;
-},{"./PropTypes":166}],165:[function(require,module,exports){
+},{"./PropTypes":165}],164:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -20265,7 +20212,7 @@ var PathUtils = {
 module.exports = PathUtils;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"object-assign":194,"qs":195}],166:[function(require,module,exports){
+},{"object-assign":193,"qs":194}],165:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -20300,7 +20247,7 @@ var PropTypes = assign({}, ReactPropTypes, {
 module.exports = PropTypes;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./Route":168}],167:[function(require,module,exports){
+},{"./Route":167}],166:[function(require,module,exports){
 /**
  * Encapsulates a redirect to the given route.
  */
@@ -20313,7 +20260,7 @@ function Redirect(to, params, query) {
 }
 
 module.exports = Redirect;
-},{}],168:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -20517,7 +20464,7 @@ var Route = (function () {
 module.exports = Route;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./PathUtils":165}],169:[function(require,module,exports){
+},{"./PathUtils":164}],168:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -20596,7 +20543,7 @@ var ScrollHistory = {
 module.exports = ScrollHistory;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./getWindowScrollPosition":184}],170:[function(require,module,exports){
+},{"./getWindowScrollPosition":183}],169:[function(require,module,exports){
 'use strict';
 
 var PropTypes = require('./PropTypes');
@@ -20671,7 +20618,7 @@ var State = {
 };
 
 module.exports = State;
-},{"./PropTypes":166}],171:[function(require,module,exports){
+},{"./PropTypes":165}],170:[function(require,module,exports){
 /* jshint -W058 */
 
 'use strict';
@@ -20747,7 +20694,7 @@ Transition.to = function (transition, routes, params, query, callback) {
 };
 
 module.exports = Transition;
-},{"./Cancellation":161,"./Redirect":167}],172:[function(require,module,exports){
+},{"./Cancellation":160,"./Redirect":166}],171:[function(require,module,exports){
 /**
  * Actions that modify the URL.
  */
@@ -20773,7 +20720,7 @@ var LocationActions = {
 };
 
 module.exports = LocationActions;
-},{}],173:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 'use strict';
 
 var LocationActions = require('../actions/LocationActions');
@@ -20803,7 +20750,7 @@ var ImitateBrowserBehavior = {
 };
 
 module.exports = ImitateBrowserBehavior;
-},{"../actions/LocationActions":172}],174:[function(require,module,exports){
+},{"../actions/LocationActions":171}],173:[function(require,module,exports){
 /**
  * A scroll behavior that always scrolls to the top of the page
  * after a transition.
@@ -20819,7 +20766,7 @@ var ScrollToTopBehavior = {
 };
 
 module.exports = ScrollToTopBehavior;
-},{}],175:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -20861,7 +20808,7 @@ var ContextWrapper = (function (_React$Component) {
 module.exports = ContextWrapper;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],176:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -20909,7 +20856,7 @@ DefaultRoute.defaultProps = {
 };
 
 module.exports = DefaultRoute;
-},{"../PropTypes":166,"./Route":180,"./RouteHandler":181}],177:[function(require,module,exports){
+},{"../PropTypes":165,"./Route":179,"./RouteHandler":180}],176:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -21048,7 +20995,7 @@ Link.defaultProps = {
 module.exports = Link;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../PropTypes":166}],178:[function(require,module,exports){
+},{"../PropTypes":165}],177:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -21097,7 +21044,7 @@ NotFoundRoute.defaultProps = {
 };
 
 module.exports = NotFoundRoute;
-},{"../PropTypes":166,"./Route":180,"./RouteHandler":181}],179:[function(require,module,exports){
+},{"../PropTypes":165,"./Route":179,"./RouteHandler":180}],178:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
@@ -21141,7 +21088,7 @@ Redirect.propTypes = {
 Redirect.defaultProps = {};
 
 module.exports = Redirect;
-},{"../PropTypes":166,"./Route":180}],180:[function(require,module,exports){
+},{"../PropTypes":165,"./Route":179}],179:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -21236,7 +21183,7 @@ Route.defaultProps = {
 module.exports = Route;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../PropTypes":166,"./RouteHandler":181}],181:[function(require,module,exports){
+},{"../PropTypes":165,"./RouteHandler":180}],180:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -21348,7 +21295,7 @@ RouteHandler.childContextTypes = {
 module.exports = RouteHandler;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../PropTypes":166,"./ContextWrapper":175}],182:[function(require,module,exports){
+},{"../PropTypes":165,"./ContextWrapper":174}],181:[function(require,module,exports){
 (function (process,global){
 /* jshint -W058 */
 'use strict';
@@ -21866,7 +21813,7 @@ function createRouter(options) {
 module.exports = createRouter;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./Cancellation":161,"./History":162,"./Match":163,"./PathUtils":165,"./PropTypes":166,"./Redirect":167,"./Route":168,"./ScrollHistory":169,"./Transition":171,"./actions/LocationActions":172,"./behaviors/ImitateBrowserBehavior":173,"./createRoutesFromReactChildren":183,"./isReactChildren":186,"./locations/HashLocation":187,"./locations/HistoryLocation":188,"./locations/RefreshLocation":189,"./locations/StaticLocation":190,"./supportsHistory":193,"_process":1}],183:[function(require,module,exports){
+},{"./Cancellation":160,"./History":161,"./Match":162,"./PathUtils":164,"./PropTypes":165,"./Redirect":166,"./Route":167,"./ScrollHistory":168,"./Transition":170,"./actions/LocationActions":171,"./behaviors/ImitateBrowserBehavior":172,"./createRoutesFromReactChildren":182,"./isReactChildren":185,"./locations/HashLocation":186,"./locations/HistoryLocation":187,"./locations/RefreshLocation":188,"./locations/StaticLocation":189,"./supportsHistory":192,"_process":1}],182:[function(require,module,exports){
 (function (global){
 /* jshint -W084 */
 'use strict';
@@ -21951,7 +21898,7 @@ function createRoutesFromReactChildren(children) {
 module.exports = createRoutesFromReactChildren;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./Route":168,"./components/DefaultRoute":176,"./components/NotFoundRoute":178,"./components/Redirect":179}],184:[function(require,module,exports){
+},{"./Route":167,"./components/DefaultRoute":175,"./components/NotFoundRoute":177,"./components/Redirect":178}],183:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -21973,7 +21920,7 @@ function getWindowScrollPosition() {
 module.exports = getWindowScrollPosition;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],185:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 'use strict';
 
 exports.DefaultRoute = require('./components/DefaultRoute');
@@ -22005,7 +21952,7 @@ exports.createRoutesFromReactChildren = require('./createRoutesFromReactChildren
 
 exports.create = require('./createRouter');
 exports.run = require('./runRouter');
-},{"./History":162,"./Navigation":164,"./Route":168,"./State":170,"./behaviors/ImitateBrowserBehavior":173,"./behaviors/ScrollToTopBehavior":174,"./components/DefaultRoute":176,"./components/Link":177,"./components/NotFoundRoute":178,"./components/Redirect":179,"./components/Route":180,"./components/RouteHandler":181,"./createRouter":182,"./createRoutesFromReactChildren":183,"./locations/HashLocation":187,"./locations/HistoryLocation":188,"./locations/RefreshLocation":189,"./locations/StaticLocation":190,"./locations/TestLocation":191,"./runRouter":192}],186:[function(require,module,exports){
+},{"./History":161,"./Navigation":163,"./Route":167,"./State":169,"./behaviors/ImitateBrowserBehavior":172,"./behaviors/ScrollToTopBehavior":173,"./components/DefaultRoute":175,"./components/Link":176,"./components/NotFoundRoute":177,"./components/Redirect":178,"./components/Route":179,"./components/RouteHandler":180,"./createRouter":181,"./createRoutesFromReactChildren":182,"./locations/HashLocation":186,"./locations/HistoryLocation":187,"./locations/RefreshLocation":188,"./locations/StaticLocation":189,"./locations/TestLocation":190,"./runRouter":191}],185:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -22022,7 +21969,7 @@ function isReactChildren(object) {
 module.exports = isReactChildren;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],187:[function(require,module,exports){
+},{}],186:[function(require,module,exports){
 'use strict';
 
 var LocationActions = require('../actions/LocationActions');
@@ -22134,7 +22081,7 @@ var HashLocation = {
 };
 
 module.exports = HashLocation;
-},{"../History":162,"../actions/LocationActions":172}],188:[function(require,module,exports){
+},{"../History":161,"../actions/LocationActions":171}],187:[function(require,module,exports){
 'use strict';
 
 var LocationActions = require('../actions/LocationActions');
@@ -22221,7 +22168,7 @@ var HistoryLocation = {
 };
 
 module.exports = HistoryLocation;
-},{"../History":162,"../actions/LocationActions":172}],189:[function(require,module,exports){
+},{"../History":161,"../actions/LocationActions":171}],188:[function(require,module,exports){
 'use strict';
 
 var HistoryLocation = require('./HistoryLocation');
@@ -22253,7 +22200,7 @@ var RefreshLocation = {
 };
 
 module.exports = RefreshLocation;
-},{"../History":162,"./HistoryLocation":188}],190:[function(require,module,exports){
+},{"../History":161,"./HistoryLocation":187}],189:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -22306,7 +22253,7 @@ StaticLocation.prototype.pop = throwCannotModify;
 module.exports = StaticLocation;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],191:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -22404,7 +22351,7 @@ var TestLocation = (function () {
 module.exports = TestLocation;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../History":162,"../actions/LocationActions":172}],192:[function(require,module,exports){
+},{"../History":161,"../actions/LocationActions":171}],191:[function(require,module,exports){
 'use strict';
 
 var createRouter = require('./createRouter');
@@ -22455,7 +22402,7 @@ function runRouter(routes, location, callback) {
 }
 
 module.exports = runRouter;
-},{"./createRouter":182}],193:[function(require,module,exports){
+},{"./createRouter":181}],192:[function(require,module,exports){
 'use strict';
 
 function supportsHistory() {
@@ -22472,7 +22419,7 @@ function supportsHistory() {
 }
 
 module.exports = supportsHistory;
-},{}],194:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 'use strict';
 
 function ToObject(val) {
@@ -22500,10 +22447,10 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],195:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 module.exports = require('./lib/');
 
-},{"./lib/":196}],196:[function(require,module,exports){
+},{"./lib/":195}],195:[function(require,module,exports){
 // Load modules
 
 var Stringify = require('./stringify');
@@ -22520,7 +22467,7 @@ module.exports = {
     parse: Parse
 };
 
-},{"./parse":197,"./stringify":198}],197:[function(require,module,exports){
+},{"./parse":196,"./stringify":197}],196:[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -22683,7 +22630,7 @@ module.exports = function (str, options) {
     return Utils.compact(obj);
 };
 
-},{"./utils":199}],198:[function(require,module,exports){
+},{"./utils":198}],197:[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -22782,7 +22729,7 @@ module.exports = function (obj, options) {
     return keys.join(delimiter);
 };
 
-},{"./utils":199}],199:[function(require,module,exports){
+},{"./utils":198}],198:[function(require,module,exports){
 // Load modules
 
 
@@ -22915,6 +22862,361 @@ exports.isBuffer = function (obj) {
         obj.constructor.isBuffer &&
         obj.constructor.isBuffer(obj));
 };
+
+},{}],199:[function(require,module,exports){
+(function (global){
+;(function (root, factory) {
+  /* istanbul ignore next */
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = factory((typeof window !== "undefined" ? window['React']['require'] : typeof global !== "undefined" ? global['React']['require'] : null)("react"));
+  } else if (typeof define === "function" && define.amd) {
+    define(["react"], factory);
+  } else {
+    root.ReactTagsInput = factory(root.React);
+  }
+})(this, function (React) {
+  "use strict";
+
+  var Input = React.createClass({
+    render: function () {
+      var ns = this.props.ns;
+
+      var inputClass = this.props.classNames.input || ns + "tagsinput-input";
+
+      if (this.props.validating) {
+        var validatingClass = this.props.classNames.validating || ns + "tagsinput-validating";
+        inputClass += " " + validatingClass;
+      }
+
+      if (this.props.invalid) {
+        var invalidClass = this.props.classNames.invalid || ns + "tagsinput-invalid";
+        inputClass += " " + invalidClass;
+      }
+
+      return React.createElement("input",
+        // https://gist.github.com/sebmarkbage/a6e220b7097eb3c79ab7
+        // avoid dependency on ES6's `Object.assign()`
+        React.__spread({}, this.props, {
+          type: "text"
+        , className: inputClass
+        , placeholder: this.props.placeholder
+        })
+      );
+    }
+  });
+
+  var Tag = React.createClass({
+    render: function () {
+      return (
+        React.createElement("span", {
+          className: this.props.classNames.tag || this.props.ns + "tagsinput-tag"
+        }, this.props.tag, React.createElement("a", {
+          onClick: this.props.remove
+          , className: this.props.classNames.remove || this.props.ns + "tagsinput-remove"
+        }))
+      );
+    }
+  });
+
+  var TagsInput = React.createClass({
+    propTypes: {
+      value: React.PropTypes.array
+      , valueLink: React.PropTypes.object
+      , defaultValue: React.PropTypes.array
+      , placeholder: React.PropTypes.string
+      , classNames: React.PropTypes.object
+      , classNamespace: React.PropTypes.string
+      , style: React.PropTypes.object
+      , addKeys: React.PropTypes.array
+      , removeKeys: React.PropTypes.array
+      , addOnBlur: React.PropTypes.bool
+      , onChange: React.PropTypes.func
+      , onChangeInput: React.PropTypes.func
+      , onBlur: React.PropTypes.func
+      , onClick: React.PropTypes.func
+      , onKeyDown: React.PropTypes.func
+      , onKeyUp: React.PropTypes.func
+      , onTagAdd: React.PropTypes.func
+      , beforeTagAdd: React.PropTypes.func
+      , onTagRemove: React.PropTypes.func
+      , beforeTagRemove: React.PropTypes.func
+      , transform: React.PropTypes.func
+      , validate: React.PropTypes.func
+      , validateAsync: React.PropTypes.func
+      , renderTag: React.PropTypes.func
+      , required: React.PropTypes.bool
+    }
+
+    , getDefaultProps: function () {
+      return {
+        defaultValue: []
+        , placeholder: "Add a tag"
+        , classNames: {}
+        , classNamespace: "react"
+        , addKeys: [13, 9]
+        , removeKeys: [8]
+        , addOnBlur: true
+        , onChange: function () { }
+        , onChangeInput: function () { }
+        , onBlur: function () { }
+        , onClick: function (e) { }
+        , onKeyDown: function () { }
+        , onKeyUp: function () { }
+        , onTagAdd: function () { }
+        , beforeTagAdd: function () { return true; }
+        , onTagRemove: function () { }
+        , beforeTagRemove: function () { return true; }
+        , transform: function (tag) { return tag.trim(); }
+        , renderTag: null
+        , required: false
+      };
+    }
+
+    , getInitialState: function () {
+      var value = this.props.defaultValue.slice(0);
+
+      return {
+        value: value
+        , tag: ""
+        , invalid: false
+        , validating: false
+      };
+    }
+
+    , componentWillUpdate: function (nextProps) {
+      if (!this.isUncontrolled() && this.isUncontrolled(nextProps)) {
+        this.setState({ value: this.props.defaultValue.slice(0) });
+      }
+    }
+
+    , isUncontrolled: function (props) {
+      props = props || this.props;
+      return !props.value && !props.valueLink;
+    }
+
+    , getValueLink: function () {
+      if (!this.isUncontrolled()) {
+        return this.props.valueLink || {
+          value: this.props.value
+          , requestChange: this.props.onChange
+        };
+      }
+    }
+
+    , _valueTransaction: function (fn, tag) {
+      var valueLink = this.getValueLink();
+
+      if (!this.isUncontrolled()) {
+        return valueLink.requestChange(fn(valueLink.value), tag);
+      }
+
+      this.setState(function (state) {
+        var newValue = fn(state.value);
+        if (newValue) {
+          this.props.onChange(newValue, tag);
+          return { value: newValue };
+        }
+      });
+    }
+
+    , _value: function () {
+      var valueLink = this.getValueLink();
+
+      if (!this.isUncontrolled()) {
+        return valueLink.value;
+      }
+
+      return this.state.value;
+    }
+
+    , defaultValidate: function (tag) {
+      return this._value().indexOf(tag) === -1;
+    }
+
+    , getTags: function () {
+      return this._value();
+    }
+
+    , validation: function (tag, cb) {
+      var validate = this.props.validateAsync || this.props.validate || this.defaultValidate;
+
+      var async = !!this.props.validateAsync || validate.length == 2;
+
+      if (async) {
+        validate(tag, cb);
+      } else {
+        cb(validate(tag));
+      }
+    }
+
+    , addTag: function (tag) {
+      var valueLink = this.getValueLink();
+
+      var newTag = this.props.transform(tag);
+
+      if (!newTag) { return ; }
+
+      if (!this.props.beforeTagAdd(tag)) {
+        return ;
+      };
+
+      this.setState({ validating: true });
+      this.validation(newTag, function (valid) {
+        this.setState({ validating: false });
+
+        if (!valid) { return this.setState({ invalid: true }); }
+
+        this._valueTransaction(function (value) {
+
+          this.setState({
+            tag: ""
+            , invalid: false
+          }, function () {
+            this.props.onTagAdd(newTag);
+          });
+
+          return value.concat([newTag]);
+        }.bind(this), newTag);
+      }.bind(this));
+    }
+
+    , removeTag: function (tag) {
+      if (!this.props.beforeTagRemove(tag)) {
+        return ;
+      };
+
+      this._valueTransaction(function (value) {
+        var clone = value.concat([]);
+
+        for (var i = 0; i < clone.length; i += 1) {
+          if (clone[i] === tag) {
+            clone.splice(i, 1);
+
+            this.setState({
+              invalid: false
+            }, function () {
+              this.props.onTagRemove(tag);
+            });
+
+            return clone;
+          }
+        }
+      }.bind(this), tag);
+    }
+
+    , onKeyDown: function (e) {
+      var add = this.props.addKeys.indexOf(e.keyCode) !== -1
+        , remove = this.props.removeKeys.indexOf(e.keyCode) !== -1;
+
+      if (add) {
+        e.preventDefault();
+        this.addTag(this.state.tag);
+      }
+
+      if (remove && this._value().length > 0 && this.state.tag === "") {
+        this.removeTag(this._value()[this._value().length - 1]);
+      }
+
+      if (!add && !remove) {
+        this.props.onKeyDown(e);
+      }
+    }
+
+    , onChange: function (e) {
+      if (!this.state.validating) {
+        this.props.onChangeInput(e.target.value);
+        this.setState({
+          tag: e.target.value
+          , invalid: false
+        });
+      }
+    }
+
+    , onBlur: function (e) {
+      var tag = this.state.tag;
+
+      if (this.props.addOnBlur) {
+        this.addTag(tag);
+      }
+
+      this.props.onBlur();
+    }
+
+    , clear: function () {
+      this._valueTransaction(function (value) {
+        return [];
+      }, "");
+    }
+
+    , clearInput: function () {
+      this.setState({ tag: "", invalid: false });
+    }
+
+    , focus: function () {
+      this.refs.input.getDOMNode().focus();
+    }
+
+    , blur: function () {
+      this.refs.input.getDOMNode().blur();
+    }
+
+    , handleClick: function (e) {
+      if (e.target === this.getDOMNode()) {
+        this.focus();
+      }
+
+      this.props.onClick(e);
+    }
+
+    , render: function() {
+      var ns = this.props.classNamespace === "" ? "" : this.props.classNamespace + "-";
+
+      var tagNodes = this._value().map(function (tag, i) {
+        var removeTag = this.removeTag.bind(null, tag)
+
+        if (this.props.renderTag) {
+          return this.props.renderTag(i, tag, removeTag);
+        }
+
+        return React.createElement(Tag, {
+          key: i
+          , ns: ns
+          , tag: tag
+          , classNames: this.props.classNames
+          , remove: removeTag
+        });
+      }.bind(this));
+
+      var hasTags = tagNodes.length;
+      var needsTags = this.props.required && !hasTags;
+
+      return (
+        React.createElement("div", {
+          style: this.props.style,
+          className: this.props.classNames.div || ns + "tagsinput"
+          , onClick: this.handleClick
+        }, tagNodes, React.createElement(Input, {
+          ref: "input"
+          , ns: ns
+          , classNames: this.props.classNames
+          , placeholder: this.props.placeholder
+          , value: this.state.tag
+          , invalid: this.state.invalid
+          , validating: this.state.validating
+          , onKeyDown: this.onKeyDown
+          , onKeyUp: this.props.onKeyUp
+          , onChange: this.onChange
+          , onBlur: this.onBlur
+          , required: needsTags
+        }))
+      );
+    }
+  });
+
+  return TagsInput;
+});
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{}],200:[function(require,module,exports){
 (function (global){
@@ -23460,989 +23762,6 @@ module.exports = function injectTapEventPlugin () {
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{"./ResponderEventPlugin.js":200,"./TapEventPlugin.js":201}],204:[function(require,module,exports){
-/**
- * PolyFills make me sad
- */
-var KeyEvent = KeyEvent || {};
-KeyEvent.DOM_VK_UP = KeyEvent.DOM_VK_UP || 38;
-KeyEvent.DOM_VK_DOWN = KeyEvent.DOM_VK_DOWN || 40;
-KeyEvent.DOM_VK_BACK_SPACE = KeyEvent.DOM_VK_BACK_SPACE || 8;
-KeyEvent.DOM_VK_RETURN = KeyEvent.DOM_VK_RETURN || 13;
-KeyEvent.DOM_VK_ENTER = KeyEvent.DOM_VK_ENTER || 14;
-KeyEvent.DOM_VK_ESCAPE = KeyEvent.DOM_VK_ESCAPE || 27;
-KeyEvent.DOM_VK_TAB = KeyEvent.DOM_VK_TAB || 9;
-
-module.exports = KeyEvent;
-
-},{}],205:[function(require,module,exports){
-var Typeahead = require('./typeahead');
-var Tokenizer = require('./tokenizer');
-
-module.exports = {
-  Typeahead: Typeahead,
-  Tokenizer: Tokenizer
-};
-
-},{"./tokenizer":206,"./typeahead":208}],206:[function(require,module,exports){
-(function (global){
-/**
- * @jsx React.DOM
- */
-
-var React = (typeof window !== "undefined" ? window['React']['require'] : typeof global !== "undefined" ? global['React']['require'] : null)("react");
-var Token = require('./token');
-var KeyEvent = require('../keyevent');
-var Typeahead = require('../typeahead');
-var classNames = require('classnames');
-
-function _arraysAreDifferent(array1, array2) {
-  if (array1.length != array2.length){
-    return true;
-  }
-  for (var i = array2.length - 1; i >= 0; i--) {
-    if (array2[i] !== array1[i]){
-      return true;
-    }
-  }
-}
-
-/**
- * A typeahead that, when an option is selected, instead of simply filling
- * the text entry widget, prepends a renderable "token", that may be deleted
- * by pressing backspace on the beginning of the line with the keyboard.
- */
-var TypeaheadTokenizer = React.createClass({displayName: "TypeaheadTokenizer",
-  propTypes: {
-    name: React.PropTypes.string,
-    options: React.PropTypes.array,
-    customClasses: React.PropTypes.object,
-    allowCustomValues: React.PropTypes.number,
-    defaultSelected: React.PropTypes.array,
-    defaultValue: React.PropTypes.string,
-    placeholder: React.PropTypes.string,
-    inputProps: React.PropTypes.object,
-    onTokenRemove: React.PropTypes.func,
-    onKeyDown: React.PropTypes.func,
-    onKeyUp: React.PropTypes.func,
-    onTokenAdd: React.PropTypes.func,
-    onFocus: React.PropTypes.func,
-    onBlur: React.PropTypes.func,
-    filterOption: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
-    ]),
-    displayOption: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
-    ]),
-    maxVisible: React.PropTypes.number,
-    defaultClassNames: React.PropTypes.bool
-  },
-
-  getInitialState: function() {
-    return {
-      // We need to copy this to avoid incorrect sharing
-      // of state across instances (e.g., via getDefaultProps())
-      selected: this.props.defaultSelected.slice(0)
-    };
-  },
-
-  getDefaultProps: function() {
-    return {
-      options: [],
-      defaultSelected: [],
-      customClasses: {},
-      allowCustomValues: 0,
-      defaultValue: "",
-      placeholder: "",
-      inputProps: {},
-      defaultClassNames: true,
-      filterOption: null,
-      displayOption: function(token){return token },
-      onKeyDown: function(event) {},
-      onKeyUp: function(event) {},
-      onFocus: function(event) {},
-      onBlur: function(event) {},
-      onTokenAdd: function() {},
-      onTokenRemove: function() {}
-    };
-  },
-
-  componentWillReceiveProps: function(nextProps){
-    // if we get new defaultProps, update selected
-    if (_arraysAreDifferent(this.props.defaultSelected, nextProps.defaultSelected)){
-      this.setState({selected: nextProps.defaultSelected.slice(0)})
-    }
-  },
-
-  focus: function(){
-    this.refs.typeahead.focus();
-  },
-
-  getSelectedTokens: function(){
-    return this.state.selected;
-  },
-
-  // TODO: Support initialized tokens
-  //
-  _renderTokens: function() {
-    var tokenClasses = {};
-    tokenClasses[this.props.customClasses.token] = !!this.props.customClasses.token;
-    var classList = classNames(tokenClasses);
-    var result = this.state.selected.map(function(selected) {
-      var displayString = this.props.displayOption(selected);
-      return (
-        React.createElement(Token, {key:  displayString, className: classList, 
-          onRemove:  this._removeTokenForValue, 
-          object: selected, 
-          name:  this.props.name}, 
-           displayString 
-        )
-      );
-    }, this);
-    return result;
-  },
-
-  _getOptionsForTypeahead: function() {
-    // return this.props.options without this.selected
-    return this.props.options;
-  },
-
-  _onKeyDown: function(event) {
-    // We only care about intercepting backspaces
-    if (event.keyCode === KeyEvent.DOM_VK_BACK_SPACE) {
-      return this._handleBackspace(event);
-    }
-    this.props.onKeyDown(event);
-  },
-
-  _handleBackspace: function(event){
-    // No tokens
-    if (!this.state.selected.length) {
-      return;
-    }
-
-    // Remove token ONLY when bksp pressed at beginning of line
-    // without a selection
-    var entry = this.refs.typeahead.refs.entry.getDOMNode();
-    if (entry.selectionStart == entry.selectionEnd &&
-        entry.selectionStart == 0) {
-      this._removeTokenForValue(
-        this.state.selected[this.state.selected.length - 1]);
-      event.preventDefault();
-    }
-  },
-
-  _removeTokenForValue: function(value) {
-    var index = this.state.selected.indexOf(value);
-    if (index == -1) {
-      return;
-    }
-
-    this.state.selected.splice(index, 1);
-    this.setState({selected: this.state.selected});
-    this.props.onTokenRemove(value);
-    return;
-  },
-
-  _addTokenForValue: function(value) {
-    if (this.state.selected.indexOf(value) != -1) {
-      return;
-    }
-    this.state.selected.push(value);
-    this.setState({selected: this.state.selected});
-    this.refs.typeahead.setEntryText("");
-    this.props.onTokenAdd(value);
-  },
-
-  render: function() {
-    var classes = {};
-    classes[this.props.customClasses.typeahead] = !!this.props.customClasses.typeahead;
-    var classList = classNames(classes);
-    var tokenizerClasses = [this.props.defaultClassNames && "typeahead-tokenizer"];
-    tokenizerClasses[this.props.className] = !!this.props.className;
-    var tokenizerClassList = classNames(tokenizerClasses)
-
-    return (
-      React.createElement("div", {className: tokenizerClassList}, 
-         this._renderTokens(), 
-        React.createElement(Typeahead, {ref: "typeahead", 
-          className: classList, 
-          placeholder: this.props.placeholder, 
-          inputProps: this.props.inputProps, 
-          allowCustomValues: this.props.allowCustomValues, 
-          customClasses: this.props.customClasses, 
-          options: this._getOptionsForTypeahead(), 
-          defaultValue: this.props.defaultValue, 
-          maxVisible: this.props.maxVisible, 
-          onOptionSelected: this._addTokenForValue, 
-          onKeyDown: this._onKeyDown, 
-          onKeyUp: this.props.onKeyUp, 
-          onFocus: this.props.onFocus, 
-          onBlur: this.props.onBlur, 
-          displayOption: this.props.displayOption, 
-          defaultClassNames: this.props.defaultClassNames, 
-          filterOption: this.props.filterOption})
-      )
-    );
-  }
-});
-
-module.exports = TypeaheadTokenizer;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
-},{"../keyevent":204,"../typeahead":208,"./token":207,"classnames":211}],207:[function(require,module,exports){
-(function (global){
-/**
- * @jsx React.DOM
- */
-
-var React = (typeof window !== "undefined" ? window['React']['require'] : typeof global !== "undefined" ? global['React']['require'] : null)("react");
-var classNames = require('classnames');
-
-/**
- * Encapsulates the rendering of an option that has been "selected" in a
- * TypeaheadTokenizer
- */
-var Token = React.createClass({displayName: "Token",
-  propTypes: {
-    className: React.PropTypes.string,
-    name: React.PropTypes.string,
-    children: React.PropTypes.string,
-    object: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.object,
-    ]),
-    onRemove: React.PropTypes.func
-  },
-
-  render: function() {
-    var className = classNames([
-      "typeahead-token",
-      this.props.className
-    ]);
-
-    return (
-      React.createElement("div", {className: className}, 
-        this._renderHiddenInput(), 
-        this.props.children, 
-        this._renderCloseButton()
-      )
-    );
-  },
-
-  _renderHiddenInput: function() {
-    // If no name was set, don't create a hidden input
-    if (!this.props.name) {
-      return null;
-    }
-
-    return (
-      React.createElement("input", {
-        type: "hidden", 
-        name:  this.props.name + '[]', 
-        value:  this.props.object}
-      )
-    );
-  },
-
-  _renderCloseButton: function() {
-    if (!this.props.onRemove) {
-      return "";
-    }
-    return (
-      React.createElement("a", {className: "typeahead-token-close", href: "#", onClick: function(event) {
-          this.props.onRemove(this.props.object);
-          event.preventDefault();
-        }.bind(this)}, "×")
-    );
-  }
-});
-
-module.exports = Token;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
-},{"classnames":211}],208:[function(require,module,exports){
-(function (global){
-/**
- * @jsx React.DOM
- */
-
-var React = (typeof window !== "undefined" ? window['React']['require'] : typeof global !== "undefined" ? global['React']['require'] : null)("react");
-var TypeaheadSelector = require('./selector');
-var KeyEvent = require('../keyevent');
-var fuzzy = require('fuzzy');
-var classNames = require('classnames');
-
-var IDENTITY_FN = function(input) { return input; };
-var _generateAccessor = function(field) {
-  return function(object) { return object[field]; };
-};
-
-/**
- * A "typeahead", an auto-completing text input
- *
- * Renders an text input that shows options nearby that you can use the
- * keyboard or mouse to select.  Requires CSS for MASSIVE DAMAGE.
- */
-var Typeahead = React.createClass({displayName: "Typeahead",
-  propTypes: {
-    name: React.PropTypes.string,
-    customClasses: React.PropTypes.object,
-    maxVisible: React.PropTypes.number,
-    options: React.PropTypes.array,
-    allowCustomValues: React.PropTypes.number,
-    defaultValue: React.PropTypes.string,
-    value: React.PropTypes.string,
-    placeholder: React.PropTypes.string,
-    textarea: React.PropTypes.bool,
-    inputProps: React.PropTypes.object,
-    onOptionSelected: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onKeyDown: React.PropTypes.func,
-    onKeyUp: React.PropTypes.func,
-    onFocus: React.PropTypes.func,
-    onBlur: React.PropTypes.func,
-    filterOption: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
-    ]),
-    displayOption: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
-    ]),
-    formInputOption: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
-    ]),
-    defaultClassNames: React.PropTypes.bool,
-    customListComponent: React.PropTypes.oneOfType([
-      React.PropTypes.element,
-      React.PropTypes.func
-    ])
-  },
-
-  getDefaultProps: function() {
-    return {
-      options: [],
-      customClasses: {},
-      allowCustomValues: 0,
-      defaultValue: "",
-      value: null,
-      placeholder: "",
-      textarea: false,
-      inputProps: {},
-      onOptionSelected: function(option) {},
-      onChange: function(event) {},
-      onKeyDown: function(event) {},
-      onKeyUp: function(event) {},
-      onFocus: function(event) {},
-      onBlur: function(event) {},
-      filterOption: null,
-      defaultClassNames: true,
-      customListComponent: TypeaheadSelector
-    };
-  },
-
-  getInitialState: function() {
-    return {
-      // The currently visible set of options
-      visible: this.getOptionsForValue(this.props.defaultValue, this.props.options),
-
-      // This should be called something else, "entryValue"
-      entryValue: this.props.value || this.props.defaultValue,
-
-      // A valid typeahead value
-      selection: this.props.value,
-
-      // Index of the selection
-      selectionIndex: null
-    };
-  },
-
-  getOptionsForValue: function(value, options) {
-    var filterOptions = this._generateFilterFunction();
-    var result = filterOptions(value, options);
-    if (this.props.maxVisible) {
-      result = result.slice(0, this.props.maxVisible);
-    }
-    return result;
-  },
-
-  setEntryText: function(value) {
-    this.refs.entry.getDOMNode().value = value;
-    this._onTextEntryUpdated();
-  },
-
-  focus: function(){
-    React.findDOMNode(this.refs.entry).focus()
-  },
-
-  _hasCustomValue: function() {
-    if (this.props.allowCustomValues > 0 &&
-      this.state.entryValue.length >= this.props.allowCustomValues &&
-      this.state.visible.indexOf(this.state.entryValue) < 0) {
-      return true;
-    }
-    return false;
-  },
-
-  _getCustomValue: function() {
-    if (this._hasCustomValue()) {
-      return this.state.entryValue;
-    }
-    return null;
-  },
-
-  _renderIncrementalSearchResults: function() {
-    // Nothing has been entered into the textbox
-    if (!this.state.entryValue) {
-      return "";
-    }
-
-    // Something was just selected
-    if (this.state.selection) {
-      return "";
-    }
-
-    return (
-      React.createElement(this.props.customListComponent, {
-        ref: "sel", options: this.state.visible, 
-        onOptionSelected: this._onOptionSelected, 
-        customValue: this._getCustomValue(), 
-        customClasses: this.props.customClasses, 
-        selectionIndex: this.state.selectionIndex, 
-        defaultClassNames: this.props.defaultClassNames, 
-        displayOption: this._generateOptionToStringFor(this.props.displayOption)})
-    );
-  },
-
-  getSelection: function() {
-    var index = this.state.selectionIndex;
-    if (this._hasCustomValue()) {
-      if (index === 0) {
-        return this.state.entryValue;
-      } else {
-        index--;
-      }
-    }
-    return this.state.visible[index];
-  },
-
-  _onOptionSelected: function(option, event) {
-    var nEntry = this.refs.entry.getDOMNode();
-    nEntry.focus();
-
-    var displayOption = this._generateOptionToStringFor(this.props.displayOption);
-    var optionString = displayOption(option, 0);
-
-    var formInputOption = this._generateOptionToStringFor(this.props.formInputOption || displayOption);
-    var formInputOptionString = formInputOption(option);
-
-    nEntry.value = optionString;
-    this.setState({visible: this.getOptionsForValue(optionString, this.props.options),
-                   selection: formInputOptionString,
-                   entryValue: optionString});
-    return this.props.onOptionSelected(option, event);
-  },
-
-  _onTextEntryUpdated: function() {
-    var value = this.refs.entry.getDOMNode().value;
-    this.setState({visible: this.getOptionsForValue(value, this.props.options),
-                   selection: null,
-                   entryValue: value});
-  },
-
-  _onEnter: function(event) {
-    var selection = this.getSelection();
-    if (!selection) {
-      return this.props.onKeyDown(event);
-    }
-    return this._onOptionSelected(selection, event);
-  },
-
-  _onEscape: function() {
-    this.setState({
-      selectionIndex: null
-    });
-  },
-
-  _onTab: function(event) {
-    var selection = this.getSelection();
-    var option = selection ?
-      selection : (this.state.visible.length > 0 ? this.state.visible[0] : null);
-
-    if (option === null && this._hasCustomValue()) {
-      option = this._getCustomValue();
-    }
-
-    if (option !== null) {
-      return this._onOptionSelected(option, event);
-    }
-  },
-
-  eventMap: function(event) {
-    var events = {};
-
-    events[KeyEvent.DOM_VK_UP] = this.navUp;
-    events[KeyEvent.DOM_VK_DOWN] = this.navDown;
-    events[KeyEvent.DOM_VK_RETURN] = events[KeyEvent.DOM_VK_ENTER] = this._onEnter;
-    events[KeyEvent.DOM_VK_ESCAPE] = this._onEscape;
-    events[KeyEvent.DOM_VK_TAB] = this._onTab;
-
-    return events;
-  },
-
-  _nav: function(delta) {
-    if (!this._hasHint()) {
-      return;
-    }
-    var newIndex = this.state.selectionIndex === null ? (delta == 1 ? 0 : delta) : this.state.selectionIndex + delta;
-    var length = this.state.visible.length;
-    if (this._hasCustomValue()) {
-      length += 1;
-    }
-
-    if (newIndex < 0) {
-      newIndex += length;
-    } else if (newIndex >= length) {
-      newIndex -= length;
-    }
-
-    this.setState({selectionIndex: newIndex});
-  },
-
-  navDown: function() {
-    this._nav(1);
-  },
-
-  navUp: function() {
-    this._nav(-1);
-  },
-
-  _onChange: function(event) {
-    if (this.props.onChange) {
-      this.props.onChange(event);
-    }
-
-    this._onTextEntryUpdated();
-  },
-
-  _onKeyDown: function(event) {
-    // If there are no visible elements, don't perform selector navigation.
-    // Just pass this up to the upstream onKeydown handler
-    if (!this._hasHint()) {
-      return this.props.onKeyDown(event);
-    }
-
-    var handler = this.eventMap()[event.keyCode];
-
-    if (handler) {
-      handler(event);
-    } else {
-      return this.props.onKeyDown(event);
-    }
-    // Don't propagate the keystroke back to the DOM/browser
-    event.preventDefault();
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-    this.setState({
-      visible: this.getOptionsForValue(this.state.entryValue, nextProps.options)
-    });
-  },
-
-  render: function() {
-    var inputClasses = {};
-    inputClasses[this.props.customClasses.input] = !!this.props.customClasses.input;
-    var inputClassList = classNames(inputClasses);
-
-    var classes = {
-      typeahead: this.props.defaultClassNames
-    };
-    classes[this.props.className] = !!this.props.className;
-    var classList = classNames(classes);
-
-    var InputElement = this.props.textarea ? 'textarea' : 'input';
-
-    return (
-      React.createElement("div", {className: classList}, 
-         this._renderHiddenInput(), 
-        React.createElement(InputElement, React.__spread({ref: "entry", type: "text"}, 
-          this.props.inputProps, 
-          {placeholder: this.props.placeholder, 
-          className: inputClassList, 
-          value: this.state.entryValue, 
-          defaultValue: this.props.defaultValue, 
-          onChange: this._onChange, 
-          onKeyDown: this._onKeyDown, 
-          onKeyUp: this.props.onKeyUp, 
-          onFocus: this.props.onFocus, 
-          onBlur: this.props.onBlur})
-        ), 
-         this._renderIncrementalSearchResults() 
-      )
-    );
-  },
-
-  _renderHiddenInput: function() {
-    if (!this.props.name) {
-      return null;
-    }
-
-    return (
-      React.createElement("input", {
-        type: "hidden", 
-        name:  this.props.name, 
-        value:  this.state.selection}
-      )
-    );
-  },
-
-  _generateFilterFunction: function() {
-    var filterOptionProp = this.props.filterOption;
-    if (typeof filterOptionProp === 'function') {
-      return function(value, options) {
-        return options.filter(function(o) { return filterOptionProp(value, o); });
-      };
-    } else {
-      var mapper;
-      if (typeof filterOptionProp === 'string') {
-        mapper = _generateAccessor(filterOptionProp);
-      } else {
-        mapper = IDENTITY_FN;
-      }
-      return function(value, options) {
-        var transformedOptions = options.map(mapper);
-        return fuzzy
-          .filter(value, transformedOptions)
-          .map(function(res) { return options[res.index]; });
-      };
-    }
-  },
-
-  _generateOptionToStringFor: function(prop) {
-    if (typeof prop === 'string') {
-      return _generateAccessor(prop);
-    } else if (typeof prop === 'function') {
-      return prop;
-    } else {
-      return IDENTITY_FN;
-    }
-  },
-
-  _hasHint: function() {
-    return this.state.visible.length > 0 || this._hasCustomValue();
-  }
-});
-
-module.exports = Typeahead;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
-},{"../keyevent":204,"./selector":210,"classnames":211,"fuzzy":212}],209:[function(require,module,exports){
-(function (global){
-/**
- * @jsx React.DOM
- */
-
-var React = (typeof window !== "undefined" ? window['React']['require'] : typeof global !== "undefined" ? global['React']['require'] : null)("react");
-var classNames = require('classnames');
-
-/**
- * A single option within the TypeaheadSelector
- */
-var TypeaheadOption = React.createClass({displayName: "TypeaheadOption",
-  propTypes: {
-    customClasses: React.PropTypes.object,
-    customValue: React.PropTypes.string,
-    onClick: React.PropTypes.func,
-    children: React.PropTypes.string,
-    hover: React.PropTypes.bool
-  },
-
-  getDefaultProps: function() {
-    return {
-      customClasses: {},
-      onClick: function(event) {
-        event.preventDefault();
-      }
-    };
-  },
-
-  render: function() {
-    var classes = {};
-    classes[this.props.customClasses.hover || "hover"] = !!this.props.hover;
-    classes[this.props.customClasses.listItem] = !!this.props.customClasses.listItem;
-
-    if (this.props.customValue) {
-      classes[this.props.customClasses.customAdd] = !!this.props.customClasses.customAdd;
-    }
-
-    var classList = classNames(classes);
-
-    return (
-      React.createElement("li", {className: classList, onClick: this._onClick}, 
-        React.createElement("a", {href: "javascript: void 0;", className: this._getClasses(), ref: "anchor"}, 
-           this.props.children
-        )
-      )
-    );
-  },
-
-  _getClasses: function() {
-    var classes = {
-      "typeahead-option": true,
-    };
-    classes[this.props.customClasses.listAnchor] = !!this.props.customClasses.listAnchor;
-
-    return classNames(classes);
-  },
-
-  _onClick: function(event) {
-    event.preventDefault();
-    return this.props.onClick(event);
-  }
-});
-
-
-module.exports = TypeaheadOption;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
-},{"classnames":211}],210:[function(require,module,exports){
-(function (global){
-/**
- * @jsx React.DOM
- */
-
-var React = (typeof window !== "undefined" ? window['React']['require'] : typeof global !== "undefined" ? global['React']['require'] : null)("react");
-var TypeaheadOption = require('./option');
-var classNames = require('classnames');
-
-/**
- * Container for the options rendered as part of the autocompletion process
- * of the typeahead
- */
-var TypeaheadSelector = React.createClass({displayName: "TypeaheadSelector",
-  propTypes: {
-    options: React.PropTypes.array,
-    customClasses: React.PropTypes.object,
-    customValue: React.PropTypes.string,
-    selectionIndex: React.PropTypes.number,
-    onOptionSelected: React.PropTypes.func,
-    displayOption: React.PropTypes.func.isRequired,
-    defaultClassNames: React.PropTypes.bool
-  },
-
-  getDefaultProps: function() {
-    return {
-      selectionIndex: null,
-      customClasses: {},
-      customValue: null,
-      onOptionSelected: function(option) { },
-      defaultClassNames: true
-    };
-  },
-
-  render: function() {
-    var classes = {
-      "typeahead-selector": this.props.defaultClassNames
-    };
-    classes[this.props.customClasses.results] = this.props.customClasses.results;
-    var classList = classNames(classes);
-
-    // CustomValue should be added to top of results list with different class name
-    var customValue = null;
-    var customValueOffset = 0;
-    if (this.props.customValue !== null) {
-      customValueOffset++;
-      customValue = (
-        React.createElement(TypeaheadOption, {ref: this.props.customValue, key: this.props.customValue, 
-          hover: this.props.selectionIndex === 0, 
-          customClasses: this.props.customClasses, 
-          customValue: this.props.customValue, 
-          onClick: this._onClick.bind(this, this.props.customValue)}, 
-           this.props.customValue
-        )
-      );
-    }
-
-    var results = this.props.options.map(function(result, i) {
-      var displayString = this.props.displayOption(result, i);
-      var uniqueKey = displayString + '_' + i;
-      return (
-        React.createElement(TypeaheadOption, {ref: uniqueKey, key: uniqueKey, 
-          hover: this.props.selectionIndex === i + customValueOffset, 
-          customClasses: this.props.customClasses, 
-          onClick: this._onClick.bind(this, result)}, 
-           displayString 
-        )
-      );
-    }, this);
-
-
-    return (
-      React.createElement("ul", {className: classList}, 
-         customValue, 
-         results 
-      )
-    );
-  },
-
-  _onClick: function(result, event) {
-    return this.props.onOptionSelected(result, event);
-  }
-
-});
-
-module.exports = TypeaheadSelector;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
-},{"./option":209,"classnames":211}],211:[function(require,module,exports){
-arguments[4][143][0].apply(exports,arguments)
-},{"dup":143}],212:[function(require,module,exports){
-/*
- * Fuzzy
- * https://github.com/myork/fuzzy
- *
- * Copyright (c) 2012 Matt York
- * Licensed under the MIT license.
- */
-
-(function() {
-
-var root = this;
-
-var fuzzy = {};
-
-// Use in node or in browser
-if (typeof exports !== 'undefined') {
-  module.exports = fuzzy;
-} else {
-  root.fuzzy = fuzzy;
-}
-
-// Return all elements of `array` that have a fuzzy
-// match against `pattern`.
-fuzzy.simpleFilter = function(pattern, array) {
-  return array.filter(function(string) {
-    return fuzzy.test(pattern, string);
-  });
-};
-
-// Does `pattern` fuzzy match `string`?
-fuzzy.test = function(pattern, string) {
-  return fuzzy.match(pattern, string) !== null;
-};
-
-// If `pattern` matches `string`, wrap each matching character
-// in `opts.pre` and `opts.post`. If no match, return null
-fuzzy.match = function(pattern, string, opts) {
-  opts = opts || {};
-  var patternIdx = 0
-    , result = []
-    , len = string.length
-    , totalScore = 0
-    , currScore = 0
-    // prefix
-    , pre = opts.pre || ''
-    // suffix
-    , post = opts.post || ''
-    // String to compare against. This might be a lowercase version of the
-    // raw string
-    , compareString =  opts.caseSensitive && string || string.toLowerCase()
-    , ch, compareChar;
-
-  pattern = opts.caseSensitive && pattern || pattern.toLowerCase();
-
-  // For each character in the string, either add it to the result
-  // or wrap in template if its the next string in the pattern
-  for(var idx = 0; idx < len; idx++) {
-    ch = string[idx];
-    if(compareString[idx] === pattern[patternIdx]) {
-      ch = pre + ch + post;
-      patternIdx += 1;
-
-      // consecutive characters should increase the score more than linearly
-      currScore += 1 + currScore;
-    } else {
-      currScore = 0;
-    }
-    totalScore += currScore;
-    result[result.length] = ch;
-  }
-
-  // return rendered string if we have a match for every char
-  if(patternIdx === pattern.length) {
-    return {rendered: result.join(''), score: totalScore};
-  }
-
-  return null;
-};
-
-// The normal entry point. Filters `arr` for matches against `pattern`.
-// It returns an array with matching values of the type:
-//
-//     [{
-//         string:   '<b>lah' // The rendered string
-//       , index:    2        // The index of the element in `arr`
-//       , original: 'blah'   // The original element in `arr`
-//     }]
-//
-// `opts` is an optional argument bag. Details:
-//
-//    opts = {
-//        // string to put before a matching character
-//        pre:     '<b>'
-//
-//        // string to put after matching character
-//      , post:    '</b>'
-//
-//        // Optional function. Input is an element from the passed in
-//        // `arr`, output should be the string to test `pattern` against.
-//        // In this example, if `arr = [{crying: 'koala'}]` we would return
-//        // 'koala'.
-//      , extract: function(arg) { return arg.crying; }
-//    }
-fuzzy.filter = function(pattern, arr, opts) {
-  opts = opts || {};
-  return arr
-          .reduce(function(prev, element, idx, arr) {
-            var str = element;
-            if(opts.extract) {
-              str = opts.extract(element);
-            }
-            var rendered = fuzzy.match(pattern, str, opts);
-            if(rendered != null) {
-              prev[prev.length] = {
-                  string: rendered.rendered
-                , score: rendered.score
-                , index: idx
-                , original: element
-              };
-            }
-            return prev;
-          }, [])
-
-          // Sort by score. Browsers are inconsistent wrt stable/unstable
-          // sorting, so force stable by using the index in the case of tie.
-          // See http://ofb.net/~sethml/is-sort-stable.html
-          .sort(function(a,b) {
-            var compare = b.score - a.score;
-            if(compare) return compare;
-            return a.index - b.index;
-          });
-};
-
-
-}());
-
-
-},{}],213:[function(require,module,exports){
 /*
  *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.
  *
