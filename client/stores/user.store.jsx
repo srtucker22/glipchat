@@ -12,14 +12,9 @@ var UserStore = function() {
   _this.logoutError   = new ReactiveVar('');
   _this.subscribed = new ReactiveVar(false);
 
-  Tracker.autorun((c)=> {
-    if (Meteor.userId()) {
-      _this.subscribed.set(false);
-      Meteor.subscribe('user', {
-        onReady() {
-          _this.subscribed.set(true);
-        },
-      });
+  Meteor.subscribe('user', {
+    onReady() {
+      _this.subscribed.set(true);
     }
   });
 
@@ -64,13 +59,13 @@ var UserStore = function() {
   // If user is not logged in, login as guest
   _this.requireUser = ()=> {
     return new Promise((resolve, reject)=> {
-      if (Meteor.user()) {
+      if (Meteor.user() && _this.subscribed.get()) {
         resolve(Meteor.user());
-      } else if (Meteor.loggingIn()) {
+      } else if (Meteor.loggingIn() || !_this.subscribed.get()) {
 
         // wait for loggingIn
         Tracker.autorun((c)=> {
-          if (Meteor.loggingIn())
+          if (Meteor.loggingIn() || (Meteor.user() && !_this.subscribed.get()))
             return;
 
           // stop the tracker
@@ -103,8 +98,12 @@ var UserStore = function() {
 
   // is the user a guest user
   _this.isGuest = ()=> {
-    return this.user() && (!this.user().services || (this.user().username && this.user().username.startsWith('guest-#')));
-  }
+    return _this.user() && (!_this.user().services || (!!_this.user().username && _this.user().username.indexOf('guest-#') !== -1));
+  };
+
+  _this.updateUsername = (username)=> {
+    Meteor.users.update({_id: Meteor.userId()}, {$set: {username}});
+  };
 
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
@@ -163,7 +162,10 @@ var UserStore = function() {
             _this.on.logoutFailed(err);
           }
         });
+        break;
 
+      case 'USER_UPDATE_USERNAME':
+        _this.updateUsername(payload.username);
         break;
     }
   });

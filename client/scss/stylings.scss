@@ -44,25 +44,3 @@ header {
     vertical-align: middle;
   }
 }
-
-$insetShadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
-$z1Shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-
-.typeahead {
-  .typeahead-menu-wrapper {
-    margin: 0 2px;
-
-    .typeahead-menu {
-      padding: 0;
-
-      .typeahead-menu-item {
-        padding: 10px;
-        .cell {
-          &.right {
-            padding-left: 10px;
-          }
-        }
-      }
-    }
-  }
-}

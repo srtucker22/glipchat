@@ -15,29 +15,38 @@ var RoomStore = function() {
   _this.currentRoom = ReactiveVar(null);
   _this.currentRoomId = ReactiveVar('');
   _this.gettingCurrentRoom = ReactiveVar(false);
+  _this.inviteError = ReactiveVar(null);
+  _this.invitees = ReactiveVar(null);
   _this.inviteModalVisible = ReactiveVar(false);
 
   // auto-update the subscription to the room and store the room
   Tracker.autorun(function(c) {
     _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
-    Meteor.subscribe('room', _this.currentRoomId.get(), {
-      onReady() {
-        // set the current room object
+    Meteor.call('grantRoomAccess', _this.currentRoomId.get(), (err)=> {
+      if(!err){
+        Meteor.subscribe('room', _this.currentRoomId.get(), {
+          onReady() {
+            // set the current room object
+            _this.gettingCurrentRoom.set(false);
+          },
+        });
+      } else {
         _this.gettingCurrentRoom.set(false);
-      },
+      }
     });
   });
 
   // Callbacks
   _.extend(_this, {
+    clearInvitees(){
+      _this.invitees.set(null);
+    },
+
     createRoom() {
       _this.creatingRoom.set(true);
       _this.createError.set('');
       UserStore.requireUser().then((user)=> {
-        Rooms.insert({
-          owner: user._id,
-          connected: [],
-        }, (err, id)=> {
+        Meteor.call('createRoom', (err, id)=> {
           _this.creatingRoom.set(false);
           if (err) {
             _this.createError.set(err);
@@ -56,6 +65,17 @@ var RoomStore = function() {
 
     hideInviteModal() {
       _this.inviteModalVisible.set(false);
+    },
+
+    invite(invitees){
+      _this.inviteError.set(null);
+      Meteor.call('invite', _this.currentRoomId.get(), invitees, (err, res)=> {
+        if (err) {
+          _this.inviteError.set(err);
+        } else {
+          // sent
+        }
+      });
     },
 
     joinRoom(r) {  // join an existing room
@@ -96,7 +116,11 @@ var RoomStore = function() {
     showInviteModal(){
       if(!!_this.currentRoom.get() && !RTCStore.localStreamError.get() && !!RTCStore.localStream.get())
         _this.inviteModalVisible.set(true);
-    }
+    },
+
+    updateInvitees(invitees){
+      _this.invitees.set(invitees);
+    },
   });
 
   _this.tokenId = Dispatcher.register((payload)=> {
@@ -104,8 +128,14 @@ var RoomStore = function() {
       case 'HIDE_INVITE_MODAL':
         _this.hideInviteModal();
         break;
+      case 'CLEAR_INVITEES':
+        _this.clearInvitees();
+        break;
       case 'CREATE_ROOM':
         _this.createRoom();
+        break;
+      case 'INVITE':
+        _this.invite(payload.invitees);
         break;
       case 'JOIN_ROOM':
         _this.joinRoom(payload.roomId);
@@ -118,6 +148,9 @@ var RoomStore = function() {
         break;
       case 'SHOW_INVITE_MODAL':
         _this.showInviteModal();
+        break;
+      case 'UPDATE_INVITEES':
+        _this.updateInvitees(payload.invitees);
         break;
     }
   });

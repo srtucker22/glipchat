@@ -8,7 +8,6 @@ var {
 var routes = (
   <Route handler={AppComponent}>
     <Route name='home' path='/' handler={HomeComponent} />
-    <Route name='inbox' path='inbox' handler={InboxComponent} />
     <Route name='room' path='room/:roomId' handler={RoomComponent} />
     <NotFoundRoute handler={NotFoundComponent} />
   </Route>

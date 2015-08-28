@@ -17,6 +17,10 @@ var UserActions = function() {
     logout() {
       Dispatcher.dispatch({ actionType: 'USER_LOGOUT'});
     },
+
+    updateUsername(username){
+      Dispatcher.dispatch({ actionType: 'USER_UPDATE_USERNAME', username });
+    }
   });
 
   return _this;

@@ -95,14 +95,11 @@
     render() {
       return (
         <div key='overlay' style={[styles.css]}>
-          <Paper zDepth={1} style={
-            _.extend(
-            {},
+          <Paper zDepth={1} style={_.extend({},
             GlobalStyles.table,
             styles.controls.css,
             Radium.getState(this.state, 'overlay', ':hover') ? styles.controls.visible: {}
-            )
-          }>
+          )}>
             <div key='invite' onTouchTap={RoomActions.showInviteModal} style={[GlobalStyles.cell, styles.controls.button.css]}>
               <IconButton>
                 <FontIcon className='material-icons' color={Colors.fullWhite}>person_add</FontIcon>
@@ -126,11 +123,11 @@
                 <FontIcon className='material-icons' color={Colors.fullWhite}> mic_off</FontIcon>
               </IconButton>
             </div>
-            <div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
+            {/*<div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
               <IconButton>
                 <FontIcon className='material-icons' color={Colors.fullWhite}>settings</FontIcon>
               </IconButton>
-            </div>
+            </div>*/}
             <div key='end' style={[GlobalStyles.cell, styles.controls.button.css, styles.controls.buttonEnd.css]} onTouchTap={this.leave}>
               <IconButton>
                 <FontIcon className='material-icons' color={Radium.getState(this.state, 'end', ':hover') ? Colors.fullWhite: Colors.red800}>call_end</FontIcon>

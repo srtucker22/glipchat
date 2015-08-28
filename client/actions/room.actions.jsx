@@ -2,6 +2,9 @@ var RoomActions = function() {
   var _this = this;
 
   _.extend(_this, {
+    clearInvitees() {
+      Dispatcher.dispatch({ actionType: 'CLEAR_INVITEES'});
+    },
 
     createRoom() {
       Dispatcher.dispatch({ actionType: 'CREATE_ROOM'});
@@ -10,6 +13,13 @@ var RoomActions = function() {
     hideInviteModal(){
       Dispatcher.dispatch({
         actionType: 'HIDE_INVITE_MODAL',
+      });
+    },
+
+    invite(invitees){
+      Dispatcher.dispatch({
+        actionType: 'INVITE',
+        invitees,
       });
     },
 
@@ -37,7 +47,11 @@ var RoomActions = function() {
       Dispatcher.dispatch({
         actionType: 'SHOW_INVITE_MODAL',
       });
-    }
+    },
+
+    updateInvitees(invitees) {
+      Dispatcher.dispatch({ actionType: 'UPDATE_INVITEES', invitees });
+    },
   });
 
   return _this;

@@ -19,14 +19,10 @@ Rooms.attachSchema(Schema.Rooms);
 // restrict modification access to authorized users
 Rooms.allow({
   insert(userId, room) {
-    console.log(room);
     return room.owner === userId  || (Roles.userIsInRole(userId, ['manage-users','admin']));
   },
 
   update(userId, room, fields, modifier) { // TODO : make this more restrictive based on the fields
-    console.log(room);
-    console.log(fields);
-    console.log(modifier);
     return room.owner === userId || (Roles.userIsInRole(userId, [room._id, 'manage-users','admin']));
   },
 

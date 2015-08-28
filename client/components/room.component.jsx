@@ -98,8 +98,12 @@
         room: RoomStore.currentRoom.get(),
         stream: RTCStore.localStream.get(),
         streamError: RTCStore.streamError.get(),
-        user: UserStore.user()
       };
+    },
+
+    shouldComponentUpdate(nextProps, nextState) {
+      console.log(nextProps);
+      console.log(nextState);
     },
 
     render() {
@@ -113,21 +117,17 @@
 
       return (
         <div style={[styles.css]}>
-          {!!this.data.localStreamError && <LocalStreamErrorComponent error={this.data.localStreamError} {...other}/>}
+          {!!this.data.localStreamError ? (<LocalStreamErrorComponent error={this.data.localStreamError} {...other}/>): ''}
 
-          <InviteComponent
-            ref='invite'
-            linkUrl={window.location.href}
-            username={UserStore.isGuest() ? '' : UserStore.user().profile.name}
-          />
+          <InviteComponent ref='invite' linkUrl={window.location.href} />
 
-          {!this.data.localStreamError && !!this.data.stream && <ControlsComponent />}
+          {(!this.data.localStreamError && !!this.data.stream) ? <ControlsComponent />: ''}
 
-          {!this.data.localStreamError && !!this.data.stream && (this.data.room.connected.length === 1 && this.data.room.connected[0] === this.data.user._id) && <FirstOverlayComponent linkUrl={window.location.href} />}
+          {(!this.data.localStreamError && !!this.data.stream) ? (<FirstOverlayComponent linkUrl={window.location.href} room={this.data.room} />): ''}
 
-          {!!this.data.primaryStream && <VideoComponent src={(this.data.primaryStream === 'local') ? this.data.stream : this.data.peers[this.data.primaryStream]} muted={(this.data.primaryStream === 'local')} flip={(this.data.primaryStream === 'local')} fullScreen={true}/>}
+          {!!this.data.primaryStream ? (<VideoComponent src={(this.data.primaryStream === 'local') ? this.data.stream : this.data.peers[this.data.primaryStream]} muted={(this.data.primaryStream === 'local')} flip={(this.data.primaryStream === 'local')} fullScreen={true}/>) : ''}
 
-          {!!this.data.peers && _.keys(this.data.peers).length && <div style={[styles.videos.css]}>
+          {(!!this.data.peers && _.keys(this.data.peers).length) ? (<div style={[styles.videos.css]}>
             <div key='local' style={[styles.videos.video.css]}>
               <VideoOverlayComponent id='local'/>
               <VideoComponent src={this.data.stream} muted={true} flip={true}/>
@@ -140,7 +140,7 @@
                 </div>
               );
             })}
-          </div>}
+          </div>) : ''}
         </div>
       );
     },

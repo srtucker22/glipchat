@@ -67,14 +67,14 @@
     render() {
       return (
         <div className='dropdown' style={[GlobalStyles.cell]}>
-          <Avatar className='dropdown-toggle' data-toggle='dropdown' src={'https://graph.facebook.com/' + this.props.user.services.facebook.id + '/picture'} />
+          <Avatar className='dropdown-toggle' data-toggle='dropdown' src={this.props.user.services.google.picture}/>
           <Card className='dropdown-menu'>
             <CardText>
               {this.props.user.profile.name}
             </CardText>
-            <CardText>
-              {!!this.props.user.services.facebook && !!this.props.user.services.facebook.email}
-            </CardText>
+            {!!this.props.user.services.google && !!this.props.user.services.google.email && <CardText>
+              {this.props.user.services.google.email}
+            </CardText>}
             <CardActions className='text-center' expandable={false}>
               <FlatButton onTouchTap={this.logout} label='Sign out'/>
             </CardActions>
@@ -93,6 +93,10 @@
         loggingIn: UserStore.loggingIn(),
         subscribed: UserStore.subscribed.get(),
       };
+    },
+
+    loginWithGoogle() {
+      UserActions.loginWithGoogle();
     },
 
     loginWithFacebook() {
@@ -143,13 +147,13 @@
             </div>
           );
         } else {
-          loginButton = <FlatButton label='Login with Facebook' onClick={this.loginWithFacebook}/>;
+          loginButton = <FlatButton label='Login with Google' onClick={this.loginWithGoogle}/>;
         }
       }
 
       return (
         <header>
-          <AppBar title={this.props.appName} iconElementRight={loginButton? loginButton: profileButtons} onLeftIconButtonTouchTap={this.toggleNav}/>
+          <AppBar title={this.props.appName} iconElementRight={loginButton? loginButton: profileButtons} onLeftIconButtonTouchTap={this.toggleNav} showMenuIconButton={false}/>
           <LeftNav ref='leftNav' docked={false} menuItems={menuItems} />
         </header>
       );

@@ -142,9 +142,7 @@ var RTCStore = function() {
           pc.addIceCandidate(new RTCIceCandidate(data.ice), ()=> {
             // successfully added candidate
             //console.log('successfully added candidate');
-          },
-
-          (err)=> {
+          }, (err)=> {
             console.error(err);
           });
         }
@@ -179,7 +177,6 @@ var RTCStore = function() {
 
   // get the local stream from legit browsers
   _this.getLocalStream = ()=> {
-    console.log('gettingLocalStream');
     _this.localStreamError.set(null);
     if (!_this.localStream.get() && !_this.gettingLocalStream.get()) {
       _this.gettingLocalStream.set(true);
@@ -193,6 +190,7 @@ var RTCStore = function() {
         video: true,
         audio: true
       }, (s)=> {
+        console.log('Getting local stream');
         _this.localStream.set(s);
         _this.gettingLocalStream.set(false);
         _this.primaryStream.set('local');

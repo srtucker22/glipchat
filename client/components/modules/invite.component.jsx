@@ -93,16 +93,13 @@
   }
 
   let GlobalStyles = null;
-  let FacebookActions = null;
-  let FacebookStore = null;
   let RoomActions = null;
   let RoomStore = null;
+  let UserActions = null;
   let UserStore = null;
 
   Dependency.autorun(()=> {
     GlobalStyles = Dependency.get('GlobalStyles');
-    FacebookActions = Dependency.get('FacebookActions');
-    FacebookStore = Dependency.get('FacebookStore');
     RoomActions = Dependency.get('RoomActions');
     RoomStore = Dependency.get('RoomStore');
     UserActions = Dependency.get('UserActions');
@@ -123,31 +120,39 @@
     getMeteorData() {
       return {
         inviteModalVisible: RoomStore.inviteModalVisible.get(),
+        invitees: RoomStore.invitees.get(),
+        user: UserStore.user(),
       };
     },
 
-    getFriends() {
-      FacebookActions.getFriends();
+    invite() {
+      // let message = this.refs.message.getDOMNode().value;
+
+      if (this.data.invitees) {
+        RoomActions.invite(this.data.invitees);
+        RoomActions.hideInviteModal();
+      }
     },
 
     loginWithFacebook() {
       UserActions.loginWithFacebook();
     },
 
-    invite() {
-      console.log(this.refs.dialog);
-      console.log('inviting');
-      this.getFriends();
+    updateUsername(e) {
+      UserActions.updateUsername(e.target.value);
     },
 
     render() {
       //Custom Actions
       let customActions = [
         <FlatButton
+          key='cancel'
           label='Cancel'
           onTouchTap={this.cancel} />,
         <FlatButton
+          key='invite'
           label='Invite'
+          disabled={(!this.data.invitees || !this.data.invitees.length)}
           primary={true}
           onTouchTap={this.invite} />
       ];
@@ -172,14 +177,15 @@
                 <div style={[GlobalStyles.inline, styles.content.inviteRow.header.label.css]}>Send invite as</div>
                 <TextField
                   style={styles.content.inviteRow.header.inputName.css}
-                  defaultValue={this.props.username}
+                  value={this.data.user.username}
+                  onChange={this.updateUsername}
                   floatingLabelText='Your name'/>
                 {/*UserStore.isGuest() && <div style={[GlobalStyles.inline, styles.content.inviteRow.header.button.css]}>
                   <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
                 </div>*/}
               </div>
-              <TypeaheadComponent />
-              <textarea style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>
+              <TypeaheadComponent ref='typeahead'/>
+              {/*<textarea ref='message' style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>*/}
             </div>
           </div>
         </Dialog>

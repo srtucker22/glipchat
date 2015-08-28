@@ -17,9 +17,6 @@ Meteor.publish('room', function(roomId) {
 
   var _this = this;
 
-  // for testing purposes -- let everyone see rooms
-  return Rooms.find({_id: roomId});
-
   if (Roles.userIsInRole(this.userId, [roomId, 'manage-users','admin'])) {
     return Rooms.find({_id: roomId});
   } else {
