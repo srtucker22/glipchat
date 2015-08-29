@@ -34,38 +34,65 @@
     menu: {
       css:{
         color: Colors.fullBlack,
-      }
+      },
+
+      paper: {
+        css: {
+          maxHeight: '300px',
+          overflowX: 'hidden',
+          overflowY: 'auto',
+          textOverflow: 'ellipsis',
+        },
+      },
     }
   };
 
   let GlobalStyles = null;
-  let HeaderActions = null;
-  let HeaderStore = null;
+  let RoomActions = null;
   let UserStore   = null;
   let UserActions = null;
 
   Dependency.autorun(()=> {
     GlobalStyles = Dependency.get('GlobalStyles');
-    HeaderActions = Dependency.get('HeaderActions');
-    HeaderStore = Dependency.get('HeaderStore');
+    RoomActions = Dependency.get('RoomActions');
     UserStore   = Dependency.get('UserStore');
     UserActions = Dependency.get('UserActions');
   });
 
   NotificationDropdownComponent = Radium(React.createClass({
+    componentDidMount() {
+      var _this = this;
+      this.interval = window.setInterval(function () {
+        _this.setState({ lastUpdated: new Date() });
+      }, 1000);
+    },
+
+    componentWillUnmount() {
+      if(this.interval){
+        window.clearInterval(this.interval);
+      }
+    },
+
+    joinRoom(r) {
+      RoomActions.joinRoom(r);
+    },
+
     render() {
       return (
         <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
-          <IconButton iconStyle={styles.icon.css} iconClassName='material-icons dropdown-toggle' data-toggle='dropdown'>{(this.props.messages && this.props.messages.length) ? 'notifications':'notifications_none'}</IconButton>
-          <Card className='dropdown-menu'>
-            {(!!this.props.messages && this.props.messages.length) ? _.map(this.props.messages, (message)=> {
+          <IconButton iconStyle={styles.icon.css} iconClassName='material-icons dropdown-toggle' data-toggle='dropdown'>{(this.props.history && this.props.history.length) ? 'notifications':'notifications_none'}</IconButton>
+          <Card className='dropdown-menu' style={styles.menu.paper.css}>
+            {(!!this.props.history && this.props.history.length) ? _.map(this.props.history, (item)=> {
                 return (
-                  <MenuItem key={message.id} primaryText={message.text} />
+                  <MenuItem
+                    key={item.createdAt}
+                    primaryText= {item.room + ' - ' + moment(item.createdAt).fromNow()}
+                    onTouchTap={this.joinRoom.bind(this, item.room)} />
                 );
               }) :
 
             <MenuItem className='text-center'>
-              No notifications
+              No recent rooms
             </MenuItem>}
           </Card>
         </div>
@@ -129,14 +156,6 @@
       let avatarButton;
       let profileButtons;
 
-      let testMessages = [{
-        id: 1, text: 'this is some text',
-      },
-      {
-        id: 2, text: 'this is some more text',
-      }];
-      this.data.messages = testMessages;
-
       let menuItems = [
         { route: 'get-started', text: 'Get Started' },
         { route: 'customization', text: 'Customization' },
@@ -147,7 +166,7 @@
         if (this.data.user && !UserStore.isGuest()) {
 
           notificationDropdown = (
-            <NotificationDropdownComponent messages={this.data.messages}/>
+            <NotificationDropdownComponent history={this.data.user.history.reverse()}/>
           );
 
           profileDropdown = (

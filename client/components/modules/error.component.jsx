@@ -75,6 +75,15 @@
     );
   };
 
+  let duplicateErrorComponent = (
+    <div className='row' style={[styles.general.css]}>
+      <div className='col-xs-12 text-center'>
+        <img src='images/camel.png' style={[styles.general.icon.css]}/>
+        <p>Uh oh! You're already connected to this room in a different window, tab, or browser.</p>
+      </div>
+    </div>
+  );
+
   let generalErrorComponent = (
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
@@ -84,11 +93,11 @@
     </div>
   );
 
-  let duplicateErrorComponent = (
+  let notSupportedErrorComponent = (
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
-        <img src='images/camel.png' style={[styles.general.icon.css]}/>
-        <p>Uh oh! You're already connected to this room in a different window, tab, or browser.</p>
+        <img src='images/astronaut.png' style={[styles.general.icon.css]}/>
+        <p>Sorry, we don't currently support your browser. Please use Chrome or Firefox.</p>
       </div>
     </div>
   );
@@ -102,6 +111,9 @@
       switch(this.props.error.status){
         case 'PermissionDeniedError':
           errorComponent = permissionDeniedComponent(this.props.appName);
+          break;
+        case 405:
+          errorComponent = notSupportedErrorComponent;
           break;
         case 409:
           errorComponent = duplicateErrorComponent;

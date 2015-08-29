@@ -41,6 +41,7 @@ roomStream.on('join', function(roomId) {
   });
 
   Rooms.update({_id: roomId}, {$addToSet: {connected: _this.userId}});
+  Meteor.users.update(_this.userId, {$addToSet: {history: {room: roomId, createdAt: new Date}}});
 
   // when someone disconnects, remove them from the Room's connected list
   _this.onDisconnect = function() {

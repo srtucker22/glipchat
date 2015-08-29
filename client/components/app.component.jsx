@@ -30,7 +30,7 @@
 
     render() {
       return (
-        <RouteHandler appName='quasar.io'/>
+        <RouteHandler appName='quasar'/>
       );
     },
   });

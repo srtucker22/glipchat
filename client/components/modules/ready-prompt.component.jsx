@@ -31,6 +31,13 @@
   ReadyPromptComponent = Radium(React.createClass({
     mixins: [ReactMeteorData],
 
+    componentDidMount() {
+      // join room stream directly if alone in room
+      if(!this.props.room.connected.length){
+        RoomActions.joinRoomStream(this.props.room._id);
+      };
+    },
+
     getMeteorData() {
       return {
         user: UserStore.user(),
@@ -42,12 +49,6 @@
     },
 
     render(){
-      // join room stream directly if alone in room
-      if(!this.props.room.connected.length){
-        RoomActions.joinRoomStream(this.props.room._id);
-      };
-
-      // otherwise ask to join
       return (
         <div>
           {(this.props.room.connected.length && !_.contains(this.props.room.connected, this.data.user._id)) ? (

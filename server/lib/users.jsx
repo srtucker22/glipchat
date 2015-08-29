@@ -69,6 +69,18 @@ Schema.User = new SimpleSchema({
     type: Schema.UserProfile,
     optional: true,
   },
+  history: {
+    type: [Object],
+    optional: true,
+  },
+  'history.$.room': {
+    type: String,
+    optional: true,
+  },
+  'history.$.createdAt': {
+    type: Date,
+    optional: true,
+  },
   services: {
     type: Object,
     optional: true,

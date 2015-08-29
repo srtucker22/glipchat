@@ -6,7 +6,10 @@
 
   const styles = {
     css: {
-      background: 'url(images/quasar.jpg) no-repeat center center fixed',
+      backgroundAttachment: 'fixed',
+      backgroundImage: 'url(images/quasar.jpg)',
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       color: Colors.fullWhite,
       minHeight: '300px',
@@ -15,6 +18,7 @@
     title: {
       css: {
         color: Colors.fullWhite,
+        fontSize: '80px',
         textShadow: '2px 2px rgba(0, 0, 0, 0.5)',
       }
     }
