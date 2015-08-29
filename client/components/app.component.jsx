@@ -30,7 +30,7 @@
 
     render() {
       return (
-        <RouteHandler appName='Meteor React WebRTC'/>
+        <RouteHandler appName='quasar.io'/>
       );
     },
   });

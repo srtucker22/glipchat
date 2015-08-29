@@ -60,10 +60,8 @@
           RoomActions.joinRoom(params.roomId);
 
           RoomStore.requireRoom(params.roomId).then((room)=> {
-            this.room = room;
             if (!RTCStore.isDuplicateConnection()) {
               RTCActions.getLocalStream();
-              RoomActions.joinRoomStream(params.roomId);
             }
             callback();
           }).catch((err)=> {
@@ -82,12 +80,15 @@
 
       willTransitionFrom: function(transition, component) {
         RTCActions.disconnect();
+        RTCActions.stopLocalStream();
         RoomActions.leaveRoom();
       },
     },
 
     componentWillUnmount() {
+      RTCActions.disconnect();
       RTCActions.stopLocalStream();
+      RoomActions.leaveRoom();
     },
 
     getMeteorData() {
@@ -101,12 +102,8 @@
       };
     },
 
-    shouldComponentUpdate(nextProps, nextState) {
-      console.log(nextProps);
-      console.log(nextState);
-    },
-
     render() {
+
       // log the errors for now
       if(this.data.localStreamError)
         console.error(this.data.localStreamError);
@@ -122,6 +119,8 @@
           <InviteComponent ref='invite' linkUrl={window.location.href} />
 
           {(!this.data.localStreamError && !!this.data.stream) ? <ControlsComponent />: ''}
+
+          {(!this.data.localStreamError && !!this.data.stream) ? (<ReadyPromptComponent room={this.data.room} />): ''}
 
           {(!this.data.localStreamError && !!this.data.stream) ? (<FirstOverlayComponent linkUrl={window.location.href} room={this.data.room} />): ''}
 

@@ -1,3 +1,5 @@
+// the error is the streaming queue -- you need to make sure one thing streams before the other and that you wait to receive ice shit until your local/remote descriptions are set
+
 // Dependencies
 var RoomStore = null;
 var UserStore = null;
@@ -38,6 +40,7 @@ var RTCStore = function() {
     pc.addStream(_this.localStream.get());
     pc.onicecandidate = (evnt)=> {
       var ice = evnt.candidate ? {sdpMLineIndex: evnt.candidate.sdpMLineIndex, sdpMid: evnt.candidate.sdpMid, candidate: evnt.candidate.candidate} : {};
+      console.log('Emitting ice candidate', id);
       roomStream.emit('msg', {type: 'ice', room: RoomStore.currentRoomId.get(), to: id, ice: ice});
     };
 
@@ -78,6 +81,7 @@ var RTCStore = function() {
   // handle all room stream emissions
   function handleMessage(data) {
     var pc = getPeerConnection(data.from);
+    pc.iceQueue = [];
     switch (data.type) {
       case 'peer.connected':
         console.log('Peer connected', data.from);
@@ -89,7 +93,9 @@ var RTCStore = function() {
         try {
           pc.removeStream(peers[data.from]);
         } catch(e) {
+          console.log(e);
           // Firefox doesn't implement removeStream
+          // console.log(e);
         }
 
         delete peers[data.from];
@@ -108,6 +114,7 @@ var RTCStore = function() {
         break;
 
       case 'sdp-offer':
+        console.log('received an offer');
         pc.setRemoteDescription(new RTCSessionDescription(data.sdp), ()=> {
           console.log('Setting remote description by offer');
           pc.createAnswer((sdp)=> {
@@ -122,6 +129,8 @@ var RTCStore = function() {
             console.error(err);
           });
 
+        }, (err)=> {
+          console.error(err);
         });
 
         break;
@@ -138,13 +147,18 @@ var RTCStore = function() {
 
       case 'ice':
         if (data.ice && data.ice.candidate) {
-          //console.log('Adding ice candidates');
-          pc.addIceCandidate(new RTCIceCandidate(data.ice), ()=> {
-            // successfully added candidate
-            //console.log('successfully added candidate');
-          }, (err)=> {
-            console.error(err);
-          });
+          console.log('Adding ice candidates');
+          pc.iceQueue.push(data.ice);
+          if(pc.remoteDescription && pc.localDescription){
+            _.each(pc.iceQueue, (candidate)=> {
+              pc.addIceCandidate(new RTCIceCandidate(data.ice), ()=> {
+                // successfully added candidate
+                //console.log('successfully added candidate');
+              }, (err)=> {
+                console.error(err);
+              });
+            });
+          }
         }
 
         break;
@@ -159,6 +173,7 @@ var RTCStore = function() {
 
   // disconnect from a room stream, clear all peer data
   _this.disconnect = ()=> {
+    console.log('disconnecting');
 
     // announce disconnect to peers
     roomStream.emit('msg', {
@@ -170,9 +185,16 @@ var RTCStore = function() {
     roomStream.removeListener(UserStore.user()._id, handleMessage);
 
     // clear all peer data
+    _.each(peerConnections, (val, key)=>{
+      var pc = getPeerConnection(key);
+      if(pc.iceConnectionState !== 'closed')
+        pc.close();
+    });
+
     peers = {};
     peerConnections = {};
     _this.peers.set(peers);
+    _this.primaryStream.set(null);
   }
 
   // get the local stream from legit browsers
@@ -198,6 +220,7 @@ var RTCStore = function() {
         _this.isLocalAudioEnabled.set(s.getAudioTracks()[0].enabled);
         _this.isLocalVideoEnabled.set(s.getVideoTracks()[0].enabled);
       }, (e)=> {
+        console.error(e);
         _this.localStreamError.set({status: e.name, description: (e.message ? e.message: e.name)});
         _this.gettingLocalStream.set(false);
       });
@@ -223,6 +246,7 @@ var RTCStore = function() {
   _this.joinRoomStream = (r)=> {
     _this.requireLocalStream().then(()=> {
       if(!_this.isDuplicateConnection()){
+        console.log('joining room stream');
         roomStream.emit('join', r);
 
         // handle messages for the current user
@@ -269,6 +293,9 @@ var RTCStore = function() {
     if (!!_this.localStream.get()) {
       _this.localStream.get().stop();
       _this.localStream.set(null);
+
+      if(_this.primaryStream.get() === 'local')
+        this.primaryStream.set(null);
     }
   };
 

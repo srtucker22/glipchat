@@ -68,8 +68,6 @@ Meteor.methods({
 
       let subject = 'You\'ve been invited to a Meteor React WebRTC video chat';
 
-      console.log(basicMessage);
-
       Email.send({
         to: invitees,
         from: user.username,

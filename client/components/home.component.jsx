@@ -2,6 +2,23 @@
   // Dependencies
   const { Navigation } = Router;
   const { FontIcon, RaisedButton } = MUI;
+  const { Colors } = MUI.Styles;
+
+  const styles = {
+    css: {
+      background: 'url(images/quasar.jpg) no-repeat center center fixed',
+      backgroundSize: 'cover',
+      color: Colors.fullWhite,
+      minHeight: '300px',
+    },
+
+    title: {
+      css: {
+        color: Colors.fullWhite,
+        textShadow: '2px 2px rgba(0, 0, 0, 0.5)',
+      }
+    }
+  };
 
   let GlobalStyles = null;
   let RoomStore = null;
@@ -34,12 +51,13 @@
 
     render() {
       return (
-        <div>
+        <div style={[styles.css]}>
+          <GithubComponent />
           <div style={[GlobalStyles.stickyFooterPage]}>
             <HeaderComponent appName={this.props.appName}/>
             <div className='row'>
               <div className='col-xs-12 text-center'>
-                <h1>Welcome to {this.props.appName}</h1>
+                <h1 style={[styles.title.css]}>{this.props.appName}</h1>
                 <br />
                 <RaisedButton onTouchTap={this.createRoom} label='Start video call' primary={true}/>
               </div>

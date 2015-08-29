@@ -64,7 +64,7 @@
     render(){
       return (
         <div>
-          {this.props.room.connected.length === 1 && this.props.room.connected[0] === this.data.user._id && (
+          {(this.props.room.connected.length === 1 && this.props.room.connected[0] === this.data.user._id) ? (
           <div style={[GlobalStyles.table, styles.css]}>
             <div style={[GlobalStyles.cell]}>
               <div style={[GlobalStyles.table, styles.invite.css]}>
@@ -78,7 +78,7 @@
                 <div style={[GlobalStyles.table, GlobalStyles.inset, styles.linkUrl.css]}>{this.props.linkUrl}</div>
               </div>
             </div>
-          </div>)}
+          </div>) : ''}
         </div>
       );
     }

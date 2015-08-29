@@ -22,18 +22,23 @@ var RoomStore = function() {
   // auto-update the subscription to the room and store the room
   Tracker.autorun(function(c) {
     _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
-    Meteor.call('grantRoomAccess', _this.currentRoomId.get(), (err)=> {
-      if(!err){
-        Meteor.subscribe('room', _this.currentRoomId.get(), {
-          onReady() {
-            // set the current room object
-            _this.gettingCurrentRoom.set(false);
-          },
-        });
-      } else {
-        _this.gettingCurrentRoom.set(false);
-      }
-    });
+    if(!!_this.currentRoomId.get()){
+      Meteor.call('grantRoomAccess', _this.currentRoomId.get(), (err)=> {
+        if(!err){
+          Meteor.subscribe('room', _this.currentRoomId.get(), {
+            onReady() {
+              // set the current room object
+              _this.gettingCurrentRoom.set(false);
+            },
+          });
+        } else {
+          console.error(err);
+          _this.gettingCurrentRoom.set(false);
+        }
+      });
+    } else {
+      _this.gettingCurrentRoom.set(false);
+    }
   });
 
   // Callbacks
@@ -98,15 +103,16 @@ var RoomStore = function() {
     requireRoom(r) {
       return new Promise((resolve, reject)=> {
         Tracker.autorun(function(c) {
-          if (_this.gettingCurrentRoom.get() || !_this.currentRoomId.get())
+          if (!!_this.gettingCurrentRoom.get() || !_this.currentRoomId.get())
             return;
 
           // stop the tracker
           c.stop();
 
-          if (_this.currentRoom.get() && _this.currentRoom.get()._id === r) {
+          if (!!_this.currentRoom.get() && _this.currentRoom.get()._id === r) {
             resolve(_this.currentRoom.get());
           } else {
+            console.log(_this.gettingCurrentRoom.get());
             reject({status: 404, description: 'ROOM_NOT_FOUND'});
           };
         });

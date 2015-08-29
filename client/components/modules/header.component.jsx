@@ -19,9 +19,23 @@
   const Colors = MUI.Styles.Colors;
 
   const styles = {
-    icon: {
-      color: Colors.fullWhite,
+    css: {
+      background: 'none',
+      border: 'none',
+      boxShadow: 'none',
     },
+
+    icon: {
+      css:{
+        color: Colors.fullWhite,
+      },
+    },
+
+    menu: {
+      css:{
+        color: Colors.fullBlack,
+      }
+    }
   };
 
   let GlobalStyles = null;
@@ -41,8 +55,8 @@
   NotificationDropdownComponent = Radium(React.createClass({
     render() {
       return (
-        <div className='dropdown' style={[GlobalStyles.cell]}>
-          <IconButton iconStyle={styles.icon} iconClassName='material-icons dropdown-toggle' data-toggle='dropdown'>{(this.props.messages && this.props.messages.length) ? 'notifications':'notifications_none'}</IconButton>
+        <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
+          <IconButton iconStyle={styles.icon.css} iconClassName='material-icons dropdown-toggle' data-toggle='dropdown'>{(this.props.messages && this.props.messages.length) ? 'notifications':'notifications_none'}</IconButton>
           <Card className='dropdown-menu'>
             {(!!this.props.messages && this.props.messages.length) ? _.map(this.props.messages, (message)=> {
                 return (
@@ -66,7 +80,7 @@
 
     render() {
       return (
-        <div className='dropdown' style={[GlobalStyles.cell]}>
+        <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
           <Avatar className='dropdown-toggle' data-toggle='dropdown' src={this.props.user.services.google.picture}/>
           <Card className='dropdown-menu'>
             <CardText>
@@ -153,7 +167,8 @@
 
       return (
         <header>
-          <AppBar title={this.props.appName} iconElementRight={loginButton? loginButton: profileButtons} onLeftIconButtonTouchTap={this.toggleNav} showMenuIconButton={false}/>
+          <AppBar title={''/*this.props.appName*/} iconElementRight={loginButton? loginButton: profileButtons} onLeftIconButtonTouchTap={this.toggleNav} showMenuIconButton={false}
+          style={styles.css} />
           <LeftNav ref='leftNav' docked={false} menuItems={menuItems} />
         </header>
       );
