@@ -9,6 +9,7 @@
 
     videos: {
       css: {
+        background: 'transparent',
         bottom: 0,
         left: 0,
         padding: '0 5px',

@@ -6,14 +6,12 @@
 
 meteor-platform
 react
-meteorhacks:npm
 momentjs:moment
 aldeed:collection2
 fastclick
 underscore
 
 
-npm-container
 alanning:roles
 cosmos:browserify
 accounts-ui
@@ -29,6 +27,12 @@ fourseven:scss
 lepozepo:streams
 artwells:accounts-guest
 twbs:bootstrap
-mquandalle:bower
 wolves:bourbon
 email
+force-ssl
+spiderable
+markoshust:radium
+meteorhacks:npm
+
+
+npm-container

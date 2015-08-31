@@ -2,7 +2,6 @@ Browser = require('bowser');
 MUI = require('material-ui');
 MUI.Menu = require('material-ui/lib/menus/menu');
 MUI.MenuItem = require('material-ui/lib/menus/menu-item');
-Radium = require('radium');
 Router = require('react-router');
 TagsInput = require('react-tagsinput');
 
