@@ -98,11 +98,11 @@ var UserStore = function() {
 
   // is the user a guest user
   _this.isGuest = ()=> {
-    return _this.user() && (!_this.user().services || (!!_this.user().username && _this.user().username.indexOf('guest-#') !== -1));
+    return _this.user() && (!_this.user().services || !_this.user().services.google || (!!_this.user().username && _this.user().username.indexOf('guest-#') !== -1));
   };
 
-  _this.updateUsername = (username)=> {
-    Meteor.users.update({_id: Meteor.userId()}, {$set: {username}});
+  _this.updateProfileName = (name)=> {
+    Meteor.users.update({_id: Meteor.userId()}, {$set: {'profile.name': name}});
   };
 
   _this.tokenId = Dispatcher.register((payload)=> {
@@ -164,8 +164,8 @@ var UserStore = function() {
         });
         break;
 
-      case 'USER_UPDATE_USERNAME':
-        _this.updateUsername(payload.username);
+      case 'USER_UPDATE_PROFILE_NAME':
+        _this.updateProfileName(payload.name);
         break;
     }
   });

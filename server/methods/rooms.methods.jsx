@@ -1,4 +1,5 @@
-var roomURL = 'http://localhost:3000/#/room/';
+var appName = 'quasar';
+var roomURL = process.env.ROOT_URL + '#/room/';
 
 _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g
@@ -61,16 +62,16 @@ Meteor.methods({
       let user = Meteor.user();
 
       let basicMessage = renderEmailTemplate('basic-message.html', {
-        appName: 'Meteor React WebRTC',
+        appName,
         url: (roomURL + roomId),
-        username: user.username,
+        username: user.profile.name,
       });
 
-      let subject = 'You\'ve been invited to a Meteor React WebRTC video chat';
+      let subject = 'You\'ve been invited to a ' + appName + ' video chat';
 
       Email.send({
         to: invitees,
-        from: user.username,
+        from: 'mail@' + appName + '.meteor.com',
         subject: subject,
         html: basicMessage
       });

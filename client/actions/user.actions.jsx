@@ -18,8 +18,8 @@ var UserActions = function() {
       Dispatcher.dispatch({ actionType: 'USER_LOGOUT'});
     },
 
-    updateUsername(username){
-      Dispatcher.dispatch({ actionType: 'USER_UPDATE_USERNAME', username });
+    updateProfileName(name){
+      Dispatcher.dispatch({ actionType: 'USER_UPDATE_PROFILE_NAME', name });
     }
   });
 

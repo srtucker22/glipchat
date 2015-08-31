@@ -165,9 +165,9 @@
       if (!UserStore.loggingIn() && this.data.subscribed) {
         if (this.data.user && !UserStore.isGuest()) {
 
-          notificationDropdown = (
+          notificationDropdown = !!this.data.user.history ? (
             <NotificationDropdownComponent history={this.data.user.history.reverse()}/>
-          );
+          ) : '';
 
           profileDropdown = (
             <ProfileDropdownComponent user={this.data.user} />

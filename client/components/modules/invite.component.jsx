@@ -7,6 +7,8 @@
     TextField,
   } = MUI;
 
+  const Colors = MUI.Styles.Colors;
+
   const styles = {
     css: {
       minWidth: '360px',
@@ -128,7 +130,7 @@
     invite() {
       // let message = this.refs.message.getDOMNode().value;
 
-      if (this.data.invitees) {
+      if (this.data.invitees && this.data.user.profile.name) {
         RoomActions.invite(this.data.invitees);
         RoomActions.hideInviteModal();
       }
@@ -138,8 +140,8 @@
       UserActions.loginWithFacebook();
     },
 
-    updateUsername(e) {
-      UserActions.updateUsername(e.target.value);
+    updateProfileName(e) {
+      UserActions.updateProfileName(e.target.value);
     },
 
     render() {
@@ -177,8 +179,9 @@
                 <div style={[GlobalStyles.inline, styles.content.inviteRow.header.label.css]}>Send invite as</div>
                 <TextField
                   style={styles.content.inviteRow.header.inputName.css}
-                  value={this.data.user.username}
-                  onChange={this.updateUsername}
+                  value={this.data.user.profile.name}
+                  onChange={this.updateProfileName}
+                  errorText={!this.data.user.profile.name ? ' ': null}
                   floatingLabelText='Your name'/>
                 {/*UserStore.isGuest() && <div style={[GlobalStyles.inline, styles.content.inviteRow.header.button.css]}>
                   <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
