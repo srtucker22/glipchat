@@ -23,24 +23,3 @@ body {
     margin: 0;
   }
 }
-
-header {
-  .dropdown-menu {
-    left: inherit;
-    right: 0;
-  }
-
-  .dropdown-toggle {
-    cursor: pointer;
-  }
-}
-
-.table {
-  display: table;
-  margin: 0;
-  width: initial;
-  .cell {
-    display: table-cell;
-    vertical-align: middle;
-  }
-}

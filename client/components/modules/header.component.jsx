@@ -47,6 +47,23 @@
     }
   };
 
+  let Style = Radium.Style;
+  let dropdownStyleComponent = (
+    <Style
+      scopeSelector='.dropdown'
+      rules={{
+        '.dropdown-menu': {
+          left: 'inherit',
+          right: 0,
+        },
+
+        '.dropdown-toggle': {
+          cursor: 'pointer',
+        },
+      }}
+    />
+  );
+
   let GlobalStyles = null;
   let RoomActions = null;
   let UserStore   = null;
@@ -80,6 +97,7 @@
     render() {
       return (
         <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
+          {dropdownStyleComponent}
           <IconButton iconStyle={styles.icon.css} iconClassName='material-icons dropdown-toggle' data-toggle='dropdown'>{(this.props.history && this.props.history.length) ? 'notifications':'notifications_none'}</IconButton>
           <Card className='dropdown-menu' style={styles.menu.paper.css}>
             {(!!this.props.history && this.props.history.length) ? _.map(this.props.history, (item)=> {
@@ -108,6 +126,7 @@
     render() {
       return (
         <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
+          {dropdownStyleComponent}
           <Avatar className='dropdown-toggle' data-toggle='dropdown' src={this.props.user.services.google.picture}/>
           <Card className='dropdown-menu'>
             <CardText>
