@@ -1,5 +1,5 @@
-(()=>{
-  const { Navigation } = Router;
+(()=> {
+  const {History} = ReactRouter;
   const {
     FontIcon,
     FlatButton,
@@ -67,7 +67,7 @@
   });
 
   ControlsComponent = Radium(React.createClass({
-    mixins: [ReactMeteorData, Navigation],
+    mixins: [ReactMeteorData, History],
 
     getInitialState: function() {
       return {visible: false};
@@ -80,15 +80,15 @@
       };
     },
 
-    leave(){
-      this.transitionTo('home');
+    leave() {
+      this.history.pushState(null, '/');
     },
 
-    toggleLocalAudio(){
+    toggleLocalAudio() {
       RTCActions.toggleLocalAudio();
     },
 
-    toggleLocalVideo(){
+    toggleLocalVideo() {
       RTCActions.toggleLocalVideo();
     },
 
@@ -98,7 +98,7 @@
           <Paper zDepth={1} style={_.extend({},
             GlobalStyles.table,
             styles.controls.css,
-            Radium.getState(this.state, 'overlay', ':hover') ? styles.controls.visible: {}
+            Radium.getState(this.state, 'overlay', ':hover') ? styles.controls.visible : {}
           )}>
             <div key='invite' onTouchTap={RoomActions.showInviteModal} style={[GlobalStyles.cell, styles.controls.button.css]}>
               <IconButton>
@@ -130,12 +130,12 @@
             </div>*/}
             <div key='end' style={[GlobalStyles.cell, styles.controls.button.css, styles.controls.buttonEnd.css]} onTouchTap={this.leave}>
               <IconButton>
-                <FontIcon className='material-icons' color={Radium.getState(this.state, 'end', ':hover') ? Colors.fullWhite: Colors.red800}>call_end</FontIcon>
+                <FontIcon className='material-icons' color={Radium.getState(this.state, 'end', ':hover') ? Colors.fullWhite : Colors.red800}>call_end</FontIcon>
               </IconButton>
             </div>
           </Paper>
         </div>
-      )
+      );
     }
   }));
 })();

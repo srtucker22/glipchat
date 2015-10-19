@@ -33,7 +33,7 @@
 
     componentDidMount() {
       // join room stream directly if alone in room
-      if(!this.props.room.connected.length){
+      if (!this.props.room.connected.length) {
         RoomActions.joinRoomStream(this.props.room._id);
       };
     },
@@ -48,7 +48,7 @@
       RoomActions.joinRoomStream(this.props.room._id);
     },
 
-    render(){
+    render() {
       return (
         <div>
           {(this.props.room.connected.length && !_.contains(this.props.room.connected, this.data.user._id)) ? (

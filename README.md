@@ -28,6 +28,12 @@ quasar works in browsers that support WebRTC and has so far been tested in Chrom
           "kadira": {
             "appId": "YOUR_APP_ID",
             "appSecret": "YOUR_APP_SECRET
+          },
+          "public": {
+            "analyticsSettings": {
+              "Google Analytics": {"trackingId": "YOUR_TRACKING_ID"},
+              "Segment.io" : {"apiKey": "YOUR_API_KEY"}
+            }
           }
         }
 
@@ -51,7 +57,21 @@ quasar makes for a solid example of how to integrate React + Flux in a Meteor ap
 ## Upcomming
 
 -  React Native / Meteor iOS app that works with quasar on the web
--  Whatever else the people want
+-  change the name ~ help!
+
+## TODO
+-  global namespace for appName
+-  remove scss completely if possible
+-  ditch unused packages
+-  ditch npm and package all the npm things
+-  clear the unnecessary function wrapping
+-  add short video from meteor talk and flux for stupid people to the readme
+-  signal someone is self-muted to corresponding parties
+-  ding when user enters/leaves room
+-  raix notifications
+-  turn servers?
+-  google contact integration
+-  package the thing
 
 ## License
 

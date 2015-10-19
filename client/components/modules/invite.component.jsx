@@ -92,7 +92,7 @@
         }
       }
     },
-  }
+  };
 
   let GlobalStyles = null;
   let RoomActions = null;
@@ -115,7 +115,7 @@
       RoomActions.hideInviteModal();
     },
 
-    componentWillUpdate(){
+    componentWillUpdate() {
       this.data.inviteModalVisible ? this.refs.dialog.show() : this.refs.dialog.dismiss();
     },
 
@@ -181,14 +181,16 @@
                   style={styles.content.inviteRow.header.inputName.css}
                   value={this.data.user.profile.name}
                   onChange={this.updateProfileName}
-                  errorText={!this.data.user.profile.name ? ' ': null}
+                  errorText={!this.data.user.profile.name ? ' ' : null}
                   floatingLabelText='Your name'/>
                 {/*UserStore.isGuest() && <div style={[GlobalStyles.inline, styles.content.inviteRow.header.button.css]}>
+                  <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
+                </div>*//*UserStore.isGuest() && <div style={[GlobalStyles.inline, styles.content.inviteRow.header.button.css]}>
                   <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
                 </div>*/}
               </div>
               <TypeaheadComponent ref='typeahead'/>
-              {/*<textarea ref='message' style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>*/}
+              {/*<textarea ref='message' style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>*//*<textarea ref='message' style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>*/}
             </div>
           </div>
         </Dialog>

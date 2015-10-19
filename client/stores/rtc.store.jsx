@@ -13,7 +13,7 @@ Dependency.autorun(()=> {
 var RTCStore = function() {
   var _this = this;
 
-  var iceConfig = { iceServers: [{ url: 'stun:stun.l.google.com:19302' }]};
+  var iceConfig = {iceServers: [{url: 'stun:stun.l.google.com:19302'}]};
 
   // private vars for peer connections
   var peerConnections = {};
@@ -39,9 +39,18 @@ var RTCStore = function() {
     peerConnections[id] = pc;
     pc.addStream(_this.localStream.get());
     pc.onicecandidate = (evnt)=> {
-      var ice = evnt.candidate ? {sdpMLineIndex: evnt.candidate.sdpMLineIndex, sdpMid: evnt.candidate.sdpMid, candidate: evnt.candidate.candidate} : {};
+      var ice = evnt.candidate ? {
+        sdpMLineIndex: evnt.candidate.sdpMLineIndex,
+        sdpMid: evnt.candidate.sdpMid,
+        candidate: evnt.candidate.candidate
+      } : {};
       console.log('Emitting ice candidate', id);
-      roomStream.emit('msg', {type: 'ice', room: RoomStore.currentRoomId.get(), to: id, ice: ice});
+      roomStream.emit('msg', {
+        type: 'ice',
+        room: RoomStore.currentRoomId.get(),
+        to: id,
+        ice: ice
+      });
     };
 
     pc.onaddstream = (evnt)=> {
@@ -69,13 +78,18 @@ var RTCStore = function() {
     pc.createOffer((sdp)=> {
       pc.setLocalDescription(sdp, ()=> {
         console.log('Creating an offer for', id);
-        roomStream.emit('msg', {type: 'sdp-offer', to: id, sdp: {type: sdp.type, sdp: sdp.sdp}, room: RoomStore.currentRoomId.get()});
+        roomStream.emit('msg', {
+          type: 'sdp-offer',
+          to: id,
+          sdp: {type: sdp.type, sdp: sdp.sdp},
+          room: RoomStore.currentRoomId.get()
+        });
       }, (e)=> {
         console.error(e);
       });
     }, (e)=> {
       console.error(e);
-    }, { mandatory: { offerToReceiveVideo: true, offerToReceiveAudio: true }});
+    }, {mandatory: {offerToReceiveVideo: true, offerToReceiveAudio: true}});
   }
 
   // handle all room stream emissions
@@ -92,7 +106,7 @@ var RTCStore = function() {
         console.log('Peer disconnected', data.from);
         try {
           pc.removeStream(peers[data.from]);
-        } catch(e) {
+        } catch (e) {
           console.log(e);
           // Firefox doesn't implement removeStream
           // console.log(e);
@@ -108,7 +122,7 @@ var RTCStore = function() {
         delete peerConnections[data.from];
 
         // if the deleted stream was the primaryStream, set it to the last peer or the localStream
-        if(_this.primaryStream.get() === data.from){
+        if (_this.primaryStream.get() === data.from) {
           _.keys(peers).length ? _this.primaryStream.set(_.last(_.keys(peers))) : _this.primaryStream.set('local');
         }
         break;
@@ -124,7 +138,14 @@ var RTCStore = function() {
               console.error(e);
             });
 
-            roomStream.emit('msg', { to: data.from, room: RoomStore.currentRoomId.get(), sdp: {type: sdp.type, sdp: sdp.sdp}, type: 'sdp-answer' });
+            roomStream.emit('msg', {
+              to: data.from,
+              room: RoomStore.currentRoomId.get(),
+              sdp: {
+                type: sdp.type, sdp: sdp.sdp
+              },
+              type: 'sdp-answer'
+            });
           }, (err)=> {
             console.error(err);
           });
@@ -149,7 +170,7 @@ var RTCStore = function() {
         if (data.ice && data.ice.candidate) {
           console.log('Adding ice candidates');
           pc.iceQueue.push(data.ice);
-          if(pc.remoteDescription && pc.localDescription){
+          if (pc.remoteDescription && pc.localDescription) {
             _.each(pc.iceQueue, (candidate)=> {
               pc.addIceCandidate(new RTCIceCandidate(data.ice), ()=> {
                 // successfully added candidate
@@ -185,10 +206,11 @@ var RTCStore = function() {
     roomStream.removeListener(UserStore.user()._id, handleMessage);
 
     // clear all peer data
-    _.each(peerConnections, (val, key)=>{
+    _.each(peerConnections, (val, key)=> {
       var pc = getPeerConnection(key);
-      if(pc.iceConnectionState !== 'closed')
+      if (pc.iceConnectionState !== 'closed') {
         pc.close();
+      }
     });
 
     peers = {};
@@ -221,7 +243,10 @@ var RTCStore = function() {
         _this.isLocalVideoEnabled.set(s.getVideoTracks()[0].enabled);
       }, (e)=> {
         console.error(e);
-        _this.localStreamError.set({status: e.name, description: (e.message ? e.message: e.name)});
+        _this.localStreamError.set({
+          status: e.name,
+          description: (e.message ? e.message : e.name)
+        });
         _this.gettingLocalStream.set(false);
       });
     } else {
@@ -233,19 +258,19 @@ var RTCStore = function() {
   _this.isDuplicateConnection = ()=> {
     let room = RoomStore.currentRoom.get();
     let val = room && _.contains(room.connected, UserStore.user()._id);
-    if(val){
+    if (val) {
       _this.localStreamError.set({
         status: 409,
         description: 'Conflict: user is already connected to this room'
       });
     }
     return val;
-  }
+  };
 
   // join the room stream and announce to peers to start connection process
   _this.joinRoomStream = (r)=> {
     _this.requireLocalStream().then(()=> {
-      if(!_this.isDuplicateConnection()){
+      if (!_this.isDuplicateConnection()) {
         console.log('joining room stream');
         roomStream.emit('join', r);
 
@@ -266,14 +291,14 @@ var RTCStore = function() {
   };
 
   _this.toggleAudio = (id)=> {
-    if(_.has(_this.peers.get(), id)){
+    if (_.has(_this.peers.get(), id)) {
       _this.peers.get()[id].getAudioTracks()[0].enabled = !_this.peers.get()[id].getAudioTracks()[0].enabled;
       _this.isAudioEnabled[id].set(_this.peers.get()[id].getAudioTracks()[0].enabled);
     }
   };
 
   _this.toggleLocalAudio = ()=> {
-    if(_this.localStream.get()){
+    if (_this.localStream.get()) {
       _this.localStream.get().getAudioTracks()[0].enabled = !_this.localStream.get().getAudioTracks()[0].enabled;
 
       _this.isLocalAudioEnabled.set(_this.localStream.get().getAudioTracks()[0].enabled);
@@ -281,7 +306,7 @@ var RTCStore = function() {
   };
 
   _this.toggleLocalVideo = ()=> {
-    if(_this.localStream.get()){
+    if (_this.localStream.get()) {
       _this.localStream.get().getVideoTracks()[0].enabled = !_this.localStream.get().getVideoTracks()[0].enabled;
 
       _this.isLocalVideoEnabled.set(_this.localStream.get().getVideoTracks()[0].enabled);
@@ -294,8 +319,9 @@ var RTCStore = function() {
       _this.localStream.get().stop();
       _this.localStream.set(null);
 
-      if(_this.primaryStream.get() === 'local')
+      if (_this.primaryStream.get() === 'local'){
         this.primaryStream.set(null);
+      }
     }
   };
 
@@ -309,7 +335,7 @@ var RTCStore = function() {
         // stop the tracker
         c.stop();
 
-        if(_this.localStream.get()){
+        if (_this.localStream.get()) {
           resolve(_this.localStream.get());
         } else {
           reject(_this.localStreamError.get());

@@ -5,7 +5,7 @@ _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g
 };
 
-function renderEmailTemplate(filename, vals){
+function renderEmailTemplate(filename, vals) {
   let template = Assets.getText(filename);
   let templateCompiled = _.template(template);
 
@@ -75,7 +75,7 @@ Meteor.methods({
         subject: subject,
         html: basicMessage
       });
-    } catch(e) {
+    } catch (e) {
       throw new Meteor.Error(e);
     }
   },

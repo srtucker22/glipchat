@@ -41,13 +41,13 @@
                   "version": "1.0.0"
                 },
                 "escodegen": {
-                  "version": "1.6.1",
+                  "version": "1.7.0",
                   "dependencies": {
                     "estraverse": {
                       "version": "1.9.3"
                     },
                     "esutils": {
-                      "version": "1.1.6"
+                      "version": "2.0.2"
                     },
                     "esprima": {
                       "version": "1.2.5"
@@ -76,7 +76,7 @@
                       }
                     },
                     "source-map": {
-                      "version": "0.1.43",
+                      "version": "0.2.0",
                       "dependencies": {
                         "amdefine": {
                           "version": "1.0.0"
@@ -157,17 +157,6 @@
         }
       }
     },
-    "material-ui": {
-      "version": "0.10.4",
-      "dependencies": {
-        "classnames": {
-          "version": "1.2.2"
-        },
-        "react-draggable2": {
-          "version": "0.5.1"
-        }
-      }
-    },
     "react": {
       "version": "0.13.3",
       "dependencies": {
@@ -200,22 +189,8 @@
         }
       }
     },
-    "react-router": {
-      "version": "0.13.3",
-      "dependencies": {
-        "object-assign": {
-          "version": "2.1.1"
-        },
-        "qs": {
-          "version": "2.4.1"
-        }
-      }
-    },
     "react-tagsinput": {
       "version": "1.4.3"
-    },
-    "react-tap-event-plugin": {
-      "version": "0.1.7"
     },
     "webrtc-adapter-test": {
       "version": "0.2.1"

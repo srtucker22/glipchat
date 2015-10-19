@@ -22,9 +22,9 @@ var RoomStore = function() {
   // auto-update the subscription to the room and store the room
   Tracker.autorun(function(c) {
     _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
-    if(!!_this.currentRoomId.get()){
+    if (!!_this.currentRoomId.get()) {
       Meteor.call('grantRoomAccess', _this.currentRoomId.get(), (err)=> {
-        if(!err){
+        if (!err) {
           Meteor.subscribe('room', _this.currentRoomId.get(), {
             onReady() {
               // set the current room object
@@ -43,7 +43,7 @@ var RoomStore = function() {
 
   // Callbacks
   _.extend(_this, {
-    clearInvitees(){
+    clearInvitees() {
       _this.invitees.set(null);
     },
 
@@ -72,7 +72,7 @@ var RoomStore = function() {
       _this.inviteModalVisible.set(false);
     },
 
-    invite(invitees){
+    invite(invitees) {
       _this.inviteError.set(null);
       Meteor.call('invite', _this.currentRoomId.get(), invitees, (err, res)=> {
         if (err) {
@@ -90,11 +90,11 @@ var RoomStore = function() {
       }
     },
 
-    joinRoomStream(r){
+    joinRoomStream(r) {
       RTCStore.joinRoomStream(r);
     },
 
-    leaveRoom(){
+    leaveRoom() {
       _this.currentRoomId.set('');
       _this.inviteModalVisible.set(false);
     },
@@ -103,8 +103,9 @@ var RoomStore = function() {
     requireRoom(r) {
       return new Promise((resolve, reject)=> {
         Tracker.autorun(function(c) {
-          if (!!_this.gettingCurrentRoom.get() || !_this.currentRoomId.get())
+          if (!!_this.gettingCurrentRoom.get() || !_this.currentRoomId.get()) {
             return;
+          }
 
           // stop the tracker
           c.stop();
@@ -119,12 +120,14 @@ var RoomStore = function() {
       });
     },
 
-    showInviteModal(){
-      if(!!_this.currentRoom.get() && !RTCStore.localStreamError.get() && !!RTCStore.localStream.get())
+    showInviteModal() {
+      if (!!_this.currentRoom.get() && !RTCStore.localStreamError.get() &&
+        !!RTCStore.localStream.get()) {
         _this.inviteModalVisible.set(true);
+      }
     },
 
-    updateInvitees(invitees){
+    updateInvitees(invitees) {
       _this.invitees.set(invitees);
     },
   });

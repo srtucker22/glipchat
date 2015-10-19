@@ -73,7 +73,7 @@
     },
 
     toggleAudio() {
-      (this.props.id === 'local') ? RTCActions.toggleLocalAudio(): RTCActions.toggleAudio(this.props.id);
+      (this.props.id === 'local') ? RTCActions.toggleLocalAudio() : RTCActions.toggleAudio(this.props.id);
     },
 
     render() {

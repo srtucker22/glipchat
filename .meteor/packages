@@ -4,7 +4,6 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-platform
 react
 momentjs:moment
 aldeed:collection2
@@ -27,7 +26,6 @@ fourseven:scss
 lepozepo:streams
 artwells:accounts-guest
 twbs:bootstrap
-wolves:bourbon
 email
 force-ssl
 spiderable
@@ -35,4 +33,26 @@ markoshust:radium
 meteorhacks:npm
 
 
+johnantoni:meteor-normalize
+okgrow:analytics
+standard-minifiers
+meteor-base
+mobile-experience
+mongo
+blaze-html-templates
+session
+jquery
+tracker
+logging
+reload
+random
+ejson
+spacebars
+check
+
+
+
+
 npm-container
+izzilab:material-ui
+reactrouter:react-router

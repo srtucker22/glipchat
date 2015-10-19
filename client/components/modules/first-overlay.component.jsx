@@ -61,7 +61,7 @@
       };
     },
 
-    render(){
+    render() {
       return (
         <div>
           {(this.props.room.connected.length === 1 && this.props.room.connected[0] === this.data.user._id) ? (

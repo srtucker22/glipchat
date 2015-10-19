@@ -103,12 +103,12 @@
   );
 
   LocalStreamErrorComponent = Radium(React.createClass({
-    render(){
-      var { ...other } = this.props;
+    render() {
+      var {...other} = this.props;
 
       var errorComponent = <div>{this.props.error.status}</div>;
 
-      switch(this.props.error.status){
+      switch (this.props.error.status){
         case 'PermissionDeniedError':
           errorComponent = permissionDeniedComponent(this.props.appName);
           break;

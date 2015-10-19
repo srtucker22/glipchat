@@ -12,8 +12,6 @@
   let RoomActions = null;
   let RoomStore = null;
 
-  let ThemeManager = new MUI.Styles.ThemeManager();
-
   var Style = Radium.Style;
 
   Dependency.autorun(()=> {
@@ -58,17 +56,7 @@
   };
 
   TypeaheadChipComponent = Radium(React.createClass({
-    childContextTypes: {
-      muiTheme: React.PropTypes.object
-    },
-
-    getChildContext() {
-      return {
-        muiTheme: ThemeManager.getCurrentTheme()
-      };
-    },
-
-    render(){
+    render() {
       return (
         <div style={styles.chip.border.css}>
           <Paper zDepth={1} style={styles.chip.css}>
@@ -92,7 +80,7 @@
     },
 
     renderTag(key, tag, removeHandler) {
-      if(tag){
+      if (tag) {
         return (
           <TypeaheadChipComponent key={key} tag={tag} remove={removeHandler}/>
         );
