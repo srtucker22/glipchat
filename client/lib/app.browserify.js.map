@@ -1,8 +1,8 @@
 {
   "version": 3,
   "sources": [
-    "../../../../../../../.meteor/packages/cosmos_browserify/.0.5.0.1w3mc40++os+web.browser+web.cordova/plugin.CosmosBrowserify.os/npm/CosmosBrowserify/node_modules/browserify/node_modules/browser-pack/_prelude.js",
-    "../../../../../../../.meteor/packages/cosmos_browserify/.0.5.0.1w3mc40++os+web.browser+web.cordova/plugin.CosmosBrowserify.os/npm/CosmosBrowserify/node_modules/browserify/node_modules/process/browser.js",
+    "../../../../../../.meteor/packages/cosmos_browserify/.0.5.0.c7iun3++os+web.browser+web.cordova/plugin.CosmosBrowserify.os/npm/CosmosBrowserify/node_modules/browserify/node_modules/browser-pack/_prelude.js",
+    "../../../../../../.meteor/packages/cosmos_browserify/.0.5.0.c7iun3++os+web.browser+web.cordova/plugin.CosmosBrowserify.os/npm/CosmosBrowserify/node_modules/browserify/node_modules/process/browser.js",
     "_stream_0.js",
     "node_modules/bowser/bowser.js",
     "node_modules/material-ui/lib/app-bar.js",
