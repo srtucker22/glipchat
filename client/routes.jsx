@@ -14,43 +14,23 @@ Dependency.autorun(()=> {
   UserStore   = Dependency.get('UserStore');
 });
 
-const About = React.createClass({
-  render() {
-    return <h3>About</h3>
-  }
-})
-
-const Inbox = React.createClass({
-  render() {
-    return (
-      <div>
-        <h2>Inbox</h2>
-        {this.props.children || 'Welcome to your Inbox'}
-      </div>
-    )
-  }
-})
-
-const Message = React.createClass({
-  render() {
-    return <h3>Message {this.props.params.id}</h3>
-  }
-})
-
 Meteor.startup(function() {
   window.location.hostname === 'localhost' && analytics.debug();  // show the analytics debug log if testing locally
+
+  console.log(ReactRouter.history);
+  let history = ReactRouter.history.createHistory();
 
   const routeConfig = [{
     path: '/',
     component: AppComponent,
     indexRoute: {component: HomeComponent},
-    onEnter: (nextState, replaceState) => {
+    onEnter: (nextState, replaceState) => { // there should probably be a better way to do this for all routes
       analytics.page('home');
     },
     childRoutes: [{
       path: '/room/:roomId',
       component: RoomComponent,
-      onEnter: (nextState, replaceState, callback) => {
+      onEnter: (nextState, replaceState, callback) => { // use a callback to make onEnter async
         UserStore.requireUser().then((user)=> {
 
           RoomActions.joinRoom(nextState.params.roomId);
@@ -88,38 +68,5 @@ Meteor.startup(function() {
     },
   }];
 
-  React.render(<Router routes={routeConfig} />, document.body);
+  React.render(<Router history={history} routes={routeConfig} />, document.body);
 });
-// var {
-//   Route,
-//   NotFoundRoute,
-//   IndexRoute,
-//   Router,
-// } = ReactRouter;
-//
-// Meteor.startup(function() {
-//   window.location.hostname === 'localhost' && analytics.debug();  // show the analytics debug log if testing locally
-//
-//   React.render((
-//     <Router>
-//       <Route component={AppComponent}>
-//         <IndexRoute name='home' component={HomeComponent} />
-//
-//       </Route>
-//     </Router>
-//   ), document.body);
-//   // Router.run(routes, ReactRouter.HashLocation, function(Root, state) {
-//   //   React.render(<Root/>, document.body);
-//   //   switch (state.path) {
-//   //     case '/':
-//   //       analytics.page('home');
-//   //       break;
-//   //     default:
-//   //       if (state.path && state.path.indexOf('/room/') === 0) {
-//   //         analytics.page('room');
-//   //       } else {
-//   //         analytics.page('404');
-//   //       }
-//   //   }
-//   // });
-// });
