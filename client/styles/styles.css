@@ -1,0 +1,23 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+body > div {
+  height: 100%;
+}
+
+a, a:hover {
+  text-decoration: none;
+}
+
+button {
+  margin: 0;
+}
+
+.row {
+  margin: 0;
+}

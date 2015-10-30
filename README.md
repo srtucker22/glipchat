@@ -17,10 +17,6 @@ quasar works in browsers that support WebRTC and has so far been tested in Chrom
 4. Add your personal settings for the following services included in quasar (or remove the ones you don't want)
 
         {
-          "facebook" : {
-            "appId": "YOUR_APP_ID",
-            "secret": "YOUR_APP_SECRET"
-          },
           "google" : {
             "clientId" : "YOUR_CLIENT_ID",
             "clientSecret" : "YOUR_CLIENT_SECRET"
@@ -50,27 +46,26 @@ Would love any code contributions, and please raise issues if you run into bugs 
 
 ## Motivation
 
-My original motivation for quasar was to learn React, Flux, and WebRTC in one go and further my Meteor skill.
-
 quasar makes for a solid example of how to integrate React + Flux in a Meteor app, and how to get a WebRTC video chatroom up and running.
+
+## Resources
+- [Quasar Meteor Lightening Talk!](https://www.youtube.com/watch?v=783BL__zIjY&feature=youtu.be&t=1h46m3s)
+- [Flux for Stupid People](http://blog.andrewray.me/flux-for-stupid-people/)
+- [webRTC demos](https://github.com/webrtc/)
 
 ## Upcomming
 
 -  React Native / Meteor iOS app that works with quasar on the web
--  change the name ~ help!
+-  change the name ~ *HELP!*
 
 ## TODO
 -  global namespace for appName
--  remove scss completely if possible
--  ditch unused packages
--  ditch npm and package all the npm things
 -  clear the unnecessary function wrapping
--  add short video from meteor talk and flux for stupid people to the readme
 -  signal someone is self-muted to corresponding parties
 -  ding when user enters/leaves room
 -  raix notifications
 -  turn servers?
--  google contact integration
+-  google contact integration in tags input
 -  package the thing
 
 ## License

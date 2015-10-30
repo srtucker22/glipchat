@@ -17,7 +17,6 @@ Dependency.autorun(()=> {
 Meteor.startup(function() {
   window.location.hostname === 'localhost' && analytics.debug();  // show the analytics debug log if testing locally
 
-  console.log(ReactRouter.history);
   let history = ReactRouter.history.createHistory();
 
   const routeConfig = [{
@@ -68,5 +67,5 @@ Meteor.startup(function() {
     },
   }];
 
-  React.render(<Router history={history} routes={routeConfig} />, document.body);
+  ReactDOM.render(<Router history={history} routes={routeConfig} />, document.getElementById('react'));
 });
