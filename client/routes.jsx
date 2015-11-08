@@ -38,8 +38,8 @@ Meteor.startup(function() {
             if (!RTCStore.isDuplicateConnection()) {
               RTCActions.getLocalStream();
               analytics.page(room);
-              callback();
             }
+            callback();
           }).catch((err)=> {
             replaceState(null, '/');
             console.error(err);
@@ -67,5 +67,10 @@ Meteor.startup(function() {
     },
   }];
 
-  ReactDOM.render(<Router history={history} routes={routeConfig} />, document.getElementById('react'));
+  ReactDOM.render(
+    <Router
+      history={history}
+      routes={routeConfig} />,
+    document.getElementById('react')
+  );
 });

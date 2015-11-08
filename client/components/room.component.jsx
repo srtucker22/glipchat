@@ -1,4 +1,12 @@
-const {Dialog, FontIcon, FlatButton, FloatingActionButton, IconButton, Paper, RaisedButton} = MUI;
+const {
+  Dialog,
+  FontIcon,
+  FlatButton,
+  FloatingActionButton,
+  IconButton,
+  Paper,
+  RaisedButton
+} = MUI;
 const Colors = MUI.Styles.Colors;
 
 const styles = {
@@ -54,38 +62,6 @@ let standardActions = [
 RoomComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
-  statics: {
-    // async transition requirements
-    willTransitionTo: function(transition, params, query, callback) {
-      UserStore.requireUser().then((user)=> {
-        RoomActions.joinRoom(params.roomId);
-
-        RoomStore.requireRoom(params.roomId).then((room)=> {
-          if (!RTCStore.isDuplicateConnection()) {
-            RTCActions.getLocalStream();
-          }
-          callback();
-        }).catch((err)=> {
-          console.error(err);
-          transition.abort();
-          callback();
-        });
-      })
-
-      .catch((err)=> {
-        console.error(err);
-        transition.abort();
-        callback();
-      });
-    },
-
-    willTransitionFrom: function(transition, component) {
-      RTCActions.disconnect();
-      RTCActions.stopLocalStream();
-      RoomActions.leaveRoom();
-    },
-  },
-
   componentWillUnmount() {
     RTCActions.disconnect();
     RTCActions.stopLocalStream();
@@ -117,32 +93,50 @@ RoomComponent = Radium(React.createClass({
 
     return (
       <div style={[styles.css]}>
-        {!!this.data.localStreamError ? (<LocalStreamErrorComponent error={this.data.localStreamError} {...other}/>) : ''}
+        {!!this.data.localStreamError ?
+          (<LocalStreamErrorComponent
+            error={this.data.localStreamError} {...other}/>) : ''}
 
         <InviteComponent ref='invite' linkUrl={window.location.href} />
 
-        {(!this.data.localStreamError && !!this.data.stream) ? <ControlsComponent /> : ''}
+        {(!this.data.localStreamError && !!this.data.stream) ?
+          <ControlsComponent /> : ''}
 
-        {(!this.data.localStreamError && !!this.data.stream) ? (<ReadyPromptComponent room={this.data.room} />) : ''}
+        {(!this.data.localStreamError && !!this.data.stream) ?
+          (<ReadyPromptComponent room={this.data.room} />) : ''}
 
-        {(!this.data.localStreamError && !!this.data.stream) ? (<FirstOverlayComponent linkUrl={window.location.href} room={this.data.room} />) : ''}
+        {(!this.data.localStreamError && !!this.data.stream) ?
+          (<FirstOverlayComponent
+            linkUrl={window.location.href}
+            room={this.data.room} />) : ''}
 
-        {!!this.data.primaryStream ? (<VideoComponent src={(this.data.primaryStream === 'local') ? this.data.stream : this.data.peers[this.data.primaryStream]} muted={(this.data.primaryStream === 'local')} flip={(this.data.primaryStream === 'local')} fullScreen={true}/>) : ''}
+        {!!this.data.primaryStream ?
+          (<VideoComponent
+            src={
+              (this.data.primaryStream === 'local') ?
+              this.data.stream : this.data.peers[this.data.primaryStream]
+            }
+            muted={(this.data.primaryStream === 'local')}
+            flip={(this.data.primaryStream === 'local')}
+            fullScreen={true}/>
+          ) : ''
+        }
 
-        {(!!this.data.peers && _.keys(this.data.peers).length) ? (<div style={[styles.videos.css]}>
-          <div key='local' style={[styles.videos.video.css]}>
-            <VideoOverlayComponent id='local'/>
-            <VideoComponent src={this.data.stream} muted={true} flip={true}/>
-          </div>
-          {_.map(this.data.peers, (val, key)=> {
-            return (
-              <div key={key} style={[styles.videos.video.css]}>
-                <VideoOverlayComponent id={key}/>
-                <VideoComponent src={val}/>
-              </div>
-            );
-          })}
-        </div>) : ''}
+        {(!!this.data.peers && _.keys(this.data.peers).length) ?
+          (<div style={[styles.videos.css]}>
+            <div key='local' style={[styles.videos.video.css]}>
+              <VideoOverlayComponent id='local'/>
+              <VideoComponent src={this.data.stream} muted={true} flip={true}/>
+            </div>
+            {_.map(this.data.peers, (val, key)=> {
+              return (
+                <div key={key} style={[styles.videos.video.css]}>
+                  <VideoOverlayComponent id={key}/>
+                  <VideoComponent src={val}/>
+                </div>
+              );
+            })}
+          </div>) : ''}
       </div>
     );
   },

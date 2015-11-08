@@ -158,7 +158,7 @@
       }
     },
     "react": {
-      "version": "0.13.3",
+      "version": "0.14.2",
       "dependencies": {
         "envify": {
           "version": "3.4.0",
@@ -186,14 +186,44 @@
               }
             }
           }
+        },
+        "fbjs": {
+          "version": "0.3.2",
+          "dependencies": {
+            "core-js": {
+              "version": "1.2.5"
+            },
+            "loose-envify": {
+              "version": "1.1.0",
+              "dependencies": {
+                "js-tokens": {
+                  "version": "1.0.2"
+                }
+              }
+            },
+            "promise": {
+              "version": "7.0.4",
+              "dependencies": {
+                "asap": {
+                  "version": "2.0.3"
+                }
+              }
+            },
+            "ua-parser-js": {
+              "version": "0.7.9"
+            },
+            "whatwg-fetch": {
+              "version": "0.9.0"
+            }
+          }
         }
       }
     },
     "react-tagsinput": {
-      "version": "1.4.3"
+      "version": "3.0.1"
     },
     "webrtc-adapter-test": {
-      "version": "0.2.1"
+      "version": "0.2.5"
     }
   }
 }

@@ -63,7 +63,11 @@ HomeComponent = Radium(React.createClass({
             <div className='col-xs-12 text-center'>
               <h1 style={[styles.title.css]}>{'quasar'}</h1>
               <br />
-              <RaisedButton onTouchTap={this.createRoom} label='Start video call' primary={true}/>
+              <RaisedButton
+                onTouchTap={this.createRoom}
+                label='Start video call'
+                primary={true}
+              />
             </div>
           </div>
         </div>

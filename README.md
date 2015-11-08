@@ -51,7 +51,7 @@ quasar makes for a solid example of how to integrate React + Flux in a Meteor ap
 ## Resources
 - [Quasar Meteor Lightening Talk!](https://www.youtube.com/watch?v=783BL__zIjY&feature=youtu.be&t=1h46m3s)
 - [Flux for Stupid People](http://blog.andrewray.me/flux-for-stupid-people/)
-- [webRTC demos](https://github.com/webrtc/)
+- [WebRTC Demos](https://github.com/webrtc/)
 
 ## Upcomming
 
@@ -59,6 +59,7 @@ quasar makes for a solid example of how to integrate React + Flux in a Meteor ap
 -  change the name ~ *HELP!*
 
 ## TODO
+-  bug -- fix the typeahead (no dupes, no getDOMNode warning)
 -  global namespace for appName
 -  clear the unnecessary function wrapping
 -  signal someone is self-muted to corresponding parties
