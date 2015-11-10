@@ -58,6 +58,16 @@ quasar makes for a solid example of how to integrate React + Flux in a Meteor ap
 -  React Native / Meteor iOS app that works with quasar on the web
 -  change the name ~ *HELP!*
 
+## TODO
+-  global namespace for appName
+-  clear the unnecessary function wrapping
+-  signal someone is self-muted to corresponding parties
+-  ding when user enters/leaves room
+-  raix notifications
+-  turn servers?
+-  google contact integration in tags input
+-  package the thing
+
 ## License
 
 The MIT License
