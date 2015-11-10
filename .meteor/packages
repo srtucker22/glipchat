@@ -11,14 +11,10 @@ accounts-ui
 alanning:roles
 aldeed:collection2
 artwells:accounts-guest
-<<<<<<< HEAD
-twbs:bootstrap
-=======
 blaze-html-templates
 check
 cosmos:browserify
 ejson
->>>>>>> meteor-1.2
 email
 fastclick
 force-ssl
