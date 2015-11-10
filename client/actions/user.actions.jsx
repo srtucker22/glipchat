@@ -3,23 +3,23 @@ var UserActions = function() {
 
   _.extend(_this, {
     login(user, password) {
-      Dispatcher.dispatch({ actionType: 'USER_LOGIN_PASSWORD'});
+      Dispatcher.dispatch({actionType: 'USER_LOGIN_PASSWORD'});
     },
 
     loginWithFacebook() {
-      Dispatcher.dispatch({ actionType: 'USER_LOGIN_FACEBOOK'});
+      Dispatcher.dispatch({actionType: 'USER_LOGIN_FACEBOOK'});
     },
 
     loginWithGoogle() {
-      Dispatcher.dispatch({ actionType: 'USER_LOGIN_GOOGLE'});
+      Dispatcher.dispatch({actionType: 'USER_LOGIN_GOOGLE'});
     },
 
     logout() {
-      Dispatcher.dispatch({ actionType: 'USER_LOGOUT'});
+      Dispatcher.dispatch({actionType: 'USER_LOGOUT'});
     },
 
-    updateProfileName(name){
-      Dispatcher.dispatch({ actionType: 'USER_UPDATE_PROFILE_NAME', name });
+    updateProfileName(name) {
+      Dispatcher.dispatch({actionType: 'USER_UPDATE_PROFILE_NAME', name});
     }
   });
 

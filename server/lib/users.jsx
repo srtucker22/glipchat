@@ -103,26 +103,17 @@ Meteor.users.attachSchema(Schema.User);
 
 Meteor.users.allow({
   insert(userId, user, fields, modifier) {
-    if (userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])) {
-      return true;
-    } else {
-      return false;
-    }
+    return (userId === user._id ||
+      Roles.userIsInRole(userId, ['manage-users','admin']));
   },
 
   remove(userId, user, fields, modifier) {
-    if (userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])) {
-      return true;
-    } else {
-      return false;
-    }
+    return (userId === user._id ||
+      Roles.userIsInRole(userId, ['manage-users','admin']));
   },
 
   update(userId, user, fields, modifier) {
-    if (userId === user._id || Roles.userIsInRole(userId, ['manage-users','admin'])) {
-      return true;
-    } else {
-      return false;
-    }
+    return (userId === user._id ||
+      Roles.userIsInRole(userId, ['manage-users','admin']));
   },
 });

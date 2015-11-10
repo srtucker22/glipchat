@@ -1,91 +1,89 @@
-(()=> {
-  const {FontIcon, FloatingActionButton} = MUI;
-  const Colors = MUI.Styles.Colors;
+const {FontIcon, FloatingActionButton} = MUI;
+const Colors = MUI.Styles.Colors;
 
-  const styles = {
+const styles = {
+  css: {
+    height: '100%',
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 1,
+
+    ':hover': {},
+  },
+
+  mute: {
     css: {
-      height: '100%',
-      left: 0,
+      backgroundColor: Colors.red800,
+      'float': 'right',
+      opacity: 0,
       position: 'absolute',
-      top: 0,
+      right: '5px',
+      top: '5px',
+      transition: 'opacity 1s ease-in-out',
+      zIndex: 3,
+    },
+
+    visible: {
+      css: {
+        opacity: 1,
+      },
+    },
+  },
+
+  shade: {
+    css: {
+      backgroundColor: Colors.fullBlack,
+      height: '100%',
+      opacity: 0,
+      transition: 'opacity 1s ease-in-out',
       width: '100%',
-      zIndex: 1,
-
-      ':hover': {},
+      zIndex: 2,
     },
 
-    mute: {
+    hover: {
       css: {
-        backgroundColor: Colors.red800,
-        'float': 'right',
-        opacity: 0,
-        position: 'absolute',
-        right: '5px',
-        top: '5px',
-        transition: 'opacity 1s ease-in-out',
-        zIndex: 3,
-      },
-
-      visible: {
-        css: {
-          opacity: 1,
-        },
+        opacity: 0.5,
       },
     },
+  },
+};
 
-    shade: {
-      css: {
-        backgroundColor: Colors.fullBlack,
-        height: '100%',
-        opacity: 0,
-        transition: 'opacity 1s ease-in-out',
-        width: '100%',
-        zIndex: 2,
-      },
+let RTCActions = null;
+let RTCStore = null;
 
-      hover: {
-        css: {
-          opacity: 0.5,
-        },
-      },
-    },
-  };
+Dependency.autorun(()=> {
+  RTCStore    = Dependency.get('RTCStore');
+  RTCActions  = Dependency.get('RTCActions');
+});
 
-  let RTCActions = null;
-  let RTCStore = null;
+VideoOverlayComponent = Radium(React.createClass({
+  mixins: [ReactMeteorData],
 
-  Dependency.autorun(()=> {
-    RTCStore    = Dependency.get('RTCStore');
-    RTCActions  = Dependency.get('RTCActions');
-  });
+  getMeteorData() {
+    return {
+      isAudioEnabled: (this.props.id === 'local') ? RTCStore.isLocalAudioEnabled.get() : RTCStore.isAudioEnabled[this.props.id].get(),
+    };
+  },
 
-  VideoOverlayComponent = Radium(React.createClass({
-    mixins: [ReactMeteorData],
+  setPrimaryStream() {
+    RTCActions.setPrimaryStream(this.props.id);
+  },
 
-    getMeteorData() {
-      return {
-        isAudioEnabled: (this.props.id === 'local') ? RTCStore.isLocalAudioEnabled.get() : RTCStore.isAudioEnabled[this.props.id].get(),
-      };
-    },
+  toggleAudio() {
+    (this.props.id === 'local') ? RTCActions.toggleLocalAudio() : RTCActions.toggleAudio(this.props.id);
+  },
 
-    setPrimaryStream() {
-      RTCActions.setPrimaryStream(this.props.id);
-    },
-
-    toggleAudio() {
-      (this.props.id === 'local') ? RTCActions.toggleLocalAudio(): RTCActions.toggleAudio(this.props.id);
-    },
-
-    render() {
-      return (
-        <div key='overlay' style={[styles.css]}>
-          <div onTouchTap={this.setPrimaryStream} style={[styles.shade.css, Radium.getState(this.state, 'overlay', ':hover') && styles.shade.hover.css]}>
-          </div>
-          <FloatingActionButton onTouchTap={this.toggleAudio} style={_.extend({}, styles.mute.css, (Radium.getState(this.state, 'overlay', ':hover') || !this.data.isAudioEnabled) ? styles.mute.visible.css : {})} mini={true} primary={false}>
-            <FontIcon className='material-icons' color={Colors.fullWhite}>mic_off</FontIcon>
-          </FloatingActionButton>
+  render() {
+    return (
+      <div key='overlay' style={[styles.css]}>
+        <div onTouchTap={this.setPrimaryStream} style={[styles.shade.css, Radium.getState(this.state, 'overlay', ':hover') && styles.shade.hover.css]}>
         </div>
-      );
-    },
-  }));
-})();
+        <FloatingActionButton onTouchTap={this.toggleAudio} style={_.extend({}, styles.mute.css, (Radium.getState(this.state, 'overlay', ':hover') || !this.data.isAudioEnabled) ? styles.mute.visible.css : {})} mini={true} primary={false}>
+          <FontIcon className='material-icons' color={Colors.fullWhite}>mic_off</FontIcon>
+        </FloatingActionButton>
+      </div>
+    );
+  },
+}));

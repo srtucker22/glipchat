@@ -3,8 +3,14 @@ Meteor.startup(() => {
   if (Meteor.users.find().fetch().length === 0) {
 
     let users = [
-      {name:'Manage-Users User', email:'manage@example.com', roles:['manage-users']},
-      {name:'Administrator', email:'srtucker22@gmail.com', roles:['admin']},
+      {name: 'Manage-Users User',
+        email: 'manage@example.com',
+        roles: ['manage-users']
+      },
+      {name: 'Administrator',
+        email: 'srtucker22@gmail.com',
+        roles: ['admin']
+      },
     ];
 
     _.each(users, (user) => {
@@ -12,7 +18,7 @@ Meteor.startup(() => {
       let id = Accounts.createUser({
         email: user.email,
         password: 'apple1',
-        profile: { name: user.name },
+        profile: {name: user.name},
       });
 
       if (user.roles.length > 0) {

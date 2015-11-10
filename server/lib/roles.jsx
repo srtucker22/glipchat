@@ -25,7 +25,6 @@ Meteor.methods({
   /**
    * delete a user from a specific group
    *
-   * @method deleteUser
    * @param {String} targetUserId _id of user to delete
    * @param {String} group Company to update permissions for
    */
@@ -36,7 +35,8 @@ Meteor.methods({
     let loggedInUser = Meteor.user();
 
     if (!loggedInUser ||
-        (!Roles.userIsInRole(loggedInUser, ['manage-users','admin'], group) && Meteor.userId() != targetUserId)) {
+      (!Roles.userIsInRole(loggedInUser, ['manage-users','admin'], group) &&
+        Meteor.userId() != targetUserId)) {
       throw new Meteor.Error(403, 'Access denied');
     }
 
@@ -53,7 +53,8 @@ Accounts.validateNewUser((user) => {
 
   let loggedInUser = this.userId;
 
-  if (!loggedInUser || Roles.userIsInRole(loggedInUser, ['admin','manage-users'])) {
+  if (!loggedInUser ||
+    Roles.userIsInRole(loggedInUser, ['admin','manage-users'])) {
     return true;
   }
 

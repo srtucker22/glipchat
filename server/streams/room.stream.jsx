@@ -3,14 +3,17 @@ roomStream.permissions.read(function(eventName) {
   return this.userId == eventName;
 });
 
-function disconnect(userId, roomId){
+function disconnect(userId, roomId) {
   var room = Rooms.findOne({_id: roomId});
   if (room && _.contains(room.connected, userId)) {  // make sure they are still technically in the Room model
     Rooms.update({_id: roomId}, {$pull: {connected: userId}});
 
     // tell everyone in the room the peer has disconnected
     _.each(_.without(room.connected, userId), function(currentUserId) {
-      roomStream.emit(currentUserId, {room: roomId, type: 'peer.disconnected', from: userId});
+      roomStream.emit(
+        currentUserId,
+        {room: roomId, type: 'peer.disconnected', from: userId}
+      );
     });
   }
 }
@@ -37,11 +40,16 @@ roomStream.on('join', function(roomId) {
   }
 
   _.each(_.without(room.connected, _this.userId), function(userId) {
-    roomStream.emit(userId, {room: roomId, type: 'peer.connected', from: _this.userId});
+    roomStream.emit(
+      userId,
+      {room: roomId, type: 'peer.connected', from: _this.userId}
+    );
   });
 
   Rooms.update({_id: roomId}, {$addToSet: {connected: _this.userId}});
-  Meteor.users.update(_this.userId, {$addToSet: {history: {room: roomId, createdAt: new Date}}});
+  Meteor.users.update(_this.userId,
+    {$addToSet: {history: {room: roomId, createdAt: new Date}}}
+  );
 
   // when someone disconnects, remove them from the Room's connected list
   _this.onDisconnect = function() {
@@ -72,7 +80,7 @@ roomStream.on('msg', function(data) {
   console.log(data.type + ' received from user ' + _this.userId);
 
   // user is disconnecting without closing window
-  if(data.type === 'disconnect'){
+  if (data.type === 'disconnect') {
     disconnect(_this.userId, data.room);
     return;
   }

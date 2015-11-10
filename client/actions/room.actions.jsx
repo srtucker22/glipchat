@@ -3,20 +3,20 @@ var RoomActions = function() {
 
   _.extend(_this, {
     clearInvitees() {
-      Dispatcher.dispatch({ actionType: 'CLEAR_INVITEES'});
+      Dispatcher.dispatch({actionType: 'CLEAR_INVITEES'});
     },
 
     createRoom() {
-      Dispatcher.dispatch({ actionType: 'CREATE_ROOM'});
+      Dispatcher.dispatch({actionType: 'CREATE_ROOM'});
     },
 
-    hideInviteModal(){
+    hideInviteModal() {
       Dispatcher.dispatch({
         actionType: 'HIDE_INVITE_MODAL',
       });
     },
 
-    invite(invitees){
+    invite(invitees) {
       Dispatcher.dispatch({
         actionType: 'INVITE',
         invitees,
@@ -37,20 +37,20 @@ var RoomActions = function() {
       });
     },
 
-    leaveRoom(){
+    leaveRoom() {
       Dispatcher.dispatch({
         actionType: 'LEAVE_ROOM',
       });
     },
 
-    showInviteModal(){
+    showInviteModal() {
       Dispatcher.dispatch({
         actionType: 'SHOW_INVITE_MODAL',
       });
     },
 
     updateInvitees(invitees) {
-      Dispatcher.dispatch({ actionType: 'UPDATE_INVITEES', invitees });
+      Dispatcher.dispatch({actionType: 'UPDATE_INVITEES', invitees});
     },
   });
 

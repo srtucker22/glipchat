@@ -17,10 +17,6 @@ quasar works in browsers that support WebRTC and has so far been tested in Chrom
 4. Add your personal settings for the following services included in quasar (or remove the ones you don't want)
 
         {
-          "facebook" : {
-            "appId": "YOUR_APP_ID",
-            "secret": "YOUR_APP_SECRET"
-          },
           "google" : {
             "clientId" : "YOUR_CLIENT_ID",
             "clientSecret" : "YOUR_CLIENT_SECRET"
@@ -28,6 +24,12 @@ quasar works in browsers that support WebRTC and has so far been tested in Chrom
           "kadira": {
             "appId": "YOUR_APP_ID",
             "appSecret": "YOUR_APP_SECRET
+          },
+          "public": {
+            "analyticsSettings": {
+              "Google Analytics": {"trackingId": "YOUR_TRACKING_ID"},
+              "Segment.io" : {"apiKey": "YOUR_API_KEY"}
+            }
           }
         }
 
@@ -44,15 +46,29 @@ Would love any code contributions, and please raise issues if you run into bugs 
 
 ## Motivation
 
-My original motivation for quasar was to learn React, Flux, and WebRTC in one go and further my Meteor skill.
-
 quasar makes for a solid example of how to integrate React + Flux in a Meteor app, and how to get a WebRTC video chatroom up and running.
+
+## Resources
+- [Quasar Meteor Lightening Talk!](https://www.youtube.com/watch?v=783BL__zIjY&feature=youtu.be&t=1h46m3s)
+- [Flux for Stupid People](http://blog.andrewray.me/flux-for-stupid-people/)
+- [WebRTC Demos](https://github.com/webrtc/)
 
 ## Upcomming
 
 -  Meteor 1.2 upgrade --> waiting on the <a href="https://github.com/meteor/react-packages/issues/116">meteor-packages react 0.14 PR</a> to get finalized and merged :)
 -  React Native / Meteor iOS app that works with quasar on the web
--  Whatever else the people want
+-  change the name ~ *HELP!*
+
+## TODO
+-  bug -- fix the typeahead (no dupes, no getDOMNode warning)
+-  global namespace for appName
+-  clear the unnecessary function wrapping
+-  signal someone is self-muted to corresponding parties
+-  ding when user enters/leaves room
+-  raix notifications
+-  turn servers?
+-  google contact integration in tags input
+-  package the thing
 
 ## License
 

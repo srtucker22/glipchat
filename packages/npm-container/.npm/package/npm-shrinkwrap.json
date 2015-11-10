@@ -41,13 +41,13 @@
                   "version": "1.0.0"
                 },
                 "escodegen": {
-                  "version": "1.6.1",
+                  "version": "1.7.0",
                   "dependencies": {
                     "estraverse": {
                       "version": "1.9.3"
                     },
                     "esutils": {
-                      "version": "1.1.6"
+                      "version": "2.0.2"
                     },
                     "esprima": {
                       "version": "1.2.5"
@@ -76,7 +76,7 @@
                       }
                     },
                     "source-map": {
-                      "version": "0.1.43",
+                      "version": "0.2.0",
                       "dependencies": {
                         "amdefine": {
                           "version": "1.0.0"
@@ -157,19 +157,8 @@
         }
       }
     },
-    "material-ui": {
-      "version": "0.10.4",
-      "dependencies": {
-        "classnames": {
-          "version": "1.2.2"
-        },
-        "react-draggable2": {
-          "version": "0.5.1"
-        }
-      }
-    },
     "react": {
-      "version": "0.13.3",
+      "version": "0.14.2",
       "dependencies": {
         "envify": {
           "version": "3.4.0",
@@ -197,28 +186,44 @@
               }
             }
           }
-        }
-      }
-    },
-    "react-router": {
-      "version": "0.13.3",
-      "dependencies": {
-        "object-assign": {
-          "version": "2.1.1"
         },
-        "qs": {
-          "version": "2.4.1"
+        "fbjs": {
+          "version": "0.3.2",
+          "dependencies": {
+            "core-js": {
+              "version": "1.2.5"
+            },
+            "loose-envify": {
+              "version": "1.1.0",
+              "dependencies": {
+                "js-tokens": {
+                  "version": "1.0.2"
+                }
+              }
+            },
+            "promise": {
+              "version": "7.0.4",
+              "dependencies": {
+                "asap": {
+                  "version": "2.0.3"
+                }
+              }
+            },
+            "ua-parser-js": {
+              "version": "0.7.9"
+            },
+            "whatwg-fetch": {
+              "version": "0.9.0"
+            }
+          }
         }
       }
     },
     "react-tagsinput": {
-      "version": "1.4.3"
-    },
-    "react-tap-event-plugin": {
-      "version": "0.1.7"
+      "version": "3.0.1"
     },
     "webrtc-adapter-test": {
-      "version": "0.2.1"
+      "version": "0.2.5"
     }
   }
 }

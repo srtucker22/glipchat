@@ -65,8 +65,10 @@ var UserStore = function() {
 
         // wait for loggingIn
         Tracker.autorun((c)=> {
-          if (Meteor.loggingIn() || (Meteor.user() && !_this.subscribed.get()))
+          if (Meteor.loggingIn() ||
+            (Meteor.user() && !_this.subscribed.get())) {
             return;
+          }
 
           // stop the tracker
           c.stop();
@@ -74,7 +76,7 @@ var UserStore = function() {
           if (Meteor.user()) {
             resolve(Meteor.user());
           } else {
-            Meteor.loginVisitor(null, (err)=>{
+            Meteor.loginVisitor(null, (err)=> {
               if (err) {
                 reject(err);
               } else {
@@ -85,7 +87,7 @@ var UserStore = function() {
         });
 
       } else {
-        Meteor.loginVisitor(null, (err)=>{
+        Meteor.loginVisitor(null, (err)=> {
           if (err) {
             reject(err);
           } else {
@@ -98,7 +100,11 @@ var UserStore = function() {
 
   // is the user a guest user
   _this.isGuest = ()=> {
-    return _this.user() && (!_this.user().services || !_this.user().services.google || (!!_this.user().username && _this.user().username.indexOf('guest-#') !== -1));
+    return _this.user() && (!_this.user().services ||
+    !_this.user().services.google || (
+      !!_this.user().username &&
+      _this.user().username.indexOf('guest-#') !== -1)
+    );
   };
 
   _this.updateProfileName = (name)=> {
