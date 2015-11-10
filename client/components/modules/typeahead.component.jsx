@@ -54,14 +54,29 @@ const styles = {
   },
 };
 
+// Modify TagsInput so it validates nicely
+TagsInput.prototype._addTag = function(tag) {
+  if (tag !== '' && (this.props.validate ? this.props.validate(tag) : true)) {
+    let value = this.props.value.concat([tag]);
+    this.props.onChange(value);
+    this._clearInput();
+  }
+};
+
 TypeaheadChipComponent = Radium(React.createClass({
   render() {
     return (
-      <div style={styles.chip.border.css}>
+      <div key={this.props.tag} style={styles.chip.border.css}>
         <Paper zDepth={1} style={styles.chip.css}>
           <div style={[GlobalStyles.table]}>
-            <div style={[GlobalStyles.cell, styles.chip.text.css]}>{this.props.tag}</div>
-            <FontIcon onTouchTap={this.props.remove} className='material-icons' style={styles.chip.icon.css}>remove_circle</FontIcon>
+            <div style={[
+                GlobalStyles.cell,
+                styles.chip.text.css
+              ]}>{this.props.tag}</div>
+            <FontIcon
+              onTouchTap={this.props.onRemove}
+              className='material-icons'
+              style={styles.chip.icon.css}>remove_circle</FontIcon>
           </div>
         </Paper>
       </div>
@@ -78,12 +93,12 @@ TypeaheadComponent = Radium(React.createClass({
     };
   },
 
-  renderTag(key, tag, removeHandler) {
-    if (tag) {
-      return (
-        <TypeaheadChipComponent key={key} tag={tag} remove={removeHandler}/>
-      );
-    }
+  renderTag(props) {
+    return (
+      <TypeaheadChipComponent
+        onRemove={(e) => props.onRemove(props.key)}
+        key={props.key} tag={props.tag}/>
+    );
   },
 
   updateInvitees(i) {
@@ -91,9 +106,12 @@ TypeaheadComponent = Radium(React.createClass({
   },
 
   validate(tag) {
-    let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum)\b/i
+    let _this = this;
 
-    return re.test(tag);
+    let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum)\b/i;
+
+    return re.test(tag) &&
+      (!_this.data.invitees || _this.data.invitees.indexOf(tag) === -1);
   },
 
   render() {
@@ -114,7 +132,13 @@ TypeaheadComponent = Radium(React.createClass({
         />
         <div className='row'>
           <div className='col-xs-12' style={[GlobalStyles.inset, styles.css]}>
-            <TagsInput placeholder='+ Add email addresses' ref='tags' renderTag={this.renderTag} validate={this.validate} onChange={this.updateInvitees}/>
+            <TagsInput
+              placeholder='+ Add email addresses'
+              ref='tags'
+              renderTag={this.renderTag}
+              validate={this.validate}
+              value={this.data.invitees || []}
+              onChange={this.updateInvitees}/>
           </div>
         </div>
       </div>
