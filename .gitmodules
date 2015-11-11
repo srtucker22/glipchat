@@ -1,0 +1,3 @@
+[submodule "packages/meteor-radium"]
+	path = packages/meteor-radium
+	url = https://github.com/markoshust/meteor-radium.git
