@@ -23,7 +23,6 @@ johnantoni:meteor-normalize
 jquery
 lepozepo:streams
 logging
-markoshust:radium
 meteor-base
 meteorflux:dispatcher
 meteorflux:reactive-dependency
@@ -33,7 +32,6 @@ mobile-experience
 momentjs:moment
 mongo
 npm-container
-okgrow:analytics
 random
 react
 reactive-var
@@ -47,3 +45,5 @@ standard-minifiers
 tracker
 twbs:bootstrap
 underscore
+markoshust:radium
+okgrow:analytics

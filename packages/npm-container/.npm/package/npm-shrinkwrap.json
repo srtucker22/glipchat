@@ -191,7 +191,7 @@
           "version": "0.3.2",
           "dependencies": {
             "core-js": {
-              "version": "1.2.5"
+              "version": "1.2.6"
             },
             "loose-envify": {
               "version": "1.1.0",
