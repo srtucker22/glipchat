@@ -13,8 +13,9 @@ quasar works in browsers that support WebRTC and has so far been tested in Chrom
 
 1. Clone the project <code>git clone https://github.com/srtucker22/quasar.git</code>
 2. Go to the primary directory <code>cd quasar</code>
-3. Add a settings.json to the primary directory <code>touch settings.json</code>
-4. Add your personal settings for the following services included in quasar (or remove the ones you don't want)
+3. Make the Radium repo local <a href="https://github.com/markoshust/meteor-radium/issues/5">(current Radium workaround)</a> <code>git submodule update --init</code>
+4. Add a settings.json to the primary directory <code>touch settings.json</code>
+5. Add your personal settings for the following services included in quasar (or remove the ones you don't want)
 
         {
           "google" : {
@@ -60,6 +61,7 @@ quasar makes for a solid example of how to integrate React + Flux in a Meteor ap
 
 ## TODO
 -  global namespace for appName
+-  remove Radium local weirdness when issue is resolved
 -  clear the unnecessary function wrapping
 -  signal someone is self-muted to corresponding parties
 -  ding when user enters/leaves room
