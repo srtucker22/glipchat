@@ -1,3 +1,5 @@
+let ding = new Audio('/audio/ding.mp3');
+
 const {FontIcon, FloatingActionButton, IconButton} = MUI;
 const Colors = MUI.Styles.Colors;
 
@@ -73,6 +75,14 @@ Dependency.autorun(()=> {
 
 VideoOverlayComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
+
+  componentDidMount() {
+    // play ding on entry -- this might get weird if you're the 4th person to enter
+    // do you get 4 dings?
+    if (this.props.id !== 'local') {
+      ding.play();
+    }
+  },
 
   getMeteorData() {
     let options = {

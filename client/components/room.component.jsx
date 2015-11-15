@@ -100,10 +100,10 @@ RoomComponent = Radium(React.createClass({
         <InviteComponent ref='invite' linkUrl={window.location.href} />
 
         {(!this.data.localStreamError && !!this.data.stream) ?
-          <ControlsComponent /> : ''}
+          (<ReadyPromptComponent room={this.data.room} />) : ''}
 
         {(!this.data.localStreamError && !!this.data.stream) ?
-          (<ReadyPromptComponent room={this.data.room} />) : ''}
+          <ControlsComponent /> : ''}
 
         {(!this.data.localStreamError && !!this.data.stream) ?
           (<FirstOverlayComponent

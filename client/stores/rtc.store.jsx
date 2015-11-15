@@ -261,6 +261,7 @@ var RTCStore = function() {
         return;
       }
 
+      // get permission to stream local video and audio and start stream
       let interval = 2000;  // interval between getUserMedia requests
       function getUserMedia() {
         navigator.getUserMedia({
@@ -275,8 +276,11 @@ var RTCStore = function() {
 
           _this.isLocalAudioEnabled.set(s.getAudioTracks()[0].enabled);
           _this.isLocalVideoEnabled.set(s.getVideoTracks()[0].enabled);
+
+          if (!RoomStore.currentRoom.get()) {  // don't stream if the user has left room
+            _this.stopLocalStream();
+          }
         }, (e)=> {
-          console.error(e);
           _this.localStreamError.set({
             status: e.name,
             description: (e.message ? e.message : e.name)
@@ -284,7 +288,8 @@ var RTCStore = function() {
           _this.gettingLocalStream.set(false);
 
           // if permission denied, retry getUserMedia every interval until permissions change
-          if (e.name === 'PermissionDeniedError') {
+          if (e.name === 'PermissionDeniedError' &&
+          RoomStore.currentRoom.get()) {
             setTimeout(getUserMedia, interval);
           }
         });
@@ -317,8 +322,8 @@ var RTCStore = function() {
         roomStream.emit('join', r);
 
         // handle messages for the current user
-        // this might lead to multiple handling when you switch users. make sure to clear on logout
-        // maybe belongs in userstore
+        // this might lead to multiple handling when you switch users.
+        // TODO: make sure to clear on logout
         roomStream.on(UserStore.user()._id, handleMessage);
       } else {
         _this.stopLocalStream();
