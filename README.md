@@ -63,7 +63,6 @@ quasar makes for a solid example of how to integrate React + Flux in a Meteor ap
 -  global namespace for appName
 -  remove Radium local weirdness when issue is resolved
 -  clear the unnecessary function wrapping
--  signal someone is self-muted to corresponding parties
 -  ding when user enters/leaves room
 -  raix notifications
 -  turn servers?

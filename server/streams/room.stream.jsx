@@ -59,19 +59,28 @@ roomStream.on('join', function(roomId) {
 
 // send messages between people in the room
 roomStream.on('msg', function(data) {
+  console.log(data);
   // check the data for proper values
   check(data, Match.ObjectIncluding({type: String, room: String}));
   check(data.to, Match.OneOf(null, String, undefined));
+  console.log(_.omit(data, ['type', 'room', 'to']));
   check(_.omit(data, ['type', 'room', 'to']), Match.OneOf(
-    {sdp: {sdp: String, type: String}},
-    {ice: Match.OneOf({
+    {
+      sdp: {sdp: String, type: String}
+    },{
+      ice: Match.OneOf({
         sdpMLineIndex: Number,
         sdpMid: String,
         candidate: String
       },
       {},
       null
-    )},
+    )},{
+      tracks: {
+        audio: Boolean,
+        video: Boolean
+      }
+    },
     {},
   ));
 
@@ -85,13 +94,27 @@ roomStream.on('msg', function(data) {
     return;
   }
 
-  // emit the message to everyone in the room
+  // find the room
   var room = Rooms.findOne({_id: data.room});
-  if (room && _.contains(room.connected, data.to)) {  // make sure the user is in the room
+  console.log('emitting ' + data.type + ' to ' + data.to);
 
-    console.log('emitting ' + data.type + ' to ' + data.to);
-
+  // emit message to recipients
+  if (room) {
     data.from = _this.userId;
-    roomStream.emit(data.to, data);
+    if (data.to) {
+      // emit message to singular recipient
+      if (_.contains(room.connected, data.to)) {  // make sure the user is in the room
+        data.from = _this.userId;
+        roomStream.emit(data.to, data);
+      }
+    } else {
+      // emit the message to everyone in the room
+      _.each(_.without(room.connected, _this.userId), function(currentUserId) {
+        roomStream.emit(
+          currentUserId,
+          data
+        );
+      });
+    }
   }
 });

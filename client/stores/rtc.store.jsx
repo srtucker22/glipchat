@@ -21,6 +21,7 @@ var RTCStore = function() {
 
   _this.gettingLocalStream = ReactiveVar(false);
   _this.isAudioEnabled = {};
+  _this.isRemoteEnabled = {};
   _this.isLocalAudioEnabled = ReactiveVar(false);
   _this.isLocalVideoEnabled = ReactiveVar(false);
   _this.localStream = ReactiveVar(null);
@@ -53,13 +54,31 @@ var RTCStore = function() {
       });
     };
 
+    // successfully added stream!
     pc.onaddstream = (evnt)=> {
       console.log('Received new stream', id);
       peers[id] = evnt.stream;
       _this.peers.set(peers);
 
       // create a reactive var for the audio
-      _this.isAudioEnabled[id] = ReactiveVar(evnt.stream.getAudioTracks()[0].enabled);
+      _this.isAudioEnabled[id] =
+        ReactiveVar(evnt.stream.getAudioTracks()[0].enabled);
+
+      // create a reactive var for the remote tracks, default to true
+      _this.isRemoteEnabled[id] = _this.isRemoteEnabled[id] || ReactiveVar({
+        audio: true, video: true
+      });
+
+      // emit local track settings to peer
+      roomStream.emit('msg', {
+        type: 'tracks',
+        to: id,
+        tracks: {
+          audio: _this.localStream.get().getAudioTracks()[0].enabled,
+          video: _this.localStream.get().getVideoTracks()[0].enabled
+        },
+        room: RoomStore.currentRoomId.get()
+      });
 
       // set the primaryStream to the newest peer
       _this.primaryStream.set(id);
@@ -107,9 +126,8 @@ var RTCStore = function() {
         try {
           pc.removeStream(peers[data.from]);
         } catch (e) {
-          console.log(e);
+          console.error(e);
           // Firefox doesn't implement removeStream
-          // console.log(e);
         }
 
         delete peers[data.from];
@@ -123,7 +141,9 @@ var RTCStore = function() {
 
         // if the deleted stream was the primaryStream, set it to the last peer or the localStream
         if (_this.primaryStream.get() === data.from) {
-          _.keys(peers).length ? _this.primaryStream.set(_.last(_.keys(peers))) : _this.primaryStream.set('local');
+          _.keys(peers).length ?
+            _this.primaryStream.set(_.last(_.keys(peers))) :
+            _this.primaryStream.set('local');
         }
         break;
 
@@ -174,7 +194,6 @@ var RTCStore = function() {
             _.each(pc.iceQueue, (candidate)=> {
               pc.addIceCandidate(new RTCIceCandidate(data.ice), ()=> {
                 // successfully added candidate
-                //console.log('successfully added candidate');
               }, (err)=> {
                 console.error(err);
               });
@@ -182,6 +201,15 @@ var RTCStore = function() {
           }
         }
 
+        break;
+
+      // when peer changes their own track availibility
+      case 'tracks':
+        if (_this.isRemoteEnabled[data.from]) {
+          _this.isRemoteEnabled[data.from].set(data.tracks);
+        } else {
+          this.isRemoteEnabled = ReactiveVar(data.tracks);
+        }
         break;
 
       // the server has detected the user is trying to connect twice
@@ -217,7 +245,7 @@ var RTCStore = function() {
     peerConnections = {};
     _this.peers.set(peers);
     _this.primaryStream.set(null);
-  }
+  };
 
   // get the local stream from legit browsers
   _this.getLocalStream = ()=> {
@@ -225,30 +253,44 @@ var RTCStore = function() {
     if (!_this.localStream.get() && !_this.gettingLocalStream.get()) {
       _this.gettingLocalStream.set(true);
       if (!window.RTCPeerConnection || !navigator.getUserMedia) {
-        _this.localStreamError.set({status: 405, description: 'WebRTC is not supported by your browser. You can try the app with Chrome and Firefox.'});
+        _this.localStreamError.set({
+          status: 405,
+          description: 'WebRTC is not supported by your browser. You can try the app with Chrome and Firefox.'
+        });
         _this.gettingLocalStream.set(false);
         return;
       }
 
-      navigator.getUserMedia({
-        video: true,
-        audio: true
-      }, (s)=> {
-        console.log('Getting local stream');
-        _this.localStream.set(s);
-        _this.gettingLocalStream.set(false);
-        _this.primaryStream.set('local');
+      let interval = 2000;  // interval between getUserMedia requests
+      function getUserMedia() {
+        navigator.getUserMedia({
+          video: true,
+          audio: true
+        }, (s)=> {
+          console.log('Getting local stream');
+          _this.localStreamError.set(null);
+          _this.localStream.set(s);
+          _this.gettingLocalStream.set(false);
+          _this.primaryStream.set('local');
 
-        _this.isLocalAudioEnabled.set(s.getAudioTracks()[0].enabled);
-        _this.isLocalVideoEnabled.set(s.getVideoTracks()[0].enabled);
-      }, (e)=> {
-        console.error(e);
-        _this.localStreamError.set({
-          status: e.name,
-          description: (e.message ? e.message : e.name)
+          _this.isLocalAudioEnabled.set(s.getAudioTracks()[0].enabled);
+          _this.isLocalVideoEnabled.set(s.getVideoTracks()[0].enabled);
+        }, (e)=> {
+          console.error(e);
+          _this.localStreamError.set({
+            status: e.name,
+            description: (e.message ? e.message : e.name)
+          });
+          _this.gettingLocalStream.set(false);
+
+          // if permission denied, retry getUserMedia every interval until permissions change
+          if (e.name === 'PermissionDeniedError') {
+            setTimeout(getUserMedia, interval);
+          }
         });
-        _this.gettingLocalStream.set(false);
-      });
+      }
+
+      getUserMedia(); // ask for user media
     } else {
       _this.gettingLocalStream.set(false);
     }
@@ -292,34 +334,52 @@ var RTCStore = function() {
 
   _this.toggleAudio = (id)=> {
     if (_.has(_this.peers.get(), id)) {
-      _this.peers.get()[id].getAudioTracks()[0].enabled = !_this.peers.get()[id].getAudioTracks()[0].enabled;
-      _this.isAudioEnabled[id].set(_this.peers.get()[id].getAudioTracks()[0].enabled);
+      _this.peers.get()[id].getAudioTracks()[0].enabled =
+        !_this.peers.get()[id].getAudioTracks()[0].enabled;
+      _this.isAudioEnabled[id]
+        .set(_this.peers.get()[id].getAudioTracks()[0].enabled);
     }
   };
 
   _this.toggleLocalAudio = ()=> {
     if (_this.localStream.get()) {
-      _this.localStream.get().getAudioTracks()[0].enabled = !_this.localStream.get().getAudioTracks()[0].enabled;
+      _this.localStream.get().getAudioTracks()[0].enabled =
+        !_this.localStream.get().getAudioTracks()[0].enabled;
 
-      _this.isLocalAudioEnabled.set(_this.localStream.get().getAudioTracks()[0].enabled);
+      _this.isLocalAudioEnabled
+        .set(_this.localStream.get().getAudioTracks()[0].enabled);
+
+      // notify peers of audio availibility
+      roomStream.emit('msg', {
+        type: 'tracks',
+        room: RoomStore.currentRoomId.get(),
+        tracks: {
+          audio: _this.isLocalAudioEnabled.get(),
+          video: _this.isLocalVideoEnabled.get()
+        }
+      });
     }
   };
 
   _this.toggleLocalVideo = ()=> {
     if (_this.localStream.get()) {
-      _this.localStream.get().getVideoTracks()[0].enabled = !_this.localStream.get().getVideoTracks()[0].enabled;
+      _this.localStream.get().getVideoTracks()[0].enabled =
+        !_this.localStream.get().getVideoTracks()[0].enabled;
 
-      _this.isLocalVideoEnabled.set(_this.localStream.get().getVideoTracks()[0].enabled);
+      _this.isLocalVideoEnabled
+        .set(_this.localStream.get().getVideoTracks()[0].enabled);
     }
   };
 
   // stop the local stream
   _this.stopLocalStream = ()=> {
     if (!!_this.localStream.get()) {
-      _this.localStream.get().stop();
+      _this.localStream.get().getTracks().forEach(function(track) {
+        track.stop();
+      });
       _this.localStream.set(null);
 
-      if (_this.primaryStream.get() === 'local'){
+      if (_this.primaryStream.get() === 'local') {
         this.primaryStream.set(null);
       }
     }
@@ -329,8 +389,9 @@ var RTCStore = function() {
   _this.requireLocalStream = ()=> {
     return new Promise((resolve, reject)=> {
       Tracker.autorun(function(c) {
-        if (_this.gettingLocalStream.get())
+        if (_this.gettingLocalStream.get()) {
           return;
+        }
 
         // stop the tracker
         c.stop();

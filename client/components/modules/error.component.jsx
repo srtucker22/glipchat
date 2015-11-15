@@ -45,7 +45,7 @@ const styles = {
 
     cell: {
       css: {
-        paddingTop: '50px',
+        padding: '50px 0 0 0',
       },
     }
   },
@@ -62,11 +62,19 @@ let permissionDeniedComponent = (appName)=> {
     <div style={[styles.permissionDenied.css]}>
       <div className='row'>
         <div className='col-xs-12 text-center' style={[GlobalStyles.table]}>
-          <img style={[GlobalStyles.cell, styles.permissionDenied.cell.css, styles.permissionDenied.arrow.css]} src='/images/arrow-left.png' />
+          <img style={[
+              GlobalStyles.cell,
+              styles.permissionDenied.cell.css,
+              styles.permissionDenied.arrow.css
+            ]} src='/images/arrow-left.png' />
           <div style={[GlobalStyles.cell, styles.permissionDenied.cell.css]}>
             Click the <FontIcon className='material-icons' style={styles.permissionDenied.icon.css} color={Colors.red500}>videocam_off</FontIcon> icon in the URL bar above to give {appName} access to your computer's camera and microphone.
           </div>
-          <img style={[GlobalStyles.cell, styles.permissionDenied.cell.css, styles.permissionDenied.arrow.css]} src='/images/arrow-right.png' />
+          <img style={[
+              GlobalStyles.cell,
+              styles.permissionDenied.cell.css,
+              styles.permissionDenied.arrow.css
+            ]} src='/images/arrow-right.png' />
         </div>
       </div>
     </div>

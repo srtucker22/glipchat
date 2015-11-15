@@ -1,4 +1,4 @@
-const {FontIcon, FloatingActionButton} = MUI;
+const {FontIcon, FloatingActionButton, IconButton} = MUI;
 const Colors = MUI.Styles.Colors;
 
 const styles = {
@@ -14,8 +14,9 @@ const styles = {
   },
 
   mute: {
+    // styles for local mute icon (user mutes a peer)
     css: {
-      backgroundColor: Colors.red800,
+      backgroundColor: 'transparent',
       'float': 'right',
       opacity: 0,
       position: 'absolute',
@@ -23,6 +24,18 @@ const styles = {
       top: '5px',
       transition: 'opacity 1s ease-in-out',
       zIndex: 3,
+    },
+
+    // styles for remote mute icon (peer mutes themself)
+    remote: {
+      css: {
+        bottom: '5px',
+        height: '40px',
+        padding: 0,
+        textShadow: '2px 2px rgba(0, 0, 0, 0.5)',
+        top: 'initial',
+        width: '40px',
+      },
     },
 
     visible: {
@@ -62,9 +75,16 @@ VideoOverlayComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
-    return {
-      isAudioEnabled: (this.props.id === 'local') ? RTCStore.isLocalAudioEnabled.get() : RTCStore.isAudioEnabled[this.props.id].get(),
+    let options = {
+      isAudioEnabled: (this.props.id === 'local') ?
+        RTCStore.isLocalAudioEnabled.get() :
+        RTCStore.isAudioEnabled[this.props.id].get(),
     };
+
+    if (this.props.id !== 'local') {
+      options.isRemoteEnabled = RTCStore.isRemoteEnabled[this.props.id].get();
+    }
+    return options;
   },
 
   setPrimaryStream() {
@@ -72,17 +92,46 @@ VideoOverlayComponent = Radium(React.createClass({
   },
 
   toggleAudio() {
-    (this.props.id === 'local') ? RTCActions.toggleLocalAudio() : RTCActions.toggleAudio(this.props.id);
+    (this.props.id === 'local') ?
+      RTCActions.toggleLocalAudio() : RTCActions.toggleAudio(this.props.id);
   },
 
   render() {
     return (
       <div key='overlay' style={[styles.css]}>
-        <div onTouchTap={this.setPrimaryStream} style={[styles.shade.css, Radium.getState(this.state, 'overlay', ':hover') && styles.shade.hover.css]}>
+        <div onTouchTap={this.setPrimaryStream} style={[
+            styles.shade.css,
+            Radium.getState(this.state, 'overlay', ':hover') &&
+            styles.shade.hover.css]}>
         </div>
-        <FloatingActionButton onTouchTap={this.toggleAudio} style={_.extend({}, styles.mute.css, (Radium.getState(this.state, 'overlay', ':hover') || !this.data.isAudioEnabled) ? styles.mute.visible.css : {})} mini={true} primary={false}>
-          <FontIcon className='material-icons' color={Colors.fullWhite}>mic_off</FontIcon>
+        <FloatingActionButton
+          onTouchTap={this.toggleAudio}
+          style={_.extend({},
+            styles.mute.css,
+            (Radium.getState(this.state, 'overlay', ':hover') ||
+            !this.data.isAudioEnabled) ?
+              styles.mute.visible.css : {})
+          }
+          mini={true}
+          primary={false}>
+          <FontIcon
+            className='material-icons'
+            color={Colors.fullWhite}>mic_off
+          </FontIcon>
         </FloatingActionButton>
+        <IconButton style={_.extend({},
+            styles.mute.css,
+            styles.mute.remote.css,
+            (this.data.isRemoteEnabled && !this.data.isRemoteEnabled.audio) ?
+              styles.mute.visible.css : {})
+          }
+          mini={true}
+          primary={false}>
+          <FontIcon
+            className='material-icons'
+            color={Colors.fullWhite}>mic_off
+          </FontIcon>
+        </IconButton>
       </div>
     );
   },
