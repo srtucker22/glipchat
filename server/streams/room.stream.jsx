@@ -59,11 +59,9 @@ roomStream.on('join', function(roomId) {
 
 // send messages between people in the room
 roomStream.on('msg', function(data) {
-  console.log(data);
   // check the data for proper values
   check(data, Match.ObjectIncluding({type: String, room: String}));
   check(data.to, Match.OneOf(null, String, undefined));
-  console.log(_.omit(data, ['type', 'room', 'to']));
   check(_.omit(data, ['type', 'room', 'to']), Match.OneOf(
     {
       sdp: {sdp: String, type: String}

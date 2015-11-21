@@ -13,9 +13,8 @@ quasar works in browsers that support WebRTC and has so far been tested in Chrom
 
 1. Clone the project <code>git clone https://github.com/srtucker22/quasar.git</code>
 2. Go to the primary directory <code>cd quasar</code>
-3. Make the Radium repo local <a href="https://github.com/markoshust/meteor-radium/issues/5">(current Radium workaround)</a> <code>git submodule update --init</code>
-4. Add a settings.json to the primary directory <code>touch settings.json</code>
-5. Add your personal settings for the following services included in quasar (or remove the ones you don't want)
+3. Add a settings.json to the primary directory <code>touch settings.json</code>
+4. Add your personal settings for the following services included in quasar (or remove the ones you don't want)
 
         {
           "google" : {
@@ -34,8 +33,8 @@ quasar works in browsers that support WebRTC and has so far been tested in Chrom
           }
         }
 
-6. run the app with the settings <code>meteor --settings settings.json</code>
-7. enjoy!
+5. run the app with the settings <code>meteor --settings settings.json</code>
+6. enjoy!
 
 ## Code Example
 
@@ -50,11 +49,11 @@ Would love any code contributions, and please raise issues if you run into bugs 
 quasar makes for a solid example of how to integrate React + Flux in a Meteor app, and how to get a WebRTC video chatroom up and running.
 
 ## Resources
-- [Quasar Meteor Lightening Talk!](https://www.youtube.com/watch?v=783BL__zIjY&feature=youtu.be&t=1h46m3s)
+- [Quasar Meteor Lightening Talk!](https://youtu.be/C0S_QCb6HSM)
 - [Flux for Stupid People](http://blog.andrewray.me/flux-for-stupid-people/)
 - [WebRTC Demos](https://github.com/webrtc/)
 
-## Upcomming
+## Upcoming
 
 -  React Native / Meteor iOS app that works with quasar on the web
 -  change the name ~ *HELP!*
@@ -62,8 +61,6 @@ quasar makes for a solid example of how to integrate React + Flux in a Meteor ap
 ## TODO
 -  global namespace for appName
 -  remove Radium local weirdness when issue is resolved
--  clear the unnecessary function wrapping
--  ding when user enters/leaves room
 -  raix notifications
 -  turn servers?
 -  google contact integration in tags input

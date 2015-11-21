@@ -114,10 +114,6 @@ InviteComponent = Radium(React.createClass({
     RoomActions.hideInviteModal();
   },
 
-  componentWillUpdate() {
-    this.data.inviteModalVisible ? this.refs.dialog.show() : this.refs.dialog.dismiss();
-  },
-
   getMeteorData() {
     return {
       inviteModalVisible: RoomStore.inviteModalVisible.get(),
@@ -163,9 +159,8 @@ InviteComponent = Radium(React.createClass({
         actions={customActions}
         actionFocus='submit'
         contentStyle={styles.css}
-        modal={false}
-        ref='dialog'
-        onDismiss={this.cancel}>
+        open={this.data.inviteModalVisible}
+        onRequestClose={this.cancel}>
         <div style={[styles.content.css]}>
           <div className='row' style={[styles.content.linkRow.css]}>
             <div style={[styles.content.linkRow.header.css]}>Share the permanent link. Bookmark and come back anytime.</div>
