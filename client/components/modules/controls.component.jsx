@@ -20,7 +20,7 @@ const styles = {
     css: {
       backgroundColor: Colors.fullBlack,
       margin: '50px auto',
-      opacity: 0,
+      opacity: 0.30,
       overflow: 'hidden',
     },
 
