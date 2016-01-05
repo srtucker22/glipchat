@@ -1,56 +1,84 @@
+/**
+ * quasar
+ *
+ * Copyright (c) 2015 Glipcode http://glipcode.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions
+ * of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * SHANE: Removed commas flagged as unneeded by WebSphere
+ * SHANE: Changed opacity to 0.5 for testing
+ * SHANE: Moved the button position for testing (added "top: '20%'" to const styles
+ *
+ */
+
 const {History} = ReactRouter;
+
 const {
   FontIcon,
   FlatButton,
   IconButton,
   Paper
 } = MUI;
+
 const Colors = MUI.Styles.Colors;
 
 const styles = {
   css: {
-    height: '100px',
     position: 'absolute',
+    top: '20%',
+    height: '100px',
     width: '100%',
     zIndex: 3,
-    ':hover': {},
+    ':hover': {}
   },
 
   controls: {
     css: {
       backgroundColor: Colors.fullBlack,
       margin: '50px auto',
-      opacity: 0.30,
-      overflow: 'hidden',
+      opacity: 0.5,
+      overflow: 'hidden'
     },
 
     button: {
       css: {
         ':hover': {
-          backgroundColor: Colors.grey900,
-        },
+          backgroundColor: Colors.grey900
+        }
       }
     },
 
     red: {
       backgroundColor: Colors.red800,
       ':hover': {
-        backgroundColor: Colors.red900,
+        backgroundColor: Colors.red900
       },
     },
 
     visible: {
-      opacity: 1,
+      opacity: 1
     },
 
     buttonEnd: {
       css: {
         ':hover': {
-          backgroundColor: Colors.red800,
-        },
-      },
-    },
-  },
+          backgroundColor: Colors.red800
+        }
+      }
+    }
+  }
 };
 
 let RoomActions = null;
