@@ -30,10 +30,11 @@ const Colors = MUI.Styles.Colors;
 
 const styles = {
   css: {
-    height: '100px',
     position: 'absolute',
+    height: '100px',
     width: '100%',
-    zIndex: 3,
+    top: '68%',
+    zIndex: 4,
     ':hover': {},
   },
 
@@ -41,7 +42,7 @@ const styles = {
     css: {
       backgroundColor: Colors.fullBlack,
       margin: '50px auto',
-      opacity: 0.5,
+      opacity: 0.7,
       overflow: 'hidden',
     },
 
