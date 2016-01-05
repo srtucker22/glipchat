@@ -1,8 +1,6 @@
-// the error is the streaming queue -- you need to make sure one thing streams before the other and that you wait to receive ice shit until your local/remote descriptions are set
-
 // Dependencies
-var RoomStore = null;
-var UserStore = null;
+let RoomStore;
+let UserStore;
 
 Dependency.autorun(()=> {
   RoomStore = Dependency.get('RoomStore');
@@ -255,7 +253,8 @@ var RTCStore = function() {
       if (!window.RTCPeerConnection || !navigator.getUserMedia) {
         _this.localStreamError.set({
           status: 405,
-          description: 'WebRTC is not supported by your browser. You can try the app with Chrome and Firefox.'
+          description: 'WebRTC is not supported by your browser. ' +
+            'You can try the app with Chrome and Firefox.'
         });
         _this.gettingLocalStream.set(false);
         return;

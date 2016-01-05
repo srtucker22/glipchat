@@ -51,7 +51,7 @@ const styles = {
   },
 };
 
-let GlobalStyles = null;
+let GlobalStyles;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');

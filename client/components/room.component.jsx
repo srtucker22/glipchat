@@ -119,8 +119,7 @@ RoomComponent = Radium(React.createClass({
             muted={(this.data.primaryStream === 'local')}
             flip={(this.data.primaryStream === 'local')}
             fullScreen={true}/>
-          ) : ''
-        }
+          ) : ''}
 
         {(!!this.data.peers && _.keys(this.data.peers).length) ?
           (<div style={[styles.videos.css]}>

@@ -1,7 +1,5 @@
 var RoomActions = function() {
-  var _this = this;
-
-  _.extend(_this, {
+  return {
     clearInvitees() {
       Dispatcher.dispatch({actionType: 'CLEAR_INVITEES'});
     },
@@ -52,9 +50,7 @@ var RoomActions = function() {
     updateInvitees(invitees) {
       Dispatcher.dispatch({actionType: 'UPDATE_INVITEES', invitees});
     },
-  });
-
-  return _this;
+  };
 };
 
 Dependency.add('RoomActions', new RoomActions());

@@ -5,11 +5,8 @@ var UserStore = function() {
   // UserStore Reactive Vars
   _this.user = Meteor.user;
   _this.loggingIn = Meteor.loggingIn;
-
-  _this.createError   = new ReactiveVar('');
-  _this.loginError    = new ReactiveVar('');
-  _this.loginOrCreate = new ReactiveVar('login');
-  _this.logoutError   = new ReactiveVar('');
+  _this.loginError = new ReactiveVar('');
+  _this.logoutError = new ReactiveVar('');
   _this.subscribed = new ReactiveVar(false);
 
   Meteor.subscribe('user', {
@@ -20,35 +17,25 @@ var UserStore = function() {
 
   // Callbacks
   _this.on = {
-    loginStart() {
-      _this.loginOrCreate.set('login');
-      _this.loginError.set('');
-    },
-
-    createStart() {
-      _this.loginOrCreate.set('create');
-      _this.createError.set('');
-    },
-
-    logoutStart() {
-      _this.logoutError.set('');
-    },
 
     loginFailed(error) {
       _this.loginError.set(error);
     },
 
-    createFailed(error) {
-      _this.createError.set(error);
+    loginSuccess(user) {
+      _this.loginError.set('');
     },
 
-    loginOrCreateSuccess(user) {
+    loginStart() {
       _this.loginError.set('');
-      _this.createError.set('');
     },
 
     logoutFailed(error) {
       _this.logoutError.set(error);
+    },
+
+    logoutStart() {
+      _this.logoutError.set('');
     },
 
     logoutSuccess() {
@@ -117,12 +104,11 @@ var UserStore = function() {
         _this.on.loginStart();
         Meteor.loginWithPassword(payload.user, payload.password, (err)=> {
           if (!err) {
-            _this.on.loginOrCreateSuccess();
+            _this.on.loginSuccess();
           } else {
             _this.on.loginFailed(err);
           }
         });
-
         break;
 
       case 'USER_LOGIN_FACEBOOK':
@@ -132,31 +118,27 @@ var UserStore = function() {
           loginStyle: Browser.mobile ? 'redirect' : 'popup',
         }, (err)=> {
           if (!err) {
-            _this.on.loginOrCreateSuccess();
+            _this.on.loginSuccess();
           } else {
             _this.on.loginFailed(err);
           }
         });
-
         break;
 
       case 'USER_LOGIN_GOOGLE':
         _this.on.loginStart();
         Meteor.loginWithGoogle({
-          requestPermissions: ['https://www.googleapis.com/auth/contacts.readonly'],
+          requestPermissions: [
+            'https://www.googleapis.com/auth/contacts.readonly'
+          ],
           loginStyle: Browser.mobile ? 'redirect' : 'popup',
         }, (err)=> {
           if (!err) {
-            _this.on.loginOrCreateSuccess();
+            _this.on.loginSuccess();
           } else {
             _this.on.loginFailed(err);
           }
         });
-
-        break;
-
-      case 'USER_CREATE':
-        _this.on.createStart();
         break;
 
       case 'USER_LOGOUT':

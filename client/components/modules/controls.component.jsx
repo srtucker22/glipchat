@@ -53,9 +53,9 @@ const styles = {
   },
 };
 
-let RoomActions = null;
-let RTCActions = null;
-let RTCStore = null;
+let RoomActions;
+let RTCActions;
+let RTCStore;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
@@ -141,8 +141,7 @@ ControlsComponent = Radium(React.createClass({
               styles.controls.button.css,
               styles.controls.buttonEnd.css
             ]}
-            onTouchTap={this.leave}
-          >
+            onTouchTap={this.leave}>
             <IconButton>
               <FontIcon
                 className='material-icons'

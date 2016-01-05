@@ -60,7 +60,6 @@ quasar makes for a solid example of how to integrate React + Flux in a Meteor ap
 
 ## TODO
 -  global namespace for appName
--  remove Radium local weirdness when issue is resolved
 -  raix notifications
 -  turn servers?
 -  google contact integration in tags input

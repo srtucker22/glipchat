@@ -1,6 +1,6 @@
 // Dependencies
-var RTCStore = null;
-var UserStore = null;
+let RTCStore;
+let UserStore;
 
 Dependency.autorun(()=> {
   RTCStore = Dependency.get('RTCStore');
