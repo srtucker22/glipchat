@@ -32,7 +32,6 @@ const styles = {
     top: 0,
     width: '100%',
     zIndex: 1,
-
     ':hover': {},
   },
 
@@ -80,7 +79,7 @@ const styles = {
 
     hover: {
       css: {
-        opacity: 0.5,
+        opacity: 0.7,
       },
     },
   },
