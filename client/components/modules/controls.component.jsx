@@ -41,7 +41,7 @@ const styles = {
     css: {
       backgroundColor: Colors.fullBlack,
       margin: '50px auto',
-      opacity: 0.30,
+      opacity: 0.5,
       overflow: 'hidden',
     },
 

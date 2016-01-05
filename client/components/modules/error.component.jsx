@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /**
  * quasar
  *
@@ -19,6 +21,7 @@
  *
  */
 
+>>>>>>> master
 // SHANE: Adding some comments to give better context for developers.
 // SHANE: Changed the user error text to remove contractions (difficult for non-native readers) and to improve context.
 const {FontIcon} = MUI;
@@ -107,34 +110,58 @@ let permissionDeniedComponent = (appName)=> {
 
 // Warn that the user is already connected to the room in a different window, tab or browser
 let duplicateErrorComponent = (
+<<<<<<< HEAD
+  <div className='row' style={[styles.general.css]}>
+    <div className='col-xs-12 text-center'>
+      <img src='/images/camel.png' style={[styles.general.icon.css]}/>
+      <p>You are already connected to this room in a different window, tab, or browser.</p>
+      <p> To fix this problem you can try returning to the other window, tab or browser.</p>
+=======
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
         <img src='/images/camel.png' style={[styles.general.icon.css]}/>
         <p>You are already connected to this room in a different window, tab, or browser.</p>
         <p> To fix this problem you can try returning to the other window, tab or browser.</p>
       </div>
+>>>>>>> master
     </div>
 );
 
 // Warn that there has been a general error and ask the user to refresh the session
 let generalErrorComponent = (
+<<<<<<< HEAD
+  <div className='row' style={[styles.general.css]}>
+    <div className='col-xs-12 text-center'>
+      <img src='/images/atomic.png' style={[styles.general.icon.css]}/>
+        <p>Something went wrong. Please try refreshing the page.</p>
+        <p>If this does not fix the problem please close the tab or window and try again.</p>
+=======
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
         <img src='/images/atomic.png' style={[styles.general.icon.css]}/>
         <p>Something went wrong. Please try refreshing the page.</p>
         <p>If this does not fix the problem please close the tab or window and try again.</p>
       </div>
+>>>>>>> master
     </div>
 );
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
 let notSupportedErrorComponent = (
+<<<<<<< HEAD
+  <div className='row' style={[styles.general.css]}>
+    <div className='col-xs-12 text-center'>
+      <img src='/images/astronaut.png' style={[styles.general.icon.css]}/>
+        <p>Sorry, we do not currently support your browser.</p>
+        <p>You can download <a href="https://www.google.com/chrome/">Google Chrome</a> or <a href="https://www.mozilla.org/firefox">Mozilla Firefox</a> for free to use this video chatroom.</p>
+=======
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
         <img src='/images/astronaut.png' style={[styles.general.icon.css]}/>
         <p>Sorry, we do not currently support your browser.</p>
         <p>You can download <a href="https://www.google.com/chrome/">Google Chrome</a> or <a href="https://www.mozilla.org/firefox">Mozilla Firefox</a> for free to use this video chatroom.</p>
       </div>
+>>>>>>> master
     </div>
 );
 
