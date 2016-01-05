@@ -10,6 +10,7 @@ aldeed:collection2@2.5.0
 aldeed:simple-schema@1.3.3
 artwells:accounts-guest@0.1.13
 autoupdate@1.2.4
+awatson1978:browser-detection@1.0.4
 babel-compiler@5.8.24_1
 babel-runtime@0.1.4
 base64@1.0.4
@@ -60,6 +61,7 @@ logging@1.0.8
 markoshust:radium@0.15.3
 meteor@1.1.10
 meteor-base@1.0.1
+meteor-platform@1.2.3
 meteorflux:dispatcher@1.2.0
 meteorflux:namespace@1.0.0
 meteorflux:reactive-dependency@0.1.1
@@ -104,6 +106,7 @@ spacebars@1.0.7
 spacebars-compiler@1.0.7
 spiderable@1.0.9
 srp@1.0.4
+standard-app-packages@1.0.6
 standard-minifiers@1.0.2
 templating@1.1.5
 templating-tools@1.0.0
