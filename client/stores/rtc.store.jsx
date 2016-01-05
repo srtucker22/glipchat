@@ -1,5 +1,5 @@
 /**
- * RTCStore Creator
+ * quasar
  *
  * Copyright (c) 2015 Glipcode http://glipcode.com
  *
