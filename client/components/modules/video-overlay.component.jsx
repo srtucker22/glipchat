@@ -41,7 +41,7 @@ const styles = {
     css: {
       backgroundColor: 'transparent',
       'float': 'right',
-      opacity: 0.3,
+      opacity: 0.5,
       position: 'absolute',
       right: '5px',
       top: '5px',
