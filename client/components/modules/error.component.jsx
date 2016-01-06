@@ -19,8 +19,9 @@
  *
  */
 
-const FontIcon;
-FontIcon = MUI;
+// SHANE: Adding some comments to give better context for developers.
+// SHANE: Changed the user error text to remove contractions (difficult for non-native readers) and to improve context.
+const {FontIcon} = MUI;
 const Colors = MUI.Styles.Colors;
 
 const styles = {
@@ -73,16 +74,14 @@ const styles = {
   },
 };
 
-let GlobalStyles;
-GlobalStyles = null;
+let GlobalStyles = null;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
 });
 
 // Ask for permission to use the camera and microphone on the user's computer
-let permissionDeniedComponent;
-permissionDeniedComponent = (appName)=> {
+let permissionDeniedComponent = (appName)=> {
   return (
       <div style={[styles.permissionDenied.css]}>
         <div className='row'>
@@ -91,17 +90,15 @@ permissionDeniedComponent = (appName)=> {
               GlobalStyles.cell,
               styles.permissionDenied.cell.css,
               styles.permissionDenied.arrow.css
-            ]} src='/images/arrow-left.png'/>
+            ]} src='/images/arrow-left.png' />
             <div style={[GlobalStyles.cell, styles.permissionDenied.cell.css]}>
-              Click the <FontIcon className='material-icons' style={styles.permissionDenied.icon.css}
-                                  color={Colors.red500}>videocam_off</FontIcon> icon in the URL bar above to
-              give {appName} access to your computer's camera and microphone.
+              Click the <FontIcon className='material-icons' style={styles.permissionDenied.icon.css} color={Colors.red500}>videocam_off</FontIcon> icon in the URL bar above to give {appName} access to your computer's camera and microphone.
             </div>
             <img style={[
               GlobalStyles.cell,
               styles.permissionDenied.cell.css,
               styles.permissionDenied.arrow.css
-            ]} src='/images/arrow-right.png'/>
+            ]} src='/images/arrow-right.png' />
           </div>
         </div>
       </div>
@@ -109,20 +106,18 @@ permissionDeniedComponent = (appName)=> {
 };
 
 // Warn that the user is already connected to the room in a different window, tab or browser
-let duplicateErrorComponent;
-duplicateErrorComponent = (
+let duplicateErrorComponent = (
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
         <img src='/images/camel.png' style={[styles.general.icon.css]}/>
         <p>You are already connected to this room in a different window, tab, or browser.</p>
-        <p> To fix this problem you can try returning to the other window, tab or browser.</p>
+        <p> To fix this problem you can try returning to that view of this room.</p>
       </div>
     </div>
 );
 
 // Warn that there has been a general error and ask the user to refresh the session
-let generalErrorComponent;
-generalErrorComponent = (
+let generalErrorComponent = (
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
         <img src='/images/atomic.png' style={[styles.general.icon.css]}/>
@@ -133,14 +128,12 @@ generalErrorComponent = (
 );
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
-let notSupportedErrorComponent;
-notSupportedErrorComponent = (
+let notSupportedErrorComponent = (
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
         <img src='/images/astronaut.png' style={[styles.general.icon.css]}/>
         <p>Sorry, we do not currently support your browser.</p>
-        <p>You can download <a href="https://www.google.com/chrome/">Google Chrome</a> or <a
-            href="https://www.mozilla.org/firefox">Mozilla Firefox</a> for free to use this video chatroom.</p>
+        <p>You can download <a href="https://www.google.com/chrome/">Google Chrome</a> or <a href="https://www.mozilla.org/firefox">Mozilla Firefox</a> for free to use this video chatroom.</p>
       </div>
     </div>
 );
@@ -148,12 +141,9 @@ notSupportedErrorComponent = (
 // Logic for determining which error message to show when something goes wrong
 LocalStreamErrorComponent = Radium(React.createClass({
   render() {
-    var other;
-    var errorComponent;
+    var {...other} = this.props;
 
-    other = this.props;
-
-    errorComponent = <div>{this.props.error.status}</div>;
+    var errorComponent = <div>{this.props.error.status}</div>;
 
     switch (this.props.error.status){
       case 'PermissionDeniedError':

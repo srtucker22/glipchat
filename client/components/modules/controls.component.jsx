@@ -17,68 +17,62 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * SHANE: Removed commas flagged as unneeded by WebSphere
- * SHANE: Changed opacity to 0.5 for testing
- * SHANE: Moved the button position for testing (added "top: '20%'" to const styles
- *
  */
 
 const {History} = ReactRouter;
-
 const {
   FontIcon,
   FlatButton,
   IconButton,
   Paper
 } = MUI;
-
 const Colors = MUI.Styles.Colors;
 
 const styles = {
   css: {
     position: 'absolute',
-    top: '20%',
     height: '100px',
     width: '100%',
-    zIndex: 3,
-    ':hover': {}
+    top: '68%',
+    zIndex: 4,
+    ':hover': {},
   },
 
   controls: {
     css: {
       backgroundColor: Colors.fullBlack,
       margin: '50px auto',
-      opacity: 0.5,
-      overflow: 'hidden'
+      opacity: 0.7,
+      overflow: 'hidden',
     },
 
     button: {
       css: {
         ':hover': {
-          backgroundColor: Colors.grey900
-        }
+          backgroundColor: Colors.grey900,
+        },
       }
     },
 
     red: {
       backgroundColor: Colors.red800,
       ':hover': {
-        backgroundColor: Colors.red900
+        backgroundColor: Colors.red900,
       },
     },
 
     visible: {
-      opacity: 1
+      opacity: 1,
     },
 
     buttonEnd: {
       css: {
         ':hover': {
-          backgroundColor: Colors.red800
-        }
-      }
-    }
-  }
+          backgroundColor: Colors.red800,
+        },
+      },
+    },
+  },
 };
 
 let RoomActions = null;
