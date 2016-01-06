@@ -49,12 +49,14 @@ const styles = {
 
     video: {
       css: {
-        'float': 'right',
+        float: 'right',
         display: 'inline-block',
         maxHeight: '20%',
         maxWidth: '20%',
         margin: '5px',
         position: 'relative',
+        bottom: '5px',
+        zIndex: 2,
       },
     },
   },

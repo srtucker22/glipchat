@@ -17,9 +17,6 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * SHANE: Removed commas flagged as unneeded by WebSphere
- * SHANE: Changed opacity to 0.5 for testing
- *
  */
 
 let ding = new Audio('/audio/ding.mp3');
@@ -35,7 +32,7 @@ const styles = {
     top: 0,
     width: '100%',
     zIndex: 1,
-    ':hover': {}
+    ':hover': {},
   },
 
   mute: {
@@ -43,15 +40,15 @@ const styles = {
     css: {
       backgroundColor: 'transparent',
       'float': 'right',
-      opacity: 0.5,
+      opacity: 0,
       position: 'absolute',
       right: '5px',
       top: '5px',
       transition: 'opacity 1s ease-in-out',
-      zIndex: 3
+      zIndex: 3,
     },
 
-    // styles for remote mute icon (peers mute themselves)
+    // styles for remote mute icon (peer mutes themself)
     remote: {
       css: {
         bottom: '5px',
@@ -59,15 +56,15 @@ const styles = {
         padding: 0,
         textShadow: '2px 2px rgba(0, 0, 0, 0.5)',
         top: 'initial',
-        width: '40px'
-      }
+        width: '40px',
+      },
     },
 
     visible: {
       css: {
-        opacity: 1
-      }
-    }
+        opacity: 1,
+      },
+    },
   },
 
   shade: {
@@ -77,21 +74,19 @@ const styles = {
       opacity: 0,
       transition: 'opacity 1s ease-in-out',
       width: '100%',
-      zIndex: 2
+      zIndex: 2,
     },
 
     hover: {
       css: {
-        opacity: 0.5
-      }
-    }
-  }
+        opacity: 0.7,
+      },
+    },
+  },
 };
 
-let RTCActions;
-RTCActions = null;
-let RTCStore;
-RTCStore = null;
+let RTCActions = null;
+let RTCStore = null;
 
 Dependency.autorun(()=> {
   RTCStore    = Dependency.get('RTCStore');
@@ -169,5 +164,5 @@ VideoOverlayComponent = Radium(React.createClass({
         </IconButton>
       </div>
     );
-  }
+  },
 }));
