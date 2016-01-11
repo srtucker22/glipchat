@@ -45,7 +45,17 @@ VideoComponent = Radium(React.createClass({
   render() {
 
     return (
-      <video style={[styles.css, this.props.flip && styles.flip.css, this.props.fullScreen && styles.fullScreen.css]} src={URL.createObjectURL(this.props.src)} muted={this.props.muted} autoPlay></video>
+      <video
+        style={[
+          styles.css,
+          this.props.flip && styles.flip.css,
+          this.props.fullScreen && styles.fullScreen.css
+        ]}
+        src={URL.createObjectURL(this.props.src)}
+        muted={this.props.muted}
+        autoPlay
+        onTouchTap={this.props.onTouchTap}>
+      </video>
     );
   },
 }));

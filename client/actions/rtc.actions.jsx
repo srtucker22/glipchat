@@ -20,11 +20,21 @@
  */
 
 var RTCActions = function() {
-  var _this = this;
+  return {
+    disconnect(roomId) {
+      Dispatcher.dispatch({actionType: 'DISCONNECT'});
+    },
 
-  _.extend(_this, {
+    getLocalStream() {
+      Dispatcher.dispatch({actionType: 'GET_LOCAL_STREAM'});
+    },
+
     setPrimaryStream(id) {
       Dispatcher.dispatch({actionType: 'SET_PRIMARY_STREAM', id: id});
+    },
+
+    stopLocalStream() {
+      Dispatcher.dispatch({actionType: 'STOP_LOCAL_STREAM'});
     },
 
     toggleAudio(id) {
@@ -38,21 +48,7 @@ var RTCActions = function() {
     toggleLocalVideo() {
       Dispatcher.dispatch({actionType: 'TOGGLE_LOCAL_VIDEO'});
     },
-
-    disconnect(roomId) {
-      Dispatcher.dispatch({actionType: 'DISCONNECT'});
-    },
-
-    getLocalStream() {
-      Dispatcher.dispatch({actionType: 'GET_LOCAL_STREAM'});
-    },
-
-    stopLocalStream() {
-      Dispatcher.dispatch({actionType: 'STOP_LOCAL_STREAM'});
-    },
-  });
-
-  return _this;
+  };
 };
 
 Dependency.add('RTCActions', new RTCActions());

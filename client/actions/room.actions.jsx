@@ -20,15 +20,19 @@
  */
 
 var RoomActions = function() {
-  var _this = this;
-
-  _.extend(_this, {
+  return {
     clearInvitees() {
       Dispatcher.dispatch({actionType: 'CLEAR_INVITEES'});
     },
 
     createRoom() {
       Dispatcher.dispatch({actionType: 'CREATE_ROOM'});
+    },
+
+    hideControls() {
+      Dispatcher.dispatch({
+        actionType: 'HIDE_CONTROLS',
+      });
     },
 
     hideInviteModal() {
@@ -64,6 +68,13 @@ var RoomActions = function() {
       });
     },
 
+    showControls(delay) {
+      Dispatcher.dispatch({
+        actionType: 'SHOW_CONTROLS',
+        delay,
+      });
+    },
+
     showInviteModal() {
       Dispatcher.dispatch({
         actionType: 'SHOW_INVITE_MODAL',
@@ -73,9 +84,7 @@ var RoomActions = function() {
     updateInvitees(invitees) {
       Dispatcher.dispatch({actionType: 'UPDATE_INVITEES', invitees});
     },
-  });
-
-  return _this;
+  };
 };
 
 Dependency.add('RoomActions', new RoomActions());

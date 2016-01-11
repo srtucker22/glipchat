@@ -28,10 +28,8 @@
  * @type {null}
  */
 
-var RoomStore;
-var UserStore;
-RoomStore = null;
-UserStore = null;
+let RoomStore;
+let UserStore;
 
 Dependency.autorun(()=> {
   RoomStore = Dependency.get('RoomStore');
@@ -290,8 +288,8 @@ RTCStore = function () {
       _this.primaryStream.set(null);
     };
 
-  /** Get the local stream from compatible browsers. */
-  _this.getLocalStream = ()=> {
+    /** Get the local stream from compatible browsers. */
+    _this.getLocalStream = ()=> {
       _this.localStreamError.set(null);
       if (!_this.localStream.get() && !_this.gettingLocalStream.get()) {
         _this.gettingLocalStream.set(true);
@@ -333,7 +331,7 @@ RTCStore = function () {
             /** If permission is denied retry getUserMedia every interval until permissions change. */
             if (e.name === 'PermissionDeniedError' &&
                 RoomStore.currentRoom.get()) {
-              setTimeout(getUserMedia, interval);
+              Meteor.setTimeout(getUserMedia, interval);
             }
           });
         }

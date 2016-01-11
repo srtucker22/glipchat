@@ -20,9 +20,7 @@
  */
 
 var UserActions = function() {
-  var _this = this;
-
-  _.extend(_this, {
+  return {
     login(user, password) {
       Dispatcher.dispatch({actionType: 'USER_LOGIN_PASSWORD'});
     },
@@ -42,9 +40,7 @@ var UserActions = function() {
     updateProfileName(name) {
       Dispatcher.dispatch({actionType: 'USER_UPDATE_PROFILE_NAME', name});
     }
-  });
-
-  return _this;
+  };
 };
 
 Dependency.add('UserActions', new UserActions());

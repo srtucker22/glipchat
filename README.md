@@ -72,6 +72,10 @@ The streams are managed by roomStream in <a href="https://github.com/srtucker22/
 
 This project welcomes code contributions, bug reports and feature requests.
 
+## Motivation
+
+quasar is intended to be an example of how to create a WebRTC video chatroom and of how to integrate React and Flux in a Meteor app.
+
 ## Resources
 - [quasar Meteor Lightening Talk!](https://youtu.be/C0S_QCb6HSM)
 - [Flux for Stupid People](http://blog.andrewray.me/flux-for-stupid-people/)

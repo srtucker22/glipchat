@@ -184,14 +184,21 @@ InviteComponent = Radium(React.createClass({
         onRequestClose={this.cancel}>
         <div style={[styles.content.css]}>
           <div className='row' style={[styles.content.linkRow.css]}>
-            <div style={[styles.content.linkRow.header.css]}>Share the permanent link. Bookmark and come back anytime.</div>
+            <div style={[styles.content.linkRow.header.css]}>
+              Share the permanent link. Bookmark and come back anytime.
+            </div>
             <div style={[GlobalStyles.inset, styles.content.linkRow.url.css]}>
               {this.props.linkUrl}
             </div>
           </div>
           <div className='row' style={[styles.content.inviteRow.css]}>
             <div style={[styles.content.inviteRow.header.css]}>
-              <div style={[GlobalStyles.inline, styles.content.inviteRow.header.label.css]}>Send invite as</div>
+              <div style={[
+                GlobalStyles.inline,
+                styles.content.inviteRow.header.label.css
+              ]}>
+                Send invite as
+              </div>
               <TextField
                 style={styles.content.inviteRow.header.inputName.css}
                 value={this.data.user.profile.name}
@@ -200,12 +207,10 @@ InviteComponent = Radium(React.createClass({
                 floatingLabelText='Your name'/>
               {/*UserStore.isGuest() && <div style={[GlobalStyles.inline, styles.content.inviteRow.header.button.css]}>
                 <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
-              </div>*//*UserStore.isGuest() && <div style={[GlobalStyles.inline, styles.content.inviteRow.header.button.css]}>
-                <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
               </div>*/}
             </div>
             <TypeaheadComponent ref='typeahead'/>
-            {/*<textarea ref='message' style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>*//*<textarea ref='message' style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>*/}
+            {/*<textarea ref='message' style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>*/}
           </div>
         </div>
       </Dialog>

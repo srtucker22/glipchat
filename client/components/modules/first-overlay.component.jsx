@@ -68,6 +68,7 @@ let UserStore = null;
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
   RoomActions = Dependency.get('RoomActions');
+  RoomStore = Dependency.get('RoomStore');
   UserStore = Dependency.get('UserStore');
 });
 
@@ -82,7 +83,7 @@ FirstOverlayComponent = Radium(React.createClass({
 
   render() {
     return (
-      <div>
+      <div onTouchTap={this.props.onTouchTap}>
         {(this.props.room.connected.length === 1 &&
           this.props.room.connected[0] === this.data.user._id) ?
           (<div style={[GlobalStyles.table, styles.css]}>
