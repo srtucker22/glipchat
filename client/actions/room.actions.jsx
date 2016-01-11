@@ -31,6 +31,12 @@ var RoomActions = function() {
       Dispatcher.dispatch({actionType: 'CREATE_ROOM'});
     },
 
+    hideControls() {
+      Dispatcher.dispatch({
+        actionType: 'HIDE_CONTROLS',
+      });
+    },
+
     hideInviteModal() {
       Dispatcher.dispatch({
         actionType: 'HIDE_INVITE_MODAL',
@@ -61,6 +67,13 @@ var RoomActions = function() {
     leaveRoom() {
       Dispatcher.dispatch({
         actionType: 'LEAVE_ROOM',
+      });
+    },
+
+    showControls(delay) {
+      Dispatcher.dispatch({
+        actionType: 'SHOW_CONTROLS',
+        delay,
       });
     },
 

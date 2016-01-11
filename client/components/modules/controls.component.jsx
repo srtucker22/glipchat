@@ -33,7 +33,6 @@ const styles = {
     position: 'absolute',
     height: '100px',
     width: '100%',
-    top: '68%',
     zIndex: 4,
     ':hover': {},
   },
@@ -42,7 +41,7 @@ const styles = {
     css: {
       backgroundColor: Colors.fullBlack,
       margin: '50px auto',
-      opacity: 0.7,
+      opacity: 0,
       overflow: 'hidden',
     },
 
@@ -55,10 +54,12 @@ const styles = {
     },
 
     red: {
-      backgroundColor: Colors.red800,
-      ':hover': {
-        backgroundColor: Colors.red900,
-      },
+      css: {
+        backgroundColor: Colors.red800,
+        ':hover': {
+          backgroundColor: Colors.red900,
+        },
+      }
     },
 
     visible: {
@@ -75,13 +76,16 @@ const styles = {
   },
 };
 
-let RoomActions = null;
-let RTCActions = null;
-let RTCStore = null;
+let GlobalStyles;
+let RoomActions;
+let RoomStore;
+let RTCActions;
+let RTCStore;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
   RoomActions = Dependency.get('RoomActions');
+  RoomStore = Dependency.get('RoomStore');
   RTCActions = Dependency.get('RTCActions');
   RTCStore = Dependency.get('RTCStore');
 });
@@ -95,6 +99,7 @@ ControlsComponent = Radium(React.createClass({
 
   getMeteorData() {
     return {
+      controlsVisible: RoomStore.controlsVisible.get(),
       isLocalAudioEnabled: RTCStore.isLocalAudioEnabled.get(),
       isLocalVideoEnabled: RTCStore.isLocalVideoEnabled.get(),
     };
@@ -114,12 +119,15 @@ ControlsComponent = Radium(React.createClass({
 
   render() {
     return (
-      <div key='overlay' style={[styles.css]}>
+      <div
+        key='overlay'
+        style={[styles.css]}
+        onTouchTap={this.props.onTouchTap}>
         <Paper zDepth={1} style={_.extend({},
           GlobalStyles.table,
           styles.controls.css,
-          Radium.getState(this.state, 'overlay', ':hover') ?
-            styles.controls.visible : {}
+          (Radium.getState(this.state, 'overlay', ':hover') ||
+            this.data.controlsVisible) ? styles.controls.visible : {}
         )}>
           <div key='invite'
             onTouchTap={RoomActions.showInviteModal}
@@ -132,7 +140,7 @@ ControlsComponent = Radium(React.createClass({
           <div key='video' onTouchTap={this.toggleLocalVideo} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
-            !this.data.isLocalVideoEnabled && styles.controls.red
+            !this.data.isLocalVideoEnabled && styles.controls.red.css
           ]}>
             <IconButton>
               <FontIcon
@@ -143,12 +151,12 @@ ControlsComponent = Radium(React.createClass({
           <div key='audio' onTouchTap={this.toggleLocalAudio} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
-            !this.data.isLocalAudioEnabled && styles.controls.red
+            !this.data.isLocalAudioEnabled && styles.controls.red.css
           ]}>
             <IconButton>
               <FontIcon
                 className='material-icons'
-                color={Colors.fullWhite}> mic_off</FontIcon>
+                color={Colors.fullWhite}>mic_off</FontIcon>
             </IconButton>
           </div>
           {/*<div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
@@ -163,8 +171,7 @@ ControlsComponent = Radium(React.createClass({
               styles.controls.button.css,
               styles.controls.buttonEnd.css
             ]}
-            onTouchTap={this.leave}
-          >
+            onTouchTap={this.leave}>
             <IconButton>
               <FontIcon
                 className='material-icons'

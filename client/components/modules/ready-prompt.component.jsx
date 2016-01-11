@@ -69,12 +69,16 @@ ReadyPromptComponent = Radium(React.createClass({
 
   render() {
     return (
-      <div>
-        {(this.props.room.connected.length && !_.contains(this.props.room.connected, this.data.user._id)) ? (
+      <div onTouchTap={this.props.onTouchTap}>
+        {(this.props.room.connected.length &&
+          !_.contains(this.props.room.connected, this.data.user._id)) ? (
           <div style={[GlobalStyles.table, styles.css]}>
             <div className='text-center' style={[GlobalStyles.cell]}>
               <p>Are you ready to join?</p>
-              <RaisedButton label='Join' primary={true} onTouchTap={this.joinRoomStream}></RaisedButton>
+              <RaisedButton label='Join'
+                primary={true}
+                onTouchTap={this.joinRoomStream}>
+              </RaisedButton>
             </div>
           </div>
         ) : ''}

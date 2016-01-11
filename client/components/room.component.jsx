@@ -102,6 +102,14 @@ RoomComponent = Radium(React.createClass({
     };
   },
 
+  toggleControls() {
+    if (RoomStore.controlsVisible.get()) {
+      RoomActions.hideControls();
+    }else {
+      RoomActions.showControls();
+    }
+  },
+
   render() {
 
     // log the errors for now
@@ -123,15 +131,17 @@ RoomComponent = Radium(React.createClass({
         <InviteComponent ref='invite' linkUrl={window.location.href} />
 
         {(!this.data.localStreamError && !!this.data.stream) ?
-          (<ReadyPromptComponent room={this.data.room} />) : ''}
+          (<ReadyPromptComponent
+            onTouchTap={this.toggleControls}
+            room={this.data.room}/>) : ''}
 
         {(!this.data.localStreamError && !!this.data.stream) ?
-          <ControlsComponent /> : ''}
+          <ControlsComponent onTouchTap={this.toggleControls}/> : ''}
 
         {(!this.data.localStreamError && !!this.data.stream) ?
           (<FirstOverlayComponent
             linkUrl={window.location.href}
-            room={this.data.room} />) : ''}
+            room={this.data.room} onTouchTap={this.toggleControls}/>) : ''}
 
         {!!this.data.primaryStream ?
           (<VideoComponent
@@ -139,9 +149,10 @@ RoomComponent = Radium(React.createClass({
               (this.data.primaryStream === 'local') ?
               this.data.stream : this.data.peers[this.data.primaryStream]
             }
-            muted={(this.data.primaryStream === 'local')}
             flip={(this.data.primaryStream === 'local')}
-            fullScreen={true}/>
+            fullScreen={true}
+            muted={(this.data.primaryStream === 'local')}
+            onTouchTap={this.toggleControls}/>
           ) : ''
         }
 

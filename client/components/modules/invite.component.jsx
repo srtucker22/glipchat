@@ -184,14 +184,21 @@ InviteComponent = Radium(React.createClass({
         onRequestClose={this.cancel}>
         <div style={[styles.content.css]}>
           <div className='row' style={[styles.content.linkRow.css]}>
-            <div style={[styles.content.linkRow.header.css]}>Share the permanent link. Bookmark and come back anytime.</div>
+            <div style={[styles.content.linkRow.header.css]}>
+              Share the permanent link. Bookmark and come back anytime.
+            </div>
             <div style={[GlobalStyles.inset, styles.content.linkRow.url.css]}>
               {this.props.linkUrl}
             </div>
           </div>
           <div className='row' style={[styles.content.inviteRow.css]}>
             <div style={[styles.content.inviteRow.header.css]}>
-              <div style={[GlobalStyles.inline, styles.content.inviteRow.header.label.css]}>Send invite as</div>
+              <div style={[
+                GlobalStyles.inline,
+                styles.content.inviteRow.header.label.css
+              ]}>
+                Send invite as
+              </div>
               <TextField
                 style={styles.content.inviteRow.header.inputName.css}
                 value={this.data.user.profile.name}

@@ -104,6 +104,13 @@ VideoOverlayComponent = Radium(React.createClass({
     }
   },
 
+  getInitialState: function() {
+    return {
+      shade: false,
+      shadeTimer: null
+    };
+  },
+
   getMeteorData() {
     let options = {
       isAudioEnabled: (this.props.id === 'local') ?
@@ -118,6 +125,7 @@ VideoOverlayComponent = Radium(React.createClass({
   },
 
   setPrimaryStream() {
+    this.toggleShade();
     RTCActions.setPrimaryStream(this.props.id);
   },
 
@@ -126,20 +134,43 @@ VideoOverlayComponent = Radium(React.createClass({
       RTCActions.toggleLocalAudio() : RTCActions.toggleAudio(this.props.id);
   },
 
+  toggleShade() {
+    if (this.state.shade) {
+      Meteor.clearTimeout(this.state.shadeTimer);
+      this.setState({
+        shade: false,
+        shadeTimer: null
+      });
+    } else {
+      let timeout = Meteor.setTimeout(()=> {
+        this.setState({
+          shade: false,
+          shadeTimer: null
+        });
+      }, 5000);
+      this.setState({
+        shade: true,
+        shadeTimer: timeout
+      });
+    }
+  },
+
   render() {
     return (
-      <div key='overlay' style={[styles.css]}>
+      <div key='overlay'
+        style={[styles.css]}>
         <div onTouchTap={this.setPrimaryStream} style={[
             styles.shade.css,
-            Radium.getState(this.state, 'overlay', ':hover') &&
-            styles.shade.hover.css]}>
+            (Radium.getState(this.state, 'overlay', ':hover') ||
+              this.state.shade) &&
+                styles.shade.hover.css]}>
         </div>
         <FloatingActionButton
           onTouchTap={this.toggleAudio}
           style={_.extend({},
             styles.mute.css,
             (Radium.getState(this.state, 'overlay', ':hover') ||
-            !this.data.isAudioEnabled) ?
+            !this.data.isAudioEnabled || this.state.shade) ?
               styles.mute.visible.css : {})
           }
           mini={true}

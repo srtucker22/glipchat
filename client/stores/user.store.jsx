@@ -150,7 +150,7 @@ var UserStore = function() {
         _this.on.loginStart();
         Meteor.loginWithFacebook({
           requestPermissions: ['public_profile', 'email', 'user_friends'],
-          loginStyle: Browser.mobile ? 'redirect' : 'popup',
+          loginStyle: (Browser.mobile || Browser.tablet) ? 'redirect' : 'popup',
         }, (err)=> {
           if (!err) {
             _this.on.loginOrCreateSuccess();
@@ -164,7 +164,8 @@ var UserStore = function() {
       case 'USER_LOGIN_GOOGLE':
         _this.on.loginStart();
         Meteor.loginWithGoogle({
-          requestPermissions: ['https://www.googleapis.com/auth/contacts.readonly'],
+          requestPermissions:
+            ['https://www.googleapis.com/auth/contacts.readonly'],
           loginStyle: Browser.mobile ? 'redirect' : 'popup',
         }, (err)=> {
           if (!err) {
