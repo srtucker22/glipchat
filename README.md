@@ -87,7 +87,6 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 -  Change the name of the project to make it more accessible for projected users (suggestions welcome)
 
 ## TODO
--  Different controls logic on mobile/tablet -- fade out controls on initialization, then tap to view controls
 -  Implement a global namespace for appName (clarify meaning)
 -  Remove Radium local weirdness when issue is resolved
 -  Add raix push notifications for cordova to enhance mobile support
