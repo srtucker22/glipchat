@@ -1,3 +1,24 @@
+/**
+ * quasar
+ *
+ * Copyright (c) 2015 Glipcode http://glipcode.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions
+ * of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 const {History} = ReactRouter;
 const {
   FontIcon,
@@ -9,10 +30,10 @@ const Colors = MUI.Styles.Colors;
 
 const styles = {
   css: {
-    height: '100px',
     position: 'absolute',
+    height: '100px',
     width: '100%',
-    zIndex: 3,
+    zIndex: 4,
     ':hover': {},
   },
 
@@ -33,10 +54,12 @@ const styles = {
     },
 
     red: {
-      backgroundColor: Colors.red800,
-      ':hover': {
-        backgroundColor: Colors.red900,
-      },
+      css: {
+        backgroundColor: Colors.red800,
+        ':hover': {
+          backgroundColor: Colors.red900,
+        },
+      }
     },
 
     visible: {
@@ -53,13 +76,16 @@ const styles = {
   },
 };
 
+let GlobalStyles;
 let RoomActions;
+let RoomStore;
 let RTCActions;
 let RTCStore;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
   RoomActions = Dependency.get('RoomActions');
+  RoomStore = Dependency.get('RoomStore');
   RTCActions = Dependency.get('RTCActions');
   RTCStore = Dependency.get('RTCStore');
 });
@@ -73,6 +99,7 @@ ControlsComponent = Radium(React.createClass({
 
   getMeteorData() {
     return {
+      controlsVisible: RoomStore.controlsVisible.get(),
       isLocalAudioEnabled: RTCStore.isLocalAudioEnabled.get(),
       isLocalVideoEnabled: RTCStore.isLocalVideoEnabled.get(),
     };
@@ -92,12 +119,15 @@ ControlsComponent = Radium(React.createClass({
 
   render() {
     return (
-      <div key='overlay' style={[styles.css]}>
+      <div
+        key='overlay'
+        style={[styles.css]}
+        onTouchTap={this.props.onTouchTap}>
         <Paper zDepth={1} style={_.extend({},
           GlobalStyles.table,
           styles.controls.css,
-          Radium.getState(this.state, 'overlay', ':hover') ?
-            styles.controls.visible : {}
+          (Radium.getState(this.state, 'overlay', ':hover') ||
+            this.data.controlsVisible) ? styles.controls.visible : {}
         )}>
           <div key='invite'
             onTouchTap={RoomActions.showInviteModal}
@@ -110,7 +140,7 @@ ControlsComponent = Radium(React.createClass({
           <div key='video' onTouchTap={this.toggleLocalVideo} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
-            !this.data.isLocalVideoEnabled && styles.controls.red
+            !this.data.isLocalVideoEnabled && styles.controls.red.css
           ]}>
             <IconButton>
               <FontIcon
@@ -121,12 +151,12 @@ ControlsComponent = Radium(React.createClass({
           <div key='audio' onTouchTap={this.toggleLocalAudio} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
-            !this.data.isLocalAudioEnabled && styles.controls.red
+            !this.data.isLocalAudioEnabled && styles.controls.red.css
           ]}>
             <IconButton>
               <FontIcon
                 className='material-icons'
-                color={Colors.fullWhite}> mic_off</FontIcon>
+                color={Colors.fullWhite}>mic_off</FontIcon>
             </IconButton>
           </div>
           {/*<div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>

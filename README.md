@@ -6,6 +6,10 @@ quasar is a real-time video chatroom application. The frontend is powered by Rea
 
 quasar has been tested in Chrome and Firefox. Other browsers may not support WebRTC.
 
+## Motivation
+
+quasar is intended to be an example of how to create a WebRTC video chatroom and of how to integrate React and Flux in a Meteor app.
+
 ## Installation
 
 1. Clone the project <code>git clone https://github.com/srtucker22/quasar.git</code>
@@ -32,9 +36,33 @@ quasar has been tested in Chrome and Firefox. Other browsers may not support Web
 
 5. Run the app with the settings <code>meteor --settings settings.json</code>
 
-## Code Example
+## Application Design Overview
+
+As mentioned previously, quasar is an example of how to create a WebRTC video chatroom and also of how to integrate React and Flux in a Meteor app.
+
+Don't know React or Flux? No problem!
+
+The best way to describe React is that it is a view layer only.
+
+Flux is an architectural pattern that can be used with React to enable one-way data flows to a centralized application data store using an event system.
+- Your Views "Dispatch" "Actions"
+- Your "Store" Responds to Dispatched Events
+- Your Store Emits a "Change" Event
+- Your View Responds to the "Change" Event
+
+Read these useful guides to get a quick overview:
+- [ReactJS For Stupid People](http://blog.andrewray.me/reactjs-for-stupid-people/)
+- [Flux For Stupid People](http://blog.andrewray.me/flux-for-stupid-people/)
+
+The application folder structure logically reflects the flux architecture through folders such as actions and stores.
+
+Routing is done with [React Router](https://github.com/rackt/react-router)
+
+It's worth spending some time understanding how this router works before digging into the code.
+Check out <a href="https://github.com/srtucker22/quasar/blob/master/client/routes.jsx">routes.jsx</a> for the main router code.
 
 quasar uses <a href="https://github.com/arunoda/meteor-streams">Meteor Streams</a> to power the WebRTC communication.
+[Note: Meteor Streams is now officially an inactive project]
 
 The streams are handled by RTCStore in <a href="https://github.com/srtucker22/quasar/blob/master/client/stores/rtc.store.jsx">rtc.store.jsx</a> on the frontend.
 
@@ -43,10 +71,13 @@ The streams are managed by roomStream in <a href="https://github.com/srtucker22/
 ## Contributing
 
 This project welcomes code contributions, bug reports and feature requests.
+<<<<<<< HEAD
 
 ## Motivation
 
 quasar is intended to be an example of how to create a WebRTC video chatroom and of how to integrate React and Flux in a Meteor app.
+=======
+>>>>>>> pr/6
 
 ## Resources
 - [quasar Meteor Lightening Talk!](https://youtu.be/C0S_QCb6HSM)
@@ -59,6 +90,7 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 -  Change the name of the project to make it more accessible for projected users (suggestions welcome)
 
 ## TODO
+-  Different controls logic on mobile/tablet -- fade out controls on initialization, then tap to view controls
 -  Implement a global namespace for appName (clarify meaning)
 -  Remove Radium local weirdness when issue is resolved
 -  Add raix push notifications for cordova to enhance mobile support

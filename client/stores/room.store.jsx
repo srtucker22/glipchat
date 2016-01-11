@@ -1,3 +1,24 @@
+/**
+ * quasar
+ *
+ * Copyright (c) 2015 Glipcode http://glipcode.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions
+ * of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 // Dependencies
 let RTCStore;
 let UserStore;
@@ -10,11 +31,16 @@ Dependency.autorun(()=> {
 // RoomStore Creator
 var RoomStore = function() {
   var _this = this;
+
+  _this.controlsTimer = ReactiveVar(null);
+  _this.controlsVisible = ReactiveVar(false);
+
   _this.createError = ReactiveVar('');
   _this.creatingRoom = ReactiveVar(false);
   _this.currentRoom = ReactiveVar(null);
   _this.currentRoomId = ReactiveVar('');
   _this.gettingCurrentRoom = ReactiveVar(false);
+
   _this.inviteError = ReactiveVar(null);
   _this.invitees = ReactiveVar(null);
   _this.inviteModalVisible = ReactiveVar(false);
@@ -66,6 +92,14 @@ var RoomStore = function() {
         _this.creatingRoom.set(false);
         _this.createError.set({status: 403, description: 'UNAUTHORIZED'});
       });
+    },
+
+    hideControls() {
+      if (_this.controlsTimer.get()) {  // clear the timeout
+        Meteor.clearTimeout(_this.controlsTimer.get());
+        _this.controlsTimer.set(null);
+      }
+      _this.controlsVisible.set(false); // hide the controls
     },
 
     hideInviteModal() {
@@ -127,6 +161,17 @@ var RoomStore = function() {
       }
     },
 
+    showControls(delay) {
+      if (!_this.controlsTimer.get()) {
+        let timeout = Meteor.setTimeout(()=> {
+          _this.controlsVisible.set(false); // hide the controls
+          _this.controlsTimer.set(null);  // clear the variable
+        }, (delay || 5000));
+        _this.controlsTimer.set(timeout);
+        _this.controlsVisible.set(true);
+      }
+    },
+
     updateInvitees(invitees) {
       _this.invitees.set(invitees);
     },
@@ -134,14 +179,17 @@ var RoomStore = function() {
 
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
-      case 'HIDE_INVITE_MODAL':
-        _this.hideInviteModal();
-        break;
       case 'CLEAR_INVITEES':
         _this.clearInvitees();
         break;
       case 'CREATE_ROOM':
         _this.createRoom();
+        break;
+      case 'HIDE_CONTROLS':
+        _this.hideControls();
+        break;
+      case 'HIDE_INVITE_MODAL':
+        _this.hideInviteModal();
         break;
       case 'INVITE':
         _this.invite(payload.invitees);
@@ -154,6 +202,9 @@ var RoomStore = function() {
         break;
       case 'LEAVE_ROOM':
         _this.leaveRoom();
+        break;
+      case 'SHOW_CONTROLS':
+        _this.showControls(payload.delay);
         break;
       case 'SHOW_INVITE_MODAL':
         _this.showInviteModal();
