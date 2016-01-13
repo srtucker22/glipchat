@@ -6,7 +6,7 @@ const {
   TextField,
 } = MUI;
 
-const Colors = MUI.Styles.Colors;
+const {Colors} = MUI.Styles;
 
 const styles = {
   css: {

@@ -7,11 +7,13 @@ const {
   TextField
 } = MUI;
 
-let GlobalStyles = null;
-let RoomActions = null;
-let RoomStore = null;
+const {
+  Style
+} = Radium;
 
-var Style = Radium.Style;
+let GlobalStyles;
+let RoomActions;
+let RoomStore;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');

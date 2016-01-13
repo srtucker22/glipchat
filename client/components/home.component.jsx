@@ -51,12 +51,24 @@ HomeComponent = Radium(React.createClass({
 
   createRoom() {
     RoomActions.createRoom();
+    this.setState({
+      loading: true
+    });
+  },
+
+  getInitialState() {
+    return {
+      loading: false
+    };
   },
 
   render() {
     return (
       <div style={[styles.css]}>
         <GithubComponent />
+        {this.state.loading ?
+          <LoadingDialogComponent open={true} title='Starting video call'/> : ''
+        }
         <div style={[GlobalStyles.stickyFooterPage]}>
           <HeaderComponent/>
           <div className='row'>
