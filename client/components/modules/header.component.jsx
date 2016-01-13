@@ -118,23 +118,30 @@ NotificationDropdownComponent = Radium(React.createClass({
     return (
       <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
         {dropdownStyleComponent}
-        <IconButton iconStyle={styles.icon.css} iconClassName='material-icons dropdown-toggle' data-toggle='dropdown'>{(this.props.history && this.props.history.length) ? 'notifications' : 'notifications_none'}</IconButton>
+        <IconButton
+          iconStyle={styles.icon.css}
+          iconClassName='material-icons dropdown-toggle' data-toggle='dropdown'>
+          {(this.props.history && this.props.history.length) ?
+            'notifications' : 'notifications_none'}
+        </IconButton>
         <Card className='dropdown-menu' style={styles.menu.paper.css}>
-          {(!!this.props.history && this.props.history.length) ? _.map(this.props.history, (item)=> {
-            return (
-              <MenuItem
-                key={item.createdAt}
-                primaryText= {item.room + ' - ' + moment(item.createdAt).fromNow()}
-                onTouchTap={this.joinRoom.bind(this, item.room)} />
-            );
-          }) :
+          {(!!this.props.history && this.props.history.length) ?
+            _.map(this.props.history, (item)=> {
+              return (
+                <MenuItem
+                  key={item.createdAt}
+                  primaryText={item.room +
+                    ' - ' + moment(item.createdAt).fromNow()}
+                  onTouchTap={this.joinRoom.bind(this, item.room)} />
+              );
+            }) :
 
-        <MenuItem className='text-center'>
-            No recent rooms
-                    </MenuItem>}
-                </Card>
-            </div>
-  );
+            <MenuItem className='text-center'>
+              No recent rooms
+            </MenuItem>}
+        </Card>
+      </div>
+    );
   },
 }));
 
@@ -147,14 +154,20 @@ ProfileDropdownComponent = Radium(React.createClass({
     return (
       <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
         {dropdownStyleComponent}
-        <Avatar className='dropdown-toggle' data-toggle='dropdown' src={this.props.user.services.google.picture}/>
+        <Avatar
+          className='dropdown-toggle'
+          data-toggle='dropdown'
+          src={this.props.user.services.google.picture}/>
         <Card className='dropdown-menu'>
           <CardText>
             {this.props.user.profile.name}
           </CardText>
-          {!!this.props.user.services.google && !!this.props.user.services.google.email && <CardText>
-            {this.props.user.services.google.email}
-          </CardText>}
+          {!!this.props.user.services.google &&
+            !!this.props.user.services.google.email &&
+            <CardText>
+              {this.props.user.services.google.email}
+            </CardText>
+          }
           <CardActions className='text-center' expandable={false}>
             <FlatButton onTouchTap={this.logout} label='Sign out'/>
           </CardActions>
@@ -209,7 +222,8 @@ HeaderComponent = Radium(React.createClass({
       if (this.data.user && !UserStore.isGuest()) {
 
         notificationDropdown = !!this.data.user.history ? (
-          <NotificationDropdownComponent history={this.data.user.history.reverse()}/>
+          <NotificationDropdownComponent
+            history={this.data.user.history.reverse()}/>
         ) : '';
 
         profileDropdown = (
@@ -223,14 +237,21 @@ HeaderComponent = Radium(React.createClass({
           </div>
         );
       } else {
-        loginButton = <FlatButton label='Login with Google' onClick={this.loginWithGoogle}/>;
+        loginButton = <FlatButton
+          label='Login with Google'
+          onClick={this.loginWithGoogle}
+        />;
       }
     }
 
     return (
       <header>
-        <AppBar title={''} iconElementRight={loginButton ? loginButton : profileButtons} onLeftIconButtonTouchTap={this.toggleNav} showMenuIconButton={false}
-        style={styles.css} />
+        <AppBar
+          title={''}
+          iconElementRight={loginButton ? loginButton : profileButtons}
+          onLeftIconButtonTouchTap={this.toggleNav}
+          showMenuIconButton={false}
+          style={styles.css} />
         <LeftNav ref='leftNav' docked={false} menuItems={menuItems} />
       </header>
     );

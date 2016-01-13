@@ -88,7 +88,6 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 
 ## TODO
 -  Implement a global namespace for appName (clarify meaning)
--  Remove Radium local weirdness when issue is resolved
 -  Add raix push notifications for cordova to enhance mobile support
 -  Add TURN server support to make it more useful for real-world deployment
 -  Add Google contact integration in tags input to make it easier to invite friends to chats

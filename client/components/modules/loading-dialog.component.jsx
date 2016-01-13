@@ -10,7 +10,6 @@ const styles = {
   body: {
     css: {
       background: Colors.grey900,
-      opacity: 0.75
     }
   },
 
@@ -26,26 +25,6 @@ const styles = {
 };
 
 LoadingDialogComponent = Radium(React.createClass({
-  contextTypes: {
-    muiTheme: React.PropTypes.object,
-  },
-
-  getInitialState() {
-    return {
-      muiTheme: this.context.muiTheme
-    };
-  },
-
-  componentWillMount() {
-    // customize the muiTheme so we can override the white Paper background
-    let newMuiTheme = this.state.muiTheme;
-    newMuiTheme.rawTheme.palette.canvasColor = 'none';
-
-    this.setState({
-      muiTheme: newMuiTheme,
-    });
-  },
-
   render() {
     return (
       <div className='LoadingDialog'>
