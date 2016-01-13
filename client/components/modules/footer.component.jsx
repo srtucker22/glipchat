@@ -47,7 +47,7 @@ FooterComponent = Radium(React.createClass({
         <div className='text-left' style={[GlobalStyles.cell]}>
           Copyright <a href={glipcode.href} target='_blank'>
             {glipcode.name}
-          </a> 2015
+          </a> 2015-2016
         </div>
         <div className='text-right' style={[GlobalStyles.cell]}>
           Made with ♥ using <a href={meteorFlux.href}
