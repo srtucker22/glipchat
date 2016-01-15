@@ -16,11 +16,6 @@
  * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
- * Original Author: the error is the streaming queue -- you need to make sure one thing streams before the other
- * and that you wait to receive ice shit until your local/remote descriptions are set.
- *
- * SHANE: Split all variables into declaration and initization and moved to scope start
  */
 
 /**

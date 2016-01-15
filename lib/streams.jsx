@@ -20,3 +20,4 @@
  */
 
 roomStream = new Meteor.Stream('rooms');
+notificationStream = new Meteor.Stream('notifications');

@@ -106,6 +106,11 @@ Schema.User = new SimpleSchema({
     optional: true,
     blackbox: true,
   },
+  status: {
+    type: Object,
+    blackbox: true,
+    optional: true
+  },
 
   // Add `roles` to your schema if you use the meteor-roles package.
   // Note that when using this package, you must also specify the

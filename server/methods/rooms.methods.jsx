@@ -20,11 +20,28 @@
  */
 
 var appName = 'quasar';
-var roomURL = process.env.ROOT_URL + '#/room/';
+var roomURL = process.env.ROOT_URL + 'room/';
 
 _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g
 };
+
+// if a user with a google account is online when invited, show them a notification
+function notifyOnlineInvitees(user, roomId, invitees) {
+  // get online invitees
+  let onlineInvitees = Meteor.users.find({
+    'services.google.email': {$in: invitees},
+    'status.online': true
+  }).fetch();
+
+  _.each(onlineInvitees, (invitee)=> {
+    notificationStream.emit(invitee._id, {
+      from: user.profile.name,
+      room: (roomURL + roomId),
+      type: 'invite'
+    });
+  });
+}
 
 function renderEmailTemplate(filename, vals) {
   let template = Assets.getText(filename);
@@ -90,12 +107,17 @@ Meteor.methods({
 
       let subject = 'You\'ve been invited to a ' + appName + ' video chat';
 
+      // send invite emails
       Email.send({
         to: invitees,
         from: 'mail@' + appName + '.meteor.com',
         subject: subject,
         html: basicMessage
       });
+
+      // notify online invitees with push notification
+      notifyOnlineInvitees(user, roomId, invitees);
+
     } catch (e) {
       throw new Meteor.Error(e);
     }

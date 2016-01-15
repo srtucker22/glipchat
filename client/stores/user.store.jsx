@@ -106,6 +106,50 @@ var UserStore = function() {
     });
   };
 
+  _this.getNotificationPermission = ()=> {
+    function listenForNotifications() {
+      _this.requireUser().then(function(user) {
+        notificationStream.on(user._id, (data)=> {
+          if (data.type === 'invite') {
+            let title = 'New Chat Invitation';
+            let options = {
+              body: data.from + ' has invited you to a chat.',
+              icon: 'apple-icon-180x180.png'
+            };
+            let notification = new Notification(title, options);
+            notification.onclick = ()=> {
+              notification.close();
+              window.location = data.room;
+              return;
+            };
+          }
+        });
+      });
+    }
+
+    // Let's check if the browser supports notifications
+    if (!('Notification' in window)) {
+      return;
+    }
+
+    // Let's check whether notification permissions have already been granted
+    else if (Notification.permission === 'granted') {
+      // If it's okay let's create notifications
+      listenForNotifications();
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== 'denied') {
+      Notification.requestPermission(function(permission) {
+        // If the user accepts, let's create notifications
+        if (permission === 'granted') {
+          // we can send notifications
+          listenForNotifications();
+        }
+      });
+    }
+  };
+
   // is the user a guest user
   _this.isGuest = ()=> {
     return _this.user() && (!_this.user().services ||
@@ -149,8 +193,10 @@ var UserStore = function() {
       case 'USER_LOGIN_GOOGLE':
         _this.on.loginStart();
         Meteor.loginWithGoogle({
-          requestPermissions:
-            ['https://www.googleapis.com/auth/contacts.readonly'],
+          requestPermissions: [
+            'https://www.googleapis.com/auth/contacts.readonly',
+            'https://www.googleapis.com/auth/userinfo.email'
+          ],
           loginStyle: Browser.mobile ? 'redirect' : 'popup',
         }, (err)=> {
           if (!err) {
@@ -175,6 +221,9 @@ var UserStore = function() {
       case 'USER_UPDATE_PROFILE_NAME':
         _this.updateProfileName(payload.name);
         break;
+
+      case 'GET_NOTIFICATION_PERMISSION':
+        _this.getNotificationPermission();
     }
   });
 

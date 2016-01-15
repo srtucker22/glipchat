@@ -45,14 +45,16 @@ const styles = {
   },
 };
 
-let GlobalStyles = null;
-let RoomStore = null;
-let RoomActions = null;
+let GlobalStyles;
+let RoomStore;
+let RoomActions;
+let UserActions;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
   RoomStore = Dependency.get('RoomStore');
   RoomActions = Dependency.get('RoomActions');
+  UserActions = Dependency.get('UserActions');
 });
 
 HomeComponent = Radium(React.createClass({
@@ -62,6 +64,10 @@ HomeComponent = Radium(React.createClass({
     return {
       currentRoom: RoomStore.currentRoom.get(),
     };
+  },
+
+  componentWillMount() {
+    UserActions.getNotificationPermission();
   },
 
   componentWillUpdate(nextProps, nextState) {
