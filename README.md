@@ -1,10 +1,15 @@
 # quasar
 
-View the project at <a href="https://quasar.meteor.com">quasar.meteor.com</a>
+View the project at <a href="https://quasar.meteor.com" target="_blank">quasar.meteor.com</a>
 
 quasar is a real-time video chatroom application. The frontend is powered by React, Flux and WebRTC and the backend is powered by Meteor.
 
-quasar has been tested in Chrome and Firefox. Other browsers may not support WebRTC.
+quasar has been tested on the following:
+- Chrome
+- Firefox
+- OS X (Electron application)
+
+Other browsers and operating systems may not support WebRTC.
 
 ## Motivation
 
@@ -61,9 +66,9 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 
 ### Electron Notes:
 
-quasar uses <a href="https://github.com/mixmaxhq/meteor-electron">meteor-electron</a> to easily transform into a downloadable desktop app and update as you develop. For settings.json configuration for this feature, please refer to the <a href="https://github.com/mixmaxhq/meteor-electron">meteor-electron documentation</a>.
+quasar uses <a href="https://github.com/mixmaxhq/meteor-electron" target="_blank">meteor-electron</a> to easily transform into a downloadable desktop app and update as you develop. For settings.json configuration for this feature, please refer to the <a href="https://github.com/mixmaxhq/meteor-electron" target="_blank">meteor-electron documentation</a>.
 
-meteor-electron has been modified to build a compressed version of the quasar desktop app at <code>quasar/public/downloads/{platform}-{arch}/quasar.zip</code>, which browser versions can reference for easy downloading. See <a href="https://github.com/srtucker22/quasar/blob/master/client/components/modules/download-button.component.jsx#L57">download-button.component.jsx</a> for how components reference this directory.
+meteor-electron has been modified to build a compressed version of the quasar desktop app at <code>quasar/public/downloads/{platform}-{arch}/quasar.zip</code>, which browser versions can reference for easy downloading. See <a href="https://github.com/srtucker22/quasar/blob/master/client/components/modules/download-button.component.jsx#L57" target="_blank">download-button.component.jsx</a> for how components reference this directory.
 
 ## Application Design Overview
 
@@ -88,14 +93,14 @@ The application folder structure logically reflects the flux architecture throug
 Routing is done with [React Router](https://github.com/rackt/react-router)
 
 It's worth spending some time understanding how this router works before digging into the code.
-Check out <a href="https://github.com/srtucker22/quasar/blob/master/client/routes.jsx">routes.jsx</a> for the main router code.
+Check out <a href="https://github.com/srtucker22/quasar/blob/master/client/routes.jsx" target="_blank">routes.jsx</a> for the main router code.
 
-quasar uses <a href="https://github.com/arunoda/meteor-streams">Meteor Streams</a> to power the WebRTC communication.
+quasar uses <a href="https://github.com/arunoda/meteor-streams" target="_blank">Meteor Streams</a> to power the WebRTC communication.
 [Note: Meteor Streams is now officially an inactive project]
 
-The streams are handled by RTCStore in <a href="https://github.com/srtucker22/quasar/blob/master/client/stores/rtc.store.jsx">rtc.store.jsx</a> on the frontend.
+The streams are handled by RTCStore in <a href="https://github.com/srtucker22/quasar/blob/master/client/stores/rtc.store.jsx" target="_blank">rtc.store.jsx</a> on the frontend.
 
-The streams are managed by roomStream in <a href="https://github.com/srtucker22/quasar/blob/master/server/streams/room.stream.jsx">room.stream.jsx</a> on the backend.
+The streams are managed by roomStream in <a href="https://github.com/srtucker22/quasar/blob/master/server/streams/room.stream.jsx" target="_blank">room.stream.jsx</a> on the backend.
 
 ## Contributing
 
