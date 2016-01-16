@@ -32,9 +32,38 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
               "Segment.io" : {"apiKey": "YOUR_API_KEY"}
             }
           }
+          "electron": {
+            "autoPackage": true,
+            "builds": [{
+              "platform": "darwin", "arch": "x64"
+            }],
+            "name": "quasar",
+            "icon": {
+              "darwin": "public/apple-icon-180x180.png",
+              "win32": "public/ms-icon-310x310.png"
+            },
+            "rootUrl": "https://quasar.meteor.com",
+            "version": "0.1.1",
+            "description": "A really cool app.",
+            "height": 768,
+            "width": 1024,
+            "frame": true,
+            "title-bar-style": "hidden",
+            "resizable": true,
+            "protocols": [{
+              "name": "quasar",
+              "schemes": ["quasar"]
+            }]
+          }
         }
 
 5. Run the app with the settings <code>meteor --settings settings.json</code>
+
+### Electron Notes:
+
+quasar uses <a href="https://github.com/mixmaxhq/meteor-electron">meteor-electron</a> to easily transform into a downloadable desktop app and update as you develop. For settings.json configuration for this feature, please refer to the <a href="https://github.com/mixmaxhq/meteor-electron">meteor-electron documentation</a>.
+
+meteor-electron has been modified to build a compressed version of the quasar desktop app at <code>quasar/public/downloads/{platform}-{arch}/quasar.zip</code>, which browser versions can reference for easy downloading. See <a href="https://github.com/srtucker22/quasar/blob/master/client/components/modules/download-button.component.jsx#L57">download-button.component.jsx</a> for how components reference this directory.
 
 ## Application Design Overview
 
