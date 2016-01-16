@@ -19,9 +19,16 @@
  *
  */
 
+let NotificationActions;
+
+Dependency.autorun(()=> {
+  NotificationActions = Dependency.get('NotificationActions');
+});
+
 // UserStore Creator
 var UserStore = function() {
-  var _this = this;
+  let _this = this;
+  let currentId = Meteor.userId();
 
   // UserStore Reactive Vars
   _this.user = Meteor.user;
@@ -33,6 +40,21 @@ var UserStore = function() {
   Meteor.subscribe('user', {
     onReady() {
       _this.subscribed.set(true);
+    }
+  });
+
+  Tracker.autorun((c)=> {
+    if (Meteor.loggingIn() ||
+      (Meteor.userId() && !_this.subscribed.get())) {
+      return;
+    }
+
+    if (!Meteor.userId() || currentId !== Meteor.userId()) {
+      NotificationActions.clearListener(currentId);
+    }
+
+    if (Meteor.userId()) {
+      NotificationActions.registerListener(Meteor.userId());
     }
   });
 
@@ -106,50 +128,6 @@ var UserStore = function() {
     });
   };
 
-  _this.getNotificationPermission = ()=> {
-    function listenForNotifications() {
-      _this.requireUser().then(function(user) {
-        notificationStream.on(user._id, (data)=> {
-          if (data.type === 'invite') {
-            let title = 'New Chat Invitation';
-            let options = {
-              body: data.from + ' has invited you to a chat.',
-              icon: 'apple-icon-180x180.png'
-            };
-            let notification = new Notification(title, options);
-            notification.onclick = ()=> {
-              notification.close();
-              window.location = data.room;
-              return;
-            };
-          }
-        });
-      });
-    }
-
-    // Let's check if the browser supports notifications
-    if (!('Notification' in window)) {
-      return;
-    }
-
-    // Let's check whether notification permissions have already been granted
-    else if (Notification.permission === 'granted') {
-      // If it's okay let's create notifications
-      listenForNotifications();
-    }
-
-    // Otherwise, we need to ask the user for permission
-    else if (Notification.permission !== 'denied') {
-      Notification.requestPermission(function(permission) {
-        // If the user accepts, let's create notifications
-        if (permission === 'granted') {
-          // we can send notifications
-          listenForNotifications();
-        }
-      });
-    }
-  };
-
   // is the user a guest user
   _this.isGuest = ()=> {
     return _this.user() && (!_this.user().services ||
@@ -221,9 +199,6 @@ var UserStore = function() {
       case 'USER_UPDATE_PROFILE_NAME':
         _this.updateProfileName(payload.name);
         break;
-
-      case 'GET_NOTIFICATION_PERMISSION':
-        _this.getNotificationPermission();
     }
   });
 

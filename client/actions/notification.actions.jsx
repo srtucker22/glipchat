@@ -19,28 +19,20 @@
  *
  */
 
-var UserActions = function() {
+var NotificationActions = function() {
   return {
-    login(user, password) {
-      Dispatcher.dispatch({actionType: 'USER_LOGIN_PASSWORD'});
+    clearListener(id) {
+      Dispatcher.dispatch({actionType: 'NOTIFICATION_CLEAR_LISTENER', id});
     },
 
-    loginWithFacebook() {
-      Dispatcher.dispatch({actionType: 'USER_LOGIN_FACEBOOK'});
+    getPermission() {
+      Dispatcher.dispatch({actionType: 'NOTIFICATION_GET_PERMISSION'});
     },
 
-    loginWithGoogle() {
-      Dispatcher.dispatch({actionType: 'USER_LOGIN_GOOGLE'});
+    registerListener(id) {
+      Dispatcher.dispatch({actionType: 'NOTIFICATION_REGISTER_LISTENER', id});
     },
-
-    logout() {
-      Dispatcher.dispatch({actionType: 'USER_LOGOUT'});
-    },
-
-    updateProfileName(name) {
-      Dispatcher.dispatch({actionType: 'USER_UPDATE_PROFILE_NAME', name});
-    }
   };
 };
 
-Dependency.add('UserActions', new UserActions());
+Dependency.add('NotificationActions', new NotificationActions());
