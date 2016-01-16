@@ -43,13 +43,9 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
               "platform": "darwin", "arch": "x64"
             }],
             "name": "quasar",
-            "icon": {
-              "darwin": "public/apple-icon-180x180.png",
-              "win32": "public/ms-icon-310x310.png"
-            },
             "rootUrl": "https://quasar.meteor.com",
-            "version": "0.1.1",
-            "description": "A really cool app.",
+            "version": "0.0.1",
+            "description": "Video Chatroom with Meteor + WebRTC + React + Flux",
             "height": 768,
             "width": 1024,
             "frame": true,
