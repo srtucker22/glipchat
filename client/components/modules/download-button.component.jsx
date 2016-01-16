@@ -54,12 +54,12 @@ DownloadButtonComponent = Radium(React.createClass({
     let platforms = {
       mac: {
         icon: '/images/apple.svg',
-        link: '/downloads/darwin-64/quasar.zip',
+        link: '/downloads/darwin-x64/quasar.zip',
         title: 'Mac OS X'
       },
       win: {
         icon: '/images/windows.svg',
-        link: '/downloads/win-64/quasar.zip',
+        link: '/downloads/win-x64/quasar.zip',
         title: 'Windows'
       }
     };

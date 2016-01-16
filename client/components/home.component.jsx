@@ -92,7 +92,6 @@ HomeComponent = Radium(React.createClass({
   },
 
   render() {
-    console.log(Browser);
     return (
       <div style={[styles.css]}>
         <GithubComponent />
@@ -112,7 +111,8 @@ HomeComponent = Radium(React.createClass({
                 style={{marginBottom: '50px'}}
               />
               <br />
-              {Browser.mac ? <DownloadButtonComponent platform='mac' /> : ''}
+              {(Browser.mac && !Browser.electron) ?
+                <DownloadButtonComponent platform='mac' /> : ''}
             </div>
           </div>
         </div>

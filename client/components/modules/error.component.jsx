@@ -168,7 +168,8 @@ let NotSupportedErrorComponent = Radium(React.createClass({
           <p>Sorry, we do not currently support your browser.</p>
           <p>You can download <a href='https://www.google.com/chrome/'>Google Chrome</a> or <a href='https://www.mozilla.org/firefox'>Mozilla Firefox</a> for free to use this video chatroom.</p>
           <br/>
-          {Browser.mac ? <DownloadButtonComponent platform='mac'/> : ''}
+          {(Browser.mac && !Browser.electron) ?
+            <DownloadButtonComponent platform='mac' /> : ''}
           <br/>
           <RaisedButton
             label='Go Back'
