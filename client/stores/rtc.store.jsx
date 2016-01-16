@@ -256,31 +256,34 @@ RTCStore = function() {
   }
 
   /** Disconnect from a room stream and clear all peer data. */
-  _this.disconnect = ()=> {
+  _this.disconnect = (id)=> {
     console.log('disconnecting');
 
-    /** Announce disconnect to peers. */
-    roomStream.emit('msg', {
-      type: 'disconnect',
-      room: RoomStore.currentRoomId.get()
-    });
+    if (RoomStore.currentRoomId.get()) {
+      /** Announce disconnect to peers. */
+      roomStream.emit('msg', {
+        type: 'disconnect',
+        room: RoomStore.currentRoomId.get()
+      });
 
-    /** Clear listener for room messages. */
-    roomStream.removeListener(UserStore.user()._id, handleMessage);
+      /** Clear listener for room messages. */
+      let userId = id || UserStore.user()._id;
+      roomStream.removeListener(userId, handleMessage);
 
-    /** Clear all peer data. */
-    _.each(peerConnections, (val, key)=> {
-      var pc;
-      pc = getPeerConnection(key);
-      if (pc.iceConnectionState !== 'closed') {
-        pc.close();
-      }
-    });
+      /** Clear all peer data. */
+      _.each(peerConnections, (val, key)=> {
+        var pc;
+        pc = getPeerConnection(key);
+        if (pc.iceConnectionState !== 'closed') {
+          pc.close();
+        }
+      });
 
-    peers = {};
-    peerConnections = {};
-    _this.peers.set(peers);
-    _this.primaryStream.set(null);
+      peers = {};
+      peerConnections = {};
+      _this.peers.set(peers);
+      _this.primaryStream.set(null);
+    }
   };
 
   /** Get the local stream from compatible browsers. */
@@ -451,7 +454,7 @@ RTCStore = function() {
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType) {
       case 'DISCONNECT':
-        _this.disconnect();
+        _this.disconnect(payload.id);
         break;
       case 'GET_LOCAL_STREAM':
         _this.getLocalStream();

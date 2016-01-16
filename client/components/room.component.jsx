@@ -18,7 +18,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-
+const {History} = ReactRouter;
 const {
   Dialog,
   FontIcon,
@@ -83,7 +83,7 @@ let standardActions = [
 ];
 
 RoomComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
+  mixins: [ReactMeteorData, History],
 
   componentWillUnmount() {
     RTCActions.disconnect();
@@ -92,6 +92,13 @@ RoomComponent = Radium(React.createClass({
   },
 
   getMeteorData() {
+    // if the user logs out on a different tab, leave the room
+    if (Object.keys(this.data).length &&
+      this.data.userId !== UserStore.userId()) {
+      console.log(this.data);
+      RTCActions.disconnect(this.data.userId);
+      this.history.pushState(null, '/');
+    }
     return {
       localStreamError: RTCStore.localStreamError.get(),
       peers: RTCStore.peers.get(),
@@ -99,6 +106,7 @@ RoomComponent = Radium(React.createClass({
       room: RoomStore.currentRoom.get(),
       stream: RTCStore.localStream.get(),
       streamError: RTCStore.streamError.get(),
+      userId: UserStore.userId(),
     };
   },
 

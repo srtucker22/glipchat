@@ -20,9 +20,13 @@
  */
 
 let NotificationActions;
+let RoomActions;
+let RTCActions;
 
 Dependency.autorun(()=> {
   NotificationActions = Dependency.get('NotificationActions');
+  RoomActions = Dependency.get('RoomActions');
+  RTCActions = Dependency.get('RTCActions');
 });
 
 // UserStore Creator
@@ -32,6 +36,7 @@ var UserStore = function() {
 
   // UserStore Reactive Vars
   _this.user = Meteor.user;
+  _this.userId = Meteor.userId;
   _this.loggingIn = Meteor.loggingIn;
   _this.loginError = new ReactiveVar('');
   _this.logoutError = new ReactiveVar('');
@@ -50,7 +55,8 @@ var UserStore = function() {
     }
 
     if (!Meteor.userId() || currentId !== Meteor.userId()) {
-      NotificationActions.clearListener(currentId);
+      NotificationActions.clearListener(currentId); // clear user notifications
+      RTCActions.disconnect(currentId); // disconnect from any conversations
     }
 
     if (Meteor.userId()) {

@@ -22,11 +22,9 @@
 // NotificationStore Creator
 var NotificationStore = function() {
   var _this = this;
-
   _this.permission = ReactiveVar(null);
 
   _this.clearListener = (id)=> {
-    console.log('unregistered ', id);
     notificationStream.removeAllListeners(id);
   };
 
@@ -48,7 +46,6 @@ var NotificationStore = function() {
   };
 
   _this.registerListener = (id)=> {
-    console.log('registered ', id);
     notificationStream.on(id, (data)=> {
       if (_this.permission.get() === 'granted') {
         if (data.type === 'invite') {

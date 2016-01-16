@@ -83,6 +83,10 @@ Meteor.methods({
       throw new Meteor.Error(400, 'Room not found');
     }
 
+    if (!this.userId) {
+      throw new Meteor.Error(401, 'No user');
+    }
+
     if (!Roles.userIsInRole(this.userId, roomId)) {
       Roles.addUsersToRoles(this.userId, roomId, Roles.GLOBAL_GROUP);
     }

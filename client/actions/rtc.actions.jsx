@@ -21,8 +21,8 @@
 
 var RTCActions = function() {
   return {
-    disconnect(roomId) {
-      Dispatcher.dispatch({actionType: 'DISCONNECT'});
+    disconnect(id) {
+      Dispatcher.dispatch({actionType: 'DISCONNECT', id});
     },
 
     getLocalStream() {
@@ -30,7 +30,7 @@ var RTCActions = function() {
     },
 
     setPrimaryStream(id) {
-      Dispatcher.dispatch({actionType: 'SET_PRIMARY_STREAM', id: id});
+      Dispatcher.dispatch({actionType: 'SET_PRIMARY_STREAM', id});
     },
 
     stopLocalStream() {
@@ -38,7 +38,7 @@ var RTCActions = function() {
     },
 
     toggleAudio(id) {
-      Dispatcher.dispatch({actionType: 'TOGGLE_AUDIO', id: id});
+      Dispatcher.dispatch({actionType: 'TOGGLE_AUDIO', id});
     },
 
     toggleLocalAudio() {
