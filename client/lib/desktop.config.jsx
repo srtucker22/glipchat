@@ -1,4 +1,4 @@
 // for future use with Electron
-Meteor.startup(()=> {
-  Meteor.isDesktop = navigator.userAgent.indexOf('Electron') > -1;
-});
+if (!Electron.isDesktop()) {
+  console.log('Have you considered downloading our Electron app?');
+}

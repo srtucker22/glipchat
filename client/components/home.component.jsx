@@ -92,6 +92,7 @@ HomeComponent = Radium(React.createClass({
   },
 
   render() {
+    console.log(Browser);
     return (
       <div style={[styles.css]}>
         <GithubComponent />
@@ -108,7 +109,10 @@ HomeComponent = Radium(React.createClass({
                 onTouchTap={this.createRoom}
                 label='Start video call'
                 primary={true}
+                style={{marginBottom: '50px'}}
               />
+              <br />
+              {Browser.mac ? <DownloadButtonComponent platform='mac' /> : ''}
             </div>
           </div>
         </div>

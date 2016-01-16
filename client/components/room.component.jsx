@@ -19,15 +19,6 @@
  *
  */
 const {History} = ReactRouter;
-const {
-  Dialog,
-  FontIcon,
-  FlatButton,
-  FloatingActionButton,
-  IconButton,
-  Paper,
-  RaisedButton
-} = MUI;
 const Colors = MUI.Styles.Colors;
 
 const styles = {
@@ -95,7 +86,6 @@ RoomComponent = Radium(React.createClass({
     // if the user logs out on a different tab, leave the room
     if (Object.keys(this.data).length &&
       this.data.userId !== UserStore.userId()) {
-      console.log(this.data);
       RTCActions.disconnect(this.data.userId);
       this.history.pushState(null, '/');
     }
@@ -133,7 +123,7 @@ RoomComponent = Radium(React.createClass({
     return (
       <div style={[styles.css]}>
         {!!this.data.localStreamError ?
-          (<LocalStreamErrorComponent
+          (<ErrorComponent
             error={this.data.localStreamError} {...other}/>) : ''}
 
         <InviteComponent ref='invite' linkUrl={window.location.href} />

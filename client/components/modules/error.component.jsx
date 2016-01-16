@@ -19,9 +19,8 @@
  *
  */
 
-// SHANE: Adding some comments to give better context for developers.
-// SHANE: Changed the user error text to remove contractions (difficult for non-native readers) and to improve context.
-const {FontIcon} = MUI;
+const {History} = ReactRouter;
+const {FontIcon, RaisedButton} = MUI;
 const Colors = MUI.Styles.Colors;
 
 const styles = {
@@ -81,8 +80,9 @@ Dependency.autorun(()=> {
 });
 
 // Ask for permission to use the camera and microphone on the user's computer
-let permissionDeniedComponent = (appName)=> {
-  return (
+let PermissionDeniedComponent = Radium(React.createClass({
+  render() {
+    return (
       <div style={[styles.permissionDenied.css]}>
         <div className='row'>
           <div className='col-xs-12 text-center' style={[GlobalStyles.table]}>
@@ -92,7 +92,12 @@ let permissionDeniedComponent = (appName)=> {
               styles.permissionDenied.arrow.css
             ]} src='/images/arrow-left.png' />
             <div style={[GlobalStyles.cell, styles.permissionDenied.cell.css]}>
-              Click the <FontIcon className='material-icons' style={styles.permissionDenied.icon.css} color={Colors.red500}>videocam_off</FontIcon> icon in the URL bar above to give {appName} access to your computer's camera and microphone.
+              Click the <FontIcon
+                className='material-icons'
+                style={styles.permissionDenied.icon.css}
+                color={Colors.red500}>
+                videocam_off
+              </FontIcon> icon in the URL bar above to give access to your computers camera and microphone.
             </div>
             <img style={[
               GlobalStyles.cell,
@@ -100,63 +105,104 @@ let permissionDeniedComponent = (appName)=> {
               styles.permissionDenied.arrow.css
             ]} src='/images/arrow-right.png' />
           </div>
+          <div className='col-xs-12 text-center'>
+            <br />
+            <RaisedButton
+              label='Go Back'
+              onClick={this.props.action}
+              primary={true}/>
+          </div>
         </div>
       </div>
-  );
-};
+    );
+  }
+}));
 
 // Warn that the user is already connected to the room in a different window, tab or browser
-let duplicateErrorComponent = (
-    <div className='row' style={[styles.general.css]}>
-      <div className='col-xs-12 text-center'>
-        <img src='/images/camel.png' style={[styles.general.icon.css]}/>
-        <p>You are already connected to this room in a different window, tab, or browser.</p>
-        <p> To fix this problem you can try returning to that view of this room.</p>
+let DuplicateErrorComponent = Radium(React.createClass({
+  render() {
+    return (
+      <div className='row' style={[styles.general.css]}>
+        <div className='col-xs-12 text-center'>
+          <img src='/images/camel.png' style={[styles.general.icon.css]}/>
+          <p>You are already connected to this room in a different window, tab, or browser.</p>
+          <p> To fix this problem you can try returning to that view of this room.</p>
+          <br/>
+          <RaisedButton
+            label='Go Back'
+            onClick={this.props.action}
+            primary={true}/>
+        </div>
       </div>
-    </div>
-);
+    );
+  }
+}));
 
 // Warn that there has been a general error and ask the user to refresh the session
-let generalErrorComponent = (
-    <div className='row' style={[styles.general.css]}>
-      <div className='col-xs-12 text-center'>
-        <img src='/images/atomic.png' style={[styles.general.icon.css]}/>
-        <p>Something went wrong. Please try refreshing the page.</p>
-        <p>If this does not fix the problem please close the tab or window and try again.</p>
+let GeneralErrorComponent = Radium(React.createClass({
+  render() {
+    return (
+      <div className='row' style={[styles.general.css]}>
+        <div className='col-xs-12 text-center'>
+          <img src='/images/atomic.png' style={[styles.general.icon.css]}/>
+          <p>Something went wrong. Please try refreshing the page.</p>
+          <p>If this does not fix the problem please close the tab or window and try again.</p>
+          <br/>
+          <RaisedButton
+            label='Go Back'
+            onClick={this.props.action}
+            primary={true}/>
+        </div>
       </div>
-    </div>
-);
+    );
+  }
+}));
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
-let notSupportedErrorComponent = (
-    <div className='row' style={[styles.general.css]}>
-      <div className='col-xs-12 text-center'>
-        <img src='/images/astronaut.png' style={[styles.general.icon.css]}/>
-        <p>Sorry, we do not currently support your browser.</p>
-        <p>You can download <a href="https://www.google.com/chrome/">Google Chrome</a> or <a href="https://www.mozilla.org/firefox">Mozilla Firefox</a> for free to use this video chatroom.</p>
+let NotSupportedErrorComponent = Radium(React.createClass({
+  render() {
+    return (
+      <div className='row' style={[styles.general.css]}>
+        <div className='col-xs-12 text-center'>
+          <img src='/images/astronaut.png' style={[styles.general.icon.css]}/>
+          <p>Sorry, we do not currently support your browser.</p>
+          <p>You can download <a href='https://www.google.com/chrome/'>Google Chrome</a> or <a href='https://www.mozilla.org/firefox'>Mozilla Firefox</a> for free to use this video chatroom.</p>
+          <br/>
+          {Browser.mac ? <DownloadButtonComponent platform='mac'/> : ''}
+          <br/>
+          <RaisedButton
+            label='Go Back'
+            onClick={this.props.action}
+            primary={true}/>
+        </div>
       </div>
-    </div>
-);
+    );
+  }
+}));
 
 // Logic for determining which error message to show when something goes wrong
-LocalStreamErrorComponent = Radium(React.createClass({
-  render() {
-    var {...other} = this.props;
+ErrorComponent = Radium(React.createClass({
+  mixins: [History],
 
+  back() {
+    this.history.pushState(null, '/');
+  },
+
+  render() {
     var errorComponent = <div>{this.props.error.status}</div>;
 
     switch (this.props.error.status){
       case 'PermissionDeniedError':
-        errorComponent = permissionDeniedComponent(this.props.appName);
+        errorComponent = <PermissionDeniedComponent action={this.back}/>;
         break;
       case 405:
-        errorComponent = notSupportedErrorComponent;
+        errorComponent = <NotSupportedErrorComponent action={this.back}/>;
         break;
       case 409:
-        errorComponent = duplicateErrorComponent;
+        errorComponent = <DuplicateErrorComponent action={this.back}/>;
         break;
       default:
-        errorComponent = generalErrorComponent;
+        errorComponent = <GeneralErrorComponent action={this.back}/>;
         break;
     }
 
