@@ -24,10 +24,9 @@ const {
   Dialog,
   FlatButton,
   RaisedButton,
+  Styles: {Colors},
   TextField,
 } = MUI;
-
-const {Colors} = MUI.Styles;
 
 const styles = {
   css: {

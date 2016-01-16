@@ -21,8 +21,7 @@
 
 // Dependencies
 const {History} = ReactRouter;
-const {FontIcon, RaisedButton} = MUI;
-const {Colors} = MUI.Styles;
+const {FontIcon, RaisedButton, Styles: {Colors}} = MUI;
 
 const styles = {
   css: {
@@ -33,7 +32,7 @@ const styles = {
     backgroundSize: 'cover',
     color: Colors.fullWhite,
     height: '100%',
-    minHeight: '300px',
+    minHeight: '500px',
   },
 
   title: {

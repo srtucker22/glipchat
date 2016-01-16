@@ -20,8 +20,11 @@
  */
 
 const {History} = ReactRouter;
-const {FontIcon, RaisedButton} = MUI;
-const Colors = MUI.Styles.Colors;
+const {
+  FontIcon,
+  RaisedButton,
+  Styles: {Colors}
+} = MUI;
 
 const styles = {
   css: {

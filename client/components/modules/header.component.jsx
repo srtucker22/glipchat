@@ -32,11 +32,10 @@ const {
   IconButton,
   IconMenu,
   LeftNav,
-  Menu,
-  MenuItem
+  Libs: {Menu},
+  Libs: {MenuItem},
+  Styles: {Colors}
 } = MUI;
-
-const Colors = MUI.Styles.Colors;
 
 const styles = {
   css: {

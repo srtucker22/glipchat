@@ -1,10 +1,9 @@
 // Dependencies
 const {
+  CircularProgress,
   Dialog,
-  CircularProgress
+  Styles: {Colors},
 } = MUI;
-
-const {Colors} = MUI.Styles;
 
 const styles = {
   body: {

@@ -21,8 +21,12 @@
 
 let ding = new Audio('/audio/ding.mp3');
 
-const {FontIcon, FloatingActionButton, IconButton} = MUI;
-const Colors = MUI.Styles.Colors;
+const {
+  FloatingActionButton,
+  FontIcon,
+  IconButton,
+  Styles: {Colors}
+} = MUI;
 
 const styles = {
   css: {

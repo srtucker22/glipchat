@@ -22,8 +22,8 @@
 // Dependencies
 const {
   FontIcon,
-  Menu,
-  MenuItem,
+  Libs: {Menu},
+  Libs: {MenuItem},
   Paper,
   TextField
 } = MUI;

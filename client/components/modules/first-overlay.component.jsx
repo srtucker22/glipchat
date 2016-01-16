@@ -20,10 +20,9 @@
  */
 
 const {
-  RaisedButton
+  RaisedButton,
+  Styles: {Colors}
 } = MUI;
-
-const Colors = MUI.Styles.Colors;
 
 const styles = {
   css: {

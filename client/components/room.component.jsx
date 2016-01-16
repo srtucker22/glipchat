@@ -19,7 +19,7 @@
  *
  */
 const {History} = ReactRouter;
-const Colors = MUI.Styles.Colors;
+const {Styles: {Colors}} = MUI;
 
 const styles = {
   css: {
