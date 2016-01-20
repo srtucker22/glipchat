@@ -17,7 +17,6 @@ cosmos:browserify
 ejson
 email
 fastclick
-force-ssl
 izzilab:material-ui
 johnantoni:meteor-normalize
 jquery
@@ -49,3 +48,4 @@ markoshust:radium
 okgrow:analytics
 mizzao:user-status
 quark:electron
+crosswalk

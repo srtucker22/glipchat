@@ -211,12 +211,6 @@ HeaderComponent = Radium(React.createClass({
     let avatarButton;
     let profileButtons;
 
-    let menuItems = [
-      {route: 'get-started', text: 'Get Started'},
-      {route: 'customization', text: 'Customization'},
-      {route: 'components', text: 'Components'},
-    ];
-
     if (!UserStore.loggingIn() && this.data.subscribed) {
       if (this.data.user && !UserStore.isGuest()) {
 
@@ -251,7 +245,6 @@ HeaderComponent = Radium(React.createClass({
           onLeftIconButtonTouchTap={this.toggleNav}
           showMenuIconButton={false}
           style={styles.css} />
-        <LeftNav ref='leftNav' docked={false} menuItems={menuItems} />
       </header>
     );
   },
