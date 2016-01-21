@@ -54,12 +54,13 @@ var UserStore = function() {
       return;
     }
 
-    if (!Meteor.userId() || currentId !== Meteor.userId()) {
+    if (!Meteor.userId() || (!!currentId && currentId !== Meteor.userId())) {
       NotificationActions.clearListener(currentId); // clear user notifications
       RTCActions.disconnect(currentId); // disconnect from any conversations
     }
 
     if (Meteor.userId()) {
+      currentId = Meteor.userId();
       NotificationActions.registerListener(Meteor.userId());
     }
   });
