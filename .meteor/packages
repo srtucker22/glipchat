@@ -26,11 +26,9 @@ meteor-base
 meteorflux:dispatcher
 meteorflux:reactive-dependency
 meteorhacks:kadira
-meteorhacks:npm
 mobile-experience
 momentjs:moment
 mongo
-npm-container
 random
 react
 reactive-var
@@ -49,3 +47,7 @@ okgrow:analytics
 mizzao:user-status
 quark:electron
 crosswalk
+meteorhacks:npm
+
+
+npm-container
