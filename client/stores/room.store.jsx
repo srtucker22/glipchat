@@ -107,14 +107,37 @@ var RoomStore = function() {
     },
 
     invite(invitees) {
-      _this.inviteError.set(null);
-      Meteor.call('invite', _this.currentRoomId.get(), invitees, (err, res)=> {
-        if (err) {
-          _this.inviteError.set(err);
-        } else {
-          // sent
-        }
-      });
+      if (!!_this.currentRoomId.get()) {
+        _this.inviteError.set(null);
+        Meteor.call('invite', _this.currentRoomId.get(), invitees, (err, res)=> {
+          if (err) {
+            _this.inviteError.set(err);
+          } else {
+            // sent
+          }
+        });
+      } else {
+        // create the room
+        _this.createRoom();
+
+        // then invite the people
+        Tracker.autorun(function(c) {
+          if (!_this.currentRoomId.get()) {
+            return;
+          }
+
+          c.stop();
+
+          _this.inviteError.set(null);
+          Meteor.call('invite', _this.currentRoomId.get(), invitees, (err, res)=> {
+            if (err) {
+              _this.inviteError.set(err);
+            } else {
+              // sent
+            }
+          });
+        });
+      }
     },
 
     joinRoom(r) {  // join an existing room

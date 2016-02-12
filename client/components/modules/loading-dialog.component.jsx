@@ -14,6 +14,7 @@ const styles = {
 
   content: {
     css: {
+      color: Colors.fullWhite,
       background: 'none',
       borderRadius: '10px',
       maxWidth: '300px',

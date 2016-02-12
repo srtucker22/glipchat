@@ -27,6 +27,7 @@ const {
   Card,
   CardActions,
   CardText,
+  Divider,
   FlatButton,
   FontIcon,
   IconButton,
@@ -42,6 +43,40 @@ const styles = {
     background: 'none',
     border: 'none',
     boxShadow: 'none',
+  },
+
+  sidenav: {
+    css: {
+
+    },
+    profile: {
+      css: {
+        width: '100%',
+        backgroundImage: 'url("images/left-nav-background.png")',
+        backgroundSize: '100%',
+        backgroundRepeat: 'no-repeat',
+        padding: 10,
+        color: 'white'
+      },
+      details: {
+        css: {
+          marginTop: 10
+        },
+        text: {
+          css: {
+            margin: 0,
+            fontSize: '20px'
+          }
+        }
+      }
+    }
+  },
+
+  mobile: {
+    css: {
+      position: 'fixed',
+      top: 0
+    }
   },
 
   icon: {
@@ -176,11 +211,40 @@ ProfileDropdownComponent = Radium(React.createClass({
   },
 }));
 
+let menuItems = [[
+    {
+      title: 'Invitations',
+      icon: 'drafts'
+    }, {
+      title: 'Snooze notifications',
+      icon: 'notifications_paused'
+    }, {
+      title: 'Status',
+      icon: 'mood'
+    }
+  ], [
+    {
+      title: 'Settings',
+      icon: 'settings'
+    }, {
+      title: 'GitHub',
+      icon: 'code'
+    }, {
+      title: 'Feedback',
+      icon: 'announcement'
+    }
+  ]
+];
+
 HeaderComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   childContextTypes: {
     muiTheme: React.PropTypes.object,
+  },
+
+  getInitialState() {
+    return {open: false};
   },
 
   getMeteorData() {
@@ -199,12 +263,16 @@ HeaderComponent = Radium(React.createClass({
     UserActions.loginWithFacebook();
   },
 
-  toggleNav() {
-    this.refs.leftNav.toggle();
+  handleToggle() {
+    this.setState({open: !this.state.open});
+  },
+
+  handleClose() {
+    this.setState({open: false});
   },
 
   render() {
-    let {...other} = this.props;
+    let {mobile, ...other} = this.props;
 
     let loginButton;
     let notificationDropdown;
@@ -212,7 +280,7 @@ HeaderComponent = Radium(React.createClass({
     let profileButtons;
 
     if (!UserStore.loggingIn() && this.data.subscribed) {
-      if (this.data.user && !UserStore.isGuest()) {
+      if (!!this.data.user && !UserStore.isGuest()) {
 
         notificationDropdown = !!this.data.user.history ? (
           <NotificationDropdownComponent
@@ -236,15 +304,60 @@ HeaderComponent = Radium(React.createClass({
         />;
       }
     }
-
     return (
       <header>
         <AppBar
           title={''}
-          iconElementRight={loginButton ? loginButton : profileButtons}
-          onLeftIconButtonTouchTap={this.toggleNav}
-          showMenuIconButton={false}
-          style={styles.css} />
+          iconElementRight={mobile ? (
+            this.props.iconElementRight
+          ) :
+            (loginButton ? loginButton : profileButtons)}
+          onLeftIconButtonTouchTap={this.handleToggle}
+          style={_.extend({}, mobile ? styles.mobile.css : styles.css)}
+          {...other}/>
+        {!!this.data.user ? (
+          <LeftNav
+          docked={false}
+          open={this.state.open}
+          onRequestChange={open => this.setState({open})}>
+            <div style={[styles.sidenav.profile.css]}>
+              <Avatar
+                src={!!this.data.user.services &&
+                  !!this.data.user.services.google &&
+                  !!this.data.user.services.google.picture ?
+                  this.data.user.services.google.picture :
+                  'images/profile-default.png'}
+                style={{display: 'block'}}
+                size={50}/>
+              <div style={styles.sidenav.profile.details.css}>
+                <p style={styles.sidenav.profile.details.text.css}>
+                  {this.data.user.profile.name}
+                </p>
+                {!!this.data.user.services && !!this.data.user.services.google ?
+                  <p style={styles.sidenav.profile.details.text.css}>
+                    {this.data.user.services.google.email}
+                  </p> : ''}
+              </div>
+            </div>
+            {_.map(menuItems, (list, index)=> {
+              let items = (_.map(list, (item)=> {
+                return (
+                  <MenuItem
+                    key={'left-nav-' + item.title.toLowerCase()}
+                    primaryText={item.title}
+                    leftIcon={
+                      <FontIcon
+                        className='material-icons'
+                        color={Colors.grey600}>{item.icon}
+                      </FontIcon>
+                    }
+                  />
+                );
+              }));
+              index !== list.length - 1 && items.push(<Divider />);
+              return items;
+            })}
+        </LeftNav>) : ''}
       </header>
     );
   },

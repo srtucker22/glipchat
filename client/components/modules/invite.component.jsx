@@ -113,11 +113,11 @@ const styles = {
   },
 };
 
-let GlobalStyles = null;
-let RoomActions = null;
-let RoomStore = null;
-let UserActions = null;
-let UserStore = null;
+let GlobalStyles;
+let RoomActions;
+let RoomStore;
+let UserActions;
+let UserStore;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
@@ -143,8 +143,6 @@ InviteComponent = Radium(React.createClass({
   },
 
   invite() {
-    // let message = this.refs.message.getDOMNode().value;
-
     if (this.data.invitees && this.data.user.profile.name) {
       RoomActions.invite(this.data.invitees);
       RoomActions.hideInviteModal();
@@ -177,7 +175,6 @@ InviteComponent = Radium(React.createClass({
     return (
       <Dialog
         actions={customActions}
-        actionFocus='submit'
         contentStyle={styles.css}
         open={this.data.inviteModalVisible}
         onRequestClose={this.cancel}>
@@ -209,7 +206,6 @@ InviteComponent = Radium(React.createClass({
               </div>*/}
             </div>
             <TypeaheadComponent ref='typeahead'/>
-            {/*<textarea ref='message' style={[GlobalStyles.inset, styles.content.inviteRow.textarea.css]} placeholder='Include a message?' rows={3}></textarea>*/}
           </div>
         </div>
       </Dialog>

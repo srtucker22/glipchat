@@ -18,9 +18,10 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+var urlJoin = Meteor.npmRequire('url-join');
 
 var appName = 'quasar';
-var roomURL = process.env.ROOT_URL + 'room/';
+var roomURL = urlJoin(process.env.ROOT_URL, 'room/');
 
 _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g
@@ -30,14 +31,15 @@ _.templateSettings = {
 function notifyOnlineInvitees(user, roomId, invitees) {
   // get online invitees
   let onlineInvitees = Meteor.users.find({
-    'services.google.email': {$in: invitees},
+    'services.google.email': {$in: _.pluck(invitees, 'email')},
     'status.online': true
   }).fetch();
 
+  console.log(onlineInvitees);
   _.each(onlineInvitees, (invitee)=> {
     notificationStream.emit(invitee._id, {
       from: user.profile.name,
-      room: (roomURL + roomId),
+      room: urlJoin(roomURL, roomId),
       type: 'invite'
     });
   });
@@ -94,7 +96,7 @@ Meteor.methods({
 
   invite(roomId, invitees) {
     check(roomId, String);
-    check(invitees, [String]);
+    check(invitees, [Match.ObjectIncluding({email: String})]);
 
     // Let other method calls from the same client start running,
     // without waiting for the email sending to complete.
@@ -105,7 +107,7 @@ Meteor.methods({
 
       let basicMessage = renderEmailTemplate('basic-message.html', {
         appName,
-        url: (roomURL + roomId),
+        url: urlJoin(roomURL, roomId),
         username: user.profile.name,
       });
 
@@ -113,7 +115,7 @@ Meteor.methods({
 
       // send invite emails
       Email.send({
-        to: invitees,
+        to: _.pluck(invitees, 'email'),
         from: 'mail@' + appName + '.meteor.com',
         subject: subject,
         html: basicMessage

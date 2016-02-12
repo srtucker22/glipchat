@@ -5,4 +5,5 @@ Browser.electron = Electron.isDesktop();
 
 TagsInput = require('react-tagsinput');
 require('webrtc-adapter-test');
+Q = require('q');
 injectTapEventPlugin();

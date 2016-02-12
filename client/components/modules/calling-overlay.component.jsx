@@ -19,7 +19,9 @@
  *
  */
 
+const {History} = ReactRouter;
 const {
+  CircularProgress,
   RaisedButton,
   Styles: {Colors}
 } = MUI;
@@ -32,76 +34,50 @@ const styles = {
     position: 'absolute',
     top: 0,
     width: '100%',
-    zIndex: 2,
+    zIndex: 3,
   },
-
-  invite: {
-    css: {
-      margin: '0 0 20px 0',
-      width: '100%',
-    },
-    cell: {
-      css: {
-        padding: '10px',
-        width: '50%',
-      }
-    },
-  },
-
-  linkUrl: {
-    css: {
-      backgroundColor: Colors.fullWhite,
-      color: Colors.fullBlack,
-      margin: '10px auto',
-      overflow: 'hidden',
-      padding: '10px',
-      textOverflow: 'ellipsis',
-    }
-  }
 };
 
 let GlobalStyles = null;
-let RoomActions = null;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
-  RoomActions = Dependency.get('RoomActions');
 });
 
-FirstOverlayComponent = Radium(React.createClass({
+CallingOverlayComponent = Radium(React.createClass({
+  mixins: [History],
+
+  leave() {
+    this.history.pushState(null, '/');
+  },
+
   render() {
     return (
       <div onTouchTap={this.props.onTouchTap}>
         <div style={[GlobalStyles.table, styles.css]}>
-          <div style={[GlobalStyles.cell]}>
-            <div style={[GlobalStyles.table, styles.invite.css]}>
-              <div
-                style={[
-                  GlobalStyles.cell,
-                  styles.invite.cell.css]}
-                className='text-right'>You are the only one here.</div>
-              <div style={[
-                  GlobalStyles.cell,
-                  styles.invite.cell.css]} className='text-left'>
-                <RaisedButton
-                  label='Invite people'
-                  primary={true}
-                  onTouchTap={RoomActions.showInviteModal}>
-                </RaisedButton>
+          <div className='text-center' style={[GlobalStyles.cell]}>
+            {this.props.failed ? (
+              <div>
+                <h3>Contacts Unavailable</h3>
+                <h5>No contacts have connected</h5>
+                <div style={{margin: 'auto', width: '100%'}}>
+                  <RaisedButton label='Retry'
+                    primary={true}
+                    onTouchTap={this.props.retry}
+                    style={{margin: '0 10px'}}>
+                  </RaisedButton>
+                  <RaisedButton label='Cancel'
+                    primary={true}
+                    onTouchTap={this.leave}>
+                  </RaisedButton>
+                </div>
               </div>
-            </div>
-            <div>
-              <div className='text-center'>
-                Share the permanent link. Bookmark and come back anytime.
+            ) : (
+              <div>
+                <h3>Contacting...</h3>
+                <CircularProgress mode='indeterminate'/>
               </div>
-              <div
-                style={[
-                  GlobalStyles.table,
-                  GlobalStyles.inset,
-                  styles.linkUrl.css]}>
-                {this.props.linkUrl}
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

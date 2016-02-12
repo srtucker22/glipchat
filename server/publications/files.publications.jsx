@@ -19,32 +19,8 @@
  *
  */
 
-var UserActions = function() {
-  return {
-    getContacts() {
-      Dispatcher.dispatch({actionType: 'USER_GET_CONTACTS'});
-    },
-
-    login(user, password) {
-      Dispatcher.dispatch({actionType: 'USER_LOGIN_PASSWORD'});
-    },
-
-    loginWithFacebook() {
-      Dispatcher.dispatch({actionType: 'USER_LOGIN_FACEBOOK'});
-    },
-
-    loginWithGoogle() {
-      Dispatcher.dispatch({actionType: 'USER_LOGIN_GOOGLE'});
-    },
-
-    logout() {
-      Dispatcher.dispatch({actionType: 'USER_LOGOUT'});
-    },
-
-    updateProfileName(name) {
-      Dispatcher.dispatch({actionType: 'USER_UPDATE_PROFILE_NAME', name});
-    }
-  };
-};
-
-Dependency.add('UserActions', new UserActions());
+// publish current user
+Meteor.publish('images', function() {
+  check(arguments, Match.OneOf({}, null, undefined));
+  return Images.find();
+});

@@ -6,7 +6,7 @@ body {
   height: 100%;
 }
 
-body > div {
+body > div:first-of-type {
   height: 100%;
 }
 

@@ -43,7 +43,8 @@ Meteor.startup(function() {
   const routeConfig = [{
     path: '/',
     component: AppComponent,
-    indexRoute: {component: HomeComponent},
+    indexRoute: {component: (Browser.mobile || Browser.tablet) ?
+      HomeMobileComponent : HomeComponent},
     onEnter: (nextState, replaceState) => { // there should probably be a better way to do this for all routes
       analytics.page('home');
     },

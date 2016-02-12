@@ -109,7 +109,6 @@ RoomComponent = Radium(React.createClass({
   },
 
   render() {
-
     // log the errors for now
     if (this.data.localStreamError) {
       console.error(this.data.localStreamError);
@@ -120,13 +119,26 @@ RoomComponent = Radium(React.createClass({
 
     var {...other} = this.props;
 
+    let overlay;
+
+    if (!this.data.localStreamError && !!this.data.stream &&
+      this.data.room.connected.length === 1 &&
+      this.data.room.connected[0] === this.data.userId) {
+      overlay = (Browser.mobile || Browser.tablet) ?
+        <CallingOverlayComponent failed={true}/> :
+        <FirstOverlayComponent
+          linkUrl={window.location.href}
+          onTouchTap={this.toggleControls}/>;
+    }
+
     return (
       <div style={[styles.css]}>
         {!!this.data.localStreamError ?
           (<ErrorComponent
             error={this.data.localStreamError} {...other}/>) : ''}
 
-        <InviteComponent ref='invite' linkUrl={window.location.href} />
+        {!(Browser.mobile || Browser.tablet) ?
+          <InviteComponent ref='invite' linkUrl={window.location.href} /> : ''}
 
         {(!this.data.localStreamError && !!this.data.stream) ?
           (<ReadyPromptComponent
@@ -136,10 +148,7 @@ RoomComponent = Radium(React.createClass({
         {(!this.data.localStreamError && !!this.data.stream) ?
           <ControlsComponent onTouchTap={this.toggleControls}/> : ''}
 
-        {(!this.data.localStreamError && !!this.data.stream) ?
-          (<FirstOverlayComponent
-            linkUrl={window.location.href}
-            room={this.data.room} onTouchTap={this.toggleControls}/>) : ''}
+        {!!overlay ? overlay : ''}
 
         {!!this.data.primaryStream ?
           (<VideoComponent

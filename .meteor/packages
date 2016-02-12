@@ -13,11 +13,9 @@ aldeed:collection2
 artwells:accounts-guest
 blaze-html-templates
 check
-cosmos:browserify
 ejson
 email
 fastclick
-izzilab:material-ui
 johnantoni:meteor-normalize
 jquery
 lepozepo:streams
@@ -51,3 +49,9 @@ meteorhacks:npm
 
 
 npm-container
+long:google-contacts
+cfs:standard-packages
+cfs:filesystem
+cosmos:browserify@=0.9.3
+izzilab:material-ui@=0.2.6
+http

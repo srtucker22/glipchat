@@ -77,15 +77,6 @@ const styles = {
   },
 };
 
-// Modify TagsInput so it validates nicely
-TagsInput.prototype._addTag = function(tag) {
-  if (tag !== '' && (this.props.validate ? this.props.validate(tag) : true)) {
-    let value = this.props.value.concat([tag]);
-    this.props.onChange(value);
-    this._clearInput();
-  }
-};
-
 TypeaheadChipComponent = Radium(React.createClass({
   render() {
     return (

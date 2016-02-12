@@ -19,43 +19,60 @@
  *
  */
 
+// Dependencies
+const {
+  RaisedButton,
+  Styles: {Colors}
+} = MUI;
+
 const styles = {
   css: {
-    width: '100%',
-  }
+    backgroundAttachment: 'fixed',
+    backgroundImage: 'url(images/quasar.jpg)',
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    color: Colors.fullWhite,
+    height: '100%',
+    width: '100%'
+  },
+
+  title: {
+    css: {
+      color: Colors.fullWhite,
+      fontSize: '80px',
+      textShadow: '2px 2px rgba(0, 0, 0, 0.5)',
+    },
+  },
 };
 
-let GlobalStyles = null;
+let GlobalStyles;
+let UserActions;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
+  UserActions = Dependency.get('UserActions');
 });
 
-let glipcode = {name: 'Glipcode', href: 'http://glipcode.com/'};
-let meteorFlux = {name: 'MeteorFlux', href: 'https://github.com/meteorflux'};
+IntroComponent = Radium(React.createClass({
+  loginWithGoogle() {
+    UserActions.loginWithGoogle();
+  },
 
-FooterComponent = Radium(React.createClass({
   render() {
     return (
-      <footer
-        className='col-xs-12'
-        style={[
-          GlobalStyles.table,
-          styles.css,
-          {height: GlobalStyles.footerHeight}
-        ]}>
-        <div className='text-left' style={[GlobalStyles.cell]}>
-          Copyright <a href={glipcode.href} target='_blank'>
-            {glipcode.name}
-          </a> 2016
+      <div style={[GlobalStyles.table, styles.css]}>
+        <div className='text-center' style={[GlobalStyles.cell]}>
+          <h1 style={[styles.title.css]}>{'quasar'}</h1>
+          <br />
+          <RaisedButton
+            onTouchTap={this.loginWithGoogle}
+            label='Sign in with Google'
+            primary={true}
+            style={{marginBottom: '50px'}}
+          />
         </div>
-        <div className='text-right' style={[GlobalStyles.cell]}>
-          Made with ♥ using <a href={meteorFlux.href}
-            target='_blank'>
-            {meteorFlux.name}
-          </a>
-        </div>
-      </footer>
+      </div>
     );
   },
 }));

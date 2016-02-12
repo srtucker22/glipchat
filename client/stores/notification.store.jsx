@@ -47,6 +47,7 @@ var NotificationStore = function() {
 
   _this.registerListener = (id)=> {
     notificationStream.on(id, (data)=> {
+      console.log('ruh roh');
       if (_this.permission.get() === 'granted') {
         if (data.type === 'invite') {
           let title = 'New Chat Invitation';
