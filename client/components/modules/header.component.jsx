@@ -118,10 +118,10 @@ let dropdownStyleComponent = (
   />
 );
 
-let GlobalStyles = null;
-let RoomActions = null;
-let UserStore   = null;
-let UserActions = null;
+let GlobalStyles;
+let RoomActions;
+let UserStore;
+let UserActions;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
@@ -211,31 +211,6 @@ ProfileDropdownComponent = Radium(React.createClass({
   },
 }));
 
-let menuItems = [[
-    {
-      title: 'Invitations',
-      icon: 'drafts'
-    }, {
-      title: 'Snooze notifications',
-      icon: 'notifications_paused'
-    }, {
-      title: 'Status',
-      icon: 'mood'
-    }
-  ], [
-    {
-      title: 'Settings',
-      icon: 'settings'
-    }, {
-      title: 'GitHub',
-      icon: 'code'
-    }, {
-      title: 'Feedback',
-      icon: 'announcement'
-    }
-  ]
-];
-
 HeaderComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
@@ -272,12 +247,47 @@ HeaderComponent = Radium(React.createClass({
   },
 
   render() {
+
     let {mobile, ...other} = this.props;
 
-    let loginButton;
-    let notificationDropdown;
     let avatarButton;
+    let loginButton;
+    let menuItems;
+    let notificationDropdown;
     let profileButtons;
+
+    if (mobile) {
+      menuItems = [[
+          {
+            title: 'Invitations',
+            icon: 'drafts'
+          }, {
+            title: 'Snooze notifications',
+            icon: 'notifications_paused'
+          }, {
+            title: 'Status',
+            icon: 'mood'
+          }
+        ], [
+          {
+            title: 'Settings',
+            icon: 'settings'
+          }, {
+            title: 'GitHub',
+            icon: 'code'
+          }, {
+            title: 'Feedback',
+            icon: 'announcement',
+          }
+        ], [
+          {
+            title: 'Logout',
+            icon: 'power_settings_new',
+            action: UserActions.logout
+          }
+        ]
+      ];
+    }
 
     if (!UserStore.loggingIn() && this.data.subscribed) {
       if (!!this.data.user && !UserStore.isGuest()) {
@@ -315,7 +325,7 @@ HeaderComponent = Radium(React.createClass({
           onLeftIconButtonTouchTap={this.handleToggle}
           style={_.extend({}, mobile ? styles.mobile.css : styles.css)}
           {...other}/>
-        {!!this.data.user ? (
+        {!!this.data.user && mobile ? (
           <LeftNav
           docked={false}
           open={this.state.open}
@@ -345,6 +355,7 @@ HeaderComponent = Radium(React.createClass({
                   <MenuItem
                     key={'left-nav-' + item.title.toLowerCase()}
                     primaryText={item.title}
+                    onTouchTap={item.action}
                     leftIcon={
                       <FontIcon
                         className='material-icons'

@@ -1,6 +1,13 @@
-icon right on header needs dynamic placement based on device type or something -- matchmedia sucks
-the dialog will ask the user if they want to send the invites,
-  it will be clever about whether the invites are all for non users or any existing users
-send invites button makes a request to the roomstore
-  if users exist in list, will open the room and send invites to all parties, otherwise will send invites and that's it -- matchmedia sucks
-  it will also start a timer for waiting for responses. if no response is received within timer, we end the call but keep the screen and offer to retry
+- icon right on header needs dynamic placement based on device type or something -- matchmedia sucks (iphone 4 needs 24px right padding or something)
+- dialog will be clever about whether the invites are all for non users or any existing users
+- if users exist in invite list, open the room and send invites to all parties, otherwise send invites and that's it
+- active marker for active contacts
+- invite marker for non-user contacts
+- smart contact updating and connecting to existing users
+- show recent history for mobile contacts instead of all contacts
+- single trip contact images when using google contacts
+- excess tracker bug calls in roomstore (is calling meteor.call like 5 times!)
+- batch publications
+- invite modal on mobile redesign -- make it a fullscreen modal
+- invite modal on desktop uses same component
+- notification collection for tracking all sorts of notifications

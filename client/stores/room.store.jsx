@@ -45,10 +45,14 @@ var RoomStore = function() {
   _this.invitees = ReactiveVar(null);
   _this.inviteModalVisible = ReactiveVar(false);
 
+  _this.ringing = ReactiveVar(false);
+  _this.ringDuration = 60000; // currently 1 minute
+
   // auto-update the subscription to the room and store the room
   Tracker.autorun(function(c) {
     _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
     if (!!_this.currentRoomId.get()) {
+      console.log('hmmm this shouldnt happen so often');
       Meteor.call('grantRoomAccess', _this.currentRoomId.get(), (err)=> {
         if (!err) {
           Meteor.subscribe('room', _this.currentRoomId.get(), {
@@ -59,17 +63,74 @@ var RoomStore = function() {
           });
         } else {
           console.error(err);
+          _this.invitees.set(null);
           _this.gettingCurrentRoom.set(false);
         }
       });
     } else {
+      _this.invitees.set(null);
       _this.gettingCurrentRoom.set(false);
     }
   });
 
-  // Callbacks
   _.extend(_this, {
+    retry() {
+      if (_this.currentRoomId.get()) {
+        Meteor.call('notifyOnlineInvitees', _this.currentRoomId.get(),
+        _this.invitees.get(), 'invite', (err, res)=> {
+          if (err) {
+            _this.inviteError.set(err);
+          } else {
+            _this.ring(); // start a ringer that will resolve when someone joins or timeout
+          }
+        });
+      }
+    },
+
+    ring() {
+      let tracker;
+      _this.ringing.set(true);
+      _this.ringTimer = Meteor.setTimeout(()=> {
+        _this.ringing.set(false);
+        !!tracker && tracker.stop();
+      }, _this.ringDuration);
+
+      Tracker.autorun(function(c) {
+        // if the user leaves the room, end the tracker
+        if (!_this.currentRoomId.get()) {
+          c.stop();
+          _this.endRing();
+          return;
+        }
+
+        // if connections enter the room, end the tracker and timer
+        if (_this.currentRoom.get() && _this.currentRoom.get().connected &&
+        _this.currentRoom.get().connected.length > 1) {
+          c.stop();
+          _this.endRing();
+        }
+      });
+    },
+
+    endRing() {
+      if (!!_this.ringTimer) {
+        Meteor.clearTimeout(_this.ringTimer);
+        _this.ringing.set(false);
+        _this.ringTimer = null;
+      }
+    },
+
     clearInvitees() {
+      let invitees = _this.invitees.get();
+      if (invitees && invitees.length) {
+        Meteor.call('notifyOnlineInvitees', _this.currentRoomId.get(), invitees, 'uninvite', (err, res)=> {
+          if (err) {
+            _this.inviteError.set(err);
+          } else {
+            // sent
+          }
+        });
+      }
       _this.invitees.set(null);
     },
 
@@ -114,6 +175,7 @@ var RoomStore = function() {
             _this.inviteError.set(err);
           } else {
             // sent
+            _this.updateInvitees(invitees);
           }
         });
       } else {
@@ -131,9 +193,11 @@ var RoomStore = function() {
           _this.inviteError.set(null);
           Meteor.call('invite', _this.currentRoomId.get(), invitees, (err, res)=> {
             if (err) {
+              console.log(err);
               _this.inviteError.set(err);
             } else {
-              // sent
+              _this.ring(); // start a ringer that will resolve when someone joins or timeout
+              _this.updateInvitees(invitees);
             }
           });
         });
@@ -152,8 +216,10 @@ var RoomStore = function() {
     },
 
     leaveRoom() {
+      _this.clearInvitees();  // clear invitee list and invitee notifications
       _this.currentRoomId.set('');
       _this.inviteModalVisible.set(false);
+      _this.endRing();
     },
 
     // Promise for requested room to load
@@ -225,6 +291,12 @@ var RoomStore = function() {
         break;
       case 'LEAVE_ROOM':
         _this.leaveRoom();
+        break;
+      case 'ROOM_RETRY':
+        _this.retry();
+        break;
+      case 'ROOM_RING':
+        _this.ring();
         break;
       case 'SHOW_CONTROLS':
         _this.showControls(payload.delay);

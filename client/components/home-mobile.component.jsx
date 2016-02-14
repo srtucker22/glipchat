@@ -54,6 +54,7 @@ const styles = {
 
 let GlobalStyles;
 let NotificationActions;
+let NotificationStore;
 let RoomStore;
 let RoomActions;
 let UserActions;
@@ -62,6 +63,7 @@ let UserStore;
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
   NotificationActions = Dependency.get('NotificationActions');
+  NotificationStore = Dependency.get('NotificationStore');
   RoomActions = Dependency.get('RoomActions');
   RoomStore = Dependency.get('RoomStore');
   UserActions = Dependency.get('UserActions');
@@ -75,6 +77,7 @@ HomeMobileComponent = Radium(React.createClass({
     return {
       contacts: UserStore.contacts.get(),
       currentRoom: RoomStore.currentRoom.get(),
+      invitations: NotificationStore.invitations.get(),
       user: UserStore.user()
     };
   },
@@ -148,7 +151,6 @@ HomeMobileComponent = Radium(React.createClass({
       (<div style={[styles.css]}>
         <HeaderComponent mobile={true}
         showMenuIconButton={true}
-        iconStyleRight={{marginRight: '24px'}}
         iconElementRight={
           (!!this.state.invitees && this.state.invitees.length) ?
           (<IconButton
@@ -172,6 +174,7 @@ HomeMobileComponent = Radium(React.createClass({
         >
           Contacts who are already using quasar will receive a notification. New users will be sent an email request.
         </Dialog>
+        <AnswerDialogComponent invitation={this.data.invitations && this.data.invitations.length ? this.data.invitations[0] : undefined}/>
       </div>) : <IntroComponent/>
     );
   },

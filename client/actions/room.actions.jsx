@@ -68,6 +68,18 @@ var RoomActions = function() {
       });
     },
 
+    retry() {
+      Dispatcher.dispatch({
+        actionType: 'ROOM_RETRY',
+      });
+    },
+
+    ring() {
+      Dispatcher.dispatch({
+        actionType: 'ROOM_RING',
+      });
+    },
+
     showControls(delay) {
       Dispatcher.dispatch({
         actionType: 'SHOW_CONTROLS',

@@ -31,7 +31,7 @@ LoadingDialogComponent = Radium(React.createClass({
         <Dialog
           bodyStyle={styles.body.css}
           contentStyle={styles.content.css}
-          onRequestClose={false}
+          onRequestClose={undefined}
           open={this.props.open}>
           <h4>{this.props.title}</h4>
           <CircularProgress mode='indeterminate'/>

@@ -38,17 +38,32 @@ const styles = {
   },
 };
 
-let GlobalStyles = null;
+let GlobalStyles;
+let RoomActions;
+let RoomStore;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
+  RoomActions = Dependency.get('RoomActions');
+  RoomStore = Dependency.get('RoomStore');
 });
 
 CallingOverlayComponent = Radium(React.createClass({
-  mixins: [History],
+  mixins: [ReactMeteorData, History],
+
+  getMeteorData() {
+    return {
+      invitees: RoomStore.invitees.get(),
+      ringing: RoomStore.ringing.get(),
+    };
+  },
 
   leave() {
     this.history.pushState(null, '/');
+  },
+
+  retry() {
+    RoomActions.retry();
   },
 
   render() {
@@ -56,16 +71,11 @@ CallingOverlayComponent = Radium(React.createClass({
       <div onTouchTap={this.props.onTouchTap}>
         <div style={[GlobalStyles.table, styles.css]}>
           <div className='text-center' style={[GlobalStyles.cell]}>
-            {this.props.failed ? (
+            {!!this.data.ringing ? (
               <div>
-                <h3>Contacts Unavailable</h3>
-                <h5>No contacts have connected</h5>
-                <div style={{margin: 'auto', width: '100%'}}>
-                  <RaisedButton label='Retry'
-                    primary={true}
-                    onTouchTap={this.props.retry}
-                    style={{margin: '0 10px'}}>
-                  </RaisedButton>
+                <h3>Contacting...</h3>
+                <CircularProgress mode='indeterminate'/>
+                <div style={{display: 'block', paddingTop: '16px'}}>
                   <RaisedButton label='Cancel'
                     primary={true}
                     onTouchTap={this.leave}>
@@ -74,8 +84,19 @@ CallingOverlayComponent = Radium(React.createClass({
               </div>
             ) : (
               <div>
-                <h3>Contacting...</h3>
-                <CircularProgress mode='indeterminate'/>
+                <h3>Contacts Unavailable</h3>
+                <h5>No contacts connected</h5>
+                <div style={{margin: 'auto', width: '100%'}}>
+                  {this.data.invitees ? <RaisedButton label='Retry'
+                    primary={true}
+                    onTouchTap={this.retry}
+                    style={{margin: '0 10px'}}>
+                  </RaisedButton> : ''}
+                  <RaisedButton label={this.data.invitees ? 'Cancel' : 'Leave'}
+                    primary={true}
+                    onTouchTap={this.leave}>
+                  </RaisedButton>
+                </div>
               </div>
             )}
           </div>

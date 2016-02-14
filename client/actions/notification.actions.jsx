@@ -21,6 +21,12 @@
 
 var NotificationActions = function() {
   return {
+    accept() {
+      Dispatcher.dispatch({
+        actionType: 'NOTIFICATION_ACCEPT_INVITATION'
+      });
+    },
+
     clearListener(id) {
       Dispatcher.dispatch({actionType: 'NOTIFICATION_CLEAR_LISTENER', id});
     },
@@ -31,6 +37,12 @@ var NotificationActions = function() {
 
     registerListener(id) {
       Dispatcher.dispatch({actionType: 'NOTIFICATION_REGISTER_LISTENER', id});
+    },
+
+    reject() {
+      Dispatcher.dispatch({
+        actionType: 'NOTIFICATION_REJECT_INVITATION'
+      });
     },
   };
 };

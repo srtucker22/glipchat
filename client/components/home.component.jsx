@@ -98,7 +98,7 @@ HomeComponent = Radium(React.createClass({
           <LoadingDialogComponent open={true} title='Starting video call'/> : ''
         }
         <div style={[GlobalStyles.stickyFooterPage]}>
-          <HeaderComponent/>
+          <HeaderComponent showMenuIconButton={false}/>
           <div className='row'>
             <div className='col-xs-12 text-center'>
               <h1 style={[styles.title.css]}>{'quasar'}</h1>

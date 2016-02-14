@@ -30,14 +30,26 @@ const {
 
 const styles = {
   css: {
-    minWidth: '360px',
+
+  },
+
+  mobile: {
+    css: {
+
+    }
   },
 
   content: {
     css: {
-      maxHeight: '360px',
-      overflowX: 'hidden',
-      overflowY: 'scroll',
+      minWidth: '360px',
+    },
+
+    inner: {
+      css: {
+        maxHeight: '360px',
+        overflowX: 'hidden',
+        overflowY: 'scroll',
+      },
     },
 
     linkRow: {
@@ -175,10 +187,12 @@ InviteComponent = Radium(React.createClass({
     return (
       <Dialog
         actions={customActions}
-        contentStyle={styles.css}
+        contentStyle={styles.content.css}
         open={this.data.inviteModalVisible}
-        onRequestClose={this.cancel}>
-        <div style={[styles.content.css]}>
+        onRequestClose={this.cancel}
+        style={Browser.mobile || Browser.tablet ?
+          styles.mobile.css : styles.css}>
+        <div style={[styles.content.inner.css]}>
           <div className='row' style={[styles.content.linkRow.css]}>
             <div style={[styles.content.linkRow.header.css]}>
               Share the permanent link. Bookmark and come back anytime.
@@ -205,7 +219,7 @@ InviteComponent = Radium(React.createClass({
                 <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
               </div>*/}
             </div>
-            <TypeaheadComponent ref='typeahead'/>
+            <TypeaheadMobileComponent ref='typeahead'/>
           </div>
         </div>
       </Dialog>

@@ -125,7 +125,7 @@ RoomComponent = Radium(React.createClass({
       this.data.room.connected.length === 1 &&
       this.data.room.connected[0] === this.data.userId) {
       overlay = (Browser.mobile || Browser.tablet) ?
-        <CallingOverlayComponent failed={true}/> :
+        <CallingOverlayComponent/> :
         <FirstOverlayComponent
           linkUrl={window.location.href}
           onTouchTap={this.toggleControls}/>;
@@ -137,8 +137,7 @@ RoomComponent = Radium(React.createClass({
           (<ErrorComponent
             error={this.data.localStreamError} {...other}/>) : ''}
 
-        {!(Browser.mobile || Browser.tablet) ?
-          <InviteComponent ref='invite' linkUrl={window.location.href} /> : ''}
+        <InviteComponent ref='invite' linkUrl={window.location.href}/>
 
         {(!this.data.localStreamError && !!this.data.stream) ?
           (<ReadyPromptComponent

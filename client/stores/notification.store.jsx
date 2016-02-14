@@ -19,10 +19,25 @@
  *
  */
 
+let RoomActions;
+let RoomStore;
+
+Dependency.autorun(()=> {
+  RoomActions = Dependency.get('RoomActions');
+  RoomStore = Dependency.get('RoomStore');
+});
+
 // NotificationStore Creator
 var NotificationStore = function() {
   var _this = this;
   _this.permission = ReactiveVar(null);
+  _this.invitations = ReactiveVar([]);
+
+  _this.accept = ()=> {
+    let data = _this.invitations.get().shift();
+    _this.invitations.set(_this.invitations.get().slice());
+    RoomStore.joinRoom(data.room);
+  };
 
   _this.clearListener = (id)=> {
     notificationStream.removeAllListeners(id);
@@ -47,27 +62,55 @@ var NotificationStore = function() {
 
   _this.registerListener = (id)=> {
     notificationStream.on(id, (data)=> {
-      console.log('ruh roh');
       if (_this.permission.get() === 'granted') {
-        if (data.type === 'invite') {
-          let title = 'New Chat Invitation';
-          let options = {
-            body: data.from + ' has invited you to a chat.',
-            icon: 'apple-icon-180x180.png'
-          };
-          let notification = new Notification(title, options);
-          notification.onclick = ()=> {
-            notification.close();
-            window.location = data.room;
-            return;
-          };
+        switch (data.type){
+          case 'invite':
+            let title = 'New Chat Invitation';
+            let options = {
+              body: data.from + ' has invited you to a chat.',
+              icon: 'apple-icon-180x180.png'
+            };
+            let notification = new Notification(title, options);
+            notification.onclick = ()=> {
+              notification.close();
+              window.location = data.url;
+              return;
+            };
+
+            // push the current invitation
+            data.notification = notification;
+            _this.invitations.set(
+              _this.invitations.get().concat([data])
+            );
+            break;
+          case 'uninvite':
+            let invitation = _.findWhere(_this.invitations.get(), {room: data.room});
+            if (!!invitation && !!invitation.notification) {
+              invitation.notification.close();
+            }
+            _this.invitations.set(
+              _.reject(_this.invitations.get(), (invitation)=> {
+                return invitation.room === data.room &&
+                  invitation.from === data.from;
+              })
+            );
+            break;
         }
       }
     });
   };
 
+  _this.reject = ()=> {
+    // remove the first element from the invitations queue
+    _this.invitations.get().shift();
+    _this.invitations.set(_this.invitations.get().slice());
+  };
+
   _this.tokenId = Dispatcher.register((payload)=> {
     switch (payload.actionType){
+      case 'NOTIFICATION_ACCEPT_INVITATION':
+        _this.accept();
+        break;
       case 'NOTIFICATION_CLEAR_LISTENER':
         _this.clearListener(payload.id);
         break;
@@ -76,6 +119,9 @@ var NotificationStore = function() {
         break;
       case 'NOTIFICATION_REGISTER_LISTENER':
         _this.registerListener(payload.id);
+        break;
+      case 'NOTIFICATION_REJECT_INVITATION':
+        _this.reject();
         break;
     }
   });

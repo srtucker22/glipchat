@@ -28,19 +28,19 @@ _.templateSettings = {
 };
 
 // if a user with a google account is online when invited, show them a notification
-function notifyOnlineInvitees(user, roomId, invitees) {
+function notifyOnlineInvitees(user, roomId, invitees, type) {
   // get online invitees
   let onlineInvitees = Meteor.users.find({
     'services.google.email': {$in: _.pluck(invitees, 'email')},
     'status.online': true
   }).fetch();
 
-  console.log(onlineInvitees);
   _.each(onlineInvitees, (invitee)=> {
     notificationStream.emit(invitee._id, {
       from: user.profile.name,
-      room: urlJoin(roomURL, roomId),
-      type: 'invite'
+      room: roomId,
+      url: urlJoin(roomURL, roomId),
+      type
     });
   });
 }
@@ -122,10 +122,25 @@ Meteor.methods({
       });
 
       // notify online invitees with push notification
-      notifyOnlineInvitees(user, roomId, invitees);
+      notifyOnlineInvitees(user, roomId, invitees, 'invite');
 
     } catch (e) {
-      throw new Meteor.Error(e);
+      throw new Meteor.Error(e.message);
     }
   },
+
+  notifyOnlineInvitees(roomId, invitees, type) {
+    check(roomId, String);
+    check(invitees, [Match.ObjectIncluding({email: String})]);
+
+    this.unblock();
+
+    if (!this.userId) {
+      throw new Meteor.Error(401, 'No user');
+    }
+
+    let user = Meteor.user();
+
+    notifyOnlineInvitees(user, roomId, invitees, type);
+  }
 });

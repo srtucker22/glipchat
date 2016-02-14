@@ -153,15 +153,12 @@ var UserStore = function() {
   };
 
   _this.getContacts = ()=> {
-    console.log('gettingContacts');
-    console.log(GooglePeople.readyForUse);
     if (GooglePeople.readyForUse) {
       // we need to wait for google to get their shit together before we can use the People API :/
       if (!_this.contacts.get() &&
         !_this.isGuest() && _this.user().services.google) {
 
         GooglePeople.getContacts().then(function(res) {
-          console.log(res);
           let modified = _.map(res, (val)=> {
             // we're getting buggy returns from Google People for photos right now
             let photo = val.photos ? _.find(val.photos, (photo)=> {
@@ -213,7 +210,7 @@ var UserStore = function() {
                     let cursor = Images.find(id);
                     let images = cursor.fetch();
                     // update contact with the image url once image is loaded
-                    if (!!images && images[0].url()) {
+                    if (!!images && images.length && images[0].url()) {
                       contact.src = images[0].url();
                       _this.contacts.set(contacts);
                     } else {
@@ -281,7 +278,7 @@ var UserStore = function() {
             'https://www.googleapis.com/auth/contacts.readonly',
             'https://www.googleapis.com/auth/userinfo.email'
           ],
-          loginStyle: Browser.mobile ? 'redirect' : 'popup',
+          loginStyle: (Browser.mobile || Browser.tablet) ? 'redirect' : 'popup',
           requestOfflineToken: true,
           forceApprovalPrompt: true
         }, (err)=> {
