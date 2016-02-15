@@ -160,7 +160,7 @@ HomeMobileComponent = Radium(React.createClass({
             done
           </IconButton>) : null}/>
         <div style={[styles.content.css]}>
-          {!!this.data.contacts ? <TypeaheadMobileComponent
+          {!!this.data.contacts ? <TypeaheadContactComponent
             contacts={this.data.contacts}
             mobile={true}
             onChange={this.onTypeaheadChange}/> : ''}

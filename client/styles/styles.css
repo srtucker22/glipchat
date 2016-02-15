@@ -21,3 +21,22 @@ button {
 .row {
   margin: 0;
 }
+
+.modal-enter {
+  position: fixed;
+  top: 100%;
+}
+
+.modal-enter.modal-enter-active {
+  top: 0;
+  transition: all 300ms ease;
+}
+
+.modal-leave {
+  top: 0;
+}
+
+.modal-leave.modal-leave-active {
+  top: 100%;
+  transition: all 300ms ease;
+}

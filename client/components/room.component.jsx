@@ -125,7 +125,7 @@ RoomComponent = Radium(React.createClass({
       this.data.room.connected.length === 1 &&
       this.data.room.connected[0] === this.data.userId) {
       overlay = (Browser.mobile || Browser.tablet) ?
-        <CallingOverlayComponent/> :
+        <CallingOverlayComponent onTouchTap={this.toggleControls}/> :
         <FirstOverlayComponent
           linkUrl={window.location.href}
           onTouchTap={this.toggleControls}/>;

@@ -3,12 +3,12 @@
 - if users exist in invite list, open the room and send invites to all parties, otherwise send invites and that's it
 - active marker for active contacts
 - invite marker for non-user contacts
-- smart contact updating and connecting to existing users
+- smart contact connecting to existing users
 - show recent history for mobile contacts instead of all contacts
-- single trip contact images when using google contacts
 - excess tracker bug calls in roomstore (is calling meteor.call like 5 times!)
 - batch publications
 - invite modal on mobile redesign -- make it a fullscreen modal
-- invite modal on desktop uses same component
 
 - notification collection for tracking all sorts of notifications
+- getContacts should only get the updated contacts instead of all contacts -- a little bit of work here
+- show contact photo in answer-overlay

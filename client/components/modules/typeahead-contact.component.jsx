@@ -194,13 +194,15 @@ ContactListComponent = Radium(React.createClass({
 
   render() {
     return (
-      <div>
+      <div style={[!this.props.mobile && {
+          maxHeight: '120px', overflowY: 'scroll'
+        }]}>
         <List>
-          <Divider/>
+          {this.props.contacts && this.props.contacts.length ? <Divider/> : ''}
           {_.map(
             _.filter(this.props.contacts, (contact)=> {
               return !this.props.query ||
-              this.fuzzyFilter(this.props.query, contact.name);
+              this.fuzzyFilter(this.props.query, contact.name || '');
             }), (contact, index)=> {
               return (
                 <ListItem
@@ -222,7 +224,7 @@ ContactListComponent = Radium(React.createClass({
   }
 }));
 
-TypeaheadMobileComponent = Radium(React.createClass({
+TypeaheadContactComponent = Radium(React.createClass({
   getInitialState() {
     return {
       invitees: []
@@ -288,6 +290,7 @@ TypeaheadMobileComponent = Radium(React.createClass({
       <input
         type='text'
         onChange={callBoth}
+        placeholder={'Search for people'}
         value={value} {...other}
         style={_.extend({}, styles.input.css, _this.props.mobile ? styles.input.mobile.css : '')}/>
     );
@@ -311,7 +314,6 @@ TypeaheadMobileComponent = Radium(React.createClass({
           <div className='col-xs-12' style={this.props.mobile ?
               [styles.mobile.css] :
               [GlobalStyles.inset, styles.css]}>
-            <div style={{display: 'inline-block', padding: '0 16px'}}>To:</div>
             <TagsInput
               ref='tags'
               renderTag={this.renderTag}
@@ -319,11 +321,13 @@ TypeaheadMobileComponent = Radium(React.createClass({
               validate={this.validate}
               value={this.state.invitees || []}
               onChange={this.updateInvitees}
-              onInputChange={this.updateQuery}/>
-            {this.props.mobile ? <ContactListComponent
+              onInputChange={this.updateQuery}
+              placeholder={'Search for people'}/>
+            <ContactListComponent
               contacts={this.props.contacts}
               query={this.state.query}
-              onSelect={this.addInvitee}/> : ''}
+              mobile={this.props.mobile}
+              onSelect={this.addInvitee}/>
           </div>
         </div>
       </div>

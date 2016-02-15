@@ -21,8 +21,10 @@
 
 // Dependencies
 const {
+  AppBar,
   Dialog,
   FlatButton,
+  IconButton,
   RaisedButton,
   Styles: {Colors},
   TextField,
@@ -35,7 +37,13 @@ const styles = {
 
   mobile: {
     css: {
-
+      background: Colors.fullWhite,
+      height: '100%',
+      left: 0,
+      overflow: 'scroll',
+      position: 'fixed',
+      width: '100%',
+      zIndex: 5
     }
   },
 
@@ -148,6 +156,7 @@ InviteComponent = Radium(React.createClass({
 
   getMeteorData() {
     return {
+      contacts: UserStore.contacts.get(),
       inviteModalVisible: RoomStore.inviteModalVisible.get(),
       invitees: RoomStore.invitees.get(),
       user: UserStore.user(),
@@ -155,8 +164,8 @@ InviteComponent = Radium(React.createClass({
   },
 
   invite() {
-    if (this.data.invitees && this.data.user.profile.name) {
-      RoomActions.invite(this.data.invitees);
+    if (this.state.invitees && this.data.user.profile.name) {
+      RoomActions.invite(this.state.invitees);
       RoomActions.hideInviteModal();
     }
   },
@@ -169,6 +178,12 @@ InviteComponent = Radium(React.createClass({
     UserActions.updateProfileName(e.target.value);
   },
 
+  onTypeaheadChange(state) {
+    this.setState({
+      invitees: state.invitees
+    });
+  },
+
   render() {
     //Custom Actions
     let customActions = [
@@ -179,18 +194,60 @@ InviteComponent = Radium(React.createClass({
       <FlatButton
         key='invite'
         label='Invite'
-        disabled={(!this.data.invitees || !this.data.invitees.length)}
+        disabled={(!this.state.invitees || !this.state.invitees.length)}
         primary={true}
         onTouchTap={this.invite} />
     ];
 
-    return (
-      <Dialog
+    let mobile = Browser.mobile || Browser.tablet;
+    return (mobile ?
+      <ReactCSSTransitionGroup transitionName='modal' transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+      {this.data.inviteModalVisible ?
+      <div key='invite-modal' style={[styles.mobile.css]}>
+        <AppBar
+          showMenuIconButton={false}
+          title={'Invite Contacts'}
+          iconElementRight={<IconButton
+            iconClassName='material-icons'
+            onTouchTap={this.cancel}>
+            clear
+          </IconButton>}
+        />
+        {!!this.data.contacts ? <TypeaheadContactComponent
+          contacts={this.data.contacts}
+          mobile={true}
+          onChange={this.onTypeaheadChange}/> : ''}
+        {this.state.invitees ? <div style={[GlobalStyles.table, {
+            position: 'fixed',
+            width: '100%',
+            bottom: 0
+          }]}>
+          <div style={[GlobalStyles.cell, {width: '50%'}]}>
+            <FlatButton
+              backgroundColor={Colors.red500}
+              key='cancel'
+              label='Cancel'
+              onTouchTap={this.cancel}
+              style={{color: Colors.fullWhite, width: '100%'}}/>
+          </div>
+          <div style={[GlobalStyles.cell, {width: '50%'}]}>
+            <FlatButton
+              backgroundColor={Colors.cyan500}
+              key='cancel'
+              label='Invite'
+              onTouchTap={this.invite}
+              style={{color: Colors.fullWhite, width: '100%'}}/>
+          </div>
+        </div> : ''}
+      </div> : <div></div>}
+    </ReactCSSTransitionGroup> :
+
+      (<Dialog
         actions={customActions}
         contentStyle={styles.content.css}
         open={this.data.inviteModalVisible}
         onRequestClose={this.cancel}
-        style={Browser.mobile || Browser.tablet ?
+        style={mobile ?
           styles.mobile.css : styles.css}>
         <div style={[styles.content.inner.css]}>
           <div className='row' style={[styles.content.linkRow.css]}>
@@ -219,10 +276,11 @@ InviteComponent = Radium(React.createClass({
                 <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
               </div>*/}
             </div>
-            <TypeaheadMobileComponent ref='typeahead'/>
+            <TypeaheadContactComponent contacts={this.data.contacts}
+            onChange={this.onTypeaheadChange}/>
           </div>
         </div>
-      </Dialog>
+      </Dialog>)
     );
   },
 }));
