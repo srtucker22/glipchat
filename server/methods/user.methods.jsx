@@ -87,6 +87,100 @@ function googleContacts(user) {
   return gcontacts;
 }
 
+function getContactPhoto(user, contact) {
+  // photo fileName
+  let fileName = user.services.google.id + '_' +
+    _.last(contact.photoUrl.split('/')) + '.png';
+
+  // look for existing file
+  let existingFile = Images.findOne({'original.name': fileName});
+  if (!!existingFile) {
+    return existingFile._id;
+  }
+
+  // this function is now async
+  var fut = new Future();
+
+  // create the google contacts object
+  gcontacts = googleContacts(user);
+
+  // callback creates FS.File from binaryData
+  let callback = Meteor.bindEnvironment((err, binaryData)=> {
+    if (err) {
+      console.log(err);
+      fut.return(null);
+    } else {
+      let newFile = new FS.File();
+      let attatchDataSync = Meteor.wrapAsync(newFile.attachData, newFile);
+      let res = attatchDataSync(binaryData, {type: 'image/png'});
+      // name the file {googleId}_{contactId}.png with user as owner
+      newFile.name(fileName);
+      newFile.owner = user._id;
+
+      let image = Images.insert(newFile);
+
+      // return the image id
+      fut.return(image._id);
+    }
+  });
+
+  // add the request to a queue that will execute without getting throttled
+  contactsRequester.makeRequest(
+    wrapFunction(gcontacts.getPhoto, gcontacts, [contact.photoUrl, callback]) // get the binary image data from google
+  );
+
+  // return the promise
+  return fut.wait();
+}
+
+function storeContactImages(userId, updatedContacts) {
+  let user = Meteor.users.findOne({_id: userId});
+  let imageQueue = {};
+  let loopFinished = false;
+  _.each(updatedContacts, (contact)=> {
+    if (!contact.src && contact.photoUrl) {
+      imageQueue[contact.id] = true;
+      // call server to request photo from google or retrieve from storage
+      Meteor.defer(()=> {
+        function completeUpdate(contactId) {
+          delete imageQueue[contactId];
+          if (loopFinished && !_.keys(imageQueue).length) {
+            Meteor.users.update(
+              {_id: userId},
+              {$set: {'services.google.contacts': updatedContacts}}
+            );
+          }
+        }
+
+        let id = getContactPhoto(user, contact);
+        if (!!id) {
+          let cursor = Images.find(id);
+          let images = cursor.fetch();
+          // update contact with the image url once image is loaded
+          if (!!images && images.length && images[0].url()) {
+            contact.src = images[0].url();
+            completeUpdate(contact.id);
+          } else {
+            // hack to deal with CollectionFS bug
+            // github.com/CollectionFS/Meteor-CollectionFS/issues/323
+            let liveQuery = cursor.observe({
+              changed: function(newImage, oldImage) {
+                if (newImage.url() !== null) {
+                  liveQuery.stop();
+                  contact.src = newImage.url();
+                  completeUpdate(contact.id);
+                }
+              }
+            });
+          }
+        } else {
+          completeUpdate(contact.id);
+        }
+      });
+    }
+  });
+  loopFinished = true;
+}
 // room access server methods
 Meteor.methods({
   // create a room and get access
@@ -123,50 +217,46 @@ Meteor.methods({
 
     this.unblock();
 
-    let user = Meteor.users.findOne(this.userId);
+    let user = Meteor.user();
 
-    // photo fileName
-    let fileName = user.services.google.id + '_' +
-      _.last(contact.photoUrl.split('/')) + '.png';
+    return getContactPhoto(user, contact);
+  },
+  mergeContacts(contacts) {
+    this.unblock();
 
-    // look for existing file
-    let existingFile = Images.findOne({'original.name': fileName});
-    if (!!existingFile) {
-      return existingFile._id;
+    let user = Meteor.user();
+
+    let updatedContacts;
+
+    if (!user.services.google.contacts) {
+      updatedContacts = contacts;
+    } else {
+      let existingContacts = user.services.google.contacts;
+      let indexedExistingContacts = _.indexBy(existingContacts, 'id');
+
+      _.each(contacts, (contact)=> {
+        if (!!indexedExistingContacts[contact.id]) {
+          _.extend(indexedExistingContacts[contact.id], contact);
+        } else {
+          indexedExistingContacts[contact.id] = contact;
+        }
+      });
+      updatedContacts = _.map(indexedExistingContacts, (val)=> {
+        return val;
+      });
     }
 
-    // this function is now async
-    var fut = new Future();
+    // update the user model's contacts
+    if (!!updatedContacts) {
+      Meteor.users.update(
+        {_id: this.userId},
+        {$set: {'services.google.contacts': updatedContacts}}
+      );
+    }
 
-    // create the google contacts object
-    gcontacts = googleContacts(user);
+    // download and store all the contact images
+    storeContactImages(this.userId, updatedContacts);
 
-    // callback creates FS.File from binaryData
-    let callback = Meteor.bindEnvironment((err, binaryData)=> {
-      if (err) {
-        console.log(err);
-        fut.return(null);
-      } else {
-        let newFile = new FS.File();
-        let attatchDataSync = Meteor.wrapAsync(newFile.attachData, newFile);
-        let res = attatchDataSync(binaryData, {type: 'image/png'});
-        // name the file {googleId}_{contactId}.png with user as owner
-        newFile.name(fileName);
-        newFile.owner = this.userId;
-
-        let image = Images.insert(newFile);
-
-        // return the image id
-        fut.return(image._id);
-      }
-    });
-
-    // add the request to a queue that will execute without getting throttled
-    contactsRequester.makeRequest(
-      wrapFunction(gcontacts.getPhoto, gcontacts, [contact.photoUrl, callback]) // get the binary image data from google
-    );
-
-    // return the promise
-    return fut.wait();
+    return updatedContacts;
   }
 });

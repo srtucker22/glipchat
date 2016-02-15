@@ -108,7 +108,8 @@ let GooglePeopleService = function() {
   }
 
   return {
-    getContacts: getContacts
+    getContacts: getContacts,
+    readyForUse: readyForUse
   };
 };
 

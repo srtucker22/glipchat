@@ -71,6 +71,10 @@ var UserStore = function() {
       NotificationActions.registerListener(Meteor.userId());  // register notifications for the logged in user
       _this.getContacts();  // get the user's contacts
     }
+
+    if (_this.user() && !_this.isGuest() && _this.user().services.google) {
+      _this.contacts.set(_this.user().services.google.contacts);
+    }
   });
 
   // Callbacks
@@ -155,8 +159,7 @@ var UserStore = function() {
   _this.getContacts = ()=> {
     if (GooglePeople.readyForUse) {
       // we need to wait for google to get their shit together before we can use the People API :/
-      if (!_this.contacts.get() &&
-        !_this.isGuest() && _this.user().services.google) {
+      if (!_this.isGuest() && _this.user().services.google) {
 
         GooglePeople.getContacts().then(function(res) {
           let modified = _.map(res, (val)=> {
@@ -193,43 +196,41 @@ var UserStore = function() {
           if (err) {
             _this.contactsError.set('could not retrieve contacts');
           } else {
-
-            // update the user doc with contacts
-            Meteor.users.update(
-              {_id: _this.userId()},
-              {$set: {'services.google.contacts': contacts}}
-            );
-
             let contacts = res;
-            _this.contacts.set(contacts);
-            _.each(contacts, (contact)=> {
-              if (contact.photoUrl) {
-                // call server to request photo from google or retrieve from storage
-                Meteor.call('getContactPhoto', contact, (error, id)=> {
-                  if (!error) {
-                    let cursor = Images.find(id);
-                    let images = cursor.fetch();
-                    // update contact with the image url once image is loaded
-                    if (!!images && images.length && images[0].url()) {
-                      contact.src = images[0].url();
-                      _this.contacts.set(contacts);
-                    } else {
-                      // hack to deal with CollectionFS bug
-                      // github.com/CollectionFS/Meteor-CollectionFS/issues/323
-                      let liveQuery = cursor.observe({
-                        changed: function(newImage, oldImage) {
-                          if (newImage.url() !== null) {
-                            liveQuery.stop();
-                            contact.src = newImage.url();
-                            _this.contacts.set(contacts);
-                          }
-                        }
-                      });
-                    }
-                  }
-                });
+            Meteor.call('mergeContacts', contacts, (err, merged)=> {
+              if (err) {
+                _this.contactsError.set('could not merge contacts');
               }
             });
+
+            // _.each(contacts, (contact)=> {
+            //   if (contact.photoUrl) {
+            //     // call server to request photo from google or retrieve from storage
+            //     Meteor.call('getContactPhoto', contact, (error, id)=> {
+            //       if (!error) {
+            //         let cursor = Images.find(id);
+            //         let images = cursor.fetch();
+            //         // update contact with the image url once image is loaded
+            //         if (!!images && images.length && images[0].url()) {
+            //           contact.src = images[0].url();
+            //           _this.contacts.set(contacts);
+            //         } else {
+            //           // hack to deal with CollectionFS bug
+            //           // github.com/CollectionFS/Meteor-CollectionFS/issues/323
+            //           let liveQuery = cursor.observe({
+            //             changed: function(newImage, oldImage) {
+            //               if (newImage.url() !== null) {
+            //                 liveQuery.stop();
+            //                 contact.src = newImage.url();
+            //                 _this.contacts.set(contacts);
+            //               }
+            //             }
+            //           });
+            //         }
+            //       }
+            //     });
+            //   }
+            // });
           }
         });
       }
@@ -276,7 +277,9 @@ var UserStore = function() {
         Meteor.loginWithGoogle({
           requestPermissions: [
             'https://www.googleapis.com/auth/contacts.readonly',
-            'https://www.googleapis.com/auth/userinfo.email'
+            'https://www.googleapis.com/auth/userinfo.email',
+            GooglePeople.readyForUse &&
+              'https://www.googleapis.com/auth/plus.login'
           ],
           loginStyle: (Browser.mobile || Browser.tablet) ? 'redirect' : 'popup',
           requestOfflineToken: true,
