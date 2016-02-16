@@ -33,7 +33,6 @@ Dependency.autorun(()=> {
 var UserStore = function() {
   let _this = this;
   let currentId = null;
-  let cleared = false;
 
   // UserStore Reactive Vars
   _this.contacts = new ReactiveVar(null);
@@ -54,17 +53,20 @@ var UserStore = function() {
   Meteor.subscribe('images');
 
   Tracker.autorun((c)=> {
+    // user is logging in or the subscription isn't ready
     if (Meteor.loggingIn() ||
       (Meteor.userId() && !_this.subscribed.get())) {
       return;
     }
 
+    // user is not logged in or switched
     if (!Meteor.userId() || (!!currentId && currentId !== Meteor.userId())) {
       _this.contacts.set(null); // clear contacts
       NotificationActions.clearListener(currentId); // clear user notifications
       RTCActions.disconnect(currentId); // disconnect from any conversations
     }
 
+    // user logged in or switched
     if (Meteor.userId() &&
       (!currentId || currentId !== Meteor.userId())) {
       currentId = Meteor.userId();
@@ -72,8 +74,30 @@ var UserStore = function() {
       _this.getContacts();  // get the user's contacts
     }
 
+    // contact tracking
     if (_this.user() && !_this.isGuest() && _this.user().services.google) {
-      _this.contacts.set(_this.user().services.google.contacts);
+      let contacts = _this.user().services.google.contacts.slice();
+
+      // track contacts who are already using the app
+      let appContacts = _.indexBy(Meteor.users.find({
+        'services.google.email': {$in: _.pluck(contacts, 'email')}
+      }).fetch(), '_id');
+
+      // don't react to these reactive vars changing
+      Tracker.nonreactive(()=> {
+        // if we just received contacts, _this.contacts will reference the google contacts -- we should subscribe
+        // otherwise, we are already subscribed to the right contacts set
+
+        // set the statuses of contacts who are app users
+        if (!!contacts && contacts.length) {
+          _.each(contacts, (contact)=> {
+            if (!!contact._id) {
+              contact.status = appContacts[contact._id] && appContacts[contact._id].status;
+            }
+          });
+          _this.contacts.set(contacts);
+        }
+      });
     }
   });
 
@@ -199,38 +223,12 @@ var UserStore = function() {
             let contacts = res;
             Meteor.call('mergeContacts', contacts, (err, merged)=> {
               if (err) {
+                console.log(err);
                 _this.contactsError.set('could not merge contacts');
+              } else {
+                Meteor.subscribe('contacts', merged);
               }
             });
-
-            // _.each(contacts, (contact)=> {
-            //   if (contact.photoUrl) {
-            //     // call server to request photo from google or retrieve from storage
-            //     Meteor.call('getContactPhoto', contact, (error, id)=> {
-            //       if (!error) {
-            //         let cursor = Images.find(id);
-            //         let images = cursor.fetch();
-            //         // update contact with the image url once image is loaded
-            //         if (!!images && images.length && images[0].url()) {
-            //           contact.src = images[0].url();
-            //           _this.contacts.set(contacts);
-            //         } else {
-            //           // hack to deal with CollectionFS bug
-            //           // github.com/CollectionFS/Meteor-CollectionFS/issues/323
-            //           let liveQuery = cursor.observe({
-            //             changed: function(newImage, oldImage) {
-            //               if (newImage.url() !== null) {
-            //                 liveQuery.stop();
-            //                 contact.src = newImage.url();
-            //                 _this.contacts.set(contacts);
-            //               }
-            //             }
-            //           });
-            //         }
-            //       }
-            //     });
-            //   }
-            // });
           }
         });
       }
@@ -274,13 +272,13 @@ var UserStore = function() {
 
       case 'USER_LOGIN_GOOGLE':
         _this.on.loginStart();
+        let permissions = [
+          'https://www.googleapis.com/auth/contacts.readonly',
+          'https://www.googleapis.com/auth/userinfo.email'];
+        GooglePeople.readyForUse &&
+          permissions.push('https://www.googleapis.com/auth/plus.login');
         Meteor.loginWithGoogle({
-          requestPermissions: [
-            'https://www.googleapis.com/auth/contacts.readonly',
-            'https://www.googleapis.com/auth/userinfo.email',
-            GooglePeople.readyForUse &&
-              'https://www.googleapis.com/auth/plus.login'
-          ],
+          requestPermissions: permissions,
           loginStyle: (Browser.mobile || Browser.tablet) ? 'redirect' : 'popup',
           requestOfflineToken: true,
           forceApprovalPrompt: true

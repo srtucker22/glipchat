@@ -223,6 +223,7 @@ Meteor.methods({
   },
   mergeContacts(contacts) {
     this.unblock();
+    console.log('mergingContacts');
 
     let user = Meteor.user();
 
@@ -244,6 +245,32 @@ Meteor.methods({
       updatedContacts = _.map(indexedExistingContacts, (val)=> {
         return val;
       });
+
+      // get all the contacts who are existing app users
+      let appContacts = Meteor.users.find({
+        'services.google.email': {$in: _.pluck(updatedContacts, 'email')},
+      }).fetch();
+
+      // index the updatedContacts by email
+      let indexedUpdatedContacts = _.indexBy(updatedContacts, 'email');
+      // update contacts with app userId
+      _.each(appContacts, (contact)=> {
+        indexedUpdatedContacts[contact.services.google.email]._id = contact._id;
+      });
+      // map result to array
+      let modifiedUpdatedContacts = _.map(indexedUpdatedContacts, (val)=> {
+        return val;
+      });
+
+      // find all contacts not included in indexedUpdatedContacts
+      let emaillessUpdatedContacts = _.reject(updatedContacts, (contact)=> {
+        return !!contact.email;
+      });
+
+      // concat the emailless contacts with the email contacts
+      updatedContacts = emaillessUpdatedContacts.concat(modifiedUpdatedContacts);
+
+      return updatedContacts;
     }
 
     // update the user model's contacts

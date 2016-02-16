@@ -7,8 +7,8 @@
 - show recent history for mobile contacts instead of all contacts
 - excess tracker bug calls in roomstore (is calling meteor.call like 5 times!)
 - batch publications
-- invite modal on mobile redesign -- make it a fullscreen modal
 
 - notification collection for tracking all sorts of notifications
 - getContacts should only get the updated contacts instead of all contacts -- a little bit of work here
 - show contact photo in answer-overlay
+- active contact tracking, subscribing shouldn't happen so often

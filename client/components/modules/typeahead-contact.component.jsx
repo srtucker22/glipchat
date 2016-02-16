@@ -29,6 +29,7 @@ const {
   List,
   ListItem,
   Paper,
+  Styles: {Colors},
   TextField
 } = MUI;
 
@@ -204,17 +205,34 @@ ContactListComponent = Radium(React.createClass({
               return !this.props.query ||
               this.fuzzyFilter(this.props.query, contact.name || '');
             }), (contact, index)=> {
+              let color;
+              if (contact.status) {
+                if (contact.status.online) {
+                  color = contact.status.idle ?
+                    Colors.amber500 : Colors.green500;
+                } else {
+                  color = Colors.red500;
+                }
+              }
               return (
                 <ListItem
                   key={'contact-' + index}
-                  primaryText={<div style={{
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                    }}>
-                      {contact.name || contact.email}
-                    </div>}
                   leftAvatar={<Avatar src={contact.src || 'images/dog.png'}/>}
-                  onTouchTap={this.props.onSelect.bind(null, contact)}/>
+                  rightIcon={
+                    <FontIcon
+                      className='material-icons'
+                      style={contact.status ?
+                        {color} : styles.chip.icon.css}>
+                        fiber_manual_record
+                    </FontIcon>
+                  }
+                  onTouchTap={this.props.onSelect.bind(null, contact)}
+                  primaryText={<div style={{
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                  }}>
+                    {contact.name || contact.email}
+                  </div>}/>
               );
             }
           )}

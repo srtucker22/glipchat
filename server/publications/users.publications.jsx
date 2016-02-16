@@ -38,3 +38,10 @@ Meteor.publish('users', function() {
     this.ready();
   }
 });
+
+Meteor.publish('contacts', function(contacts) {
+  check(arguments, [Match.Any]);
+  return Meteor.users.find({
+    'services.google.email': {$in: _.pluck(contacts, 'email')}
+  });
+});
