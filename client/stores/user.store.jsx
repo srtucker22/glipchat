@@ -75,7 +75,9 @@ var UserStore = function() {
     }
 
     // contact tracking
-    if (_this.user() && !_this.isGuest() && _this.user().services.google) {
+    if (_this.user() && !_this.isGuest() && !!_this.user().services.google &&
+      !!_this.user().services.google.contacts &&
+      _this.user().services.google.contacts.length) {
       let contacts = _this.user().services.google.contacts.slice();
 
       // track contacts who are already using the app
