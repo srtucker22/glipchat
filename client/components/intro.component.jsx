@@ -52,9 +52,19 @@ let UserActions;
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
   UserActions = Dependency.get('UserActions');
+  UserStore = Dependency.get('UserStore');
 });
 
 IntroComponent = Radium(React.createClass({
+  mixins: [ReactMeteorData],
+
+  getMeteorData() {
+    return {
+      loggingIn: UserStore.loggingIn(),
+      loggingOut: UserStore.loggingOut.get()
+    };
+  },
+
   loginWithGoogle() {
     UserActions.loginWithGoogle();
   },
@@ -62,6 +72,9 @@ IntroComponent = Radium(React.createClass({
   render() {
     return (
       <div style={[GlobalStyles.table, styles.css]}>
+        <LoadingDialogComponent
+          open={(!!this.data.loggingIn && !this.data.loggingOut)}
+          title='Signing in'/>
         <div className='text-center' style={[GlobalStyles.cell]}>
           <h1 style={[styles.title.css]}>{'quasar'}</h1>
           <br />

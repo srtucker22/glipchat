@@ -47,6 +47,7 @@ check@1.1.1-cordova.3
 coffeescript@1.0.12-cordova.3
 cosmos:browserify@0.9.3
 crosswalk@1.4.0-cordova.3
+dburles:mongo-collection-instances@0.3.4
 ddp@1.2.2
 ddp-client@1.2.2-cordova.3
 ddp-common@1.2.2
@@ -59,6 +60,7 @@ ecmascript-runtime@0.2.6
 ejson@1.0.7
 email@1.0.9-cordova.3
 fastclick@1.0.7
+force-ssl@1.0.6
 geojson-utils@1.0.4
 google@1.1.7
 hot-code-push@1.0.0
@@ -70,6 +72,7 @@ izzilab:material-ui@0.2.6
 johnantoni:meteor-normalize@0.0.1
 jquery@1.11.4
 jsx@0.2.4
+lai:collection-extensions@0.1.4
 launch-screen@1.0.5-cordova.3
 lepozepo:streams@0.2.0
 less@2.5.2-cordova.3
@@ -88,6 +91,7 @@ meteorhacks:async@1.0.0
 meteorhacks:kadira@2.27.3
 meteorhacks:meteorx@1.4.1
 meteorhacks:npm@1.5.0
+meteortoys:toykit@2.2.1
 minifiers-css@1.1.8-cordova.3
 minifiers-js@1.1.8-cordova.3
 minimongo@1.0.11-cordova.3
@@ -99,6 +103,7 @@ momentjs:moment@2.11.2
 mongo@1.1.4-cordova.3
 mongo-id@1.0.1
 mongo-livedata@1.0.9
+msavin:mongol@1.6.2
 npm-bcrypt@0.7.8_2
 npm-container@1.2.0
 npm-mongo@1.4.40-cordova.3

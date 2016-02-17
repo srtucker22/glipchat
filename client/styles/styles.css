@@ -40,3 +40,13 @@ button {
   top: 100%;
   transition: all 300ms ease;
 }
+
+.modal-appear {
+  position: absolute;
+  top: 100%;
+}
+
+.modal-appear.modal-appear-active {
+  top: 0;
+  transition: all 300ms ease;
+}

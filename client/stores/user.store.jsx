@@ -40,9 +40,19 @@ var UserStore = function() {
   _this.user = Meteor.user;
   _this.userId = Meteor.userId;
   _this.loggingIn = Meteor.loggingIn;
+  _this.loggingOut = new ReactiveVar(false);
   _this.loginError = new ReactiveVar(null);
   _this.logoutError = new ReactiveVar(null);
   _this.subscribed = new ReactiveVar(false);
+
+  // only desktop version will auto-login vistors
+  if (Browser.mobile || Browser.tablet) {
+    AccountsGuest.enabled = false;
+    AccountsGuest.forced = false;
+  } else {
+    AccountsGuest.enabled = true;
+    AccountsGuest.forced = true;
+  }
 
   Meteor.subscribe('user', {
     onReady() {
@@ -120,14 +130,17 @@ var UserStore = function() {
 
     logoutFailed(error) {
       _this.logoutError.set(error);
+      _this.loggingOut.set(true);
     },
 
     logoutStart() {
       _this.logoutError.set('');
+      _this.loggingOut.set(true);
     },
 
     logoutSuccess() {
       _this.logoutError.set('');
+      _this.loggingOut.set(false);
     },
   };
 
@@ -150,7 +163,7 @@ var UserStore = function() {
 
           if (Meteor.user()) {
             resolve(Meteor.user());
-          } else {
+          } else if (!(Browser.mobile || Browser.tablet)) {
             Meteor.loginVisitor(null, (err)=> {
               if (err) {
                 reject(err);
@@ -158,10 +171,10 @@ var UserStore = function() {
                 resolve(Meteor.user());
               }
             });
-          };
+          }
         });
 
-      } else {
+      } else if (!(Browser.mobile || Browser.tablet)) {  // only desktop version will auto-login vistors
         Meteor.loginVisitor(null, (err)=> {
           if (err) {
             reject(err);

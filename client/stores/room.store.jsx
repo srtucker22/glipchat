@@ -51,26 +51,27 @@ var RoomStore = function() {
   // auto-update the subscription to the room and store the room
   Tracker.autorun(function(c) {
     _this.currentRoom.set(Rooms.findOne({_id: _this.currentRoomId.get()}));
-    if (!!_this.currentRoomId.get()) {
-      console.log('hmmm this shouldnt happen so often');
-      Meteor.call('grantRoomAccess', _this.currentRoomId.get(), (err)=> {
-        if (!err) {
-          Meteor.subscribe('room', _this.currentRoomId.get(), {
-            onReady() {
-              // set the current room object
-              _this.gettingCurrentRoom.set(false);
-            },
-          });
-        } else {
-          console.error(err);
-          _this.invitees.set(null);
-          _this.gettingCurrentRoom.set(false);
-        }
-      });
-    } else {
-      _this.invitees.set(null);
-      _this.gettingCurrentRoom.set(false);
-    }
+    Tracker.nonreactive(()=> {
+      if (!!_this.currentRoomId.get() && !!_this.gettingCurrentRoom.get()) {
+        Meteor.call('grantRoomAccess', _this.currentRoomId.get(), (err)=> {
+          if (!err) {
+            Meteor.subscribe('room', _this.currentRoomId.get(), {
+              onReady() {
+                // set the current room object
+                _this.gettingCurrentRoom.set(false);
+              },
+            });
+          } else {
+            console.error(err);
+            _this.invitees.set(null);
+            _this.gettingCurrentRoom.set(false);
+          }
+        });
+      } else {
+        _this.invitees.set(null);
+        _this.gettingCurrentRoom.set(false);
+      }
+    });
   });
 
   _.extend(_this, {

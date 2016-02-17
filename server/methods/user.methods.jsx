@@ -268,8 +268,6 @@ Meteor.methods({
 
       // concat the emailless contacts with the email contacts
       updatedContacts = emaillessUpdatedContacts.concat(modifiedUpdatedContacts);
-
-      return updatedContacts;
     }
 
     // update the user model's contacts

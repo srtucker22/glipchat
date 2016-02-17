@@ -147,8 +147,8 @@ HomeMobileComponent = Radium(React.createClass({
       />,
     ];
     return (
-      !!this.data.user && this.data.user.profile.name ?
-      (<div style={[styles.css]}>
+      (!!this.data.user && !!this.data.user.services && !!this.data.user.services.google) ?
+      <div style={[styles.css]}>
         <HeaderComponent mobile={true}
         showMenuIconButton={true}
         iconElementRight={
@@ -172,10 +172,12 @@ HomeMobileComponent = Radium(React.createClass({
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          Contacts who are already using quasar will receive a notification. New users will be sent an email request.
+          {'Contacts who are already using quasar will receive a notification. New users will be sent an email request.'}
         </Dialog>
-        <AnswerDialogComponent invitation={this.data.invitations && this.data.invitations.length ? this.data.invitations[0] : undefined}/>
-      </div>) : <IntroComponent/>
+        <AnswerDialogComponent
+          invitation={this.data.invitations && this.data.invitations.length ?
+            this.data.invitations[0] : undefined}/>
+      </div> : <IntroComponent/>
     );
   },
 }));
