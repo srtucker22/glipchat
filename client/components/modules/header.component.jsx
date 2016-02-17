@@ -234,10 +234,6 @@ HeaderComponent = Radium(React.createClass({
     UserActions.loginWithGoogle();
   },
 
-  loginWithFacebook() {
-    UserActions.loginWithFacebook();
-  },
-
   handleToggle() {
     this.setState({open: !this.state.open});
   },

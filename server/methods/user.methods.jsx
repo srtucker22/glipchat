@@ -223,7 +223,6 @@ Meteor.methods({
   },
   mergeContacts(contacts) {
     this.unblock();
-    console.log('mergingContacts');
 
     let user = Meteor.user();
 

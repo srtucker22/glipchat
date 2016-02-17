@@ -1,9 +1,4 @@
 - icon right on header needs dynamic placement based on device type or something -- matchmedia sucks (iphone 4 needs 24px right padding or something)
-- dialog will be clever about whether the invites are all for non users or any existing users
-- if users exist in invite list, open the room and send invites to all parties, otherwise send invites and that's it
-- active marker for active contacts
-- invite marker for non-user contacts
-- smart contact connecting to existing users
 - show recent history for mobile contacts instead of all contacts
 - excess tracker bug calls in roomstore (is calling meteor.call like 5 times!)
 - batch publications
@@ -12,3 +7,4 @@
 - getContacts should only get the updated contacts instead of all contacts -- a little bit of work here
 - show contact photo in answer-overlay
 - active contact tracking, subscribing shouldn't happen so often
+- smarter search --> use first or last name and email (got the name and email so far)

@@ -19,8 +19,8 @@
  *
  */
 
-// publish current user
+// publish images owned by user
 Meteor.publish('images', function() {
   check(arguments, Match.OneOf({}, null, undefined));
-  return Images.find();
+  return Images.find({owner: this.userId});
 });

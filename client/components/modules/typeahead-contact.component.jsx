@@ -161,13 +161,26 @@ TypeaheadMobileChipComponent = Radium(React.createClass({
 
 ContactListComponent = Radium(React.createClass({
   fuzzyFilter(searchText, key) {
+    let _this = this;
+    function sub(k) {
+      let subMatchKey = k.substring(0, searchText.length);
+      let distance = _this.levenshteinDistance(searchText.toLowerCase(),
+        subMatchKey.toLowerCase());
+      return searchText.length > 3 ? distance < 2 : distance === 0;
+    }
+
     if (searchText.length === 0) {
       return false;
     }
-    let subMatchKey = key.substring(0, searchText.length);
-    let distance = this.levenshteinDistance(searchText.toLowerCase(),
-      subMatchKey.toLowerCase());
-    return searchText.length > 3 ? distance < 2 : distance === 0;
+    if (Array.isArray(key)) {
+      return _.reduce(_.map(key, (k)=> {
+        return !!k && sub(k) || 0;
+      }), (x, y)=> {
+        return Math.max(x, y);
+      });
+    } else {
+      return sub(key);
+    }
   },
 
   levenshteinDistance(searchText, key) {
@@ -198,21 +211,23 @@ ContactListComponent = Radium(React.createClass({
       <div style={[!this.props.mobile && {
           maxHeight: '120px', overflowY: 'scroll'
         }]}>
-        <List>
+        <List subheader={this.props.subheader}>
           {this.props.contacts && this.props.contacts.length ? <Divider/> : ''}
           {_.map(
             _.filter(this.props.contacts, (contact)=> {
               return !this.props.query ||
-              this.fuzzyFilter(this.props.query, contact.name || '');
+              this.fuzzyFilter(this.props.query, [contact.name, contact.email]);
             }), (contact, index)=> {
               let color;
               if (contact.status) {
                 if (contact.status.online) {
                   color = contact.status.idle ?
-                    Colors.amber500 : Colors.green500;
+                  Colors.amber500 : Colors.green500;
                 } else {
                   color = Colors.red500;
                 }
+              } else {
+                color = Colors.grey500;
               }
               return (
                 <ListItem
@@ -221,9 +236,8 @@ ContactListComponent = Radium(React.createClass({
                   rightIcon={
                     <FontIcon
                       className='material-icons'
-                      style={contact.status ?
-                        {color} : styles.chip.icon.css}>
-                        fiber_manual_record
+                      style={{color}}>
+                        {contact.status ? 'fiber_manual_record' : 'send'}
                     </FontIcon>
                   }
                   onTouchTap={this.props.onSelect.bind(null, contact)}
@@ -315,6 +329,10 @@ TypeaheadContactComponent = Radium(React.createClass({
   },
 
   render() {
+    // sort the contacts by last login date
+    let sorted = _.sortBy(this.props.contacts, (contact)=> {
+      return contact.status ? -contact.status.lastLogin.date : 0;
+    });
     return (
       <div className='typeahead'>
         <Style
@@ -342,7 +360,7 @@ TypeaheadContactComponent = Radium(React.createClass({
               onInputChange={this.updateQuery}
               placeholder={'Search for people'}/>
             <ContactListComponent
-              contacts={this.props.contacts}
+              contacts={sorted}
               query={this.state.query}
               mobile={this.props.mobile}
               onSelect={this.addInvitee}/>

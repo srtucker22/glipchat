@@ -123,7 +123,6 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 ## TODO
 -  local material icons
 -  invite workflow
-  - don't send emails to active quasar users
   - mobile -- you send an invite to a room to active users
     - if an invitee opens the app after a notification and the inviter is active,
     they will get a dialog asking to join the room and a notification in their quasar notification list for retrieval -- which shows 'join' cta until the users leave the room

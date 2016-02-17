@@ -43,6 +43,16 @@ function notifyOnlineInvitees(user, roomId, invitees, type) {
       type
     });
   });
+
+  // test push
+  // Push.debug = true;
+  // Push.send({
+  //   from: 'Test',
+  //   title: 'Hello',
+  //   text: 'World',
+  //   badge: 12,
+  //   query: {}
+  // });
 }
 
 function renderEmailTemplate(filename, vals) {
@@ -113,9 +123,11 @@ Meteor.methods({
 
       let subject = 'You\'ve been invited to a ' + appName + ' video chat';
 
-      // send invite emails
+      // send invite emails to non-users
       Email.send({
-        to: _.pluck(invitees, 'email'),
+        to: _.pluck(_.reject(invitees, (invitee)=> {
+          return !!invitee._id;
+        }), 'email'),
         from: 'mail@' + appName + '.meteor.com',
         subject: subject,
         html: basicMessage

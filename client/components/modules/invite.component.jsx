@@ -170,10 +170,6 @@ InviteComponent = Radium(React.createClass({
     }
   },
 
-  loginWithFacebook() {
-    UserActions.loginWithFacebook();
-  },
-
   updateProfileName(e) {
     UserActions.updateProfileName(e.target.value);
   },
@@ -272,9 +268,6 @@ InviteComponent = Radium(React.createClass({
                 onChange={this.updateProfileName}
                 errorText={!this.data.user.profile.name ? ' ' : null}
                 floatingLabelText='Your name'/>
-              {/*UserStore.isGuest() && <div style={[GlobalStyles.inline, styles.content.inviteRow.header.button.css]}>
-                <RaisedButton label='Login with Facebook' onClick={this.loginWithFacebook} primary={true}/>
-              </div>*/}
             </div>
             <TypeaheadContactComponent contacts={this.data.contacts}
             onChange={this.onTypeaheadChange}/>

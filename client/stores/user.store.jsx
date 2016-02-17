@@ -256,20 +256,6 @@ var UserStore = function() {
         });
         break;
 
-      case 'USER_LOGIN_FACEBOOK':
-        _this.on.loginStart();
-        Meteor.loginWithFacebook({
-          requestPermissions: ['public_profile', 'email', 'user_friends'],
-          loginStyle: (Browser.mobile || Browser.tablet) ? 'redirect' : 'popup',
-        }, (err)=> {
-          if (!err) {
-            _this.on.loginSuccess();
-          } else {
-            _this.on.loginFailed(err);
-          }
-        });
-        break;
-
       case 'USER_LOGIN_GOOGLE':
         _this.on.loginStart();
         let permissions = [

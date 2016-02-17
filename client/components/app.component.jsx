@@ -21,15 +21,6 @@
 
 let {ThemeManager, LightRawTheme} = MUI.Styles;
 
-// // for client-side Facebook SDK
-// let FacebookActions = null;
-// let FacebookStore = null;
-//
-// Dependency.autorun(()=> {
-//   FacebookActions = Dependency.get('FacebookActions');
-//   FacebookStore = Dependency.get('FacebookStore');
-// });
-
 const styles = {
   css: {
     height: 'inherit',
@@ -42,8 +33,7 @@ AppComponent = Radium(React.createClass({
   },
 
   componentDidMount() {
-    // // initialize the Facebook SDK
-    // FacebookActions.init();
+
   },
 
   getChildContext() {

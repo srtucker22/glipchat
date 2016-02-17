@@ -29,10 +29,6 @@ var UserActions = function() {
       Dispatcher.dispatch({actionType: 'USER_LOGIN_PASSWORD'});
     },
 
-    loginWithFacebook() {
-      Dispatcher.dispatch({actionType: 'USER_LOGIN_FACEBOOK'});
-    },
-
     loginWithGoogle() {
       Dispatcher.dispatch({actionType: 'USER_LOGIN_GOOGLE'});
     },

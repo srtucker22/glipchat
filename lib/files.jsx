@@ -11,8 +11,8 @@ Images.allow({
   download: function(userId, fileObj) {
     return true;
   },
-  insert: function() {
+  insert: function(userId) {
     // add custom authentication code here
-    return true;
+    return !userId;
   },
 });
