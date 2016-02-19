@@ -44,9 +44,28 @@ var NotificationStore = function() {
   };
 
   _this.getPermission = ()=> {
+    // eventually use ServiceWorker https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
+    function isNewNotificationSupported() {
+      if (!window.Notification || !Notification.requestPermission) {
+        return false;
+      }
+
+      if (Notification.permission !== 'granted') {
+        try {
+          new Notification('');
+        } catch (e) {
+          if (e.name == 'TypeError') {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+
     if (_this.permission.get() !== 'granted') {
       // Let's check if the browser supports notifications
-      if (!('Notification' in window)) {
+      if (!isNewNotificationSupported()) {
         _this.permission.set('unsupported');
       }
 
@@ -62,40 +81,41 @@ var NotificationStore = function() {
 
   _this.registerListener = (id)=> {
     notificationStream.on(id, (data)=> {
-      if (_this.permission.get() === 'granted') {
-        switch (data.type){
-          case 'invite':
-            let title = 'New Chat Invitation';
-            let options = {
-              body: data.from + ' has invited you to a chat.',
-              icon: 'apple-icon-180x180.png'
-            };
-            let notification = new Notification(title, options);
+      switch (data.type){
+        case 'invite':
+          let title = 'New Chat Invitation';
+          let options = {
+            body: data.from + ' has invited you to a chat.',
+            icon: 'apple-icon-180x180.png'
+          };
+
+          if (_this.permission.get() === 'granted') {
+            notification = new Notification(title, options);
             notification.onclick = ()=> {
               notification.close();
               window.location = data.url;
               return;
             };
-
-            // push the current invitation
             data.notification = notification;
-            _this.invitations.set(
-              _this.invitations.get().concat([data])
-            );
-            break;
-          case 'uninvite':
-            let invitation = _.findWhere(_this.invitations.get(), {room: data.room});
-            if (!!invitation && !!invitation.notification) {
-              invitation.notification.close();
-            }
-            _this.invitations.set(
-              _.reject(_this.invitations.get(), (invitation)=> {
-                return invitation.room === data.room &&
-                  invitation.from === data.from;
-              })
-            );
-            break;
-        }
+          }
+
+          // push the current invitation
+          _this.invitations.set(
+            _this.invitations.get().concat([data])
+          );
+          break;
+        case 'uninvite':
+          let invitation = _.findWhere(_this.invitations.get(), {room: data.room});
+          if (!!invitation && !!invitation.notification) {
+            invitation.notification.close();
+          }
+          _this.invitations.set(
+            _.reject(_this.invitations.get(), (invitation)=> {
+              return invitation.room === data.room &&
+                invitation.from === data.from;
+            })
+          );
+          break;
       }
     });
   };

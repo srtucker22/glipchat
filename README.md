@@ -136,7 +136,7 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 
 ## TODO
 -  local material icons
--  invite workflow
+-  Enhance invite workflow
   - mobile -- you send an invite to a room to active users
     - if an invitee opens the app after a notification and the inviter is active,
     they will get a dialog asking to join the room and a notification in their quasar notification list for retrieval -- which shows 'join' cta until the users leave the room
@@ -144,7 +144,6 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 -  Implement a global namespace for appName (clarify meaning)
 -  Add raix push notifications for cordova to enhance mobile support
 -  Add TURN server support to make it more useful for real-world deployment
--  Add Google contact integration in tags input to make it easier to invite friends to chats
 -  Package the application to make it easier to install
 
 ## License

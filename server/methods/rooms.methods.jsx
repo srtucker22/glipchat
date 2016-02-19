@@ -115,23 +115,29 @@ Meteor.methods({
     try {
       let user = Meteor.user();
 
-      let basicMessage = renderEmailTemplate('basic-message.html', {
-        appName,
-        url: urlJoin(roomURL, roomId),
-        username: user.profile.name,
+      let nonUsers = _.reject(invitees, (invitee)=> {
+        return !!invitee._id;
       });
 
-      let subject = 'You\'ve been invited to a ' + appName + ' video chat';
+      if (!!nonUsers && nonUsers.length) {
+        // send invite emails to non-users
+        let subject = 'You\'ve been invited to a ' + appName + ' video chat';
 
-      // send invite emails to non-users
-      Email.send({
-        to: _.pluck(_.reject(invitees, (invitee)=> {
-          return !!invitee._id;
-        }), 'email'),
-        from: 'mail@' + appName + '.meteor.com',
-        subject: subject,
-        html: basicMessage
-      });
+        let basicMessage = renderEmailTemplate('basic-message.html', {
+          appName,
+          url: urlJoin(roomURL, roomId),
+          username: user.profile.name,
+        });
+
+        Email.send({
+          to: _.pluck(nonUsers, 'email'),
+          from: 'mail@' + appName + '.meteor.com',
+          subject: subject,
+          html: basicMessage
+        });
+      }
+
+      // if an invitee is a user but not online, we will notify them via notifications not emails
 
       // notify online invitees with push notification
       notifyOnlineInvitees(user, roomId, invitees, 'invite');
