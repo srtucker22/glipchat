@@ -62,6 +62,7 @@ var UserStore = function() {
 
   Meteor.subscribe('images');
 
+  let appContacts;
   Tracker.autorun((c)=> {
     // user is logging in or the subscription isn't ready
     if (Meteor.loggingIn() ||
@@ -74,6 +75,7 @@ var UserStore = function() {
       _this.contacts.set(null); // clear contacts
       NotificationActions.clearListener(currentId); // clear user notifications
       RTCActions.disconnect(currentId); // disconnect from any conversations
+      appContacts = null;
     }
 
     // user logged in or switched
@@ -91,25 +93,33 @@ var UserStore = function() {
       let contacts = _this.user().services.google.contacts.slice();
 
       // track contacts who are already using the app
-      let appContacts = _.indexBy(Meteor.users.find({
-        'services.google.email': {$in: _.pluck(contacts, 'email')}
-      }).fetch(), '_id');
+      let newAppContacts = Meteor.users.find().fetch();
 
-      // don't react to these reactive vars changing
-      Tracker.nonreactive(()=> {
-        // if we just received contacts, _this.contacts will reference the google contacts -- we should subscribe
-        // otherwise, we are already subscribed to the right contacts set
+      // if a new user connects, we need to update the user's contacts model
+      if (!!newAppContacts && !!appContacts &&
+        newAppContacts.length !== appContacts.length) {
+        Meteor.call('joinAppContacts', contacts);
+        appContacts = newAppContacts;
+        return;
+      } else {
+        appContacts = newAppContacts;
+        let indexedAppContacts = _.indexBy(appContacts, '_id');
 
-        // set the statuses of contacts who are app users
-        if (!!contacts && contacts.length) {
-          _.each(contacts, (contact)=> {
-            if (!!contact._id) {
-              contact.status = appContacts[contact._id] && appContacts[contact._id].status;
-            }
-          });
-          _this.contacts.set(contacts);
-        }
-      });
+        // don't react to these reactive vars changing
+        Tracker.nonreactive(()=> {
+
+          // set the statuses of contacts who are app users
+          if (!!contacts && contacts.length) {
+            _.each(contacts, (contact)=> {
+              if (!!contact._id) {
+                contact.status = indexedAppContacts[contact._id] &&
+                  indexedAppContacts[contact._id].status;
+              }
+            });
+            _this.contacts.set(contacts);
+          }
+        });
+      }
     }
   });
 
@@ -235,13 +245,14 @@ var UserStore = function() {
           if (err) {
             _this.contactsError.set('could not retrieve contacts');
           } else {
+            Meteor.subscribe('contacts', res);
             let contacts = res;
             Meteor.call('mergeContacts', contacts, (err, merged)=> {
               if (err) {
-                console.log(err);
+                console.error(err);
                 _this.contactsError.set('could not merge contacts');
               } else {
-                Meteor.subscribe('contacts', merged);
+                // merged
               }
             });
           }

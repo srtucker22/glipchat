@@ -8,7 +8,6 @@ quasar has been tested on the following:
 - Chrome
 - Firefox
 - OS X (Electron application)
-- Android 4.3+ (Cordova application)
 
 Other browsers and operating systems may not support WebRTC.
 
@@ -24,6 +23,12 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 4. Add your personal settings for the following services included in quasar (or remove the ones you don't want)
 
         {
+          "admins": [{
+            "name": "Administrator",
+            "email": "admin@example.com",
+            "roles": ["admin"],
+            "password": "ADMIN_PASSWORD"
+          }],
           "google" : {
             "clientId" : "YOUR_CLIENT_ID",
             "clientSecret" : "YOUR_CLIENT_SECRET"
@@ -36,13 +41,22 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
             "analyticsSettings": {
               "Google Analytics": {"trackingId": "YOUR_TRACKING_ID"},
               "Segment.io" : {"apiKey": "YOUR_API_KEY"}
+            },
+            "google": {
+              "browserKey": "YOUR_BROWSER_KEY"
             }
           }
           "electron": {
             "autoPackage": true,
             "builds": [{
               "platform": "darwin", "arch": "x64"
+            },{
+              "platform": "win32", "arch": "ia32"
             }],
+            "downloadUrls": {
+              "win32": "/public/downloads/win32/",
+              "darwin": "/public/downloads/osx/quasar.zip"
+            },
             "name": "quasar",
             "rootUrl": "https://quasar.meteor.com",
             "version": "0.0.1",

@@ -148,7 +148,7 @@ HomeMobileComponent = Radium(React.createClass({
     ];
     return (
       (!!this.data.user && !!this.data.user.services && !!this.data.user.services.google) ?
-      <div style={[styles.css]}>
+      (<div style={[styles.css]}>
         <HeaderComponent mobile={true}
         showMenuIconButton={true}
         iconElementRight={
@@ -177,7 +177,7 @@ HomeMobileComponent = Radium(React.createClass({
         <AnswerDialogComponent
           invitation={this.data.invitations && this.data.invitations.length ?
             this.data.invitations[0] : undefined}/>
-      </div> : <IntroComponent/>
+      </div>) : <IntroComponent/>
     );
   },
 }));

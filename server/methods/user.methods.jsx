@@ -107,7 +107,7 @@ function getContactPhoto(user, contact) {
   // callback creates FS.File from binaryData
   let callback = Meteor.bindEnvironment((err, binaryData)=> {
     if (err) {
-      console.log(err);
+      console.error(err);
       fut.return(null);
     } else {
       let newFile = new FS.File();
@@ -117,10 +117,25 @@ function getContactPhoto(user, contact) {
       newFile.name(fileName);
       newFile.owner = user._id;
 
-      let image = Images.insert(newFile);
-
-      // return the image id
-      fut.return(image._id);
+      let image;
+      try {
+        image = Images.insert(newFile);
+        fut.return(image._id);
+      } catch (e) {
+        // the image upload failed, so let's remove the image from the collection
+        if (!!image) {
+          Images.remove({
+            _id: image._id
+          });
+        } else {
+          Images.remove({
+            name: fileName,
+            owner: user._id
+          });
+        }
+        console.error(e);
+        fut.return(null);
+      }
     }
   });
 
@@ -131,6 +146,28 @@ function getContactPhoto(user, contact) {
 
   // return the promise
   return fut.wait();
+}
+
+function joinAppContacts(user, contacts) {
+  // get all the contacts who are existing app users
+  let appContacts = Meteor.users.find({
+    'services.google.email': {$in: _.pluck(contacts, 'email')},
+  }).fetch();
+
+  // index the updatedContacts by email
+  let indexedUpdatedContacts = _.indexBy(contacts, 'email');
+  // update contacts with app userId
+  _.each(appContacts, (contact)=> {
+    indexedUpdatedContacts[contact.services.google.email]._id = contact._id;
+  });
+
+  // update the user model's contacts
+  let res = Meteor.users.update(
+    {_id: user._id},
+    {$set: {'services.google.contacts': contacts}}
+  );
+
+  return contacts;
 }
 
 function storeContactImages(userId, updatedContacts) {
@@ -161,17 +198,26 @@ function storeContactImages(userId, updatedContacts) {
             contact.src = images[0].url();
             completeUpdate(contact.id);
           } else {
+            let timeout;
+
             // hack to deal with CollectionFS bug
             // github.com/CollectionFS/Meteor-CollectionFS/issues/323
             let liveQuery = cursor.observe({
               changed: function(newImage, oldImage) {
                 if (newImage.url() !== null) {
+                  !!timeout && Meteor.clearTimeout(timeout);
                   liveQuery.stop();
                   contact.src = newImage.url();
                   completeUpdate(contact.id);
                 }
               }
             });
+
+            timeout = Meteor.setTimeout(()=> {
+              Images.remove(id);
+              liveQuery.stop(); // after 30 secs, stop waiting and remove image
+              completeUpdate(contact.id);
+            }, 30000);
           }
         } else {
           completeUpdate(contact.id);
@@ -221,18 +267,21 @@ Meteor.methods({
 
     return getContactPhoto(user, contact);
   },
+  joinAppContacts(contacts) {
+    this.unblock();
+
+    let user = Meteor.user();
+
+    return joinAppContacts(user, contacts);
+  },
   mergeContacts(contacts) {
     this.unblock();
 
     let user = Meteor.user();
 
-    let updatedContacts;
-
-    if (!user.services.google.contacts) {
-      updatedContacts = contacts;
-    } else {
-      let existingContacts = user.services.google.contacts;
-      let indexedExistingContacts = _.indexBy(existingContacts, 'id');
+    // merge passed contacts with existing user google contacts
+    if (user.services.google.contacts) {
+      let indexedExistingContacts = _.indexBy(contacts, 'id');
 
       _.each(contacts, (contact)=> {
         if (!!indexedExistingContacts[contact.id]) {
@@ -241,46 +290,13 @@ Meteor.methods({
           indexedExistingContacts[contact.id] = contact;
         }
       });
-      updatedContacts = _.map(indexedExistingContacts, (val)=> {
-        return val;
-      });
-
-      // get all the contacts who are existing app users
-      let appContacts = Meteor.users.find({
-        'services.google.email': {$in: _.pluck(updatedContacts, 'email')},
-      }).fetch();
-
-      // index the updatedContacts by email
-      let indexedUpdatedContacts = _.indexBy(updatedContacts, 'email');
-      // update contacts with app userId
-      _.each(appContacts, (contact)=> {
-        indexedUpdatedContacts[contact.services.google.email]._id = contact._id;
-      });
-      // map result to array
-      let modifiedUpdatedContacts = _.map(indexedUpdatedContacts, (val)=> {
-        return val;
-      });
-
-      // find all contacts not included in indexedUpdatedContacts
-      let emaillessUpdatedContacts = _.reject(updatedContacts, (contact)=> {
-        return !!contact.email;
-      });
-
-      // concat the emailless contacts with the email contacts
-      updatedContacts = emaillessUpdatedContacts.concat(modifiedUpdatedContacts);
     }
 
-    // update the user model's contacts
-    if (!!updatedContacts) {
-      Meteor.users.update(
-        {_id: this.userId},
-        {$set: {'services.google.contacts': updatedContacts}}
-      );
-    }
+    contacts = joinAppContacts(user, contacts);
 
     // download and store all the contact images
-    storeContactImages(this.userId, updatedContacts);
+    storeContactImages(this.userId, contacts);
 
-    return updatedContacts;
+    return contacts;
   }
 });

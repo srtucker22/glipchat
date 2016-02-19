@@ -24,7 +24,7 @@ Meteor.publish('user', function() {
   check(arguments, Match.OneOf({}, null, undefined));
   return Meteor.users.find(
     {_id: this.userId},
-    {fields: {services: 1, history: 1}}
+    {fields: {services: 1, history: 1, status: 1}}
   );
 });
 
@@ -33,7 +33,7 @@ Meteor.publish('users', function() {
   check(arguments, Match.OneOf({}, null, undefined));
 
   if (Roles.userIsInRole(this.userId, ['manage-users','admin'])) {
-    return Meteor.users.find({}, {fields: {services: 1, history: 1}});
+    return Meteor.users.find({}, {fields: {services: 1, history: 1, status: 1}});
   } else {
     this.ready();
   }
@@ -41,7 +41,17 @@ Meteor.publish('users', function() {
 
 Meteor.publish('contacts', function(contacts) {
   check(arguments, [Match.Any]);
+
+  if (!contacts || !contacts.length) {
+    this.ready();
+  }
+
   return Meteor.users.find({
     'services.google.email': {$in: _.pluck(contacts, 'email')}
+  }, {
+    fields: {
+      profile: 1,
+      status: 1
+    }
   });
 });
