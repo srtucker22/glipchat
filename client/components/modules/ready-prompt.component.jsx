@@ -53,6 +53,15 @@ ReadyPromptComponent = Radium(React.createClass({
     // join room stream directly if alone in room
     if (!this.props.room.connected.length) {
       RoomActions.joinRoomStream(this.props.room._id);
+      this.setState({
+        loading: true
+      });
+    };
+  },
+
+  getInitialState() {
+    return {
+      loading: false
     };
   },
 
@@ -72,6 +81,11 @@ ReadyPromptComponent = Radium(React.createClass({
         {(this.props.room.connected.length &&
           !_.contains(this.props.room.connected, this.data.user._id)) ? (
           <div style={[GlobalStyles.table, styles.css]}>
+            <LoadingDialogComponent
+              open={(!!this.state.loading)}
+              onTouchTap={this.props.onTouchTap}
+              title='Joining'
+              style={{zIndex: 3}}/>
             <div className='text-center' style={[GlobalStyles.cell]}>
               <p>Are you ready to join?</p>
               <RaisedButton label='Join'

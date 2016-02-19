@@ -93,6 +93,9 @@ HomeMobileComponent = Radium(React.createClass({
   invite() {
     if (this.state.invitees) {
       RoomActions.invite(this.state.invitees);
+      this.setState({
+        loading: true
+      });
     }
   },
 
@@ -104,13 +107,6 @@ HomeMobileComponent = Radium(React.createClass({
     if (this.data.currentRoom) {
       this.history.pushState(null, '/room/' + this.data.currentRoom._id);
     }
-  },
-
-  createRoom() {
-    RoomActions.createRoom();
-    this.setState({
-      loading: true
-    });
   },
 
   getInitialState() {
@@ -149,6 +145,9 @@ HomeMobileComponent = Radium(React.createClass({
     return (
       (!!this.data.user && !!this.data.user.services && !!this.data.user.services.google) ?
       (<div style={[styles.css]}>
+        {this.state.loading ?
+          <LoadingDialogComponent open={true} title='Starting video call'/> : ''
+        }
         <HeaderComponent mobile={true}
         showMenuIconButton={true}
         iconElementRight={

@@ -44,6 +44,9 @@ Dependency.autorun(()=> {
 AnswerDialogComponent = Radium(React.createClass({
   answer() {
     NotificationActions.accept();
+    this.setState({
+      loading: true
+    });
   },
   reject() {
     NotificationActions.reject();
@@ -70,6 +73,9 @@ AnswerDialogComponent = Radium(React.createClass({
         open={!!this.props.invitation}
         onRequestClose={this.handleClose}
       >
+      {this.state.loading ?
+        <LoadingDialogComponent open={true} title='Starting video call'/> : ''
+      }
       </Dialog>
     );
   },
