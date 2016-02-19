@@ -1,5 +1,5 @@
 0.02 release candidate fixes:
-- bug --> decline not working
+- feature --> put a loading spinner for room joining so people know what's going on
 - batch publications
 - bug --> icon right on header needs dynamic placement based on device type or something -- matchmedia sucks (iphone 4 needs 24px right padding or something)
 - bug --> list items are getting clicked accidentally -- try touchend vs. touchstart override for material-ui touch-ripple.jsx
