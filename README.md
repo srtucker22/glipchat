@@ -6,6 +6,7 @@ quasar is a real-time video chatroom application. The frontend is powered by Rea
 
 quasar has been tested on the following:
 - Chrome
+- Chrome for Android (Android 5+)
 - Firefox
 - OS X (Electron application)
 
@@ -13,7 +14,9 @@ Other browsers and operating systems may not support WebRTC.
 
 ## Motivation
 
-quasar is intended to be an example of how to create a WebRTC video chatroom and of how to integrate React and Flux in a Meteor app.
+Quasar is intended to be a veritable open source solution for multi-user multi-platform video conferencing -- a product regular people can use and developers can modify and build into their own products.
+
+It is also an example of how to create a WebRTC video chatroom and of how to integrate React and Flux in a Meteor app.
 
 ## Installation
 
@@ -74,7 +77,6 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
         }
 
 5. Run the app with the settings <code>meteor --settings settings.json</code>
-6. With an android phone attached to your computer, run the android app with the settings <code>meteor run android-device --verbose --settings settings.json</code>
 
 ### Electron Notes:
 
