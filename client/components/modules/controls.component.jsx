@@ -106,7 +106,15 @@ ControlsComponent = Radium(React.createClass({
   },
 
   leave() {
-    this.history.pushState(null, '/');
+    setTimeout(()=> {
+      this.history.pushState(null, '/');
+    }, 0);
+  },
+
+  showInviteModal() {
+    setTimeout(()=> {
+      RoomActions.showInviteModal();
+    }, 0);
   },
 
   toggleLocalAudio() {
@@ -130,7 +138,7 @@ ControlsComponent = Radium(React.createClass({
             this.data.controlsVisible) ? styles.controls.visible : {}
         )}>
           <div key='invite'
-            onTouchTap={RoomActions.showInviteModal}
+            onTouchTap={this.showInviteModal}
             style={[GlobalStyles.cell, styles.controls.button.css]}>
             <IconButton>
               <FontIcon className='material-icons'

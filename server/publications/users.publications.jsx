@@ -33,7 +33,10 @@ Meteor.publish('users', function() {
   check(arguments, Match.OneOf({}, null, undefined));
 
   if (Roles.userIsInRole(this.userId, ['manage-users','admin'])) {
-    return Meteor.users.find({}, {fields: {services: 1, history: 1, status: 1}});
+    return Meteor.users.find(
+      {},
+      {fields: {services: 1, history: 1, status: 1}}
+    );
   } else {
     this.ready();
   }

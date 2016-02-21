@@ -47,7 +47,7 @@ var UserStore = function() {
 
   // only desktop version will auto-login vistors
   if (Browser.mobile || Browser.tablet) {
-    AccountsGuest.enabled = false;
+    AccountsGuest.enabled = true;
     AccountsGuest.forced = false;
   } else {
     AccountsGuest.enabled = true;
@@ -257,6 +257,8 @@ var UserStore = function() {
             });
           }
         });
+      } else if (!_this.contacts.get() && _this.isGuest()) {
+        _this.contacts.set([]);
       }
     }
   };
@@ -296,6 +298,17 @@ var UserStore = function() {
           forceApprovalPrompt: true
         }, (err)=> {
           if (!err) {
+            _this.on.loginSuccess();
+          } else {
+            _this.on.loginFailed(err);
+          }
+        });
+        break;
+
+      case 'USER_LOGIN_GUEST':
+        _this.on.loginStart();
+        Meteor.loginVisitor(null, (err)=> {
+          if (err) {
             _this.on.loginSuccess();
           } else {
             _this.on.loginFailed(err);

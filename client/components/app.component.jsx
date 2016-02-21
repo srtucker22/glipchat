@@ -44,7 +44,9 @@ AppComponent = Radium(React.createClass({
 
   render() {
     return (
-      <div style={[styles.css]} appName='quasar'>{this.props.children}</div>
+      <div style={[styles.css]} appName={AppDetails.name}>
+        {this.props.children}
+      </div>
     );
   },
 }));

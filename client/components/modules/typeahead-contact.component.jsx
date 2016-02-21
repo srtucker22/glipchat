@@ -37,6 +37,10 @@ const {
   Style
 } = Radium;
 
+const {
+  ScrollListenerMixin
+} = ReactScrollComponents;
+
 let GlobalStyles;
 let RoomActions;
 let RoomStore;
@@ -134,7 +138,8 @@ TypeaheadMobileChipComponent = Radium(React.createClass({
   render() {
     return (
       <div key={this.props.tag} style={[
-          styles.chip.border.css, this.props.mobile ? styles.chip.border.mobile.css : '']}>
+          styles.chip.border.css, this.props.mobile ?
+            styles.chip.border.mobile.css : '']}>
         <Paper zDepth={1} style={styles.chip.css}>
           <div style={[GlobalStyles.table]}>
             {this.props.src ? <div style={[
@@ -160,6 +165,8 @@ TypeaheadMobileChipComponent = Radium(React.createClass({
 }));
 
 ContactListComponent = Radium(React.createClass({
+  mixins: [ScrollListenerMixin],
+
   fuzzyFilter(searchText, key) {
     let _this = this;
     function sub(k) {
@@ -231,8 +238,10 @@ ContactListComponent = Radium(React.createClass({
               }
               return (
                 <ListItem
+                  disabled={this.state.isScrolling}
                   key={'contact-' + index}
-                  leftAvatar={<Avatar src={contact.src || 'images/dog.png'}/>}
+                  leftAvatar={<Avatar src={contact.src ||
+                    'images/profile-default.jpg'}/>}
                   rightIcon={
                     <FontIcon
                       className='material-icons'
@@ -272,7 +281,9 @@ TypeaheadContactComponent = Radium(React.createClass({
     let _this = this;
     return (
       <TypeaheadMobileChipComponent
-        onRemove={(e) => props.onRemove(props.key)}
+        onRemove={(e) => setTimeout(()=> {
+          props.onRemove(props.key), 0;
+        })}
         key={props.key}
         tag={props.tag.name ? props.tag.name : props.tag.email}
         src={props.tag.src ? props.tag.src : ''}
@@ -281,11 +292,13 @@ TypeaheadContactComponent = Radium(React.createClass({
   },
 
   addInvitee(i) {
-    this.refs.tags._clearInput();
-    this.setState({
-      invitees: this.state.invitees.concat([i]),
-      query: ''
-    });
+    setTimeout(()=> {
+      this.refs.tags._clearInput();
+      this.setState({
+        invitees: this.state.invitees.concat([i]),
+        query: ''
+      });
+    }, 0);
   },
 
   updateInvitees(i) {
@@ -324,7 +337,8 @@ TypeaheadContactComponent = Radium(React.createClass({
         onChange={callBoth}
         placeholder={'Search for people'}
         value={value} {...other}
-        style={_.extend({}, styles.input.css, _this.props.mobile ? styles.input.mobile.css : '')}/>
+        style={_.extend({}, styles.input.css, _this.props.mobile ?
+          styles.input.mobile.css : '')}/>
     );
   },
 

@@ -20,7 +20,7 @@
  */
 var urlJoin = Meteor.npmRequire('url-join');
 
-var appName = 'quasar';
+var appName = AppDetails.name;
 var roomURL = urlJoin(process.env.ROOT_URL, 'room/');
 
 _.templateSettings = {

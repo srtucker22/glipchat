@@ -31,7 +31,8 @@ const {
   ListDivider,
   ListItem,
   RaisedButton,
-  Styles: {Colors}
+  Styles: {Colors},
+  TextField
 } = MUI;
 
 const styles = {
@@ -83,20 +84,26 @@ HomeMobileComponent = Radium(React.createClass({
   },
 
   handleOpen() {
-    this.setState({open: true});
+    setTimeout(()=> {
+      this.setState({open: true});
+    }, 0);
   },
 
   handleClose() {
-    this.setState({open: false});
+    setTimeout(()=> {
+      this.setState({open: false});
+    }, 0);
   },
 
   invite() {
-    if (this.state.invitees) {
-      RoomActions.invite(this.state.invitees);
-      this.setState({
-        loading: true
-      });
-    }
+    setTimeout(()=> {
+      if (this.state.invitees) {
+        RoomActions.invite(this.state.invitees);
+        this.setState({
+          loading: true
+        });
+      }
+    },0);
   },
 
   componentWillMount() {
@@ -116,6 +123,10 @@ HomeMobileComponent = Radium(React.createClass({
     };
   },
 
+  loginWithGoogle() {
+    UserActions.loginWithGoogle();
+  },
+
   onTypeaheadChange(state) {
     this.setState({
       invitees: state.invitees
@@ -128,6 +139,10 @@ HomeMobileComponent = Radium(React.createClass({
     });
   },
 
+  updateProfileName(e) {
+    UserActions.updateProfileName(e.target.value);
+  },
+
   render() {
     const actions = [
       <FlatButton
@@ -137,13 +152,14 @@ HomeMobileComponent = Radium(React.createClass({
       />,
       <FlatButton
         label='Invite'
+        disabled={!this.data.user || !this.data.user.profile.name}
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.invite}
       />,
     ];
     return (
-      (!!this.data.user && !!this.data.user.services && !!this.data.user.services.google) ?
+      (!!this.data.user) ?
       (<div style={[styles.css]}>
         {this.state.loading ?
           <LoadingDialogComponent open={true} title='Starting video call'/> : ''
@@ -162,7 +178,8 @@ HomeMobileComponent = Radium(React.createClass({
           {!!this.data.contacts ? <TypeaheadContactComponent
             contacts={this.data.contacts}
             mobile={true}
-            onChange={this.onTypeaheadChange}/> : ''}
+            onChange={this.onTypeaheadChange}/> : ''
+          }
         </div>
         <Dialog
           title='Invite to Video Call?'
@@ -171,7 +188,12 @@ HomeMobileComponent = Radium(React.createClass({
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          {'Contacts who are already using quasar will receive a notification. New users will be sent an email request.'}
+          {UserStore.isGuest() ? <TextField
+            value={this.data.user.profile.name}
+            onChange={this.updateProfileName}
+            errorText={!this.data.user.profile.name ? ' ' : null}
+            floatingLabelText='Your name'/> : ''}
+          {'Contacts who are already using ' + AppDetails.name + ' will receive a notification. New users will be sent an email request.'}
         </Dialog>
         <AnswerDialogComponent
           invitation={this.data.invitations && this.data.invitations.length ?

@@ -6,5 +6,6 @@ Browser.electron = Electron.isDesktop();
 TagsInput = require('react-tagsinput');
 require('webrtc-adapter-test');
 ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+ReactScrollComponents = require('react-scroll-components');
 Q = require('q');
 injectTapEventPlugin();

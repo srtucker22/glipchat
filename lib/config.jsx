@@ -1,0 +1,3 @@
+AppDetails = {
+  name: 'quasar'
+};

@@ -65,6 +65,10 @@ IntroComponent = Radium(React.createClass({
     };
   },
 
+  loginAsGuest() {
+    UserActions.loginAsGuest();
+  },
+
   loginWithGoogle() {
     UserActions.loginWithGoogle();
   },
@@ -72,15 +76,23 @@ IntroComponent = Radium(React.createClass({
   render() {
     return (
       <div style={[GlobalStyles.table, styles.css]}>
+        <GithubComponent />
         <LoadingDialogComponent
           open={(!!this.data.loggingIn && !this.data.loggingOut)}
           title='Signing in'/>
         <div className='text-center' style={[GlobalStyles.cell]}>
-          <h1 style={[styles.title.css]}>{'quasar'}</h1>
+          <h1 style={[styles.title.css]}>{AppDetails.name}</h1>
           <br />
           <RaisedButton
             onTouchTap={this.loginWithGoogle}
             label='Sign in with Google'
+            primary={true}
+            style={{marginBottom: '20px'}}
+          />
+          <br/>
+          <RaisedButton
+            onTouchTap={this.loginAsGuest}
+            label='Continue as guest'
             primary={true}
             style={{marginBottom: '50px'}}
           />

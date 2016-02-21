@@ -112,7 +112,7 @@ let PermissionDeniedComponent = Radium(React.createClass({
             <br />
             <RaisedButton
               label='Go Back'
-              onClick={this.props.action}
+              onTouchTap={this.props.action}
               primary={true}/>
           </div>
         </div>
@@ -133,7 +133,7 @@ let DuplicateErrorComponent = Radium(React.createClass({
           <br/>
           <RaisedButton
             label='Go Back'
-            onClick={this.props.action}
+            onTouchTap={this.props.action}
             primary={true}/>
         </div>
       </div>
@@ -153,7 +153,7 @@ let GeneralErrorComponent = Radium(React.createClass({
           <br/>
           <RaisedButton
             label='Go Back'
-            onClick={this.props.action}
+            onTouchTap={this.props.action}
             primary={true}/>
         </div>
       </div>
@@ -176,7 +176,7 @@ let NotSupportedErrorComponent = Radium(React.createClass({
           <br/>
           <RaisedButton
             label='Go Back'
-            onClick={this.props.action}
+            onTouchTap={this.props.action}
             primary={true}/>
         </div>
       </div>
