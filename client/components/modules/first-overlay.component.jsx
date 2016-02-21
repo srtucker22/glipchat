@@ -20,6 +20,10 @@
  */
 
 const {
+  addons: {PureRenderMixin}
+} = React;
+
+const {
   RaisedButton,
   Styles: {Colors}
 } = MUI;
@@ -69,6 +73,7 @@ Dependency.autorun(()=> {
 });
 
 FirstOverlayComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div onTouchTap={this.props.onTouchTap}>

@@ -19,6 +19,10 @@
  *
  */
 
+const {
+  addons: {PureRenderMixin}
+} = React;
+
 const styles = {
   css: {
     width: '100%',
@@ -35,6 +39,7 @@ let glipcode = {name: 'Glipcode', href: 'http://glipcode.com/'};
 let meteorFlux = {name: 'MeteorFlux', href: 'https://github.com/meteorflux'};
 
 FooterComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <footer

@@ -19,6 +19,10 @@
  *
  */
 
+const {
+  addons: {PureRenderMixin}
+} = React;
+
 const styles = {
   css: {
     position: 'absolute',
@@ -30,6 +34,7 @@ const styles = {
 };
 
 GithubComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <a href='https://github.com/srtucker22/quasar' target='_blank'>

@@ -21,6 +21,10 @@
 
 // Dependencies
 const {
+  addons: {PureRenderMixin}
+} = React;
+
+const {
   CircularProgress,
   Dialog,
   Styles: {Colors},
@@ -46,6 +50,7 @@ const styles = {
 };
 
 LoadingDialogComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div className='LoadingDialog'>

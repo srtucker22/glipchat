@@ -21,6 +21,10 @@
 
 // Dependencies
 const {
+  addons: {PureRenderMixin}
+} = React;
+
+const {
   RaisedButton,
   Styles: {Colors}
 } = MUI;
@@ -56,7 +60,7 @@ Dependency.autorun(()=> {
 });
 
 IntroComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
+  mixins: [PureRenderMixin, ReactMeteorData],
 
   getMeteorData() {
     return {

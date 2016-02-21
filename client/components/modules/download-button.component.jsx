@@ -19,7 +19,12 @@
  *
  */
 
+const {
+  addons: {PureRenderMixin}
+} = React;
+
 const {RaisedButton} = MUI;
+
 const styles = {
   button: {
     css: {
@@ -71,6 +76,7 @@ Dependency.autorun(()=> {
 });
 
 DownloadButtonComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     let platforms = {
       mac: {

@@ -20,7 +20,12 @@
  */
 
 // Dependencies
+const {
+  addons: {PureRenderMixin}
+} = React;
+
 const {Link} = ReactRouter;
+
 const {
   AppBar,
   Avatar,
@@ -131,6 +136,7 @@ Dependency.autorun(()=> {
 });
 
 NotificationDropdownComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   componentDidMount() {
     var _this = this;
     this.interval = window.setInterval(function() {
@@ -180,6 +186,8 @@ NotificationDropdownComponent = Radium(React.createClass({
 }));
 
 ProfileDropdownComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
+
   logout() {
     UserActions.logout();
   },

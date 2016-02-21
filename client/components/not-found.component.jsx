@@ -19,6 +19,10 @@
  *
  */
 
+const {
+  addons: {PureRenderMixin}
+} = React;
+
 const styles = {
   main: {
     css: {
@@ -37,6 +41,7 @@ Dependency.autorun(()=> {
 });
 
 NotFoundComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div>

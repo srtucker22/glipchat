@@ -20,6 +20,10 @@
  */
 
 const {
+  addons: {PureRenderMixin}
+} = React;
+
+const {
   Dialog,
   FlatButton,
   RaisedButton,
@@ -42,6 +46,8 @@ Dependency.autorun(()=> {
 });
 
 AnswerDialogComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
+
   answer() {
     NotificationActions.accept();
     this.setState({

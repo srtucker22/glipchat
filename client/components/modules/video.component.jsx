@@ -19,6 +19,10 @@
  *
  */
 
+const {
+  addons: {PureRenderMixin}
+} = React;
+
 const styles = {
   css: {
     maxHeight: '100%',
@@ -42,8 +46,8 @@ const styles = {
 };
 
 VideoComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
-
     return (
       <video
         style={[

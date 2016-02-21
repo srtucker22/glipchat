@@ -1,10 +1,5 @@
 0.02 release candidate fixes:
-- **WAITING TO DEPLOY** guest login mobile
-  - login with google option in sidebar and main home view
-  - invite component
-  - profile name field in HomeMobileComponent
 - bug --> icon right on header needs dynamic placement based on device type or something -- matchmedia sucks (iphone 4 needs 24px right padding or something)
-- **WAITING TO DEPLOY** bug --> list items are getting clicked accidentally -- try touchend vs. touchstart override for material-ui touch-ripple.jsx
 - UI --> typeahead contact component needs padding before input and a placeholder and better Design
 
 0.03
