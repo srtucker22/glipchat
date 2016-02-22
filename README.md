@@ -78,6 +78,10 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
 
 5. Run the app with the settings <code>meteor --settings settings.json</code>
 
+### Deployment Notes:
+
+To deploy to a remote server, consider using a package like <a href="https://github.com/arunoda/meteor-up">Meteor Up</a>
+
 ### Electron Notes:
 
 *Do NOT include the 'electron' field in your settings.json file if you are not running quasar from a Windows or Mac machine. meteor-electron will throw errors if you try and build from a Linux machine.*
@@ -90,7 +94,7 @@ To run the Electron app pointing to localhost, exclude the <code>rootUrl</code> 
 
 ## Application Design Overview
 
-As mentioned previously, quasar is an example of how to create a WebRTC video chatroom and also of how to integrate React and Flux in a Meteor app.
+Quasar is an example of how to create a WebRTC video chatroom and also of how to integrate React and Flux in a Meteor app.
 
 Don't know React or Flux? No problem!
 

@@ -35,7 +35,6 @@ service-configuration
 session
 spacebars
 spiderable
-standard-minifiers
 tracker
 twbs:bootstrap
 underscore
@@ -58,3 +57,5 @@ force-ssl
 msavin:mongol
 srtucker22:throttled-requester
 izzilab:material-ui
+standard-minifier-css
+standard-minifier-js

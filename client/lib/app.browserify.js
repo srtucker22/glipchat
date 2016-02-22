@@ -9,3 +9,16 @@ ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 ReactScrollComponents = require('react-scroll-components');
 Q = require('q');
 injectTapEventPlugin();
+
+Meteor.startup(function() {
+  if (WebAppCordova) {
+    var fileUrlRegEx = /^file:\/\/(.*)/;
+    WebAppCordova.localFileSystemUrl = function(fileUrl) {
+      var match = fileUrlRegEx.exec(fileUrl);
+      if (!match) return fileUrl;
+
+      var path = match[1];
+      return '/local-filesystem' + path;
+    };
+  }
+});

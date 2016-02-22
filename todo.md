@@ -1,7 +1,3 @@
-0.02 release candidate fixes:
-- bug --> icon right on header needs dynamic placement based on device type or something -- matchmedia sucks (iphone 4 needs 24px right padding or something)
-- UI --> typeahead contact component needs padding before input and a placeholder and better Design
-
 0.03
 - bug --> slow UI on android is lamesauce
 - bug --> don't include electron in cordova builds :/

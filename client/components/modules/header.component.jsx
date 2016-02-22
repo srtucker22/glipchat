@@ -284,6 +284,8 @@ HeaderComponent = Radium(React.createClass({
           }, {
             title: 'Feedback',
             icon: 'announcement',
+            href: 'https://www.facebook.com/groups/165149990531759/',
+            target: '_blank'
           }
         ], [
           {

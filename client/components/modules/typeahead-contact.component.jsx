@@ -21,6 +21,10 @@
 
 // Dependencies
 const {
+  addons: {PureRenderMixin}
+} = React;
+
+const {
   Avatar,
   Divider,
   FontIcon,
@@ -135,6 +139,7 @@ TagsInput.prototype._addTag = function(tag) {
 };
 
 TypeaheadMobileChipComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div key={this.props.tag} style={[
@@ -165,7 +170,7 @@ TypeaheadMobileChipComponent = Radium(React.createClass({
 }));
 
 ContactListComponent = Radium(React.createClass({
-  mixins: [ScrollListenerMixin],
+  mixins: [PureRenderMixin, ScrollListenerMixin],
 
   fuzzyFilter(searchText, key) {
     let _this = this;
@@ -240,8 +245,10 @@ ContactListComponent = Radium(React.createClass({
                 <ListItem
                   disabled={this.state.isScrolling}
                   key={'contact-' + index}
-                  leftAvatar={<Avatar src={contact.src ||
-                    'images/profile-default.jpg'}/>}
+                  leftAvatar={<Avatar
+                    src={contact.src || 'images/profile-default.jpg'}
+                    onError={(e)=> {e.target.src = 'images/profile-default.jpg';}}
+                  />}
                   rightIcon={
                     <FontIcon
                       className='material-icons'
@@ -266,6 +273,7 @@ ContactListComponent = Radium(React.createClass({
 }));
 
 TypeaheadContactComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   getInitialState() {
     return {
       invitees: []
@@ -335,7 +343,7 @@ TypeaheadContactComponent = Radium(React.createClass({
       <input
         type='text'
         onChange={callBoth}
-        placeholder={'Search for people'}
+        placeholder={this.state.invitees && this.state.invitees.length ? '' : 'Search for people'}
         value={value} {...other}
         style={_.extend({}, styles.input.css, _this.props.mobile ?
           styles.input.mobile.css : '')}/>
@@ -372,7 +380,7 @@ TypeaheadContactComponent = Radium(React.createClass({
               value={this.state.invitees || []}
               onChange={this.updateInvitees}
               onInputChange={this.updateQuery}
-              placeholder={'Search for people'}/>
+              style={this.props.mobile ? {padding: '10px'} : {}}/>
             <ContactListComponent
               contacts={sorted}
               query={this.state.query}
