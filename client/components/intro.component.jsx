@@ -35,7 +35,7 @@ const {
 const styles = {
   css: {
     backgroundAttachment: 'fixed',
-    backgroundImage: 'url(' + (Meteor.isCordova ? '/local-filesystem/images/quasar.jpg' : 'images/quasar.jpg') + ')',
+    backgroundImage: 'url(images/quasar.jpg)',
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',

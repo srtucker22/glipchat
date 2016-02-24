@@ -21,6 +21,7 @@
 
 import Browser from 'bowser';
 import GooglePeople from './google-people.jsx';
+import urlJoin from 'url-join';
 
 let googlePeople = GooglePeople();
 let NotificationActions;
@@ -32,6 +33,12 @@ Dependency.autorun(()=> {
   RoomActions = Dependency.get('RoomActions');
   RTCActions = Dependency.get('RTCActions');
 });
+
+// temporary hack for android images
+let httpPrepend;
+if (Meteor.isCordova) {
+  httpPrepend = Meteor.absoluteUrl();
+}
 
 // UserStore Creator
 var UserStore = function() {
@@ -119,6 +126,11 @@ var UserStore = function() {
                 contact.status = indexedAppContacts[contact._id] &&
                   indexedAppContacts[contact._id].status;
               }
+
+              if (!!httpPrepend && contact.src && contact.src.indexOf(httpPrepend) == -1) {
+                contact.src = urlJoin(httpPrepend, contact.src);
+              }
+
             });
             _this.contacts.set(contacts);
           }
