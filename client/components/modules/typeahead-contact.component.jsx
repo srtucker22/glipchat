@@ -256,7 +256,7 @@ const ContactListComponent = Radium(React.createClass({
                     <FontIcon
                       className='material-icons'
                       style={{color}}>
-                        {contact.status ? 'fiber_manual_record' : 'send'}
+                        {contact.status ? 'lens' : 'send'}
                     </FontIcon>
                   }
                   onTouchTap={this.props.onSelect.bind(null, contact)}
