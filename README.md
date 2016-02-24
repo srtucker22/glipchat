@@ -5,6 +5,7 @@ View the project at <a href="https://quasar.meteor.com" target="_blank">quasar.m
 quasar is a real-time video chatroom application. The frontend is powered by React, Flux and WebRTC and the backend is powered by Meteor.
 
 quasar has been tested on the following:
+- Android 4.3+ cordova app
 - Chrome
 - Chrome for Android (Android 5+)
 - Firefox
@@ -81,6 +82,26 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
 ### Deployment Notes:
 
 To deploy to a remote server, consider using a package like <a href="https://github.com/arunoda/meteor-up">Meteor Up</a>
+
+### Android Cordova Notes:
+
+In order to run video conferencing on quasar as a cordova app, you will to have the latest version of Android Studio installed and **you will need to use an actual Android device** (currently tested with devices 4.3+). Plug in your device to your computer via USB and run
+
+<code>meteor run android-device -p {local port} --settings settings.json</code>
+
+In order to use Google auth, you will need to run the application from a live mobiles server (see <a href="https://github.com/meteor/meteor/wiki/OAuth-for-mobile-Meteor-clients">OAuth for Mobile Meteor Clients</a> for details). To do this, first deploy your meteor application to a live server.
+
+(e.g. <code>meteor deploy {your-server-url} --settings settings.json</code>)
+
+Once the app is successfully deployed, run:
+
+<code>meteor run android-device --mobile-server {your-server-url} --settings settings.json</code>
+
+nice additional flags might be:
+<code>--verbose
+--production</code>
+
+**The mobile UI is currently super slow. Any suggestions or contributions really appreciated here!**
 
 ### Electron Notes:
 
