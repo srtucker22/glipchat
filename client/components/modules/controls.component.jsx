@@ -19,7 +19,11 @@
  *
  */
 
-const {History} = ReactRouter;
+import {browserHistory} from 'react-router';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   FontIcon,
   FlatButton,
@@ -90,8 +94,8 @@ Dependency.autorun(()=> {
   RTCStore = Dependency.get('RTCStore');
 });
 
-ControlsComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData, History],
+export default ControlsComponent = Radium(React.createClass({
+  mixins: [ReactMeteorData],
 
   getInitialState: function() {
     return {visible: false};
@@ -107,7 +111,7 @@ ControlsComponent = Radium(React.createClass({
 
   leave() {
     setTimeout(()=> {
-      this.history.pushState(null, '/');
+      browserHistory.push('/');
     }, 0);
   },
 

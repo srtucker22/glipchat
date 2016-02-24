@@ -19,6 +19,11 @@
  *
  */
 
+import LoadingDialogComponent from './loading-dialog.component.jsx';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   RaisedButton,
   Styles: {Colors}
@@ -46,7 +51,7 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-ReadyPromptComponent = Radium(React.createClass({
+export default ReadyPromptComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   componentDidMount() {

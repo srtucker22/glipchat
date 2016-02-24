@@ -19,6 +19,8 @@
  *
  */
 
+import Future from 'fibers/future';
+
 // create request queue for Google Contacts API limited to 10 req/sec
 let contactsRequester = new ThrottledRequester(10, 1000);
 
@@ -235,7 +237,7 @@ Meteor.methods({
     let user = Meteor.user();
 
     // merge passed contacts with existing user google contacts
-    if (user.services.google.contacts) {
+    if (!!user && !!user.services.google && user.services.google.contacts) {
       let indexedExistingContacts = _.indexBy(contacts, 'id');
 
       _.each(contacts, (contact)=> {

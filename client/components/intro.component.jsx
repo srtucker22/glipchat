@@ -20,9 +20,12 @@
  */
 
 // Dependencies
-const {
-  addons: {PureRenderMixin}
-} = React;
+import GithubComponent from './modules/github.component.jsx';
+import LoadingDialogComponent from './modules/loading-dialog.component.jsx';
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
 
 const {
   RaisedButton,
@@ -59,7 +62,7 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-IntroComponent = Radium(React.createClass({
+export default IntroComponent = Radium(React.createClass({
   mixins: [PureRenderMixin, ReactMeteorData],
 
   getMeteorData() {

@@ -45,7 +45,6 @@ cfs:upload-http@0.0.20
 cfs:worker@0.1.4
 check@1.1.1-beta.11
 coffeescript@1.0.12-beta.11
-cosmos:browserify@0.9.3
 crosswalk@1.4.0-beta.11
 dburles:mongo-collection-instances@0.3.4
 ddp@1.2.2
@@ -68,7 +67,6 @@ html-tools@1.0.6-beta.11
 htmljs@1.0.6-beta.11
 http@1.1.2-beta.11
 id-map@1.0.4
-izzilab:material-ui@0.2.6
 johnantoni:meteor-normalize@0.0.1
 jquery@1.11.5-beta.11
 jsx@0.2.4
@@ -80,7 +78,6 @@ livedata@1.0.15
 localstorage@1.0.6-beta.11
 logging@1.0.9-beta.11
 long:google-contacts@0.2.1
-markoshust:radium@0.15.3
 mdg:validation-error@0.4.0
 meteor@1.1.11-beta.11
 meteor-base@1.0.1
@@ -89,10 +86,8 @@ meteor-env-prod@0.0.1-beta.11
 meteorflux:dispatcher@1.2.3
 meteorflux:namespace@1.0.0
 meteorflux:reactive-dependency@0.1.1
-meteorhacks:async@1.0.0
 meteorhacks:kadira@2.27.3
 meteorhacks:meteorx@1.4.1
-meteorhacks:npm@1.5.0
 meteortoys:toykit@2.2.1
 minifier-css@1.1.8-beta.11
 minifier-js@1.1.8-beta.11
@@ -109,7 +104,6 @@ mongo-id@1.0.1
 mongo-livedata@1.0.9
 msavin:mongol@1.6.2
 npm-bcrypt@0.7.8_2
-npm-container@1.2.0
 npm-mongo@1.4.40-beta.11
 oauth@1.1.7-beta.11
 oauth2@1.1.6-beta.11
@@ -123,14 +117,9 @@ raix:eventstate@0.0.4
 raix:push@3.0.2
 random@1.0.6-beta.11
 rate-limit@1.0.1-beta.11
-react@0.14.3_1
 react-meteor-data@0.2.5
-react-runtime@0.14.4
-react-runtime-dev@0.14.4
-react-runtime-prod@0.14.4
 reactive-dict@1.1.4-beta.11
 reactive-var@1.0.6
-reactrouter:react-router@0.1.12
 reload@1.1.5-beta.11
 retry@1.0.4
 routepolicy@1.0.7-beta.11
@@ -144,7 +133,6 @@ srp@1.0.5-beta.11
 srtucker22:throttled-requester@0.0.1
 standard-minifier-css@1.0.3-beta.11
 standard-minifier-js@1.0.3-beta.11
-standard-minifiers@1.0.3-beta.11
 templating@1.1.6-beta.11
 templating-tools@1.0.1-beta.11
 tracker@1.0.10-beta.11

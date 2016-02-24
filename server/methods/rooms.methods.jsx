@@ -18,7 +18,8 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-var urlJoin = Meteor.npmRequire('url-join');
+
+import urlJoin from 'url-join';
 
 var appName = AppDetails.name;
 var roomURL = urlJoin(process.env.ROOT_URL, 'room/');

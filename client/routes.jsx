@@ -19,13 +19,21 @@
  *
  */
 
-var {IndexRoute, Router, Route, Link} = ReactRouter;
+import {Router, browserHistory} from 'react-router';
+import AppComponent from './components/app.component.jsx';
+import Browser from 'bowser';
+import HomeComponent from './components/home.component.jsx';
+import HomeMobileComponent from './components/home-mobile.component.jsx';
+import NotFoundComponent from './components/not-found.component.jsx';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import RoomComponent from './components/room.component.jsx';
 
-let RoomActions = null;
-let RoomStore   = null;
-let RTCActions  = null;
-let RTCStore    = null;
-let UserStore   = null;
+let RoomActions;
+let RoomStore;
+let RTCActions;
+let RTCStore;
+let UserStore;
 
 Dependency.autorun(()=> {
   RoomActions = Dependency.get('RoomActions');
@@ -37,8 +45,6 @@ Dependency.autorun(()=> {
 
 Meteor.startup(function() {
   window.location.hostname === 'localhost' && analytics.debug();  // show the analytics debug log if testing locally
-
-  let history = ReactRouter.history.createHistory();
 
   const routeConfig = [{
     path: '/',
@@ -63,15 +69,15 @@ Meteor.startup(function() {
             }
             callback();
           }).catch((err)=> {
-            replaceState(null, '/');
             console.error(err);
+            browserHistory.replace('/');
             callback();
           });
         })
 
         .catch((err)=> {
-          replaceState(null, '/');
           console.error(err);
+          browserHistory.replace('/');
           callback();
         });
       },
@@ -91,7 +97,7 @@ Meteor.startup(function() {
 
   ReactDOM.render(
     <Router
-      history={history}
+      history={browserHistory}
       routes={routeConfig} />,
     document.getElementById('react')
   );

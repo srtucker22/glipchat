@@ -20,7 +20,11 @@
  */
 
 // Dependencies
-const {History} = ReactRouter;
+import {browserHistory} from 'react-router';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   Avatar,
   Dialog,
@@ -71,8 +75,8 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-HomeMobileComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData, History],
+export default HomeMobileComponent = Radium(React.createClass({
+  mixins: [ReactMeteorData],
 
   getMeteorData() {
     return {
@@ -112,7 +116,7 @@ HomeMobileComponent = Radium(React.createClass({
 
   componentWillUpdate(nextProps, nextState) {
     if (this.data.currentRoom) {
-      this.history.pushState(null, '/room/' + this.data.currentRoom._id);
+      browserHistory.push('/room/' + this.data.currentRoom._id);
     }
   },
 

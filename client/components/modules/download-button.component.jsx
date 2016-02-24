@@ -19,9 +19,10 @@
  *
  */
 
-const {
-  addons: {PureRenderMixin}
-} = React;
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
 
 const {RaisedButton} = MUI;
 
@@ -75,7 +76,7 @@ Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
 });
 
-DownloadButtonComponent = Radium(React.createClass({
+export default DownloadButtonComponent = Radium(React.createClass({
   mixins: [PureRenderMixin],
   render() {
     let platforms = {

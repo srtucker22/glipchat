@@ -20,6 +20,12 @@
  */
 
 // Dependencies
+import Browser from 'bowser';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
 const {
   AppBar,
   Dialog,
@@ -147,7 +153,7 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-InviteComponent = Radium(React.createClass({
+export default InviteComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   cancel() {

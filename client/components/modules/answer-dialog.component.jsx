@@ -19,9 +19,11 @@
  *
  */
 
-const {
-  addons: {PureRenderMixin}
-} = React;
+import MUI from 'material-ui';
+import LoadingDialogComponent from './loading-dialog.component.jsx';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
 
 const {
   Dialog,
@@ -45,7 +47,7 @@ Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('NotificationActions');
 });
 
-AnswerDialogComponent = Radium(React.createClass({
+export default AnswerDialogComponent = Radium(React.createClass({
   mixins: [PureRenderMixin],
 
   answer() {

@@ -20,11 +20,11 @@
  */
 
 // Dependencies
-const {
-  addons: {PureRenderMixin}
-} = React;
-
-const {Link} = ReactRouter;
+import moment from 'moment';
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
 
 const {
   AppBar,
@@ -38,8 +38,8 @@ const {
   IconButton,
   IconMenu,
   LeftNav,
-  Libs: {Menu},
-  Libs: {MenuItem},
+  Menu,
+  MenuItem,
   Styles: {Colors}
 } = MUI;
 
@@ -135,7 +135,7 @@ Dependency.autorun(()=> {
   UserActions = Dependency.get('UserActions');
 });
 
-NotificationDropdownComponent = Radium(React.createClass({
+let NotificationDropdownComponent = Radium(React.createClass({
   mixins: [PureRenderMixin],
   componentDidMount() {
     var _this = this;
@@ -185,7 +185,7 @@ NotificationDropdownComponent = Radium(React.createClass({
   },
 }));
 
-ProfileDropdownComponent = Radium(React.createClass({
+let ProfileDropdownComponent = Radium(React.createClass({
   mixins: [PureRenderMixin],
 
   logout() {
@@ -219,7 +219,7 @@ ProfileDropdownComponent = Radium(React.createClass({
   },
 }));
 
-HeaderComponent = Radium(React.createClass({
+export default HeaderComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   childContextTypes: {

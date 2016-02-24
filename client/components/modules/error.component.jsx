@@ -19,11 +19,12 @@
  *
  */
 
-const {
-  addons: {PureRenderMixin}
-} = React;
-
-const {History} = ReactRouter;
+import Browser from 'bowser';
+import {browserHistory} from 'react-router';
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
 
 const {
   FontIcon,
@@ -194,11 +195,11 @@ let NotSupportedErrorComponent = Radium(React.createClass({
 }));
 
 // Logic for determining which error message to show when something goes wrong
-ErrorComponent = Radium(React.createClass({
-  mixins: [History, PureRenderMixin],
+export default ErrorComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
 
   back() {
-    this.history.pushState(null, '/');
+    browserHistory.push('/');
   },
 
   render() {

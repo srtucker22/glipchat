@@ -20,9 +20,10 @@
  */
 
 // Dependencies
-const {
-  addons: {PureRenderMixin}
-} = React;
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
 
 const {
   CircularProgress,
@@ -49,7 +50,7 @@ const styles = {
   }
 };
 
-LoadingDialogComponent = Radium(React.createClass({
+export default LoadingDialogComponent = Radium(React.createClass({
   mixins: [PureRenderMixin],
   render() {
     return (

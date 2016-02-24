@@ -20,16 +20,19 @@
  */
 
 // Dependencies
-const {
-  addons: {PureRenderMixin}
-} = React;
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+import ReactScrollComponents from 'react-scroll-components';
+import TagsInput from 'react-tagsinput';
 
 const {
   Avatar,
   Divider,
   FontIcon,
-  Libs: {Menu},
-  Libs: {MenuItem},
+  Menu,
+  MenuItem,
   List,
   ListItem,
   Paper,
@@ -138,7 +141,7 @@ TagsInput.prototype._addTag = function(tag) {
   }
 };
 
-TypeaheadMobileChipComponent = Radium(React.createClass({
+const TypeaheadMobileChipComponent = Radium(React.createClass({
   mixins: [PureRenderMixin],
   render() {
     return (
@@ -169,7 +172,7 @@ TypeaheadMobileChipComponent = Radium(React.createClass({
   }
 }));
 
-ContactListComponent = Radium(React.createClass({
+const ContactListComponent = Radium(React.createClass({
   mixins: [PureRenderMixin, ScrollListenerMixin],
 
   fuzzyFilter(searchText, key) {
@@ -272,7 +275,7 @@ ContactListComponent = Radium(React.createClass({
   }
 }));
 
-TypeaheadContactComponent = Radium(React.createClass({
+export default TypeaheadContactComponent = Radium(React.createClass({
   mixins: [PureRenderMixin],
   getInitialState() {
     return {

@@ -19,9 +19,10 @@
  *
  */
 
-const {
-  addons: {PureRenderMixin}
-} = React;
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
 
 const styles = {
   css: {
@@ -38,7 +39,7 @@ Dependency.autorun(()=> {
 let glipcode = {name: 'Glipcode', href: 'http://glipcode.com/'};
 let meteorFlux = {name: 'MeteorFlux', href: 'https://github.com/meteorflux'};
 
-FooterComponent = Radium(React.createClass({
+export default FooterComponent = Radium(React.createClass({
   mixins: [PureRenderMixin],
   render() {
     return (

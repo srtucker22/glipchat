@@ -1,0 +1,16 @@
+{
+  "presets": ["es2015", "stage-1", "react"],
+  "plugins": [
+    "transform-dev-warning",
+    "add-module-exports"
+  ],
+  "env": {
+    "docs-production": {
+      "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements",
+        "transform-react-inline-elements"
+      ]
+    }
+  }
+}

@@ -19,6 +19,10 @@
  *
  */
 
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
 let {ThemeManager, LightRawTheme} = MUI.Styles;
 
 const styles = {
@@ -27,7 +31,7 @@ const styles = {
   }
 };
 
-AppComponent = Radium(React.createClass({
+export const AppComponent = Radium(React.createClass({
   childContextTypes: {
     muiTheme: React.PropTypes.object,
   },

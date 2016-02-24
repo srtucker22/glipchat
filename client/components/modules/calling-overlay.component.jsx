@@ -19,7 +19,11 @@
  *
  */
 
-const {History} = ReactRouter;
+import {browserHistory} from 'react-router';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   CircularProgress,
   RaisedButton,
@@ -48,8 +52,8 @@ Dependency.autorun(()=> {
   RoomStore = Dependency.get('RoomStore');
 });
 
-CallingOverlayComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData, History],
+export default CallingOverlayComponent = Radium(React.createClass({
+  mixins: [ReactMeteorData],
 
   getMeteorData() {
     return {
@@ -59,7 +63,7 @@ CallingOverlayComponent = Radium(React.createClass({
   },
 
   leave() {
-    this.history.pushState(null, '/');
+    browserHistory.push('/');
   },
 
   retry() {
