@@ -19,6 +19,11 @@
  *
  */
 
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const styles = {
   main: {
     css: {
@@ -30,13 +35,14 @@ const styles = {
 };
 
 // Dependencies
-let GlobalStyles = null;
+let GlobalStyles;
 
 Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
 });
 
-NotFoundComponent = Radium(React.createClass({
+export default NotFoundComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div>

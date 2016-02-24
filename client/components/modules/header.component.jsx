@@ -20,7 +20,12 @@
  */
 
 // Dependencies
-const {Link} = ReactRouter;
+import moment from 'moment';
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   AppBar,
   Avatar,
@@ -33,8 +38,8 @@ const {
   IconButton,
   IconMenu,
   LeftNav,
-  Libs: {Menu},
-  Libs: {MenuItem},
+  Menu,
+  MenuItem,
   Styles: {Colors}
 } = MUI;
 
@@ -130,7 +135,8 @@ Dependency.autorun(()=> {
   UserActions = Dependency.get('UserActions');
 });
 
-NotificationDropdownComponent = Radium(React.createClass({
+let NotificationDropdownComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   componentDidMount() {
     var _this = this;
     this.interval = window.setInterval(function() {
@@ -179,7 +185,9 @@ NotificationDropdownComponent = Radium(React.createClass({
   },
 }));
 
-ProfileDropdownComponent = Radium(React.createClass({
+let ProfileDropdownComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
+
   logout() {
     UserActions.logout();
   },
@@ -211,7 +219,7 @@ ProfileDropdownComponent = Radium(React.createClass({
   },
 }));
 
-HeaderComponent = Radium(React.createClass({
+export default HeaderComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   childContextTypes: {
@@ -270,10 +278,14 @@ HeaderComponent = Radium(React.createClass({
             icon: 'settings'
           }, {
             title: 'GitHub',
-            icon: 'code'
+            icon: 'code',
+            href: 'https://github.com/srtucker22/quasar',
+            target: '_blank'
           }, {
             title: 'Feedback',
             icon: 'announcement',
+            href: 'https://www.facebook.com/groups/165149990531759/',
+            target: '_blank'
           }
         ], [
           {
@@ -306,7 +318,7 @@ HeaderComponent = Radium(React.createClass({
       } else {
         loginButton = <FlatButton
           label='Login with Google'
-          onClick={this.loginWithGoogle}
+          onTouchTap={this.loginWithGoogle}
         />;
       }
     }
@@ -328,21 +340,22 @@ HeaderComponent = Radium(React.createClass({
           onRequestChange={open => this.setState({open})}>
             <div style={[styles.sidenav.profile.css]}>
               <Avatar
-                src={!!this.data.user.services &&
-                  !!this.data.user.services.google &&
+                src={!UserStore.isGuest() &&
                   !!this.data.user.services.google.picture ?
                   this.data.user.services.google.picture :
-                  'images/profile-default.png'}
+                  'images/profile-default.jpg'}
                 style={{display: 'block'}}
                 size={50}/>
               <div style={styles.sidenav.profile.details.css}>
                 <p style={styles.sidenav.profile.details.text.css}>
                   {this.data.user.profile.name}
                 </p>
-                {!!this.data.user.services && !!this.data.user.services.google ?
+                {!UserStore.isGuest() ?
                   <p style={styles.sidenav.profile.details.text.css}>
                     {this.data.user.services.google.email}
-                  </p> : ''}
+                  </p> : <FlatButton onTouchTap={this.loginWithGoogle} label='Sign in with Google' style={{
+                    color: Colors.fullWhite,
+                    marginLeft: '-10px'}}/>}
               </div>
             </div>
             {_.map(menuItems, (list, index)=> {
@@ -352,6 +365,9 @@ HeaderComponent = Radium(React.createClass({
                     key={'left-nav-' + item.title.toLowerCase()}
                     primaryText={item.title}
                     onTouchTap={item.action}
+                    linkButton={!!item.href}
+                    href={item.href}
+                    target={item.target}
                     leftIcon={
                       <FontIcon
                         className='material-icons'

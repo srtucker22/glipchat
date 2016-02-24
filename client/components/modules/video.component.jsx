@@ -19,6 +19,11 @@
  *
  */
 
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const styles = {
   css: {
     maxHeight: '100%',
@@ -41,9 +46,9 @@ const styles = {
   },
 };
 
-VideoComponent = Radium(React.createClass({
+export default VideoComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
-
     return (
       <video
         style={[

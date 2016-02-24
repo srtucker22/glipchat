@@ -19,6 +19,11 @@
  *
  */
 
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   RaisedButton,
   Styles: {Colors}
@@ -68,7 +73,8 @@ Dependency.autorun(()=> {
   RoomActions = Dependency.get('RoomActions');
 });
 
-FirstOverlayComponent = Radium(React.createClass({
+export default FirstOverlayComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div onTouchTap={this.props.onTouchTap}>

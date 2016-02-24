@@ -19,7 +19,11 @@
  *
  */
 
-const {History} = ReactRouter;
+import {browserHistory} from 'react-router';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   FontIcon,
   FlatButton,
@@ -90,8 +94,8 @@ Dependency.autorun(()=> {
   RTCStore = Dependency.get('RTCStore');
 });
 
-ControlsComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData, History],
+export default ControlsComponent = Radium(React.createClass({
+  mixins: [ReactMeteorData],
 
   getInitialState: function() {
     return {visible: false};
@@ -106,7 +110,15 @@ ControlsComponent = Radium(React.createClass({
   },
 
   leave() {
-    this.history.pushState(null, '/');
+    setTimeout(()=> {
+      browserHistory.push('/');
+    }, 0);
+  },
+
+  showInviteModal() {
+    setTimeout(()=> {
+      RoomActions.showInviteModal();
+    }, 0);
   },
 
   toggleLocalAudio() {
@@ -130,7 +142,7 @@ ControlsComponent = Radium(React.createClass({
             this.data.controlsVisible) ? styles.controls.visible : {}
         )}>
           <div key='invite'
-            onTouchTap={RoomActions.showInviteModal}
+            onTouchTap={this.showInviteModal}
             style={[GlobalStyles.cell, styles.controls.button.css]}>
             <IconButton>
               <FontIcon className='material-icons'

@@ -20,6 +20,12 @@
  */
 
 // Dependencies
+import Browser from 'bowser';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
 const {
   AppBar,
   Dialog,
@@ -147,11 +153,17 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-InviteComponent = Radium(React.createClass({
+export default InviteComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   cancel() {
     RoomActions.hideInviteModal();
+  },
+
+  getInitialState() {
+    return {
+      open: false
+    };
   },
 
   getMeteorData() {
@@ -164,10 +176,16 @@ InviteComponent = Radium(React.createClass({
   },
 
   invite() {
-    if (this.state.invitees && this.data.user.profile.name) {
-      RoomActions.invite(this.state.invitees);
-      RoomActions.hideInviteModal();
-    }
+    setTimeout(()=> {
+      if (this.state.invitees && this.data.user.profile.name) {
+        RoomActions.invite(this.state.invitees);
+        RoomActions.hideInviteModal();
+      } else if (!this.data.user || !this.data.user.profile.name) {
+        this.setState({
+          open: true
+        });
+      }
+    }, 0);
   },
 
   updateProfileName(e) {
@@ -190,7 +208,7 @@ InviteComponent = Radium(React.createClass({
       <FlatButton
         key='invite'
         label='Invite'
-        disabled={(!this.state.invitees || !this.state.invitees.length)}
+        disabled={(!this.state.invitees || !this.state.invitees.length || !this.data.user || !this.data.user.profile.name)}
         primary={true}
         onTouchTap={this.invite} />
     ];
@@ -200,6 +218,19 @@ InviteComponent = Radium(React.createClass({
       <ReactCSSTransitionGroup transitionName='modal' transitionEnterTimeout={300} transitionLeaveTimeout={300}>
       {this.data.inviteModalVisible ?
       <div key='invite-modal' style={[styles.mobile.css]}>
+        <Dialog
+          title='Please enter your name'
+          actions={customActions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          <TextField
+            value={this.data.user.profile.name}
+            onChange={this.updateProfileName}
+            errorText={!this.data.user.profile.name ? ' ' : null}
+            floatingLabelText='Your name'/>
+        </Dialog>
         <AppBar
           showMenuIconButton={false}
           title={'Invite Contacts'}
@@ -229,7 +260,7 @@ InviteComponent = Radium(React.createClass({
           <div style={[GlobalStyles.cell, {width: '50%'}]}>
             <FlatButton
               backgroundColor={Colors.cyan500}
-              key='cancel'
+              key='invite'
               label='Invite'
               onTouchTap={this.invite}
               style={{color: Colors.fullWhite, width: '100%'}}/>

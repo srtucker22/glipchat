@@ -1,0 +1,38 @@
+{
+  "name": "quasar",
+  "version": "1.0.0",
+  "description": "View the project at <a href=\"https://quasar.meteor.com\" target=\"_blank\">quasar.meteor.com</a>",
+  "main": "mobile-config.js",
+  "dependencies": {
+    "bowser": "^1.0.0",
+    "material-ui": "^0.14.4",
+    "moment": "^2.11.2",
+    "q": "^1.4.1",
+    "radium": "^0.16.6",
+    "react": "^0.14.7",
+    "react-addons-css-transition-group": "^0.14.7",
+    "react-addons-pure-render-mixin": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "react-router": "^2.0.0",
+    "react-scroll-components": "^0.2.2",
+    "react-tagsinput": "^3.3.0",
+    "react-tap-event-plugin": "^0.2.2",
+    "url-join": "0.0.1",
+    "webrtc-adapter": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srtucker22/quasar.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/srtucker22/quasar/issues"
+  },
+  "homepage": "https://github.com/srtucker22/quasar#readme"
+}

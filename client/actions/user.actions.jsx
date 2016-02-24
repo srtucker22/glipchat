@@ -29,6 +29,10 @@ var UserActions = function() {
       Dispatcher.dispatch({actionType: 'USER_LOGIN_PASSWORD'});
     },
 
+    loginAsGuest() {
+      Dispatcher.dispatch({actionType: 'USER_LOGIN_GUEST'});
+    },
+
     loginWithGoogle() {
       Dispatcher.dispatch({actionType: 'USER_LOGIN_GOOGLE'});
     },

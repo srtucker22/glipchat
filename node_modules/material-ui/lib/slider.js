@@ -1,0 +1,584 @@
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _stylePropable = require('./mixins/style-propable');
+
+var _stylePropable2 = _interopRequireDefault(_stylePropable);
+
+var _transitions = require('./styles/transitions');
+
+var _transitions2 = _interopRequireDefault(_transitions);
+
+var _focusRipple = require('./ripples/focus-ripple');
+
+var _focusRipple2 = _interopRequireDefault(_focusRipple);
+
+var _getMuiTheme = require('./styles/getMuiTheme');
+
+var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+var _autoPrefix = require('./styles/auto-prefix');
+
+var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+/**
+  * Verifies min/max range.
+  * @param   {Object} props         Properties of the React component.
+  * @param   {String} propName      Name of the property to validate.
+  * @param   {String} componentName Name of the component whose property is being validated.
+  * @returns {Object} Returns an Error if min >= max otherwise null.
+  */
+var minMaxPropType = function minMaxPropType(props, propName, componentName) {
+  var error = _react2.default.PropTypes.number(props, propName, componentName);
+  if (error !== null) return error;
+
+  if (props.min >= props.max) {
+    var errorMsg = propName === 'min' ? 'min should be less than max' : 'max should be greater than min';
+    return new Error(errorMsg);
+  }
+};
+
+/**
+  * Verifies value is within the min/max range.
+  * @param   {Object} props         Properties of the React component.
+  * @param   {String} propName      Name of the property to validate.
+  * @param   {String} componentName Name of the component whose property is being validated.
+  * @returns {Object} Returns an Error if the value is not within the range otherwise null.
+  */
+var valueInRangePropType = function valueInRangePropType(props, propName, componentName) {
+  var error = _react2.default.PropTypes.number(props, propName, componentName);
+  if (error !== null) return error;
+
+  var value = props[propName];
+  if (value < props.min || props.max < value) {
+    return new Error(propName + ' should be within the range specified by min and max');
+  }
+};
+
+var Slider = _react2.default.createClass({
+  displayName: 'Slider',
+
+  propTypes: {
+    /**
+     * The default value of the slider.
+     */
+    defaultValue: valueInRangePropType,
+
+    /**
+     * Describe the slider.
+     */
+    description: _react2.default.PropTypes.string,
+
+    /**
+     * Disables focus ripple if set to true.
+     */
+    disableFocusRipple: _react2.default.PropTypes.bool,
+
+    /**
+     * If true, the slider will not be interactable.
+     */
+    disabled: _react2.default.PropTypes.bool,
+
+    /**
+     * An error message for the slider.
+     */
+    error: _react2.default.PropTypes.string,
+
+    /**
+     * The maximum value the slider can slide to on
+     * a scale from 0 to 1 inclusive. Cannot be equal to min.
+     */
+    max: minMaxPropType,
+
+    /**
+     * The minimum value the slider can slide to on a scale
+     * from 0 to 1 inclusive. Cannot be equal to max.
+     */
+    min: minMaxPropType,
+
+    /**
+     * The name of the slider. Behaves like the name attribute
+     * of an input element.
+     */
+    name: _react2.default.PropTypes.string,
+
+    /**
+     * Callback function that is fired when the focus has left the slider.
+     */
+    onBlur: _react2.default.PropTypes.func,
+
+    /**
+     * Callback function that is fired when the user changes the slider's value.
+     */
+    onChange: _react2.default.PropTypes.func,
+
+    /**
+     * Callback function that is fired when the slider has begun to move.
+     */
+    onDragStart: _react2.default.PropTypes.func,
+
+    /**
+     * Callback function that is fried when the slide has stopped moving.
+     */
+    onDragStop: _react2.default.PropTypes.func,
+
+    /**
+     * Callback fired when the user has focused on the slider.
+     */
+    onFocus: _react2.default.PropTypes.func,
+
+    /**
+     * Whether or not the slider is required in a form.
+     */
+    required: _react2.default.PropTypes.bool,
+
+    /**
+     * The granularity the slider can step through values.
+     */
+    step: _react2.default.PropTypes.number,
+
+    /**
+     * Override the inline-styles of the root element.
+     */
+    style: _react2.default.PropTypes.object,
+
+    /**
+     * The value of the slider.
+     */
+    value: valueInRangePropType
+  },
+
+  contextTypes: {
+    muiTheme: _react2.default.PropTypes.object
+  },
+
+  //for passing default theme context to children
+  childContextTypes: {
+    muiTheme: _react2.default.PropTypes.object
+  },
+
+  mixins: [_stylePropable2.default],
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      disabled: false,
+      disableFocusRipple: false,
+      max: 1,
+      min: 0,
+      required: true,
+      step: 0.01,
+      style: {}
+    };
+  },
+  getInitialState: function getInitialState() {
+    var value = this.props.value;
+    if (value === undefined) {
+      value = this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.min;
+    }
+    var percent = (value - this.props.min) / (this.props.max - this.props.min);
+    if (isNaN(percent)) percent = 0;
+
+    return {
+      active: false,
+      dragging: false,
+      focused: false,
+      hovered: false,
+      percent: percent,
+      value: value,
+      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
+    };
+  },
+  getChildContext: function getChildContext() {
+    return {
+      muiTheme: this.state.muiTheme
+    };
+  },
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
+    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
+    this.setState({ muiTheme: newMuiTheme });
+
+    if (nextProps.value !== undefined && !this.state.dragging) {
+      this.setValue(nextProps.value);
+    }
+  },
+  getTheme: function getTheme() {
+    return this.state.muiTheme.slider;
+  },
+  getStyles: function getStyles() {
+    var fillGutter = this.getTheme().handleSize / 2;
+    var disabledGutter = this.getTheme().trackSize + this.getTheme().handleSizeDisabled / 2;
+    var calcDisabledSpacing = this.props.disabled ? ' - ' + disabledGutter + 'px' : '';
+    var styles = {
+      root: {
+        touchCallout: 'none',
+        userSelect: 'none',
+        cursor: 'default',
+        height: this.getTheme().handleSizeActive,
+        position: 'relative',
+        marginTop: 24,
+        marginBottom: 48
+      },
+      track: {
+        position: 'absolute',
+        top: (this.getTheme().handleSizeActive - this.getTheme().trackSize) / 2,
+        left: 0,
+        width: '100%',
+        height: this.getTheme().trackSize
+      },
+      filledAndRemaining: {
+        position: 'absolute',
+        top: 0,
+        height: '100%',
+        transition: _transitions2.default.easeOut(null, 'margin')
+      },
+      handle: {
+        boxSizing: 'border-box',
+        position: 'absolute',
+        cursor: 'pointer',
+        pointerEvents: 'inherit',
+        top: 0,
+        left: '0%',
+        zIndex: 1,
+        margin: this.getTheme().trackSize / 2 + 'px 0 0 0',
+        width: this.getTheme().handleSize,
+        height: this.getTheme().handleSize,
+        backgroundColor: this.getTheme().selectionColor,
+        backgroundClip: 'padding-box',
+        border: '0px solid transparent',
+        borderRadius: '50%',
+        transform: 'translate(-50%, -50%)',
+        transition: _transitions2.default.easeOut('450ms', 'background') + ',' + _transitions2.default.easeOut('450ms', 'border-color') + ',' + _transitions2.default.easeOut('450ms', 'width') + ',' + _transitions2.default.easeOut('450ms', 'height'),
+        overflow: 'visible'
+      },
+      handleWhenDisabled: {
+        boxSizing: 'content-box',
+        cursor: 'not-allowed',
+        backgroundColor: this.getTheme().trackColor,
+        width: this.getTheme().handleSizeDisabled,
+        height: this.getTheme().handleSizeDisabled,
+        border: 'none'
+      },
+      handleWhenPercentZero: {
+        border: this.getTheme().trackSize + 'px solid ' + this.getTheme().handleColorZero,
+        backgroundColor: this.getTheme().handleFillColor,
+        boxShadow: 'none'
+      },
+      handleWhenPercentZeroAndDisabled: {
+        cursor: 'not-allowed',
+        width: this.getTheme().handleSizeDisabled,
+        height: this.getTheme().handleSizeDisabled
+      },
+      handleWhenPercentZeroAndFocused: {
+        border: this.getTheme().trackSize + 'px solid ' + this.getTheme().trackColorSelected
+      },
+      handleWhenActive: {
+        width: this.getTheme().handleSizeActive,
+        height: this.getTheme().handleSizeActive
+      },
+      ripple: {
+        height: this.getTheme().handleSize,
+        width: this.getTheme().handleSize,
+        overflow: 'visible'
+      },
+      rippleWhenPercentZero: {
+        top: -this.getTheme().trackSize,
+        left: -this.getTheme().trackSize
+      },
+      rippleInner: {
+        height: '300%',
+        width: '300%',
+        top: -this.getTheme().handleSize,
+        left: -this.getTheme().handleSize
+      }
+    };
+    styles.filled = this.mergeStyles(styles.filledAndRemaining, {
+      left: 0,
+      backgroundColor: this.props.disabled ? this.getTheme().trackColor : this.getTheme().selectionColor,
+      marginRight: fillGutter,
+      width: 'calc(' + this.state.percent * 100 + '%' + calcDisabledSpacing + ')'
+    });
+    styles.remaining = this.mergeStyles(styles.filledAndRemaining, {
+      right: 0,
+      backgroundColor: this.getTheme().trackColor,
+      marginLeft: fillGutter,
+      width: 'calc(' + (1 - this.state.percent) * 100 + '%' + calcDisabledSpacing + ')'
+    });
+
+    return styles;
+  },
+
+  // Needed to prevent text selection when dragging the slider handler.
+  // In the future, we should consider use <input type="range"> to avoid
+  // similar issues.
+  _toggleSelection: function _toggleSelection(value) {
+    var body = document.getElementsByTagName('body')[0];
+    _autoPrefix2.default.set(body.style, 'userSelect', value, this.state.muiTheme);
+  },
+  _onHandleTouchStart: function _onHandleTouchStart(e) {
+    if (document) {
+      document.addEventListener('touchmove', this._dragTouchHandler, false);
+      document.addEventListener('touchup', this._dragTouchEndHandler, false);
+      document.addEventListener('touchend', this._dragTouchEndHandler, false);
+      document.addEventListener('touchcancel', this._dragTouchEndHandler, false);
+    }
+    this._onDragStart(e);
+  },
+  _onHandleMouseDown: function _onHandleMouseDown(e) {
+    if (document) {
+      document.addEventListener('mousemove', this._dragHandler, false);
+      document.addEventListener('mouseup', this._dragEndHandler, false);
+      this._toggleSelection('none');
+    }
+    this._onDragStart(e);
+  },
+  _dragHandler: function _dragHandler(e) {
+    var _this = this;
+
+    if (this._dragRunning) {
+      return;
+    }
+    this._dragRunning = true;
+    requestAnimationFrame(function () {
+      _this._onDragUpdate(e, e.clientX - _this._getTrackLeft());
+      _this._dragRunning = false;
+    });
+  },
+  _dragTouchHandler: function _dragTouchHandler(e) {
+    var _this2 = this;
+
+    if (this._dragRunning) {
+      return;
+    }
+    this._dragRunning = true;
+    requestAnimationFrame(function () {
+      _this2._onDragUpdate(e, e.touches[0].clientX - _this2._getTrackLeft());
+      _this2._dragRunning = false;
+    });
+  },
+  _dragEndHandler: function _dragEndHandler(e) {
+    if (document) {
+      document.removeEventListener('mousemove', this._dragHandler, false);
+      document.removeEventListener('mouseup', this._dragEndHandler, false);
+      this._toggleSelection('');
+    }
+
+    this._onDragStop(e);
+  },
+  _dragTouchEndHandler: function _dragTouchEndHandler(e) {
+    if (document) {
+      document.removeEventListener('touchmove', this._dragTouchHandler, false);
+      document.removeEventListener('touchup', this._dragTouchEndHandler, false);
+      document.removeEventListener('touchend', this._dragTouchEndHandler, false);
+      document.removeEventListener('touchcancel', this._dragTouchEndHandler, false);
+    }
+
+    this._onDragStop(e);
+  },
+  getValue: function getValue() {
+    return this.state.value;
+  },
+  setValue: function setValue(i) {
+    // calculate percentage
+    var percent = (i - this.props.min) / (this.props.max - this.props.min);
+    if (isNaN(percent)) percent = 0;
+    // update state
+    this.setState({
+      value: i,
+      percent: percent
+    });
+  },
+  getPercent: function getPercent() {
+    return this.state.percent;
+  },
+  setPercent: function setPercent(percent, callback) {
+    var value = this._alignValue(this._percentToValue(percent));
+    var _props = this.props;
+    var min = _props.min;
+    var max = _props.max;
+
+    var alignedPercent = (value - min) / (max - min);
+    if (this.state.value !== value) {
+      this.setState({ value: value, percent: alignedPercent }, callback);
+    }
+  },
+  clearValue: function clearValue() {
+    this.setValue(this.props.min);
+  },
+  _alignValue: function _alignValue(val) {
+    var _props2 = this.props;
+    var step = _props2.step;
+    var min = _props2.min;
+
+    var alignValue = Math.round((val - min) / step) * step + min;
+    return parseFloat(alignValue.toFixed(5));
+  },
+  _onFocus: function _onFocus(e) {
+    this.setState({ focused: true });
+    if (this.props.onFocus) this.props.onFocus(e);
+  },
+  _onBlur: function _onBlur(e) {
+    this.setState({ focused: false, active: false });
+    if (this.props.onBlur) this.props.onBlur(e);
+  },
+  _onMouseDown: function _onMouseDown(e) {
+    if (!this.props.disabled) this._pos = e.clientX;
+  },
+  _onMouseEnter: function _onMouseEnter() {
+    this.setState({ hovered: true });
+  },
+  _onMouseLeave: function _onMouseLeave() {
+    this.setState({ hovered: false });
+  },
+  _getTrackLeft: function _getTrackLeft() {
+    return _reactDom2.default.findDOMNode(this.refs.track).getBoundingClientRect().left;
+  },
+  _onMouseUp: function _onMouseUp(e) {
+    if (!this.props.disabled) this.setState({ active: false });
+    if (!this.state.dragging && Math.abs(this._pos - e.clientX) < 5) {
+      var pos = e.clientX - this._getTrackLeft();
+      this._dragX(e, pos);
+    }
+
+    this._pos = undefined;
+  },
+  _onDragStart: function _onDragStart(e) {
+    this.setState({
+      dragging: true,
+      active: true
+    });
+    if (this.props.onDragStart) this.props.onDragStart(e);
+  },
+  _onDragStop: function _onDragStop(e) {
+    this.setState({
+      dragging: false,
+      active: false
+    });
+    if (this.props.onDragStop) this.props.onDragStop(e);
+  },
+  _onDragUpdate: function _onDragUpdate(e, pos) {
+    if (!this.state.dragging) return;
+    if (!this.props.disabled) this._dragX(e, pos);
+  },
+  _dragX: function _dragX(e, pos) {
+    var max = _reactDom2.default.findDOMNode(this.refs.track).clientWidth;
+    if (pos < 0) pos = 0;else if (pos > max) pos = max;
+    this._updateWithChangeEvent(e, pos / max);
+  },
+  _updateWithChangeEvent: function _updateWithChangeEvent(e, percent) {
+    var _this3 = this;
+
+    this.setPercent(percent, function () {
+      if (_this3.props.onChange) _this3.props.onChange(e, _this3.state.value);
+    });
+  },
+  _percentToValue: function _percentToValue(percent) {
+    return percent * (this.props.max - this.props.min) + this.props.min;
+  },
+  render: function render() {
+    var others = _objectWithoutProperties(this.props, []);
+
+    var percent = this.state.percent;
+    if (percent > 1) percent = 1;else if (percent < 0) percent = 0;
+
+    var styles = this.getStyles();
+    var sliderStyles = this.mergeStyles(styles.root, this.props.style);
+    var handleStyles = percent === 0 ? this.mergeStyles(styles.handle, styles.handleWhenPercentZero, this.state.active && styles.handleWhenActive, this.state.focused && { outline: 'none' }, (this.state.hovered || this.state.focused) && !this.props.disabled && styles.handleWhenPercentZeroAndFocused, this.props.disabled && styles.handleWhenPercentZeroAndDisabled) : this.mergeStyles(styles.handle, this.state.active && styles.handleWhenActive, this.state.focused && { outline: 'none' }, this.props.disabled && styles.handleWhenDisabled, {
+      left: percent * 100 + '%'
+    });
+    var rippleStyle = this.mergeStyles(styles.ripple, percent === 0 && styles.rippleWhenPercentZero);
+    var remainingStyles = styles.remaining;
+    if ((this.state.hovered || this.state.focused) && !this.props.disabled) {
+      remainingStyles.backgroundColor = this.getTheme().trackColorSelected;
+    }
+
+    var rippleShowCondition = (this.state.hovered || this.state.focused) && !this.state.active;
+    var rippleColor = this.state.percent === 0 ? this.getTheme().handleColorZero : this.getTheme().rippleColor;
+    var focusRipple = undefined;
+    if (!this.props.disabled && !this.props.disableFocusRipple) {
+      focusRipple = _react2.default.createElement(_focusRipple2.default, {
+        ref: 'focusRipple',
+        key: 'focusRipple',
+        style: this.mergeStyles(rippleStyle),
+        innerStyle: styles.rippleInner,
+        show: rippleShowCondition,
+        muiTheme: this.state.muiTheme,
+        color: rippleColor
+      });
+    }
+
+    var handleDragProps = {};
+
+    if (!this.props.disabled) {
+      handleDragProps = {
+        onTouchStart: this._onHandleTouchStart,
+        onMouseDown: this._onHandleMouseDown
+      };
+    }
+
+    return _react2.default.createElement(
+      'div',
+      _extends({}, others, { style: this.prepareStyles(this.props.style) }),
+      _react2.default.createElement(
+        'span',
+        null,
+        this.props.description
+      ),
+      _react2.default.createElement(
+        'span',
+        null,
+        this.props.error
+      ),
+      _react2.default.createElement(
+        'div',
+        {
+          style: this.prepareStyles(sliderStyles),
+          onFocus: this._onFocus,
+          onBlur: this._onBlur,
+          onMouseDown: this._onMouseDown,
+          onMouseEnter: this._onMouseEnter,
+          onMouseLeave: this._onMouseLeave,
+          onMouseUp: this._onMouseUp
+        },
+        _react2.default.createElement(
+          'div',
+          { ref: 'track', style: this.prepareStyles(styles.track) },
+          _react2.default.createElement('div', { style: this.prepareStyles(styles.filled) }),
+          _react2.default.createElement('div', { style: this.prepareStyles(remainingStyles) }),
+          _react2.default.createElement(
+            'div',
+            _extends({ style: this.prepareStyles(handleStyles), tabIndex: 0 }, handleDragProps),
+            focusRipple
+          )
+        )
+      ),
+      _react2.default.createElement('input', { ref: 'input', type: 'hidden',
+        name: this.props.name,
+        value: this.state.value,
+        required: this.props.required,
+        min: this.props.min,
+        max: this.props.max,
+        step: this.props.step
+      })
+    );
+  }
+});
+
+exports.default = Slider;
+module.exports = exports['default'];

@@ -19,50 +19,7 @@
  *
  */
 
-Future = Npm.require('fibers/future');
-
-// Function wrapping code.
-// fn - reference to function.
-// context - what you want "this" to be.
-// params - array of parameters to pass to function.
-let wrapFunction = function(fn, context, params) {
-  return function() {
-    fn.apply(context, params);
-  };
-};
-
-function ThrottledRequester(rate, milliseconds) {
-  // making a throttled requester:
-  let busy = false;
-  let requests = [];
-  let fulfilled = [];
-
-  return {
-    makeRequest(req) {
-      if (req) {
-        requests.push(req);
-      }
-
-      if (requests.length) {
-        let nextTick = fulfilled.length && _.first(fulfilled).clone().add(milliseconds, 'milliseconds');
-        if (fulfilled.length < rate || (nextTick && moment().isAfter(nextTick))) {
-          (requests.shift())();
-          fulfilled.push(moment());
-          fulfilled = _.last(fulfilled, rate);
-          this.makeRequest();
-        } else {
-          if (!busy) {
-            busy = true;
-            Meteor.setTimeout(()=> {
-              busy = false;
-              this.makeRequest();
-            }, milliseconds);
-          }
-        }
-      }
-    }
-  };
-}
+import Future from 'fibers/future';
 
 // create request queue for Google Contacts API limited to 10 req/sec
 let contactsRequester = new ThrottledRequester(10, 1000);
@@ -141,7 +98,7 @@ function getContactPhoto(user, contact) {
 
   // add the request to a queue that will execute without getting throttled
   contactsRequester.makeRequest(
-    wrapFunction(gcontacts.getPhoto, gcontacts, [contact.photoUrl, callback]) // get the binary image data from google
+    gcontacts.getPhoto, gcontacts, [contact.photoUrl, callback] // get the binary image data from google
   );
 
   // return the promise
@@ -249,7 +206,7 @@ Meteor.methods({
     });
 
     contactsRequester.makeRequest(
-      wrapFunction(gcontacts.getContacts, gcontacts, [callback]) // get the contacts from google
+      gcontacts.getContacts, gcontacts, [callback] // get the contacts from google
     );
 
     // return the promise
@@ -280,7 +237,7 @@ Meteor.methods({
     let user = Meteor.user();
 
     // merge passed contacts with existing user google contacts
-    if (user.services.google.contacts) {
+    if (!!user && !!user.services.google && user.services.google.contacts) {
       let indexedExistingContacts = _.indexBy(contacts, 'id');
 
       _.each(contacts, (contact)=> {

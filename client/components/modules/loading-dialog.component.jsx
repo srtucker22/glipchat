@@ -20,6 +20,11 @@
  */
 
 // Dependencies
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   CircularProgress,
   Dialog,
@@ -45,14 +50,17 @@ const styles = {
   }
 };
 
-LoadingDialogComponent = Radium(React.createClass({
+export default LoadingDialogComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div className='LoadingDialog'>
         <Dialog
+          onRequestClose={this.props.onTouchTap}
           bodyStyle={styles.body.css}
           contentStyle={styles.content.css}
-          open={this.props.open}>
+          open={this.props.open}
+          style={this.props.style}>
           <h4>{this.props.title}</h4>
           <CircularProgress mode='indeterminate'/>
         </Dialog>

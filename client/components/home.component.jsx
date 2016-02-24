@@ -20,7 +20,17 @@
  */
 
 // Dependencies
-const {History} = ReactRouter;
+import Browser from 'bowser';
+import DownloadButtonComponent from './modules/download-button.component.jsx';
+import FooterComponent from './modules/footer.component.jsx';
+import GithubComponent from './modules/github.component.jsx';
+import HeaderComponent from './modules/header.component.jsx';
+import {browserHistory} from 'react-router';
+import LoadingDialogComponent from './modules/loading-dialog.component.jsx';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
 const {FontIcon, RaisedButton, Styles: {Colors}} = MUI;
 
 const styles = {
@@ -58,8 +68,8 @@ Dependency.autorun(()=> {
   UserActions = Dependency.get('UserActions');
 });
 
-HomeComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData, History],
+export default HomeComponent = Radium(React.createClass({
+  mixins: [ReactMeteorData],
 
   getMeteorData() {
     return {
@@ -73,7 +83,7 @@ HomeComponent = Radium(React.createClass({
 
   componentWillUpdate(nextProps, nextState) {
     if (this.data.currentRoom) {
-      this.history.pushState(null, '/room/' + this.data.currentRoom._id);
+      browserHistory.push('/room/' + this.data.currentRoom._id);
     }
   },
 

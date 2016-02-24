@@ -19,6 +19,11 @@
  *
  */
 
+import LoadingDialogComponent from './loading-dialog.component.jsx';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   RaisedButton,
   Styles: {Colors}
@@ -46,13 +51,22 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-ReadyPromptComponent = Radium(React.createClass({
+export default ReadyPromptComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   componentDidMount() {
     // join room stream directly if alone in room
     if (!this.props.room.connected.length) {
       RoomActions.joinRoomStream(this.props.room._id);
+      this.setState({
+        loading: true
+      });
+    };
+  },
+
+  getInitialState() {
+    return {
+      loading: false
     };
   },
 
@@ -72,6 +86,11 @@ ReadyPromptComponent = Radium(React.createClass({
         {(this.props.room.connected.length &&
           !_.contains(this.props.room.connected, this.data.user._id)) ? (
           <div style={[GlobalStyles.table, styles.css]}>
+            <LoadingDialogComponent
+              open={(!!this.state.loading)}
+              onTouchTap={this.props.onTouchTap}
+              title='Joining'
+              style={{zIndex: 3}}/>
             <div className='text-center' style={[GlobalStyles.cell]}>
               <p>Are you ready to join?</p>
               <RaisedButton label='Join'

@@ -78,7 +78,13 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
 
 5. Run the app with the settings <code>meteor --settings settings.json</code>
 
+### Deployment Notes:
+
+To deploy to a remote server, consider using a package like <a href="https://github.com/arunoda/meteor-up">Meteor Up</a>
+
 ### Electron Notes:
+
+*Do NOT include the 'electron' field in your settings.json file if you are not running quasar from a Windows or Mac machine. meteor-electron will throw errors if you try and build from a Linux machine.*
 
 quasar uses <a href="https://github.com/mixmaxhq/meteor-electron" target="_blank">meteor-electron</a> to easily transform into a downloadable desktop app and update as you develop. For <code>settings.json</code> configuration for this feature, please refer to the <a href="https://github.com/mixmaxhq/meteor-electron" target="_blank">meteor-electron documentation</a>.
 
@@ -88,7 +94,7 @@ To run the Electron app pointing to localhost, exclude the <code>rootUrl</code> 
 
 ## Application Design Overview
 
-As mentioned previously, quasar is an example of how to create a WebRTC video chatroom and also of how to integrate React and Flux in a Meteor app.
+Quasar is an example of how to create a WebRTC video chatroom and also of how to integrate React and Flux in a Meteor app.
 
 Don't know React or Flux? No problem!
 
@@ -137,13 +143,10 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
 -  Change the name of the project to make it more accessible for projected users (suggestions welcome)
 
 ## TODO
--  local material icons
 -  Enhance invite workflow
-  - mobile -- you send an invite to a room to active users
-    - if an invitee opens the app after a notification and the inviter is active,
-    they will get a dialog asking to join the room and a notification in their quasar notification list for retrieval -- which shows 'join' cta until the users leave the room
-    - if you invite non-users, they will go through auth flow and then directed to the room. if the room is empty, user will be directed to notifications list on mobile or homepage on desktop.
--  Implement a global namespace for appName (clarify meaning)
+  - mobile -- you send an invite
+    - if an active invitee opens the app after a notification and the inviter is active, they will get a dialog asking to join the room and a notification in their quasar notification list for retrieval -- which shows 'join' cta until the users leave the room
+    - if you invite non-users, they will go directly to room as guest. if the room is empty, user will be directed to notifications list on mobile or homepage on desktop. ~ implement with invitation codes in email
 -  Add raix push notifications for cordova to enhance mobile support
 -  Add TURN server support to make it more useful for real-world deployment
 -  Package the application to make it easier to install

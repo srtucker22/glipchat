@@ -19,6 +19,12 @@
  *
  */
 
+import MUI from 'material-ui';
+import LoadingDialogComponent from './loading-dialog.component.jsx';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   Dialog,
   FlatButton,
@@ -41,9 +47,14 @@ Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('NotificationActions');
 });
 
-AnswerDialogComponent = Radium(React.createClass({
+export default AnswerDialogComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
+
   answer() {
     NotificationActions.accept();
+    this.setState({
+      loading: true
+    });
   },
   reject() {
     NotificationActions.reject();
@@ -70,6 +81,9 @@ AnswerDialogComponent = Radium(React.createClass({
         open={!!this.props.invitation}
         onRequestClose={this.handleClose}
       >
+      {this.state.loading ?
+        <LoadingDialogComponent open={true} title='Starting video call'/> : ''
+      }
       </Dialog>
     );
   },

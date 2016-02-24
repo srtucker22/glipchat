@@ -20,6 +20,13 @@
  */
 
 // Dependencies
+import GithubComponent from './modules/github.component.jsx';
+import LoadingDialogComponent from './modules/loading-dialog.component.jsx';
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   RaisedButton,
   Styles: {Colors}
@@ -28,7 +35,7 @@ const {
 const styles = {
   css: {
     backgroundAttachment: 'fixed',
-    backgroundImage: 'url(images/quasar.jpg)',
+    backgroundImage: 'url(' + (Meteor.isCordova ? '/local-filesystem/images/quasar.jpg' : 'images/quasar.jpg') + ')',
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
@@ -55,14 +62,18 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-IntroComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
+export default IntroComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin, ReactMeteorData],
 
   getMeteorData() {
     return {
       loggingIn: UserStore.loggingIn(),
       loggingOut: UserStore.loggingOut.get()
     };
+  },
+
+  loginAsGuest() {
+    UserActions.loginAsGuest();
   },
 
   loginWithGoogle() {
@@ -72,15 +83,23 @@ IntroComponent = Radium(React.createClass({
   render() {
     return (
       <div style={[GlobalStyles.table, styles.css]}>
+        <GithubComponent />
         <LoadingDialogComponent
           open={(!!this.data.loggingIn && !this.data.loggingOut)}
           title='Signing in'/>
         <div className='text-center' style={[GlobalStyles.cell]}>
-          <h1 style={[styles.title.css]}>{'quasar'}</h1>
+          <h1 style={[styles.title.css]}>{AppDetails.name}</h1>
           <br />
           <RaisedButton
             onTouchTap={this.loginWithGoogle}
             label='Sign in with Google'
+            primary={true}
+            style={{marginBottom: '20px'}}
+          />
+          <br/>
+          <RaisedButton
+            onTouchTap={this.loginAsGuest}
+            label='Continue as guest'
             primary={true}
             style={{marginBottom: '50px'}}
           />

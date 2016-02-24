@@ -19,6 +19,10 @@
  *
  */
 
+import Browser from 'bowser';
+import GooglePeople from './google-people.jsx';
+
+let googlePeople = GooglePeople();
 let NotificationActions;
 let RoomActions;
 let RTCActions;
@@ -47,7 +51,7 @@ var UserStore = function() {
 
   // only desktop version will auto-login vistors
   if (Browser.mobile || Browser.tablet) {
-    AccountsGuest.enabled = false;
+    AccountsGuest.enabled = true;
     AccountsGuest.forced = false;
   } else {
     AccountsGuest.enabled = true;
@@ -206,11 +210,11 @@ var UserStore = function() {
   };
 
   _this.getContacts = ()=> {
-    if (GooglePeople.readyForUse) {
+    if (googlePeople.readyForUse) {
       // we need to wait for google to get their shit together before we can use the People API :/
       if (!_this.isGuest() && _this.user().services.google) {
 
-        GooglePeople.getContacts().then(function(res) {
+        googlePeople.getContacts().then(function(res) {
           let modified = _.map(res, (val)=> {
             // we're getting buggy returns from Google People for photos right now
             let photo = val.photos ? _.find(val.photos, (photo)=> {
@@ -257,6 +261,8 @@ var UserStore = function() {
             });
           }
         });
+      } else if (!_this.contacts.get() && _this.isGuest()) {
+        _this.contacts.set([]);
       }
     }
   };
@@ -287,7 +293,7 @@ var UserStore = function() {
         let permissions = [
           'https://www.googleapis.com/auth/contacts.readonly',
           'https://www.googleapis.com/auth/userinfo.email'];
-        GooglePeople.readyForUse &&
+        googlePeople.readyForUse &&
           permissions.push('https://www.googleapis.com/auth/plus.login');
         Meteor.loginWithGoogle({
           requestPermissions: permissions,
@@ -296,6 +302,17 @@ var UserStore = function() {
           forceApprovalPrompt: true
         }, (err)=> {
           if (!err) {
+            _this.on.loginSuccess();
+          } else {
+            _this.on.loginFailed(err);
+          }
+        });
+        break;
+
+      case 'USER_LOGIN_GUEST':
+        _this.on.loginStart();
+        Meteor.loginVisitor(null, (err)=> {
+          if (err) {
             _this.on.loginSuccess();
           } else {
             _this.on.loginFailed(err);

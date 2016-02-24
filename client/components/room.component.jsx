@@ -18,7 +18,19 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-const {History} = ReactRouter;
+import Browser from 'bowser';
+import {browserHistory} from 'react-router';
+import CallingOverlayComponent from './modules/calling-overlay.component.jsx';
+import ControlsComponent from './modules/controls.component.jsx';
+import FirstOverlayComponent from './modules/first-overlay.component.jsx';
+import InviteComponent from './modules/invite.component.jsx';
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+import ReadyPromptComponent from './modules/ready-prompt.component.jsx';
+import VideoComponent from './modules/video.component.jsx';
+import VideoOverlayComponent from './modules/video-overlay.component.jsx';
+
 const {Styles: {Colors}} = MUI;
 
 const styles = {
@@ -53,11 +65,11 @@ const styles = {
   },
 };
 
-let RoomActions = null;
-let RoomStore   = null;
-let RTCActions  = null;
-let RTCStore    = null;
-let UserStore   = null;
+let RoomActions;
+let RoomStore;
+let RTCActions;
+let RTCStore;
+let UserStore;
 
 Dependency.autorun(()=> {
   RoomActions = Dependency.get('RoomActions');
@@ -73,8 +85,8 @@ let standardActions = [
   {text: 'Submit', onTouchTap: this._onDialogSubmit, ref: 'submit'},
 ];
 
-RoomComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData, History],
+export default RoomComponent = Radium(React.createClass({
+  mixins: [ReactMeteorData],
 
   componentWillUnmount() {
     RTCActions.disconnect();
@@ -87,7 +99,7 @@ RoomComponent = Radium(React.createClass({
     if (Object.keys(this.data).length &&
       this.data.userId !== UserStore.userId()) {
       RTCActions.disconnect(this.data.userId);
-      this.history.pushState(null, '/');
+      browserHistory.push('/');
     }
     return {
       localStreamError: RTCStore.localStreamError.get(),

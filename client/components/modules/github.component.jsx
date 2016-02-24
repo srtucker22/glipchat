@@ -19,6 +19,11 @@
  *
  */
 
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const styles = {
   css: {
     position: 'absolute',
@@ -29,7 +34,8 @@ const styles = {
   }
 };
 
-GithubComponent = Radium(React.createClass({
+export default GithubComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <a href='https://github.com/srtucker22/quasar' target='_blank'>

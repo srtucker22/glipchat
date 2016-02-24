@@ -19,7 +19,13 @@
  *
  */
 
-const {History} = ReactRouter;
+import Browser from 'bowser';
+import {browserHistory} from 'react-router';
+import MUI from 'material-ui';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Radium from 'radium';
+import React from 'react';
+
 const {
   FontIcon,
   RaisedButton,
@@ -84,6 +90,7 @@ Dependency.autorun(()=> {
 
 // Ask for permission to use the camera and microphone on the user's computer
 let PermissionDeniedComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div style={[styles.permissionDenied.css]}>
@@ -112,7 +119,7 @@ let PermissionDeniedComponent = Radium(React.createClass({
             <br />
             <RaisedButton
               label='Go Back'
-              onClick={this.props.action}
+              onTouchTap={this.props.action}
               primary={true}/>
           </div>
         </div>
@@ -123,6 +130,7 @@ let PermissionDeniedComponent = Radium(React.createClass({
 
 // Warn that the user is already connected to the room in a different window, tab or browser
 let DuplicateErrorComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div className='row' style={[styles.general.css]}>
@@ -133,7 +141,7 @@ let DuplicateErrorComponent = Radium(React.createClass({
           <br/>
           <RaisedButton
             label='Go Back'
-            onClick={this.props.action}
+            onTouchTap={this.props.action}
             primary={true}/>
         </div>
       </div>
@@ -143,6 +151,7 @@ let DuplicateErrorComponent = Radium(React.createClass({
 
 // Warn that there has been a general error and ask the user to refresh the session
 let GeneralErrorComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div className='row' style={[styles.general.css]}>
@@ -153,7 +162,7 @@ let GeneralErrorComponent = Radium(React.createClass({
           <br/>
           <RaisedButton
             label='Go Back'
-            onClick={this.props.action}
+            onTouchTap={this.props.action}
             primary={true}/>
         </div>
       </div>
@@ -163,6 +172,7 @@ let GeneralErrorComponent = Radium(React.createClass({
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
 let NotSupportedErrorComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
   render() {
     return (
       <div className='row' style={[styles.general.css]}>
@@ -176,7 +186,7 @@ let NotSupportedErrorComponent = Radium(React.createClass({
           <br/>
           <RaisedButton
             label='Go Back'
-            onClick={this.props.action}
+            onTouchTap={this.props.action}
             primary={true}/>
         </div>
       </div>
@@ -185,11 +195,11 @@ let NotSupportedErrorComponent = Radium(React.createClass({
 }));
 
 // Logic for determining which error message to show when something goes wrong
-ErrorComponent = Radium(React.createClass({
-  mixins: [History],
+export default ErrorComponent = Radium(React.createClass({
+  mixins: [PureRenderMixin],
 
   back() {
-    this.history.pushState(null, '/');
+    browserHistory.push('/');
   },
 
   render() {

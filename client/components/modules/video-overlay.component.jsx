@@ -19,7 +19,11 @@
  *
  */
 
-let ding = new Audio('/audio/ding.mp3');
+import MUI from 'material-ui';
+import Radium from 'radium';
+import React from 'react';
+
+const ding = new Audio('/audio/ding.mp3');
 
 const {
   FloatingActionButton,
@@ -97,7 +101,7 @@ Dependency.autorun(()=> {
   RTCActions  = Dependency.get('RTCActions');
 });
 
-VideoOverlayComponent = Radium(React.createClass({
+export default VideoOverlayComponent = Radium(React.createClass({
   mixins: [ReactMeteorData],
 
   componentDidMount() {
