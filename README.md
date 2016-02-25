@@ -101,6 +101,8 @@ nice additional flags might be:
 <code>--verbose
 --production</code>
 
+Please read the <a href="https://github.com/meteor/meteor/wiki/Meteor-Cordova-integration">Meteor Cordova Integration</a> docs for more details.
+
 **The mobile UI is currently super slow. Any suggestions or contributions really appreciated here!**
 
 ### Electron Notes:
@@ -170,7 +172,6 @@ quasar is intended to be an example of how to create a WebRTC video chatroom and
     - if you invite non-users, they will go directly to room as guest. if the room is empty, user will be directed to notifications list on mobile or homepage on desktop. ~ implement with invitation codes in email
 -  Add raix push notifications for cordova to enhance mobile support
 -  Add TURN server support to make it more useful for real-world deployment
--  Package the application to make it easier to install
 
 ## License
 

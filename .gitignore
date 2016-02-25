@@ -2,3 +2,4 @@ settings.json
 .DS_Store
 .meteor-electron
 /public/downloads
+node_modules

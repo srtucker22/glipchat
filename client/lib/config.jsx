@@ -1,4 +1,4 @@
-import {} from 'webrtc-adapter';
+// import {} from 'webrtc-adapter';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 

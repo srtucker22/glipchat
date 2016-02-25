@@ -13,6 +13,7 @@
     "react-addons-css-transition-group": "^0.14.7",
     "react-addons-pure-render-mixin": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-list": "^0.7.14",
     "react-router": "^2.0.0",
     "react-scroll-components": "^0.2.2",
     "react-tagsinput": "^3.3.0",
