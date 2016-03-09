@@ -3,3 +3,4 @@ settings.json
 .meteor-electron
 /public/downloads
 node_modules
+config.push.json
