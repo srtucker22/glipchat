@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "strip-json-comments": {
+      "version": "1.0.4"
+    }
+  }
+}
