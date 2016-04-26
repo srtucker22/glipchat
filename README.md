@@ -1,6 +1,6 @@
 # quasar
 
-View the project at <a href="https://quasar.meteor.com" target="_blank">quasar.meteor.com</a>
+View the project at <a href="https://quasar-meteor.herokuapp.com/" target="_blank">https://quasar-meteor.herokuapp.com/</a>
 
 quasar is a real-time video chatroom application. The frontend is powered by React, Flux and WebRTC and the backend is powered by Meteor.
 
@@ -62,7 +62,7 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
               "darwin": "/public/downloads/osx/quasar.zip"
             },
             "name": "quasar",
-            "rootUrl": "https://quasar.meteor.com",
+            "rootUrl": "https://quasar-meteor.herokuapp.com/",
             "version": "0.0.1",
             "description": "Video Chatroom with Meteor + WebRTC + React + Flux",
             "height": 768,
@@ -113,7 +113,7 @@ quasar uses <a href="https://github.com/mixmaxhq/meteor-electron" target="_blank
 
 meteor-electron has been modified to build a compressed version of the quasar desktop app at <code>quasar/public/downloads/{platform}-{arch}/quasar.zip</code>, which browser versions can reference for easy downloading. See <a href="https://github.com/srtucker22/quasar/blob/master/client/components/modules/download-button.component.jsx#L57" target="_blank">download-button.component.jsx</a> for how components reference this directory.
 
-To run the Electron app pointing to localhost, exclude the <code>rootUrl</code> parameter from <code>settings.json</code>, otherwise the Electron app will point to https://quasar.meteor.com.
+To run the Electron app pointing to localhost, exclude the <code>rootUrl</code> parameter from <code>settings.json</code>, otherwise the Electron app will point to https://quasar-meteor.herokuapp.com/.
 
 ## Application Design Overview
 
