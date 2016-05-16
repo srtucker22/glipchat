@@ -39,7 +39,7 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
           },
           "kadira": {
             "appId": "YOUR_APP_ID",
-            "appSecret": "YOUR_APP_SECRET
+            "appSecret": "YOUR_APP_SECRET"
           },
           "public": {
             "analyticsSettings": {
@@ -49,7 +49,7 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
             "google": {
               "browserKey": "YOUR_BROWSER_KEY"
             }
-          }
+          },
           "electron": {
             "autoPackage": true,
             "builds": [{
