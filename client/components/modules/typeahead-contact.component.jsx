@@ -20,33 +20,23 @@
  */
 
 // Dependencies
-import MUI from 'material-ui';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
-import ReactScrollComponents from 'react-scroll-components';
 import TagsInput from 'react-tagsinput';
-
-const {
-  Avatar,
-  Divider,
-  FontIcon,
-  Menu,
-  MenuItem,
-  List,
-  ListItem,
-  Paper,
-  Styles: {Colors},
-  TextField
-} = MUI;
+import Colors from 'material-ui/styles/colors';
+import Avatar from 'material-ui/Avatar';
+import Divider from 'material-ui/Divider';
+import FontIcon from 'material-ui/FontIcon';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import {List, ListItem} from 'material-ui/List';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
 
 const {
   Style
 } = Radium;
-
-const {
-  ScrollListenerMixin
-} = ReactScrollComponents;
 
 let GlobalStyles;
 let RoomActions;
@@ -141,8 +131,12 @@ TagsInput.prototype._addTag = function(tag) {
   }
 };
 
-const TypeaheadMobileChipComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+class TypeaheadMobileChipComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
   render() {
     return (
       <div key={this.props.tag} style={[
@@ -170,10 +164,15 @@ const TypeaheadMobileChipComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+};
+TypeaheadMobileChipComponent = Radium(TypeaheadMobileChipComponent);
 
-const ContactListComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin, ScrollListenerMixin],
+class ContactListComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
 
   fuzzyFilter(searchText, key) {
     let _this = this;
@@ -196,7 +195,7 @@ const ContactListComponent = Radium(React.createClass({
     } else {
       return sub(key);
     }
-  },
+  }
 
   levenshteinDistance(searchText, key) {
     let current = [];
@@ -219,7 +218,7 @@ const ContactListComponent = Radium(React.createClass({
       }
     }
     return current.pop();
-  },
+  }
 
   render() {
     return (
@@ -273,20 +272,23 @@ const ContactListComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+};
+ContactListComponent = Radium(ContactListComponent);
 
-export default TypeaheadContactComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
-  getInitialState() {
-    return {
+export class TypeaheadContactComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.state = {
       invitees: []
     };
-  },
+  }
 
   componentWillUpdate(nextProps, nextState) {
     this.props.onChange && this.state.invitees !== nextState.invitees &&
     this.props.onChange(nextState);
-  },
+  }
 
   renderTag(props) {
     let _this = this;
@@ -303,7 +305,7 @@ export default TypeaheadContactComponent = Radium(React.createClass({
         }}
         mobile={_this.props.mobile}/>
     );
-  },
+  }
 
   addInvitee(i) {
     setTimeout(()=> {
@@ -313,18 +315,18 @@ export default TypeaheadContactComponent = Radium(React.createClass({
         query: ''
       });
     }, 0);
-  },
+  }
 
   updateInvitees(i) {
     this.setState({
       invitees: i,
       query: ''
     });
-  },
+  }
 
   updateQuery(event) {
     this.setState({query: event.target.value});
-  },
+  }
 
   validate(tag) {
     let _this = this;
@@ -333,7 +335,7 @@ export default TypeaheadContactComponent = Radium(React.createClass({
 
     return re.test(tag) ||
       (!_this.state.invitees || _this.state.invitees.indexOf(tag) === -1);
-  },
+  }
 
   renderInput(props) {
     let _this = this;
@@ -354,7 +356,7 @@ export default TypeaheadContactComponent = Radium(React.createClass({
         style={_.extend({}, styles.input.css, _this.props.mobile ?
           styles.input.mobile.css : '')}/>
     );
-  },
+  }
 
   render() {
     // sort the contacts by last login date
@@ -396,5 +398,7 @@ export default TypeaheadContactComponent = Radium(React.createClass({
         </div>
       </div>
     );
-  },
-}));
+  }
+};
+
+export default Radium(TypeaheadContactComponent);

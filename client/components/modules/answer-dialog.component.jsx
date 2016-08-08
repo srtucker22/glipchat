@@ -19,19 +19,15 @@
  *
  */
 
-import MUI from 'material-ui';
+import Colors from 'material-ui/styles/colors';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import LoadingDialogComponent from './loading-dialog.component.jsx';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
+import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
-
-const {
-  Dialog,
-  FlatButton,
-  RaisedButton,
-  Styles: {Colors},
-  TextField,
-} = MUI;
+import TextField from 'material-ui/TextField';
 
 const styles = {
   css: {
@@ -47,18 +43,24 @@ Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('NotificationActions');
 });
 
-export default AnswerDialogComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+export class AnswerDialogComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
 
   answer() {
     NotificationActions.accept();
     this.setState({
       loading: true
     });
-  },
+  }
+
   reject() {
     NotificationActions.reject();
-  },
+  }
+
   render() {
     const actions = [
       <FlatButton
@@ -86,5 +88,7 @@ export default AnswerDialogComponent = Radium(React.createClass({
       }
       </Dialog>
     );
-  },
-}));
+  }
+};
+
+export default Radium(AnswerDialogComponent);

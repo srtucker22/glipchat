@@ -19,18 +19,16 @@
  *
  */
 
-import {browserHistory} from 'react-router';
-import MUI from 'material-ui';
+import { browserHistory } from 'react-router';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import Colors from 'material-ui/styles/colors';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import Paper from 'material-ui/Paper';
 import Radium from 'radium';
 import React from 'react';
-
-const {
-  FontIcon,
-  FlatButton,
-  IconButton,
-  Paper
-} = MUI;
-const Colors = MUI.Styles.Colors;
 
 const styles = {
   css: {
@@ -94,40 +92,33 @@ Dependency.autorun(()=> {
   RTCStore = Dependency.get('RTCStore');
 });
 
-export default ControlsComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
-
-  getInitialState: function() {
-    return {visible: false};
-  },
-
-  getMeteorData() {
-    return {
-      controlsVisible: RoomStore.controlsVisible.get(),
-      isLocalAudioEnabled: RTCStore.isLocalAudioEnabled.get(),
-      isLocalVideoEnabled: RTCStore.isLocalVideoEnabled.get(),
+export class ControlsComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false
     };
-  },
+  }
 
   leave() {
     setTimeout(()=> {
       browserHistory.push('/');
     }, 0);
-  },
+  }
 
   showInviteModal() {
     setTimeout(()=> {
       RoomActions.showInviteModal();
     }, 0);
-  },
+  }
 
   toggleLocalAudio() {
     RTCActions.toggleLocalAudio();
-  },
+  }
 
   toggleLocalVideo() {
     RTCActions.toggleLocalVideo();
-  },
+  }
 
   render() {
     return (
@@ -139,7 +130,7 @@ export default ControlsComponent = Radium(React.createClass({
           GlobalStyles.table,
           styles.controls.css,
           (Radium.getState(this.state, 'overlay', ':hover') ||
-            this.data.controlsVisible) ? styles.controls.visible : {}
+            this.props.controlsVisible) ? styles.controls.visible : {}
         )}>
           <div key='invite'
             onTouchTap={this.showInviteModal}
@@ -152,7 +143,7 @@ export default ControlsComponent = Radium(React.createClass({
           <div key='video' onTouchTap={this.toggleLocalVideo} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
-            !this.data.isLocalVideoEnabled && styles.controls.red.css
+            !this.props.isLocalVideoEnabled && styles.controls.red.css
           ]}>
             <IconButton>
               <FontIcon
@@ -163,7 +154,7 @@ export default ControlsComponent = Radium(React.createClass({
           <div key='audio' onTouchTap={this.toggleLocalAudio} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
-            !this.data.isLocalAudioEnabled && styles.controls.red.css
+            !this.props.isLocalAudioEnabled && styles.controls.red.css
           ]}>
             <IconButton>
               <FontIcon
@@ -195,4 +186,12 @@ export default ControlsComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+};
+
+export default createContainer(({params}) => {
+  return {
+    controlsVisible: RoomStore.controlsVisible.get(),
+    isLocalAudioEnabled: RTCStore.isLocalAudioEnabled.get(),
+    isLocalVideoEnabled: RTCStore.isLocalVideoEnabled.get(),
+  };
+}, Radium(ControlsComponent));

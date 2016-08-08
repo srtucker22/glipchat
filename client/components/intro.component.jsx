@@ -20,17 +20,16 @@
  */
 
 // Dependencies
+import * as config from '../../lib/config';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 import GithubComponent from './modules/github.component.jsx';
 import LoadingDialogComponent from './modules/loading-dialog.component.jsx';
-import MUI from 'material-ui';
+import Colors from 'material-ui/styles/colors';
+import RaisedButton from 'material-ui/RaisedButton';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
-
-const {
-  RaisedButton,
-  Styles: {Colors}
-} = MUI;
 
 const styles = {
   css: {
@@ -62,33 +61,30 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-export default IntroComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin, ReactMeteorData],
-
-  getMeteorData() {
-    return {
-      loggingIn: UserStore.loggingIn(),
-      loggingOut: UserStore.loggingOut.get()
-    };
-  },
+export class IntroComponent extends React.Component {
+  constructor() {
+    super(...arguments);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
 
   loginAsGuest() {
     UserActions.loginAsGuest();
-  },
+  }
 
   loginWithGoogle() {
     UserActions.loginWithGoogle();
-  },
+  }
 
   render() {
     return (
       <div style={[GlobalStyles.table, styles.css]}>
         <GithubComponent />
         <LoadingDialogComponent
-          open={(!!this.data.loggingIn && !this.data.loggingOut)}
+          open={(!!this.props.loggingIn && !this.props.loggingOut)}
           title='Signing in'/>
         <div className='text-center' style={[GlobalStyles.cell]}>
-          <h1 style={[styles.title.css]}>{AppDetails.name}</h1>
+          <h1 style={[styles.title.css]}>{config.APP_NAME}</h1>
           <br />
           <RaisedButton
             onTouchTap={this.loginWithGoogle}
@@ -106,5 +102,12 @@ export default IntroComponent = Radium(React.createClass({
         </div>
       </div>
     );
-  },
-}));
+  }
+};
+
+export default createContainer(({params}) => {
+  return {
+    loggingIn: UserStore.loggingIn(),
+    loggingOut: UserStore.loggingOut.get()
+  };
+}, Radium(IntroComponent));

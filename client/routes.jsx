@@ -26,7 +26,7 @@ import HomeComponent from './components/home.component.jsx';
 import HomeMobileComponent from './components/home-mobile.component.jsx';
 import NotFoundComponent from './components/not-found.component.jsx';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom'
 import RoomComponent from './components/room.component.jsx';
 
 let RoomActions;
@@ -49,8 +49,10 @@ Meteor.startup(function() {
   const routeConfig = [{
     path: '/',
     component: AppComponent,
-    indexRoute: {component: (Browser.mobile || Browser.tablet) ?
-      HomeMobileComponent : HomeComponent},
+    indexRoute: {
+      component: (Browser.mobile || Browser.tablet) ?
+        HomeMobileComponent : HomeComponent
+    },
     onEnter: (nextState, replaceState) => { // there should probably be a better way to do this for all routes
       analytics.page('home');
     },
@@ -95,10 +97,10 @@ Meteor.startup(function() {
     },
   }];
 
-  ReactDOM.render(
+  render((
     <Router
       history={browserHistory}
-      routes={routeConfig} />,
-    document.getElementById('react')
-  );
+      routes={routeConfig}
+    />
+  ), document.getElementById('root'));
 });

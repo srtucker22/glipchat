@@ -1,3 +1,1 @@
-AppDetails = {
-  name: 'quasar'
-};
+export const APP_NAME = 'quasar';

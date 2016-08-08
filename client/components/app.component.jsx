@@ -19,11 +19,11 @@
  *
  */
 
-import MUI from 'material-ui';
-import Radium from 'radium';
+import * as config from '../../lib/config';
 import React from 'react';
-
-let {ThemeManager, LightRawTheme} = MUI.Styles;
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
 const styles = {
   css: {
@@ -31,26 +31,27 @@ const styles = {
   }
 };
 
-export const AppComponent = Radium(React.createClass({
-  childContextTypes: {
-    muiTheme: React.PropTypes.object,
-  },
+export class AppComponent extends React.Component {
+  constructor() {
+    super(...arguments);
 
-  componentDidMount() {
-
-  },
-
+    this.constructor.childContextTypes = {
+      muiTheme: React.PropTypes.object,
+    };
+  }
   getChildContext() {
     return {
-      muiTheme: ThemeManager.getMuiTheme(LightRawTheme),
+      muiTheme: getMuiTheme(lightBaseTheme),
     };
-  },
+  }
 
   render() {
     return (
-      <div style={[styles.css]} appName={AppDetails.name}>
+      <div style={styles.css}>
         {this.props.children}
       </div>
     );
-  },
-}));
+  }
+}
+
+export default AppComponent;

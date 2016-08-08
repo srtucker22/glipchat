@@ -19,18 +19,16 @@
  *
  */
 
-import MUI from 'material-ui';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 import Radium from 'radium';
 import React from 'react';
+import Colors from 'material-ui/styles/colors';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
 
 const ding = new Audio('/audio/ding.mp3');
-
-const {
-  FloatingActionButton,
-  FontIcon,
-  IconButton,
-  Styles: {Colors}
-} = MUI;
 
 const styles = {
   css: {
@@ -101,8 +99,14 @@ Dependency.autorun(()=> {
   RTCActions  = Dependency.get('RTCActions');
 });
 
-export default VideoOverlayComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
+export class VideoOverlayComponent extends React.Component {
+  constructor() {
+    super(...arguments);
+    this.state = {
+      shade: false,
+      shadeTimer: null
+    };
+  }
 
   componentDidMount() {
     // play ding on entry -- this might get weird if you're the 4th person to enter
@@ -110,37 +114,17 @@ export default VideoOverlayComponent = Radium(React.createClass({
     if (this.props.id !== 'local') {
       ding.play();
     }
-  },
-
-  getInitialState: function() {
-    return {
-      shade: false,
-      shadeTimer: null
-    };
-  },
-
-  getMeteorData() {
-    let options = {
-      isAudioEnabled: (this.props.id === 'local') ?
-        RTCStore.isLocalAudioEnabled.get() :
-        RTCStore.isAudioEnabled[this.props.id].get(),
-    };
-
-    if (this.props.id !== 'local') {
-      options.isRemoteEnabled = RTCStore.isRemoteEnabled[this.props.id].get();
-    }
-    return options;
-  },
+  }
 
   setPrimaryStream() {
     this.toggleShade();
     RTCActions.setPrimaryStream(this.props.id);
-  },
+  }
 
   toggleAudio() {
     (this.props.id === 'local') ?
       RTCActions.toggleLocalAudio() : RTCActions.toggleAudio(this.props.id);
-  },
+  }
 
   toggleShade() {
     if (this.state.shade) {
@@ -161,7 +145,7 @@ export default VideoOverlayComponent = Radium(React.createClass({
         shadeTimer: timeout
       });
     }
-  },
+  }
 
   render() {
     return (
@@ -178,7 +162,7 @@ export default VideoOverlayComponent = Radium(React.createClass({
           style={_.extend({},
             styles.mute.css,
             (Radium.getState(this.state, 'overlay', ':hover') ||
-            !this.data.isAudioEnabled || this.state.shade) ?
+            !this.props.isAudioEnabled || this.state.shade) ?
               styles.mute.visible.css : {})
           }
           mini={true}
@@ -191,7 +175,7 @@ export default VideoOverlayComponent = Radium(React.createClass({
         <IconButton style={_.extend({},
             styles.mute.css,
             styles.mute.remote.css,
-            (this.data.isRemoteEnabled && !this.data.isRemoteEnabled.audio) ?
+            (this.props.isRemoteEnabled && !this.props.isRemoteEnabled.audio) ?
               styles.mute.visible.css : {})
           }
           mini={true}
@@ -203,5 +187,18 @@ export default VideoOverlayComponent = Radium(React.createClass({
         </IconButton>
       </div>
     );
-  },
-}));
+  }
+};
+
+export default createContainer(({params}) => {
+  let options = {
+    isAudioEnabled: (this.props.id === 'local') ?
+      RTCStore.isLocalAudioEnabled.get() :
+      RTCStore.isAudioEnabled[this.props.id].get(),
+  };
+
+  if (this.props.id !== 'local') {
+    options.isRemoteEnabled = RTCStore.isRemoteEnabled[this.props.id].get();
+  }
+  return options;
+}, Radium(VideoOverlayComponent));

@@ -20,21 +20,19 @@
  */
 
 // Dependencies
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import AppBar from 'material-ui/AppBar';
 import Browser from 'bowser';
-import MUI from 'material-ui';
+import Colors from 'material-ui/styles/colors';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
 import Radium from 'radium';
+import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-
-const {
-  AppBar,
-  Dialog,
-  FlatButton,
-  IconButton,
-  RaisedButton,
-  Styles: {Colors},
-  TextField,
-} = MUI;
+import TextField from 'material-ui/TextField';
 
 const styles = {
   css: {
@@ -153,50 +151,40 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-export default InviteComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
+export class InviteComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false
+    };
+  }
 
   cancel() {
     RoomActions.hideInviteModal();
-  },
-
-  getInitialState() {
-    return {
-      open: false
-    };
-  },
-
-  getMeteorData() {
-    return {
-      contacts: UserStore.contacts.get(),
-      inviteModalVisible: RoomStore.inviteModalVisible.get(),
-      invitees: RoomStore.invitees.get(),
-      user: UserStore.user(),
-    };
-  },
+  }
 
   invite() {
     setTimeout(()=> {
-      if (this.state.invitees && this.data.user.profile.name) {
+      if (this.state.invitees && this.props.user.profile.name) {
         RoomActions.invite(this.state.invitees);
         RoomActions.hideInviteModal();
-      } else if (!this.data.user || !this.data.user.profile.name) {
+      } else if (!this.props.user || !this.props.user.profile.name) {
         this.setState({
           open: true
         });
       }
     }, 0);
-  },
+  }
 
   updateProfileName(e) {
     UserActions.updateProfileName(e.target.value);
-  },
+  }
 
   onTypeaheadChange(state) {
     this.setState({
       invitees: state.invitees
     });
-  },
+  }
 
   render() {
     //Custom Actions
@@ -208,7 +196,7 @@ export default InviteComponent = Radium(React.createClass({
       <FlatButton
         key='invite'
         label='Invite'
-        disabled={(!this.state.invitees || !this.state.invitees.length || !this.data.user || !this.data.user.profile.name)}
+        disabled={(!this.state.invitees || !this.state.invitees.length || !this.props.user || !this.props.user.profile.name)}
         primary={true}
         onTouchTap={this.invite} />
     ];
@@ -216,7 +204,7 @@ export default InviteComponent = Radium(React.createClass({
     let mobile = Browser.mobile || Browser.tablet;
     return (mobile ?
       <ReactCSSTransitionGroup transitionName='modal' transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-      {this.data.inviteModalVisible ?
+      {this.props.inviteModalVisible ?
       <div key='invite-modal' style={[styles.mobile.css]}>
         <Dialog
           title='Please enter your name'
@@ -226,9 +214,9 @@ export default InviteComponent = Radium(React.createClass({
           onRequestClose={this.handleClose}
         >
           <TextField
-            value={this.data.user.profile.name}
+            value={this.props.user.profile.name}
             onChange={this.updateProfileName}
-            errorText={!this.data.user.profile.name ? ' ' : null}
+            errorText={!this.props.user.profile.name ? ' ' : null}
             floatingLabelText='Your name'/>
         </Dialog>
         <AppBar
@@ -240,8 +228,8 @@ export default InviteComponent = Radium(React.createClass({
             clear
           </IconButton>}
         />
-        {!!this.data.contacts ? <TypeaheadContactComponent
-          contacts={this.data.contacts}
+        {!!this.props.contacts ? <TypeaheadContactComponent
+          contacts={this.props.contacts}
           mobile={true}
           onChange={this.onTypeaheadChange}/> : ''}
         {this.state.invitees ? <div style={[GlobalStyles.table, {
@@ -272,7 +260,7 @@ export default InviteComponent = Radium(React.createClass({
       (<Dialog
         actions={customActions}
         contentStyle={styles.content.css}
-        open={this.data.inviteModalVisible}
+        open={this.props.inviteModalVisible}
         onRequestClose={this.cancel}
         style={mobile ?
           styles.mobile.css : styles.css}>
@@ -295,16 +283,25 @@ export default InviteComponent = Radium(React.createClass({
               </div>
               <TextField
                 style={styles.content.inviteRow.header.inputName.css}
-                value={this.data.user.profile.name}
+                value={this.props.user.profile.name}
                 onChange={this.updateProfileName}
-                errorText={!this.data.user.profile.name ? ' ' : null}
+                errorText={!this.props.user.profile.name ? ' ' : null}
                 floatingLabelText='Your name'/>
             </div>
-            <TypeaheadContactComponent contacts={this.data.contacts}
+            <TypeaheadContactComponent contacts={this.props.contacts}
             onChange={this.onTypeaheadChange}/>
           </div>
         </div>
       </Dialog>)
     );
-  },
-}));
+  }
+};
+
+export default createContainer(({params}) => {
+  return {
+    contacts: UserStore.contacts.get(),
+    inviteModalVisible: RoomStore.inviteModalVisible.get(),
+    invitees: RoomStore.invitees.get(),
+    user: UserStore.user(),
+  };
+}, Radium(InviteComponent));

@@ -21,16 +21,12 @@
 
 import Browser from 'bowser';
 import {browserHistory} from 'react-router';
-import MUI from 'material-ui';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
-
-const {
-  FontIcon,
-  RaisedButton,
-  Styles: {Colors}
-} = MUI;
+import FontIcon from 'material-ui/FontIcon';
+import RaisedButton from 'material-ui/RaisedButton';
+import Colors from 'material-ui/styles/colors';
 
 const styles = {
   css: {
@@ -89,8 +85,13 @@ Dependency.autorun(()=> {
 });
 
 // Ask for permission to use the camera and microphone on the user's computer
-let PermissionDeniedComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+class PermissionDeniedComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   render() {
     return (
       <div style={[styles.permissionDenied.css]}>
@@ -126,11 +127,16 @@ let PermissionDeniedComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+};
 
 // Warn that the user is already connected to the room in a different window, tab or browser
-let DuplicateErrorComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+class DuplicateErrorComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   render() {
     return (
       <div className='row' style={[styles.general.css]}>
@@ -147,11 +153,16 @@ let DuplicateErrorComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+};
 
 // Warn that there has been a general error and ask the user to refresh the session
-let GeneralErrorComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+class GeneralErrorComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   render() {
     return (
       <div className='row' style={[styles.general.css]}>
@@ -168,11 +179,16 @@ let GeneralErrorComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+};
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
-let NotSupportedErrorComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+class NotSupportedErrorComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   render() {
     return (
       <div className='row' style={[styles.general.css]}>
@@ -192,15 +208,19 @@ let NotSupportedErrorComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+}
 
 // Logic for determining which error message to show when something goes wrong
-export default ErrorComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+export class ErrorComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
 
   back() {
     browserHistory.push('/');
-  },
+  }
 
   render() {
     var errorComponent = <div>{this.props.error.status}</div>;
@@ -220,6 +240,8 @@ export default ErrorComponent = Radium(React.createClass({
         break;
     }
 
-    return errorComponent;
+    return Radium(errorComponent);
   }
-}));
+};
+
+export default ErrorComponent;

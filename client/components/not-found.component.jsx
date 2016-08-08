@@ -19,7 +19,6 @@
  *
  */
 
-import MUI from 'material-ui';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
@@ -41,8 +40,12 @@ Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
 });
 
-export default NotFoundComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+export class NotFoundComponent extends React.Component {
+  constructor() {
+    super(...arguments);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   render() {
     return (
       <div>
@@ -57,5 +60,7 @@ export default NotFoundComponent = Radium(React.createClass({
         <FooterComponent />
       </div>
     );
-  },
-}));
+  }
+};
+
+export default Radium(NotFoundComponent);

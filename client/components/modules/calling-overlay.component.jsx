@@ -19,16 +19,14 @@
  *
  */
 
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 import {browserHistory} from 'react-router';
-import MUI from 'material-ui';
+import CircularProgress from 'material-ui/CircularProgress';
+import Colors from 'material-ui/styles/colors';
 import Radium from 'radium';
+import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
-
-const {
-  CircularProgress,
-  RaisedButton,
-  Styles: {Colors}
-} = MUI;
 
 const styles = {
   css: {
@@ -52,30 +50,21 @@ Dependency.autorun(()=> {
   RoomStore = Dependency.get('RoomStore');
 });
 
-export default CallingOverlayComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
-
-  getMeteorData() {
-    return {
-      invitees: RoomStore.invitees.get(),
-      ringing: RoomStore.ringing.get(),
-    };
-  },
-
+export class CallingOverlayComponent extends React.Component {
   leave() {
     browserHistory.push('/');
-  },
+  }
 
   retry() {
     RoomActions.retry();
-  },
+  }
 
   render() {
     return (
       <div onTouchTap={this.props.onTouchTap}>
         <div style={[GlobalStyles.table, styles.css]}>
           <div className='text-center' style={[GlobalStyles.cell]}>
-            {!!this.data.ringing ? (
+            {!!this.props.ringing ? (
               <div>
                 <h3>Contacting...</h3>
                 <CircularProgress mode='indeterminate'/>
@@ -91,12 +80,12 @@ export default CallingOverlayComponent = Radium(React.createClass({
                 <h3>Contacts Unavailable</h3>
                 <h5>No contacts connected</h5>
                 <div style={{margin: 'auto', width: '100%'}}>
-                  {this.data.invitees ? <RaisedButton label='Retry'
+                  {this.props.invitees ? <RaisedButton label='Retry'
                     primary={true}
                     onTouchTap={this.retry}
                     style={{margin: '0 10px'}}>
                   </RaisedButton> : ''}
-                  <RaisedButton label={this.data.invitees ? 'Cancel' : 'Leave'}
+                  <RaisedButton label={this.props.invitees ? 'Cancel' : 'Leave'}
                     primary={true}
                     onTouchTap={this.leave}>
                   </RaisedButton>
@@ -108,4 +97,11 @@ export default CallingOverlayComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+};
+
+export default createContainer(({params}) => {
+  return {
+    invitees: RoomStore.invitees.get(),
+    ringing: RoomStore.ringing.get(),
+  };
+}, Radium(CallingOverlayComponent));

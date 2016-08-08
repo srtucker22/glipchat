@@ -19,12 +19,10 @@
  *
  */
 
-import MUI from 'material-ui';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
-
-const {RaisedButton} = MUI;
+import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
   button: {
@@ -76,8 +74,13 @@ Dependency.autorun(()=> {
   GlobalStyles = Dependency.get('GlobalStyles');
 });
 
-export default DownloadButtonComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+export class DownloadButtonComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   render() {
     let platforms = {
       mac: {
@@ -98,7 +101,6 @@ export default DownloadButtonComponent = Radium(React.createClass({
       <a href={platform.link} download>
         <RaisedButton
           primary={true}
-          label='Label after'
           labelPosition='after'
           style={styles.button.css}>
           <div style={[GlobalStyles.table, styles.button.container.css]}>
@@ -118,4 +120,6 @@ export default DownloadButtonComponent = Radium(React.createClass({
       </a>
     );
   }
-}));
+}
+
+export default Radium(DownloadButtonComponent);

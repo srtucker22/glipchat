@@ -20,28 +20,24 @@
  */
 
 // Dependencies
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
-import MUI from 'material-ui';
+import Colors from 'material-ui/styles/colors';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
-
-const {
-  AppBar,
-  Avatar,
-  Card,
-  CardActions,
-  CardText,
-  Divider,
-  FlatButton,
-  FontIcon,
-  IconButton,
-  IconMenu,
-  LeftNav,
-  Menu,
-  MenuItem,
-  Styles: {Colors}
-} = MUI;
+import AppBar from 'material-ui/AppBar';
+import Avatar from 'material-ui/Avatar';
+import {Card, CardActions, CardText} from 'material-ui/Card';
+import Divider from 'material-ui/Divider';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import Drawer from 'material-ui/Drawer';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 
 const styles = {
   css: {
@@ -135,24 +131,29 @@ Dependency.autorun(()=> {
   UserActions = Dependency.get('UserActions');
 });
 
-let NotificationDropdownComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+class NotificationDropdownComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   componentDidMount() {
     var _this = this;
     this.interval = window.setInterval(function() {
       _this.setState({lastUpdated: new Date()});
     }, 1000);
-  },
+  }
 
   componentWillUnmount() {
     if (this.interval) {
       window.clearInterval(this.interval);
     }
-  },
+  }
 
   joinRoom(r) {
     RoomActions.joinRoom(r);
-  },
+  }
 
   render() {
     return (
@@ -182,15 +183,20 @@ let NotificationDropdownComponent = Radium(React.createClass({
         </Card>
       </div>
     );
-  },
-}));
+  }
+};
+NotificationDropdownComponent = Radium(NotificationDropdownComponent);
 
-let ProfileDropdownComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+class ProfileDropdownComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
 
   logout() {
     UserActions.logout();
-  },
+  }
 
   render() {
     return (
@@ -216,39 +222,32 @@ let ProfileDropdownComponent = Radium(React.createClass({
         </Card>
       </div>
     );
-  },
-}));
+  }
+};
+ProfileDropdownComponent = Radium(ProfileDropdownComponent);
 
-export default HeaderComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
+export class HeaderComponent extends React.Component {
+  constructor(props) {
+    super(props);
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object,
-  },
-
-  getInitialState() {
-    return {open: false};
-  },
-
-  getMeteorData() {
-    return {
-      user: UserStore.user(),
-      loggingIn: UserStore.loggingIn(),
-      subscribed: UserStore.subscribed.get(),
+    this.constructor.childContextTypes = {
+      muiTheme: React.PropTypes.object,
     };
-  },
+
+    this.state = {open: false};
+  }
 
   loginWithGoogle() {
     UserActions.loginWithGoogle();
-  },
+  }
 
   handleToggle() {
     this.setState({open: !this.state.open});
-  },
+  }
 
   handleClose() {
     this.setState({open: false});
-  },
+  }
 
   render() {
 
@@ -297,16 +296,16 @@ export default HeaderComponent = Radium(React.createClass({
       ];
     }
 
-    if (!UserStore.loggingIn() && this.data.subscribed) {
-      if (!!this.data.user && !UserStore.isGuest()) {
+    if (!UserStore.loggingIn() && this.props.subscribed) {
+      if (!!this.props.user && !UserStore.isGuest()) {
 
-        notificationDropdown = !!this.data.user.history ? (
+        notificationDropdown = !!this.props.user.history ? (
           <NotificationDropdownComponent
-            history={this.data.user.history.reverse()}/>
+            history={this.props.user.history.reverse()}/>
         ) : '';
 
         profileDropdown = (
-          <ProfileDropdownComponent user={this.data.user} />
+          <ProfileDropdownComponent user={this.props.user} />
         );
 
         profileButtons = (
@@ -333,26 +332,26 @@ export default HeaderComponent = Radium(React.createClass({
           onLeftIconButtonTouchTap={this.handleToggle}
           style={_.extend({}, mobile ? styles.mobile.css : styles.css)}
           {...other}/>
-        {!!this.data.user && mobile ? (
-          <LeftNav
+        {!!this.props.user && mobile ? (
+          <Drawer
           docked={false}
           open={this.state.open}
           onRequestChange={open => this.setState({open})}>
             <div style={[styles.sidenav.profile.css]}>
               <Avatar
                 src={!UserStore.isGuest() &&
-                  !!this.data.user.services.google.picture ?
-                  this.data.user.services.google.picture :
+                  !!this.props.user.services.google.picture ?
+                  this.props.user.services.google.picture :
                   'images/profile-default.jpg'}
                 style={{display: 'block'}}
                 size={50}/>
               <div style={styles.sidenav.profile.details.css}>
                 <p style={styles.sidenav.profile.details.text.css}>
-                  {this.data.user.profile.name}
+                  {this.props.user.profile.name}
                 </p>
                 {!UserStore.isGuest() ?
                   <p style={styles.sidenav.profile.details.text.css}>
-                    {this.data.user.services.google.email}
+                    {this.props.user.services.google.email}
                   </p> : <FlatButton onTouchTap={this.loginWithGoogle} label='Sign in with Google' style={{
                     color: Colors.fullWhite,
                     marginLeft: '-10px'}}/>}
@@ -380,8 +379,16 @@ export default HeaderComponent = Radium(React.createClass({
               index !== list.length - 1 && items.push(<Divider />);
               return items;
             })}
-        </LeftNav>) : ''}
+        </Drawer>) : ''}
       </header>
     );
-  },
-}));
+  }
+};
+
+export default createContainer(({params}) => {
+  return {
+    user: UserStore.user(),
+    loggingIn: UserStore.loggingIn(),
+    subscribed: UserStore.subscribed.get(),
+  };
+}, Radium(HeaderComponent));

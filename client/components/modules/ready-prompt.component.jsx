@@ -19,15 +19,13 @@
  *
  */
 
-import LoadingDialogComponent from './loading-dialog.component.jsx';
-import MUI from 'material-ui';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import LoadingDialogComponent from './loading-dialog.component';
+import Colors from 'material-ui/styles/colors';
+import RaisedButton from 'material-ui/RaisedButton';
 import Radium from 'radium';
 import React from 'react';
-
-const {
-  RaisedButton,
-  Styles: {Colors}
-} = MUI;
 
 const styles = {
   css: {
@@ -51,9 +49,7 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-export default ReadyPromptComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
-
+export class ReadyPromptComponent extends React.Component {
   componentDidMount() {
     // join room stream directly if alone in room
     if (!this.props.room.connected.length) {
@@ -62,29 +58,23 @@ export default ReadyPromptComponent = Radium(React.createClass({
         loading: true
       });
     };
-  },
+  }
 
   getInitialState() {
     return {
       loading: false
     };
-  },
-
-  getMeteorData() {
-    return {
-      user: UserStore.user(),
-    };
-  },
+  }
 
   joinRoomStream() {
     RoomActions.joinRoomStream(this.props.room._id);
-  },
+  }
 
   render() {
     return (
       <div onTouchTap={this.props.onTouchTap}>
         {(this.props.room.connected.length &&
-          !_.contains(this.props.room.connected, this.data.user._id)) ? (
+          !_.contains(this.props.room.connected, this.props.user._id)) ? (
           <div style={[GlobalStyles.table, styles.css]}>
             <LoadingDialogComponent
               open={(!!this.state.loading)}
@@ -103,4 +93,10 @@ export default ReadyPromptComponent = Radium(React.createClass({
       </div>
     );
   }
-}));
+}
+
+export default createContainer(({params}) => {
+  return {
+    user: UserStore.user(),
+  };
+}, Radium(ReadyPromptComponent));

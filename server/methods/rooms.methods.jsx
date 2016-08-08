@@ -20,8 +20,9 @@
  */
 
 import urlJoin from 'url-join';
+import * as config from '../../lib/config';
 
-var appName = AppDetails.name;
+var appName = config.APP_NAME;
 var roomURL = urlJoin(process.env.ROOT_URL, 'room/');
 
 _.templateSettings = {

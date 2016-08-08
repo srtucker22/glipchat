@@ -19,7 +19,6 @@
  *
  */
 
-import MUI from 'material-ui';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
@@ -39,8 +38,12 @@ Dependency.autorun(()=> {
 let glipcode = {name: 'Glipcode', href: 'http://glipcode.com/'};
 let meteorFlux = {name: 'MeteorFlux', href: 'https://github.com/meteorflux'};
 
-export default FooterComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+export class FooterComponent extends React.Component {
+  constructor() {
+    super(...arguments);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
   render() {
     return (
       <footer
@@ -63,5 +66,7 @@ export default FooterComponent = Radium(React.createClass({
         </div>
       </footer>
     );
-  },
-}));
+  }
+}
+
+export default Radium(FooterComponent);

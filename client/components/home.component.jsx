@@ -20,6 +20,8 @@
  */
 
 // Dependencies
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 import Browser from 'bowser';
 import DownloadButtonComponent from './modules/download-button.component.jsx';
 import FooterComponent from './modules/footer.component.jsx';
@@ -27,11 +29,11 @@ import GithubComponent from './modules/github.component.jsx';
 import HeaderComponent from './modules/header.component.jsx';
 import {browserHistory} from 'react-router';
 import LoadingDialogComponent from './modules/loading-dialog.component.jsx';
-import MUI from 'material-ui';
 import Radium from 'radium';
 import React from 'react';
-
-const {FontIcon, RaisedButton, Styles: {Colors}} = MUI;
+import Colors from 'material-ui/styles/colors';
+import FontIcon from 'material-ui/FontIcon';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
   css: {
@@ -68,37 +70,29 @@ Dependency.autorun(()=> {
   UserActions = Dependency.get('UserActions');
 });
 
-export default HomeComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
-
-  getMeteorData() {
-    return {
-      currentRoom: RoomStore.currentRoom.get(),
+export class HomeComponent extends React.Component {
+  constructor() {
+    super(...arguments);
+    this.state = {
+      loading: false
     };
-  },
-
+  }
   componentWillMount() {
     NotificationActions.getPermission();
-  },
+  }
 
   componentWillUpdate(nextProps, nextState) {
-    if (this.data.currentRoom) {
-      browserHistory.push('/room/' + this.data.currentRoom._id);
+    if (this.props.currentRoom) {
+      browserHistory.push('/room/' + this.props.currentRoom._id);
     }
-  },
+  }
 
   createRoom() {
     RoomActions.createRoom();
     this.setState({
       loading: true
     });
-  },
-
-  getInitialState() {
-    return {
-      loading: false
-    };
-  },
+  }
 
   render() {
     return (
@@ -128,5 +122,11 @@ export default HomeComponent = Radium(React.createClass({
         <FooterComponent />
       </div>
     );
-  },
-}));
+  }
+};
+
+export default createContainer(({params}) => {
+  return {
+    currentRoom: RoomStore.currentRoom.get(),
+  };
+}, Radium(HomeComponent));

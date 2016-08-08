@@ -1,3 +1,6 @@
+- fix isScrolling for TypeaheadContactComponent
+- revive electron
+
 0.03
 - bug --> slow UI on android is lamesauce
 - bug --> don't include electron in cordova builds :/

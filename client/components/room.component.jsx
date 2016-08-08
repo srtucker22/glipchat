@@ -18,20 +18,22 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
+// Dependencies
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 import Browser from 'bowser';
 import {browserHistory} from 'react-router';
 import CallingOverlayComponent from './modules/calling-overlay.component.jsx';
 import ControlsComponent from './modules/controls.component.jsx';
 import FirstOverlayComponent from './modules/first-overlay.component.jsx';
 import InviteComponent from './modules/invite.component.jsx';
-import MUI from 'material-ui';
 import Radium from 'radium';
 import React from 'react';
 import ReadyPromptComponent from './modules/ready-prompt.component.jsx';
 import VideoComponent from './modules/video.component.jsx';
 import VideoOverlayComponent from './modules/video-overlay.component.jsx';
-
-const {Styles: {Colors}} = MUI;
+import Colors from 'material-ui/styles/colors';
 
 const styles = {
   css: {
@@ -85,32 +87,12 @@ let standardActions = [
   {text: 'Submit', onTouchTap: this._onDialogSubmit, ref: 'submit'},
 ];
 
-export default RoomComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
-
+export class RoomComponent extends React.Component {
   componentWillUnmount() {
     RTCActions.disconnect();
     RTCActions.stopLocalStream();
     RoomActions.leaveRoom();
-  },
-
-  getMeteorData() {
-    // if the user logs out on a different tab, leave the room
-    if (Object.keys(this.data).length &&
-      this.data.userId !== UserStore.userId()) {
-      RTCActions.disconnect(this.data.userId);
-      browserHistory.push('/');
-    }
-    return {
-      localStreamError: RTCStore.localStreamError.get(),
-      peers: RTCStore.peers.get(),
-      primaryStream: RTCStore.primaryStream.get(),
-      room: RoomStore.currentRoom.get(),
-      stream: RTCStore.localStream.get(),
-      streamError: RTCStore.streamError.get(),
-      userId: UserStore.userId(),
-    };
-  },
+  }
 
   toggleControls() {
     if (RoomStore.controlsVisible.get()) {
@@ -118,24 +100,24 @@ export default RoomComponent = Radium(React.createClass({
     }else {
       RoomActions.showControls();
     }
-  },
+  }
 
   render() {
     // log the errors for now
-    if (this.data.localStreamError) {
-      console.error(this.data.localStreamError);
+    if (this.props.localStreamError) {
+      console.error(this.props.localStreamError);
     }
-    if (this.data.streamError) {
-      console.error(this.data.streamError);
+    if (this.props.streamError) {
+      console.error(this.props.streamError);
     }
 
     var {...other} = this.props;
 
     let overlay;
 
-    if (!this.data.localStreamError && !!this.data.stream &&
-      this.data.room.connected.length === 1 &&
-      this.data.room.connected[0] === this.data.userId) {
+    if (!this.props.localStreamError && !!this.props.stream &&
+      this.props.room.connected.length === 1 &&
+      this.props.room.connected[0] === this.props.userId) {
       overlay = (Browser.mobile || Browser.tablet) ?
         <CallingOverlayComponent onTouchTap={this.toggleControls}/> :
         <FirstOverlayComponent
@@ -145,42 +127,42 @@ export default RoomComponent = Radium(React.createClass({
 
     return (
       <div style={[styles.css]}>
-        {!!this.data.localStreamError ?
+        {!!this.props.localStreamError ?
           (<ErrorComponent
-            error={this.data.localStreamError} {...other}/>) : ''}
+            error={this.props.localStreamError} {...other}/>) : ''}
 
         <InviteComponent ref='invite' linkUrl={window.location.href}/>
 
-        {(!this.data.localStreamError && !!this.data.stream) ?
+        {(!this.props.localStreamError && !!this.props.stream) ?
           (<ReadyPromptComponent
             onTouchTap={this.toggleControls}
-            room={this.data.room}/>) : ''}
+            room={this.props.room}/>) : ''}
 
-        {(!this.data.localStreamError && !!this.data.stream) ?
+        {(!this.props.localStreamError && !!this.props.stream) ?
           <ControlsComponent onTouchTap={this.toggleControls}/> : ''}
 
         {!!overlay ? overlay : ''}
 
-        {!!this.data.primaryStream ?
+        {!!this.props.primaryStream ?
           (<VideoComponent
             src={
-              (this.data.primaryStream === 'local') ?
-              this.data.stream : this.data.peers[this.data.primaryStream]
+              (this.props.primaryStream === 'local') ?
+              this.props.stream : this.props.peers[this.props.primaryStream]
             }
-            flip={(this.data.primaryStream === 'local')}
+            flip={(this.props.primaryStream === 'local')}
             fullScreen={true}
-            muted={(this.data.primaryStream === 'local')}
+            muted={(this.props.primaryStream === 'local')}
             onTouchTap={this.toggleControls}/>
           ) : ''
         }
 
-        {(!!this.data.peers && _.keys(this.data.peers).length) ?
+        {(!!this.props.peers && _.keys(this.props.peers).length) ?
           (<div style={[styles.videos.css]}>
             <div key='local' style={[styles.videos.video.css]}>
               <VideoOverlayComponent id='local'/>
-              <VideoComponent src={this.data.stream} muted={true} flip={true}/>
+              <VideoComponent src={this.props.stream} muted={true} flip={true}/>
             </div>
-            {_.map(this.data.peers, (val, key)=> {
+            {_.map(this.props.peers, (val, key)=> {
               return (
                 <div key={key} style={[styles.videos.video.css]}>
                   <VideoOverlayComponent id={key}/>
@@ -191,5 +173,23 @@ export default RoomComponent = Radium(React.createClass({
           </div>) : ''}
       </div>
     );
-  },
-}));
+  }
+};
+
+export default createContainer(({params}) => {
+  // if the user logs out on a different tab, leave the room
+  if (Object.keys(this.data).length &&
+    this.props.userId !== UserStore.userId()) {
+    RTCActions.disconnect(this.props.userId);
+    browserHistory.push('/');
+  }
+  return {
+    localStreamError: RTCStore.localStreamError.get(),
+    peers: RTCStore.peers.get(),
+    primaryStream: RTCStore.primaryStream.get(),
+    room: RoomStore.currentRoom.get(),
+    stream: RTCStore.localStream.get(),
+    streamError: RTCStore.streamError.get(),
+    userId: UserStore.userId(),
+  };
+}, Radium(RoomComponent));

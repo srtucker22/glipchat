@@ -19,7 +19,6 @@
  *
  */
 
-import MUI from 'material-ui';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
@@ -46,8 +45,12 @@ const styles = {
   },
 };
 
-export default VideoComponent = Radium(React.createClass({
-  mixins: [PureRenderMixin],
+export class VideoComponent extends React.Component {
+  constructor() {
+    super(...arguments);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
   render() {
     return (
       <video
@@ -62,5 +65,7 @@ export default VideoComponent = Radium(React.createClass({
         onTouchTap={this.props.onTouchTap}>
       </video>
     );
-  },
-}));
+  }
+};
+
+export default Radium(VideoComponent);

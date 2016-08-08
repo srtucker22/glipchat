@@ -20,24 +20,21 @@
  */
 
 // Dependencies
-import {browserHistory} from 'react-router';
-import MUI from 'material-ui';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import {List, ListItem} from 'material-ui/List';
+import * as config from '../../lib/config';
+import Avatar from 'material-ui/Avatar';
+import Colors from 'material-ui/styles/colors';
+import Dialog from 'material-ui/Dialog';
+import Divider from 'material-ui/Divider';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import IntroComponent from './intro.component';
 import Radium from 'radium';
+import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
-
-const {
-  Avatar,
-  Dialog,
-  FlatButton,
-  FontIcon,
-  IconButton,
-  List,
-  ListDivider,
-  ListItem,
-  RaisedButton,
-  Styles: {Colors},
-  TextField
-} = MUI;
+import TextField from 'material-ui/TextField';
 
 const styles = {
   css: {
@@ -75,29 +72,26 @@ Dependency.autorun(()=> {
   UserStore = Dependency.get('UserStore');
 });
 
-export default HomeMobileComponent = Radium(React.createClass({
-  mixins: [ReactMeteorData],
-
-  getMeteorData() {
-    return {
-      contacts: UserStore.contacts.get(),
-      currentRoom: RoomStore.currentRoom.get(),
-      invitations: NotificationStore.invitations.get(),
-      user: UserStore.user()
+export class HomeMobileComponent extends React.Component {
+  constructor() {
+    super(...arguments);
+    this.state = {
+      loading: false,
+      open: false
     };
-  },
+  }
 
   handleOpen() {
     setTimeout(()=> {
       this.setState({open: true});
     }, 0);
-  },
+  }
 
   handleClose() {
     setTimeout(()=> {
       this.setState({open: false});
     }, 0);
-  },
+  }
 
   invite() {
     setTimeout(()=> {
@@ -107,45 +101,38 @@ export default HomeMobileComponent = Radium(React.createClass({
           loading: true
         });
       }
-    },0);
-  },
+    }, 0);
+  }
 
   componentWillMount() {
     NotificationActions.getPermission();
-  },
+  }
 
   componentWillUpdate(nextProps, nextState) {
-    if (this.data.currentRoom) {
-      browserHistory.push('/room/' + this.data.currentRoom._id);
+    if (this.props.currentRoom) {
+      browserHistory.push('/room/' + this.props.currentRoom._id);
     }
-  },
-
-  getInitialState() {
-    return {
-      loading: false,
-      open: false
-    };
-  },
+  }
 
   loginWithGoogle() {
     UserActions.loginWithGoogle();
-  },
+  }
 
   onTypeaheadChange(state) {
     this.setState({
       invitees: state.invitees
     });
-  },
+  }
 
   openInviteModal() {
     this.setState({
       open: true
     });
-  },
+  }
 
   updateProfileName(e) {
     UserActions.updateProfileName(e.target.value);
-  },
+  }
 
   render() {
     const actions = [
@@ -156,14 +143,14 @@ export default HomeMobileComponent = Radium(React.createClass({
       />,
       <FlatButton
         label='Invite'
-        disabled={!this.data.user || !this.data.user.profile.name}
+        disabled={!this.props.user || !this.props.user.profile.name}
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.invite}
       />,
     ];
     return (
-      (!!this.data.user) ?
+      (!!this.props.user) ?
       (<div style={[styles.css]}>
         {this.state.loading ?
           <LoadingDialogComponent open={true} title='Starting video call'/> : ''
@@ -179,8 +166,8 @@ export default HomeMobileComponent = Radium(React.createClass({
             done
           </IconButton>) : null}/>
         <div style={[styles.content.css]}>
-          {!!this.data.contacts ? <TypeaheadContactComponent
-            contacts={this.data.contacts}
+          {!!this.props.contacts ? <TypeaheadContactComponent
+            contacts={this.props.contacts}
             mobile={true}
             onChange={this.onTypeaheadChange}/> : ''
           }
@@ -193,16 +180,25 @@ export default HomeMobileComponent = Radium(React.createClass({
           onRequestClose={this.handleClose}
         >
           {UserStore.isGuest() ? <TextField
-            value={this.data.user.profile.name}
+            value={this.props.user.profile.name}
             onChange={this.updateProfileName}
-            errorText={!this.data.user.profile.name ? ' ' : null}
+            errorText={!this.props.user.profile.name ? ' ' : null}
             floatingLabelText='Your name'/> : ''}
-          {'Contacts who are already using ' + AppDetails.name + ' will receive a notification. New users will be sent an email request.'}
+          {'Contacts who are already using ' + config.APP_NAME + ' will receive a notification. New users will be sent an email request.'}
         </Dialog>
         <AnswerDialogComponent
-          invitation={this.data.invitations && this.data.invitations.length ?
-            this.data.invitations[0] : undefined}/>
+          invitation={this.props.invitations && this.props.invitations.length ?
+            this.props.invitations[0] : undefined}/>
       </div>) : <IntroComponent/>
     );
-  },
-}));
+  }
+};
+
+export default createContainer(({params}) => {
+  return {
+    contacts: UserStore.contacts.get(),
+    currentRoom: RoomStore.currentRoom.get(),
+    invitations: NotificationStore.invitations.get(),
+    user: UserStore.user()
+  };
+}, Radium(HomeMobileComponent));
