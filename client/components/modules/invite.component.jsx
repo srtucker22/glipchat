@@ -33,6 +33,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TextField from 'material-ui/TextField';
+import TypeaheadContactComponent from './typeahead-contact.component';
 
 const styles = {
   css: {
@@ -198,7 +199,7 @@ export class InviteComponent extends React.Component {
         label='Invite'
         disabled={(!this.state.invitees || !this.state.invitees.length || !this.props.user || !this.props.user.profile.name)}
         primary={true}
-        onTouchTap={this.invite} />
+        onTouchTap={this.invite.bind(this)} />
     ];
 
     let mobile = Browser.mobile || Browser.tablet;
@@ -224,14 +225,14 @@ export class InviteComponent extends React.Component {
           title={'Invite Contacts'}
           iconElementRight={<IconButton
             iconClassName='material-icons'
-            onTouchTap={this.cancel}>
+            onTouchTap={this.cancel.bind(this)}>
             clear
           </IconButton>}
         />
         {!!this.props.contacts ? <TypeaheadContactComponent
           contacts={this.props.contacts}
           mobile={true}
-          onChange={this.onTypeaheadChange}/> : ''}
+          onChange={this.onTypeaheadChange.bind(this)}/> : ''}
         {this.state.invitees ? <div style={[GlobalStyles.table, {
             position: 'fixed',
             width: '100%',
@@ -242,7 +243,7 @@ export class InviteComponent extends React.Component {
               backgroundColor={Colors.red500}
               key='cancel'
               label='Cancel'
-              onTouchTap={this.cancel}
+              onTouchTap={this.cancel.bind(this)}
               style={{color: Colors.fullWhite, width: '100%'}}/>
           </div>
           <div style={[GlobalStyles.cell, {width: '50%'}]}>
@@ -250,7 +251,7 @@ export class InviteComponent extends React.Component {
               backgroundColor={Colors.cyan500}
               key='invite'
               label='Invite'
-              onTouchTap={this.invite}
+              onTouchTap={this.invite.bind(this)}
               style={{color: Colors.fullWhite, width: '100%'}}/>
           </div>
         </div> : ''}
@@ -261,7 +262,7 @@ export class InviteComponent extends React.Component {
         actions={customActions}
         contentStyle={styles.content.css}
         open={this.props.inviteModalVisible}
-        onRequestClose={this.cancel}
+        onRequestClose={this.cancel.bind(this)}
         style={mobile ?
           styles.mobile.css : styles.css}>
         <div style={[styles.content.inner.css]}>
@@ -284,12 +285,12 @@ export class InviteComponent extends React.Component {
               <TextField
                 style={styles.content.inviteRow.header.inputName.css}
                 value={this.props.user.profile.name}
-                onChange={this.updateProfileName}
+                onChange={this.updateProfileName.bind(this)}
                 errorText={!this.props.user.profile.name ? ' ' : null}
                 floatingLabelText='Your name'/>
             </div>
             <TypeaheadContactComponent contacts={this.props.contacts}
-            onChange={this.onTypeaheadChange}/>
+            onChange={this.onTypeaheadChange.bind(this)}/>
           </div>
         </div>
       </Dialog>)

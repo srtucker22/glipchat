@@ -100,7 +100,7 @@ export class DownloadButtonComponent extends React.Component {
     return (
       <a href={platform.link} download>
         <RaisedButton
-          primary={true}
+          secondary={true}
           labelPosition='after'
           style={styles.button.css}>
           <div style={[GlobalStyles.table, styles.button.container.css]}>

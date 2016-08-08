@@ -109,8 +109,8 @@ export class HomeMobileComponent extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (this.props.currentRoom) {
-      browserHistory.push('/room/' + this.props.currentRoom._id);
+    if (!!nextProps.currentRoom) {
+      browserHistory.push('/room/' + nextProps.currentRoom._id);
     }
   }
 

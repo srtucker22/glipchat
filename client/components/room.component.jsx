@@ -20,20 +20,20 @@
  */
 
 // Dependencies
+import { browserHistory } from 'react-router';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import Browser from 'bowser';
-import {browserHistory} from 'react-router';
-import CallingOverlayComponent from './modules/calling-overlay.component.jsx';
-import ControlsComponent from './modules/controls.component.jsx';
-import FirstOverlayComponent from './modules/first-overlay.component.jsx';
-import InviteComponent from './modules/invite.component.jsx';
+import CallingOverlayComponent from './modules/calling-overlay.component';
+import Colors from 'material-ui/styles/colors';
+import ControlsComponent from './modules/controls.component';
+import FirstOverlayComponent from './modules/first-overlay.component';
+import InviteComponent from './modules/invite.component';
 import Radium from 'radium';
 import React from 'react';
-import ReadyPromptComponent from './modules/ready-prompt.component.jsx';
-import VideoComponent from './modules/video.component.jsx';
-import VideoOverlayComponent from './modules/video-overlay.component.jsx';
-import Colors from 'material-ui/styles/colors';
+import ReadyPromptComponent from './modules/ready-prompt.component';
+import VideoComponent from './modules/video.component';
+import VideoOverlayComponent from './modules/video-overlay.component';
 
 const styles = {
   css: {
@@ -88,10 +88,23 @@ let standardActions = [
 ];
 
 export class RoomComponent extends React.Component {
+  constructor() {
+    super(...arguments);
+    console.log('CONSTRUCTING!');
+  }
+
   componentWillUnmount() {
     RTCActions.disconnect();
     RTCActions.stopLocalStream();
     RoomActions.leaveRoom();
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    // if the user logs out on a different tab, leave the room
+    if (nextProps.userId !== this.props.userId) {
+      RTCActions.disconnect(this.props.userId);
+      browserHistory.push('/');
+    }
   }
 
   toggleControls() {
@@ -103,6 +116,7 @@ export class RoomComponent extends React.Component {
   }
 
   render() {
+    console.log('room props', this.props);
     // log the errors for now
     if (this.props.localStreamError) {
       console.error(this.props.localStreamError);
@@ -159,13 +173,13 @@ export class RoomComponent extends React.Component {
         {(!!this.props.peers && _.keys(this.props.peers).length) ?
           (<div style={[styles.videos.css]}>
             <div key='local' style={[styles.videos.video.css]}>
-              <VideoOverlayComponent id='local'/>
+              <VideoOverlayComponent params={{id: 'local'}}/>
               <VideoComponent src={this.props.stream} muted={true} flip={true}/>
             </div>
             {_.map(this.props.peers, (val, key)=> {
               return (
                 <div key={key} style={[styles.videos.video.css]}>
-                  <VideoOverlayComponent id={key}/>
+                  <VideoOverlayComponent params={{id: key}}/>
                   <VideoComponent src={val}/>
                 </div>
               );
@@ -177,12 +191,7 @@ export class RoomComponent extends React.Component {
 };
 
 export default createContainer(({params}) => {
-  // if the user logs out on a different tab, leave the room
-  if (Object.keys(this.data).length &&
-    this.props.userId !== UserStore.userId()) {
-    RTCActions.disconnect(this.props.userId);
-    browserHistory.push('/');
-  }
+  console.log('room container', params);
   return {
     localStreamError: RTCStore.localStreamError.get(),
     peers: RTCStore.peers.get(),

@@ -20,14 +20,14 @@
  */
 
 import {Router, browserHistory} from 'react-router';
-import AppComponent from './components/app.component.jsx';
+import AppComponent from './components/app.component';
 import Browser from 'bowser';
-import HomeComponent from './components/home.component.jsx';
-import HomeMobileComponent from './components/home-mobile.component.jsx';
-import NotFoundComponent from './components/not-found.component.jsx';
+import HomeComponent from './components/home.component';
+import HomeMobileComponent from './components/home-mobile.component';
+import NotFoundComponent from './components/not-found.component';
 import React from 'react';
-import { render } from 'react-dom'
-import RoomComponent from './components/room.component.jsx';
+import { render } from 'react-dom';
+import RoomComponent from './components/room.component';
 
 let RoomActions;
 let RoomStore;
@@ -60,6 +60,8 @@ Meteor.startup(function() {
       path: '/room/:roomId',
       component: RoomComponent,
       onEnter: (nextState, replaceState, callback) => { // use a callback to make onEnter async
+        console.log('nextState', nextState);
+        console.log('replaceState', replaceState);
         UserStore.requireUser().then((user)=> {
 
           RoomActions.joinRoom(nextState.params.roomId);
@@ -73,7 +75,7 @@ Meteor.startup(function() {
           }).catch((err)=> {
             console.error(err);
             browserHistory.replace('/');
-            callback();
+            callback(err);
           });
         })
 

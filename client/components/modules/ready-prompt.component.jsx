@@ -50,6 +50,13 @@ Dependency.autorun(()=> {
 });
 
 export class ReadyPromptComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    };
+  }
+
   componentDidMount() {
     // join room stream directly if alone in room
     if (!this.props.room.connected.length) {
@@ -57,12 +64,6 @@ export class ReadyPromptComponent extends React.Component {
       this.setState({
         loading: true
       });
-    };
-  }
-
-  getInitialState() {
-    return {
-      loading: false
     };
   }
 
@@ -85,7 +86,7 @@ export class ReadyPromptComponent extends React.Component {
               <p>Are you ready to join?</p>
               <RaisedButton label='Join'
                 primary={true}
-                onTouchTap={this.joinRoomStream}>
+                onTouchTap={this.joinRoomStream.bind(this)}>
               </RaisedButton>
             </div>
           </div>

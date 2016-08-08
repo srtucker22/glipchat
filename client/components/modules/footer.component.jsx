@@ -36,7 +36,6 @@ Dependency.autorun(()=> {
 });
 
 let glipcode = {name: 'Glipcode', href: 'http://glipcode.com/'};
-let meteorFlux = {name: 'MeteorFlux', href: 'https://github.com/meteorflux'};
 
 export class FooterComponent extends React.Component {
   constructor() {
@@ -57,12 +56,6 @@ export class FooterComponent extends React.Component {
           Copyright <a href={glipcode.href} target='_blank'>
             {glipcode.name}
           </a> 2016
-        </div>
-        <div className='text-right' style={[GlobalStyles.cell]}>
-          Made with ♥ using <a href={meteorFlux.href}
-            target='_blank'>
-            {meteorFlux.name}
-          </a>
         </div>
       </footer>
     );

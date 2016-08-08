@@ -111,19 +111,19 @@ export class VideoOverlayComponent extends React.Component {
   componentDidMount() {
     // play ding on entry -- this might get weird if you're the 4th person to enter
     // do you get 4 dings?
-    if (this.props.id !== 'local') {
+    if (this.props.params.id !== 'local') {
       ding.play();
     }
   }
 
   setPrimaryStream() {
     this.toggleShade();
-    RTCActions.setPrimaryStream(this.props.id);
+    RTCActions.setPrimaryStream(this.props.params.id);
   }
 
   toggleAudio() {
-    (this.props.id === 'local') ?
-      RTCActions.toggleLocalAudio() : RTCActions.toggleAudio(this.props.id);
+    (this.props.params.id === 'local') ?
+      RTCActions.toggleLocalAudio() : RTCActions.toggleAudio(this.props.params.id);
   }
 
   toggleShade() {
@@ -151,14 +151,14 @@ export class VideoOverlayComponent extends React.Component {
     return (
       <div key='overlay'
         style={[styles.css]}>
-        <div onTouchTap={this.setPrimaryStream} style={[
+        <div onTouchTap={this.setPrimaryStream.bind(this)} style={[
             styles.shade.css,
             (Radium.getState(this.state, 'overlay', ':hover') ||
               this.state.shade) &&
                 styles.shade.hover.css]}>
         </div>
         <FloatingActionButton
-          onTouchTap={this.toggleAudio}
+          onTouchTap={this.toggleAudio.bind(this)}
           style={_.extend({},
             styles.mute.css,
             (Radium.getState(this.state, 'overlay', ':hover') ||
@@ -191,14 +191,16 @@ export class VideoOverlayComponent extends React.Component {
 };
 
 export default createContainer(({params}) => {
+  const {id} = params;
+  console.log('params', params);
   let options = {
-    isAudioEnabled: (this.props.id === 'local') ?
+    isAudioEnabled: (id === 'local') ?
       RTCStore.isLocalAudioEnabled.get() :
-      RTCStore.isAudioEnabled[this.props.id].get(),
+      RTCStore.isAudioEnabled[id].get(),
   };
 
-  if (this.props.id !== 'local') {
-    options.isRemoteEnabled = RTCStore.isRemoteEnabled[this.props.id].get();
+  if (id != 'local') {
+    options.isRemoteEnabled = RTCStore.isRemoteEnabled[id].get();
   }
   return options;
 }, Radium(VideoOverlayComponent));

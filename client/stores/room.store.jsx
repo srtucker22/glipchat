@@ -20,6 +20,8 @@
  */
 
 // Dependencies
+import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 let RTCStore;
 let UserStore;
 
@@ -138,8 +140,11 @@ var RoomStore = function() {
     createRoom() {
       _this.creatingRoom.set(true);
       _this.createError.set('');
+
       UserStore.requireUser().then((user)=> {
+        console.log('creatingRoom');
         Meteor.call('createRoom', (err, id)=> {
+          console.log('room created', id, err);
           _this.creatingRoom.set(false);
           if (err) {
             _this.createError.set(err);
@@ -226,7 +231,7 @@ var RoomStore = function() {
     // Promise for requested room to load
     requireRoom(r) {
       return new Promise((resolve, reject)=> {
-        Tracker.autorun(function(c) {
+        Tracker.autorun((c)=> {
           if (!!_this.gettingCurrentRoom.get() || !_this.currentRoomId.get()) {
             return;
           }

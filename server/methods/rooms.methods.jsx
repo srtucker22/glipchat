@@ -19,6 +19,7 @@
  *
  */
 
+import { Meteor } from 'meteor/meteor';
 import urlJoin from 'url-join';
 import * as config from '../../lib/config';
 

@@ -133,14 +133,14 @@ export class ControlsComponent extends React.Component {
             this.props.controlsVisible) ? styles.controls.visible : {}
         )}>
           <div key='invite'
-            onTouchTap={this.showInviteModal}
+            onTouchTap={this.showInviteModal.bind(this)}
             style={[GlobalStyles.cell, styles.controls.button.css]}>
             <IconButton>
               <FontIcon className='material-icons'
                 color={Colors.fullWhite}>person_add</FontIcon>
             </IconButton>
           </div>
-          <div key='video' onTouchTap={this.toggleLocalVideo} style={[
+          <div key='video' onTouchTap={this.toggleLocalVideo.bind(this)} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
             !this.props.isLocalVideoEnabled && styles.controls.red.css
@@ -151,7 +151,7 @@ export class ControlsComponent extends React.Component {
                 color={Colors.fullWhite}>videocam_off</FontIcon>
             </IconButton>
           </div>
-          <div key='audio' onTouchTap={this.toggleLocalAudio} style={[
+          <div key='audio' onTouchTap={this.toggleLocalAudio.bind(this)} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
             !this.props.isLocalAudioEnabled && styles.controls.red.css
@@ -174,7 +174,7 @@ export class ControlsComponent extends React.Component {
               styles.controls.button.css,
               styles.controls.buttonEnd.css
             ]}
-            onTouchTap={this.leave}>
+            onTouchTap={this.leave.bind(this)}>
             <IconButton>
               <FontIcon
                 className='material-icons'

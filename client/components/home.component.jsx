@@ -68,6 +68,7 @@ Dependency.autorun(()=> {
   RoomStore = Dependency.get('RoomStore');
   RoomActions = Dependency.get('RoomActions');
   UserActions = Dependency.get('UserActions');
+  console.log('RoomStore', RoomStore);
 });
 
 export class HomeComponent extends React.Component {
@@ -82,8 +83,8 @@ export class HomeComponent extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (this.props.currentRoom) {
-      browserHistory.push('/room/' + this.props.currentRoom._id);
+    if (!!nextProps.currentRoom) {
+      browserHistory.push(`/room/${nextProps.currentRoom._id}`);
     }
   }
 
@@ -108,9 +109,9 @@ export class HomeComponent extends React.Component {
               <h1 style={[styles.title.css]}>{'quasar'}</h1>
               <br />
               <RaisedButton
-                onTouchTap={this.createRoom}
+                onTouchTap={this.createRoom.bind(this)}
                 label='Start video call'
-                primary={true}
+                secondary={true}
                 style={{marginBottom: '50px'}}
               />
               <br />

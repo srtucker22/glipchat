@@ -382,18 +382,18 @@ export class TypeaheadContactComponent extends React.Component {
               [GlobalStyles.inset, styles.css]}>
             <TagsInput
               ref='tags'
-              renderTag={this.renderTag}
-              renderInput={this.renderInput}
-              validate={this.validate}
+              renderTag={this.renderTag.bind(this)}
+              renderInput={this.renderInput.bind(this)}
+              validate={this.validate.bind(this)}
               value={this.state.invitees || []}
-              onChange={this.updateInvitees}
-              onInputChange={this.updateQuery}
+              onChange={this.updateInvitees.bind(this)}
+              onInputChange={this.updateQuery.bind(this)}
               style={this.props.mobile ? {padding: '10px'} : {}}/>
             <ContactListComponent
               contacts={sorted}
               query={this.state.query}
               mobile={this.props.mobile}
-              onSelect={this.addInvitee}/>
+              onSelect={this.addInvitee.bind(this)}/>
           </div>
         </div>
       </div>
