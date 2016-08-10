@@ -34,6 +34,7 @@ import React from 'react';
 import Colors from 'material-ui/styles/colors';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
+import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -56,19 +57,16 @@ const styles = {
   },
 };
 
-let GlobalStyles;
 let NotificationActions;
 let RoomStore;
 let RoomActions;
 let UserActions;
 
 Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
   NotificationActions = Dependency.get('NotificationActions');
   RoomStore = Dependency.get('RoomStore');
   RoomActions = Dependency.get('RoomActions');
   UserActions = Dependency.get('UserActions');
-  console.log('RoomStore', RoomStore);
 });
 
 export class HomeComponent extends React.Component {

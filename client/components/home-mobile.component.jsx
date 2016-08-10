@@ -24,17 +24,21 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import {List, ListItem} from 'material-ui/List';
 import * as config from '../../lib/config';
+import AnswerDialogComponent from './modules/answer-dialog.component';
 import Avatar from 'material-ui/Avatar';
 import Colors from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
 import Divider from 'material-ui/Divider';
 import FlatButton from 'material-ui/FlatButton';
+import HeaderComponent from './modules/header.component';
 import IconButton from 'material-ui/IconButton';
 import IntroComponent from './intro.component';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import TextField from 'material-ui/TextField';
+import TypeaheadContactComponent from './modules/typeahead-contact.component';
+import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -54,7 +58,6 @@ const styles = {
   },
 };
 
-let GlobalStyles;
 let NotificationActions;
 let NotificationStore;
 let RoomStore;
@@ -63,7 +66,6 @@ let UserActions;
 let UserStore;
 
 Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
   NotificationActions = Dependency.get('NotificationActions');
   NotificationStore = Dependency.get('NotificationStore');
   RoomActions = Dependency.get('RoomActions');

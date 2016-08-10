@@ -1,3 +1,12 @@
+- clean up contacts so it's wicked fast ~ switch to people api at user level 500 people ~ 5 req/ 100 sec/ user
+- fix google logo
+- build a testing suite with ci
+- test multiple users on desktop native
+- test multiple users on desktop browser
+- test everything on mobile
+- test everything on desktop native
+- test the contact list component
+- react-list the contact component
 - fix isScrolling for TypeaheadContactComponent
 - revive electron
 

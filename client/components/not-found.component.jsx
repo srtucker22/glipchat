@@ -22,6 +22,7 @@
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
+import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   main: {
@@ -32,13 +33,6 @@ const styles = {
     },
   },
 };
-
-// Dependencies
-let GlobalStyles;
-
-Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
-});
 
 export class NotFoundComponent extends React.Component {
   constructor() {

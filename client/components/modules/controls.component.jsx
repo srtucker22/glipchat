@@ -29,6 +29,7 @@ import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
 import Radium from 'radium';
 import React from 'react';
+import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
   css: {
@@ -78,14 +79,12 @@ const styles = {
   },
 };
 
-let GlobalStyles;
 let RoomActions;
 let RoomStore;
 let RTCActions;
 let RTCStore;
 
 Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
   RoomActions = Dependency.get('RoomActions');
   RoomStore = Dependency.get('RoomStore');
   RTCActions = Dependency.get('RTCActions');

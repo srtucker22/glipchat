@@ -23,6 +23,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
   button: {
@@ -67,12 +68,6 @@ const styles = {
     }
   },
 };
-
-let GlobalStyles;
-
-Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
-});
 
 export class DownloadButtonComponent extends React.Component {
   constructor(props) {

@@ -36,10 +36,13 @@ const styles = {
 export class GithubComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.shouldComponentUpdate =
+      PureRenderMixin.shouldComponentUpdate.bind(this);
   }
+
   render() {
     return (
-      <a href='https://github.com/srtucker22/quasar' target='_blank'>
+      <a href={this.props.link} target='_blank'>
         <img
           style={[styles.css]}
           src='images/github.png'

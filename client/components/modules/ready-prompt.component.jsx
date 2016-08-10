@@ -26,6 +26,7 @@ import Colors from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 import Radium from 'radium';
 import React from 'react';
+import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
   css: {
@@ -39,12 +40,10 @@ const styles = {
   },
 };
 
-let GlobalStyles = null;
 let RoomActions = null;
 let UserStore = null;
 
 Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
   RoomActions = Dependency.get('RoomActions');
   UserStore = Dependency.get('UserStore');
 });

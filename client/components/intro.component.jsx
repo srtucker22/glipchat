@@ -30,6 +30,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
+import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -52,11 +53,10 @@ const styles = {
   },
 };
 
-let GlobalStyles;
 let UserActions;
+let UserStore;
 
 Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
   UserActions = Dependency.get('UserActions');
   UserStore = Dependency.get('UserStore');
 });
@@ -79,7 +79,7 @@ export class IntroComponent extends React.Component {
   render() {
     return (
       <div style={[GlobalStyles.table, styles.css]}>
-        <GithubComponent />
+        <GithubComponent link={config.GITHUB_URL}/>
         <LoadingDialogComponent
           open={(!!this.props.loggingIn && !this.props.loggingOut)}
           title='Signing in'/>

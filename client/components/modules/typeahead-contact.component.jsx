@@ -33,17 +33,16 @@ import MenuItem from 'material-ui/MenuItem';
 import {List, ListItem} from 'material-ui/List';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import GlobalStyles from '../../styles/global.styles';
 
 const {
   Style
 } = Radium;
 
-let GlobalStyles;
 let RoomActions;
 let RoomStore;
 
 Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
   RoomActions = Dependency.get('RoomActions');
   RoomStore = Dependency.get('RoomStore');
 });

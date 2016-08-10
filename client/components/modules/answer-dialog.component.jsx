@@ -22,6 +22,7 @@
 import Colors from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import GlobalStyles from '../../styles/global.styles';
 import LoadingDialogComponent from './loading-dialog.component.jsx';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
@@ -35,12 +36,10 @@ const styles = {
   },
 };
 
-let GlobalStyles;
 let NotificationActions;
 
 Dependency.autorun(()=> {
   NotificationActions = Dependency.get('NotificationActions');
-  GlobalStyles = Dependency.get('NotificationActions');
 });
 
 export class AnswerDialogComponent extends React.Component {

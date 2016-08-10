@@ -38,6 +38,7 @@ import IconMenu from 'material-ui/IconMenu';
 import Drawer from 'material-ui/Drawer';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
   css: {
@@ -119,13 +120,11 @@ let dropdownStyleComponent = (
   />
 );
 
-let GlobalStyles;
 let RoomActions;
 let UserStore;
 let UserActions;
 
 Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
   RoomActions = Dependency.get('RoomActions');
   UserStore   = Dependency.get('UserStore');
   UserActions = Dependency.get('UserActions');
@@ -329,7 +328,7 @@ export class HeaderComponent extends React.Component {
             this.props.iconElementRight
           ) :
             (loginButton ? loginButton : profileButtons)}
-          onLeftIconButtonTouchTap={this.handleToggle}
+          onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
           style={_.extend({}, mobile ? styles.mobile.css : styles.css)}
           {...other}/>
         {!!this.props.user && mobile ? (

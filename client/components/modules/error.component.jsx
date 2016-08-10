@@ -27,6 +27,7 @@ import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import Colors from 'material-ui/styles/colors';
+import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
   css: {
@@ -77,12 +78,6 @@ const styles = {
     }
   },
 };
-
-let GlobalStyles;
-
-Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
-});
 
 // Ask for permission to use the camera and microphone on the user's computer
 class PermissionDeniedComponent extends React.Component {

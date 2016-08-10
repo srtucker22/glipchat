@@ -50,3 +50,5 @@ standard-minifier-js@1.1.8
 ecmascript@0.5.7
 react-meteor-data
 meson:electron
+practicalmeteor:mocha
+dburles:factory

@@ -22,18 +22,13 @@
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
+import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
   css: {
     width: '100%',
   }
 };
-
-let GlobalStyles = null;
-
-Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
-});
 
 let glipcode = {name: 'Glipcode', href: 'http://glipcode.com/'};
 

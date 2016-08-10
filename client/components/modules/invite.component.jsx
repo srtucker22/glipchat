@@ -34,6 +34,7 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TextField from 'material-ui/TextField';
 import TypeaheadContactComponent from './typeahead-contact.component';
+import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
   css: {
@@ -138,14 +139,12 @@ const styles = {
   },
 };
 
-let GlobalStyles;
 let RoomActions;
 let RoomStore;
 let UserActions;
 let UserStore;
 
 Dependency.autorun(()=> {
-  GlobalStyles = Dependency.get('GlobalStyles');
   RoomActions = Dependency.get('RoomActions');
   RoomStore = Dependency.get('RoomStore');
   UserActions = Dependency.get('UserActions');
@@ -216,7 +215,7 @@ export class InviteComponent extends React.Component {
         >
           <TextField
             value={this.props.user.profile.name}
-            onChange={this.updateProfileName}
+            onChange={this.updateProfileName.bind(this)}
             errorText={!this.props.user.profile.name ? ' ' : null}
             floatingLabelText='Your name'/>
         </Dialog>
