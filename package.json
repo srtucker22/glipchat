@@ -28,7 +28,8 @@
     "webrtc-adapter": "^1.0.2"
   },
   "devDependencies": {
-    "enzyme": "^2.4.1"
+    "enzyme": "^2.4.1",
+    "sinon": "^1.17.5"
   },
   "scripts": {
     "test": "meteor test --driver-package practicalmeteor:mocha"

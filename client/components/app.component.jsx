@@ -22,7 +22,6 @@
 import * as config from '../../lib/config';
 import React from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
 const styles = {
