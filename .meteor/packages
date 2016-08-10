@@ -16,7 +16,6 @@ ejson@1.0.12
 email@1.1.16
 fastclick@1.0.12
 johnantoni:meteor-normalize
-lepozepo:streams
 logging@1.1.14
 meteor-base@1.0.4
 meteorflux:dispatcher
@@ -52,3 +51,4 @@ react-meteor-data
 meson:electron
 practicalmeteor:mocha
 dburles:factory
+rocketchat:streamer

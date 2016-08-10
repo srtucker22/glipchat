@@ -34,6 +34,7 @@ import React from 'react';
 import ReadyPromptComponent from './modules/ready-prompt.component';
 import VideoComponent from './modules/video.component';
 import VideoOverlayComponent from './modules/video-overlay.component';
+import ErrorComponent from './modules/error.component';
 
 const styles = {
   css: {
@@ -90,7 +91,6 @@ let standardActions = [
 export class RoomComponent extends React.Component {
   constructor() {
     super(...arguments);
-    console.log('CONSTRUCTING!');
   }
 
   componentWillUnmount() {

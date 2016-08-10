@@ -20,9 +20,13 @@
  */
 
 // room permissions
-roomStream.permissions.read(function(eventName) {
+roomStream.allowRead(function(eventName) {
   return this.userId == eventName;
 });
+
+// authenticated users can emit join and msg events
+roomStream.allowWrite('join', 'logged');
+roomStream.allowWrite('msg', 'logged');
 
 function disconnect(userId, roomId) {
   var room = Rooms.findOne({_id: roomId});
@@ -61,6 +65,7 @@ roomStream.on('join', function(roomId) {
   }
 
   _.each(_.without(room.connected, _this.userId), function(userId) {
+    console.log('emitting', userId);
     roomStream.emit(
       userId,
       {room: roomId, type: 'peer.connected', from: _this.userId}
@@ -73,20 +78,21 @@ roomStream.on('join', function(roomId) {
   );
 
   // when someone disconnects, remove them from the Room's connected list
-  _this.onDisconnect = function() {
+  _this.connection.onClose = function() {
     disconnect(_this.userId, roomId);
   };
 });
 
 // send messages between people in the room
 roomStream.on('msg', function(data) {
+  console.log('data', data);
   // check the data for proper values
   check(data, Match.ObjectIncluding({type: String, room: String}));
   check(data.to, Match.OneOf(null, String, undefined));
   check(_.omit(data, ['type', 'room', 'to']), Match.OneOf(
     {
       sdp: {sdp: String, type: String}
-    },{
+    }, {
       ice: Match.OneOf({
         sdpMLineIndex: Number,
         sdpMid: String,
@@ -94,7 +100,7 @@ roomStream.on('msg', function(data) {
       },
       {},
       null
-    )},{
+    )}, {
       tracks: {
         audio: Boolean,
         video: Boolean

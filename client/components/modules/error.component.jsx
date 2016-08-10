@@ -116,13 +116,14 @@ class PermissionDeniedComponent extends React.Component {
             <RaisedButton
               label='Go Back'
               onTouchTap={this.props.action}
-              primary={true}/>
+              secondary={true}/>
           </div>
         </div>
       </div>
     );
   }
 };
+PermissionDeniedComponent = Radium(PermissionDeniedComponent);
 
 // Warn that the user is already connected to the room in a different window, tab or browser
 class DuplicateErrorComponent extends React.Component {
@@ -143,12 +144,13 @@ class DuplicateErrorComponent extends React.Component {
           <RaisedButton
             label='Go Back'
             onTouchTap={this.props.action}
-            primary={true}/>
+            secondary={true}/>
         </div>
       </div>
     );
   }
 };
+DuplicateErrorComponent = Radium(DuplicateErrorComponent);
 
 // Warn that there has been a general error and ask the user to refresh the session
 class GeneralErrorComponent extends React.Component {
@@ -169,12 +171,13 @@ class GeneralErrorComponent extends React.Component {
           <RaisedButton
             label='Go Back'
             onTouchTap={this.props.action}
-            primary={true}/>
+            secondary={true}/>
         </div>
       </div>
     );
   }
 };
+GeneralErrorComponent = Radium(GeneralErrorComponent);
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
 class NotSupportedErrorComponent extends React.Component {
@@ -198,12 +201,13 @@ class NotSupportedErrorComponent extends React.Component {
           <RaisedButton
             label='Go Back'
             onTouchTap={this.props.action}
-            primary={true}/>
+            secondary={true}/>
         </div>
       </div>
     );
   }
 }
+NotSupportedErrorComponent = Radium(NotSupportedErrorComponent);
 
 // Logic for determining which error message to show when something goes wrong
 export class ErrorComponent extends React.Component {
@@ -235,7 +239,7 @@ export class ErrorComponent extends React.Component {
         break;
     }
 
-    return Radium(errorComponent);
+    return errorComponent;
   }
 };
 

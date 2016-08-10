@@ -127,26 +127,27 @@ RTCStore = function() {
 
   /** Make an offer to a peer to connect. */
   function makeOffer(id) {
-      var pc = getPeerConnection(id);
-      pc.createOffer((sdp)=> {
-        pc.setLocalDescription(sdp, ()=> {
-          console.log('Creating an offer for', id);
-          roomStream.emit('msg', {
-            type: 'sdp-offer',
-            to: id,
-            sdp: {type: sdp.type, sdp: sdp.sdp},
-            room: RoomStore.currentRoomId.get()
-          });
-        }, (e)=> {
-          console.error(e);
+    var pc = getPeerConnection(id);
+    pc.createOffer((sdp)=> {
+      pc.setLocalDescription(sdp, ()=> {
+        console.log('Creating an offer for', id);
+        roomStream.emit('msg', {
+          type: 'sdp-offer',
+          to: id,
+          sdp: {type: sdp.type, sdp: sdp.sdp},
+          room: RoomStore.currentRoomId.get()
         });
       }, (e)=> {
         console.error(e);
-      }, {mandatory: {offerToReceiveVideo: true, offerToReceiveAudio: true}});
-    }
+      });
+    }, (e)=> {
+      console.error(e);
+    }, {mandatory: {offerToReceiveVideo: true, offerToReceiveAudio: true}});
+  }
 
   /** Handle all room stream emissions. */
   function handleMessage(data) {
+    console.log('data', data);
     var pc;
     pc = getPeerConnection(data.from);
     pc.iceQueue = [];
@@ -238,7 +239,7 @@ RTCStore = function() {
 
         break;
 
-    /** When peer changes their own track availibility. */
+      /** When peer changes their own track availibility. */
       case 'tracks':
         if (_this.isRemoteEnabled[data.from]) {
           _this.isRemoteEnabled[data.from].set(data.tracks);
@@ -247,7 +248,7 @@ RTCStore = function() {
         }
         break;
 
-    /** The server has detected the user is trying to connect twice. */
+      /** The server has detected the user is trying to connect twice. */
       case 'error.duplicate':
         _this.localStreamError.set(data.error);
         _this.stopLocalStream();
@@ -268,7 +269,7 @@ RTCStore = function() {
 
       /** Clear listener for room messages. */
       let userId = id || UserStore.user()._id;
-      roomStream.removeListener(userId, handleMessage);
+      roomStream.unsubscribe(userId);
 
       /** Clear all peer data. */
       _.each(peerConnections, (val, key)=> {

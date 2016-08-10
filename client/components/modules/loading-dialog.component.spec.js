@@ -4,6 +4,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import LoadingDialogComponent from './loading-dialog.component';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import sinon from 'sinon';
 
 describe('LoadingDialogComponent', () => {
   const test = 'test title';
