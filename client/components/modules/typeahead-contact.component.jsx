@@ -167,7 +167,7 @@ class ContactListComponent extends React.Component {
   getVisibleContacts(query, contacts) {
     return _.filter(contacts, (contact)=> {
       return !query ||
-      _this.fuzzyFilter(query, [contact.name, contact.email]);
+      this.fuzzyFilter(query, [contact.name, contact.email]);
     });
   }
 
@@ -220,8 +220,6 @@ class ContactListComponent extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.query != this.props.query ||
       nextProps.contacts.length != this.props.contacts.length) {
-      console.log('uh oh', nextProps.contacts, this.props.contacts);
-      console.log('uh oh2', nextProps.query, this.props.query);
       this.setState({
         visibleContacts: this.getVisibleContacts(
           nextProps.query, nextProps.contacts

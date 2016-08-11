@@ -116,10 +116,6 @@ export class HomeMobileComponent extends React.Component {
     }
   }
 
-  loginWithGoogle() {
-    UserActions.loginWithGoogle();
-  }
-
   onTypeaheadChange(state) {
     this.setState({
       invitees: state.invitees
@@ -141,14 +137,14 @@ export class HomeMobileComponent extends React.Component {
       <FlatButton
         label='Cancel'
         secondary={true}
-        onTouchTap={this.handleClose}
+        onTouchTap={this.handleClose.bind(this)}
       />,
       <FlatButton
         label='Invite'
         disabled={!this.props.user || !this.props.user.profile.name}
         primary={true}
         keyboardFocused={true}
-        onTouchTap={this.invite}
+        onTouchTap={this.invite.bind(this)}
       />,
     ];
     return (
@@ -164,7 +160,7 @@ export class HomeMobileComponent extends React.Component {
             (<IconButton
               iconStyle={styles.icon.css}
               iconClassName='material-icons'
-              onTouchTap={this.openInviteModal}>
+              onTouchTap={this.openInviteModal.bind(this)}>
               done
             </IconButton>) : null}
         />
@@ -172,7 +168,7 @@ export class HomeMobileComponent extends React.Component {
           {!!this.props.contacts ? <TypeaheadContactComponent
             contacts={this.props.contacts}
             mobile={true}
-            onChange={this.onTypeaheadChange}/> : ''
+            onChange={this.onTypeaheadChange.bind(this)}/> : ''
           }
         </div>
         <Dialog
@@ -180,11 +176,11 @@ export class HomeMobileComponent extends React.Component {
           actions={actions}
           modal={false}
           open={this.state.open}
-          onRequestClose={this.handleClose}
+          onRequestClose={this.handleClose.bind(this)}
         >
           {UserStore.isGuest() ? <TextField
             value={this.props.user.profile.name}
-            onChange={this.updateProfileName}
+            onChange={this.updateProfileName.bind(this)}
             errorText={!this.props.user.profile.name ? ' ' : null}
             floatingLabelText='Your name'/> : ''}
           {'Contacts who are already using ' + config.APP_NAME + ' will receive a notification. New users will be sent an email request.'}
