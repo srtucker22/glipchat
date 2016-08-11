@@ -34,6 +34,7 @@ import {List, ListItem} from 'material-ui/List';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import GlobalStyles from '../../styles/global.styles';
+import ReactList from 'react-list';
 
 const {
   Style
@@ -116,26 +117,13 @@ const styles = {
   }
 };
 
-// Modify TagsInput so it validates nicely and stores complex Objects
-// TagsInput.prototype._addTags = function(tag) {
-//   if (typeof tag === 'string' && tag !== '' &&
-//     (this.props.validate ? this.props.validate(tag) : true)) {
-//     this.props.value.push({email: tag});
-//     this.props.onChange(this.props.value);
-//     this._clearInput();
-//   } else if (typeof tag !== 'string') {
-//     this.props.value.push(tag);
-//     this.props.onChange(this.props.value);
-//     this._clearInput();
-//   }
-// };
-
 class TypeaheadMobileChipComponent extends React.Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate =
       PureRenderMixin.shouldComponentUpdate.bind(this);
   }
+
   render() {
     return (
       <div key={this.props.tag} style={[
@@ -171,6 +159,16 @@ class ContactListComponent extends React.Component {
     super(props);
     this.shouldComponentUpdate =
       PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.state = {
+      visibleContacts: this.getVisibleContacts(props.query, props.contacts)
+    };
+  }
+
+  getVisibleContacts(query, contacts) {
+    return _.filter(contacts, (contact)=> {
+      return !query ||
+      _this.fuzzyFilter(query, [contact.name, contact.email]);
+    });
   }
 
   fuzzyFilter(searchText, key) {
@@ -219,54 +217,74 @@ class ContactListComponent extends React.Component {
     return current.pop();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.query != this.props.query ||
+      nextProps.contacts.length != this.props.contacts.length) {
+      console.log('uh oh', nextProps.contacts, this.props.contacts);
+      console.log('uh oh2', nextProps.query, this.props.query);
+      this.setState({
+        visibleContacts: this.getVisibleContacts(
+          nextProps.query, nextProps.contacts
+        )
+      });
+    }
+  }
+
+  renderItem(index, key) {
+    const contact = this.state.visibleContacts[index];
+    let color;
+    if (contact.status) {
+      if (contact.status.online) {
+        color = contact.status.idle ?
+        Colors.amber500 : Colors.green500;
+      } else {
+        color = Colors.red500;
+      }
+    } else {
+      color = Colors.grey500;
+    }
+    return (
+      <ListItem
+        disabled={this.state.isScrolling}
+        key={'contact-' + index}
+        leftAvatar={<Avatar
+          src={contact.src || 'images/profile-default.jpg'}
+        />}
+        rightIcon={
+          <FontIcon
+            className='material-icons'
+            style={{color}}>
+              {contact.status ? 'lens' : 'send'}
+          </FontIcon>
+        }
+        onTouchTap={this.props.onSelect.bind(null, contact)}
+        primaryText={
+          <div style={{
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+          }}>
+            {contact.name || contact.email}
+          </div>
+        }
+      />
+    );
+  }
+
   render() {
     return (
       <div style={[!this.props.mobile && {
           maxHeight: '120px', overflowY: 'scroll'
         }]}>
-        <List subheader={this.props.subheader}>
+        <List
+          subheader={this.props.subheader}
+          style={{overflow: 'auto', height: '100vh'}}>
           {this.props.contacts && this.props.contacts.length ? <Divider/> : ''}
-          {_.map(
-            _.filter(this.props.contacts, (contact)=> {
-              return !this.props.query ||
-              this.fuzzyFilter(this.props.query, [contact.name, contact.email]);
-            }), (contact, index)=> {
-              let color;
-              if (contact.status) {
-                if (contact.status.online) {
-                  color = contact.status.idle ?
-                  Colors.amber500 : Colors.green500;
-                } else {
-                  color = Colors.red500;
-                }
-              } else {
-                color = Colors.grey500;
-              }
-              return (
-                <ListItem
-                  disabled={this.state.isScrolling}
-                  key={'contact-' + index}
-                  leftAvatar={<Avatar
-                    src={contact.src || 'images/profile-default.jpg'}
-
-                  />}
-                  rightIcon={
-                    <FontIcon
-                      className='material-icons'
-                      style={{color}}>
-                        {contact.status ? 'lens' : 'send'}
-                    </FontIcon>
-                  }
-                  onTouchTap={this.props.onSelect.bind(null, contact)}
-                  primaryText={<div style={{
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                  }}>
-                    {contact.name || contact.email}
-                  </div>}/>
-              );
-            }
-          )}
+          <ReactList
+            itemRenderer={this.renderItem.bind(this)}
+            length={this.state.visibleContacts.length}
+            type='uniform'
+            useStaticSize={true}
+          />
         </List>
       </div>
     );
@@ -326,12 +344,14 @@ export class TypeaheadContactComponent extends React.Component {
 
     this.setState({
       invitees: tags,
-      query: ''
+      query: '',
     });
   }
 
   updateQuery(event) {
-    this.setState({query: event.target.value});
+    this.setState({
+      query: event.target.value,
+    });
   }
 
   validate(tag) {
@@ -356,7 +376,7 @@ export class TypeaheadContactComponent extends React.Component {
     return (
       <input
         type='text'
-        onChange={callBoth}
+        onChange={callBoth.bind(this)}
         placeholder={this.state.invitees && this.state.invitees.length ? '' : 'Search for people'}
         value={value} {...other}
         style={_.extend({}, styles.input.css, _this.props.mobile ?

@@ -364,7 +364,6 @@ export class HeaderComponent extends React.Component {
                     key={'left-nav-' + item.title.toLowerCase()}
                     primaryText={item.title}
                     onTouchTap={item.action}
-                    linkButton={!!item.href}
                     href={item.href}
                     target={item.target}
                     leftIcon={
