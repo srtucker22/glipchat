@@ -19,6 +19,7 @@
  *
  */
 
+import * as config from '../lib/config';
 import {Router, browserHistory} from 'react-router';
 import AppComponent from './components/app.component';
 import Browser from 'bowser';
@@ -46,6 +47,8 @@ Dependency.autorun(()=> {
 Meteor.startup(function() {
   window.location.hostname === 'localhost' && analytics.debug();  // show the analytics debug log if testing locally
 
+  document.title = config.APP_NAME; // set the title for the app
+
   const routeConfig = [{
     path: '/',
     component: AppComponent,
@@ -60,8 +63,6 @@ Meteor.startup(function() {
       path: '/room/:roomId',
       component: RoomComponent,
       onEnter: (nextState, replaceState, callback) => { // use a callback to make onEnter async
-        console.log('nextState', nextState);
-        console.log('replaceState', replaceState);
         UserStore.requireUser().then((user)=> {
 
           RoomActions.joinRoom(nextState.params.roomId);

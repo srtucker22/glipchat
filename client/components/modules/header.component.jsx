@@ -166,10 +166,10 @@ class NotificationDropdownComponent extends React.Component {
         </IconButton>
         <Card className='dropdown-menu' style={styles.menu.paper.css}>
           {(!!this.props.history && this.props.history.length) ?
-            _.map(this.props.history, (item)=> {
+            _.map(this.props.history, (item, index)=> {
               return (
                 <MenuItem
-                  key={item.createdAt}
+                  key={`history-${index}`}
                   primaryText={item.room +
                     ' - ' + moment(item.createdAt).fromNow()}
                   onTouchTap={this.joinRoom.bind(this, item.room)} />
@@ -249,8 +249,9 @@ export class HeaderComponent extends React.Component {
   }
 
   render() {
-
-    let {mobile, ...other} = this.props;
+    const {mobile, ...other} = _.omit(this.props, [
+      'user', 'loggingIn', 'subscribed'
+    ]);
 
     let avatarButton;
     let loginButton;
@@ -295,7 +296,7 @@ export class HeaderComponent extends React.Component {
       ];
     }
 
-    if (!UserStore.loggingIn() && this.props.subscribed) {
+    if (!this.props.loggingIn && this.props.subscribed) {
       if (!!this.props.user && !UserStore.isGuest()) {
 
         notificationDropdown = !!this.props.user.history ? (

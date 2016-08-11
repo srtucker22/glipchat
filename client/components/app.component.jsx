@@ -19,7 +19,6 @@
  *
  */
 
-import * as config from '../../lib/config';
 import React from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';

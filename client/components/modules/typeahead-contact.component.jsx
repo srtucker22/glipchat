@@ -117,18 +117,18 @@ const styles = {
 };
 
 // Modify TagsInput so it validates nicely and stores complex Objects
-TagsInput.prototype._addTag = function(tag) {
-  if (typeof tag === 'string' && tag !== '' &&
-    (this.props.validate ? this.props.validate(tag) : true)) {
-    let value = this.props.value.concat([{email: tag}]);
-    this.props.onChange(value);
-    this._clearInput();
-  } else if (typeof tag !== 'string') {
-    let value = this.props.value.concat([tag]);
-    this.props.onChange(value);
-    this._clearInput();
-  }
-};
+// TagsInput.prototype._addTags = function(tag) {
+//   if (typeof tag === 'string' && tag !== '' &&
+//     (this.props.validate ? this.props.validate(tag) : true)) {
+//     this.props.value.push({email: tag});
+//     this.props.onChange(this.props.value);
+//     this._clearInput();
+//   } else if (typeof tag !== 'string') {
+//     this.props.value.push(tag);
+//     this.props.onChange(this.props.value);
+//     this._clearInput();
+//   }
+// };
 
 class TypeaheadMobileChipComponent extends React.Component {
   constructor(props) {
@@ -316,9 +316,16 @@ export class TypeaheadContactComponent extends React.Component {
     }, 0);
   }
 
-  updateInvitees(i) {
+  updateInvitees(tags, changed, changedIndecies) {
+    _.each(changedIndecies, (i)=> {
+      if (typeof tags[i] === 'string' && tags[i] !== '' &&
+        (this.props.validate ? this.props.validate(tags[i]) : true)) {
+        tags[i] = {email: tags[i]};
+      }
+    });
+
     this.setState({
-      invitees: i,
+      invitees: tags,
       query: ''
     });
   }
@@ -338,7 +345,7 @@ export class TypeaheadContactComponent extends React.Component {
 
   renderInput(props) {
     let _this = this;
-    let {onChange, value, ...other} = props;
+    let {onChange, value, addTag, ...other} = props;
 
     // bug -- react-tagsinput doesn't call onChange in addition to custom function
     function callBoth(e) {

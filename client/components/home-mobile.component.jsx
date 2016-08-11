@@ -158,15 +158,16 @@ export class HomeMobileComponent extends React.Component {
           <LoadingDialogComponent open={true} title='Starting video call'/> : ''
         }
         <HeaderComponent mobile={true}
-        showMenuIconButton={true}
-        iconElementRight={
-          (!!this.state.invitees && this.state.invitees.length) ?
-          (<IconButton
-            iconStyle={styles.icon.css}
-            iconClassName='material-icons'
-            onTouchTap={this.openInviteModal}>
-            done
-          </IconButton>) : null}/>
+          showMenuIconButton={true}
+          iconElementRight={
+            (!!this.state.invitees && this.state.invitees.length) ?
+            (<IconButton
+              iconStyle={styles.icon.css}
+              iconClassName='material-icons'
+              onTouchTap={this.openInviteModal}>
+              done
+            </IconButton>) : null}
+        />
         <div style={[styles.content.css]}>
           {!!this.props.contacts ? <TypeaheadContactComponent
             contacts={this.props.contacts}

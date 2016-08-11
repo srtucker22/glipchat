@@ -116,7 +116,6 @@ export class RoomComponent extends React.Component {
   }
 
   render() {
-    console.log('room props', this.props);
     // log the errors for now
     if (this.props.localStreamError) {
       console.error(this.props.localStreamError);
@@ -191,7 +190,6 @@ export class RoomComponent extends React.Component {
 };
 
 export default createContainer(({params}) => {
-  console.log('room container', params);
   return {
     localStreamError: RTCStore.localStreamError.get(),
     peers: RTCStore.peers.get(),
