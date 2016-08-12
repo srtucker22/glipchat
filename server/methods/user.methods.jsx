@@ -239,14 +239,16 @@ Meteor.methods({
     // merge passed contacts with existing user google contacts
     if (!!user && !!user.services.google && user.services.google.contacts) {
       let indexedExistingContacts = _.indexBy(contacts, 'id');
+      let newContacts = [];
 
       _.each(contacts, (contact)=> {
         if (!!indexedExistingContacts[contact.id]) {
-          _.extend(indexedExistingContacts[contact.id], contact);
+          _.extend(indexedExistingContacts[contact.id], contact); // modify by reference
         } else {
-          indexedExistingContacts[contact.id] = contact;
+          newContacts.push(contact);
         }
       });
+      contacts = contacts.concat(newContacts);
     }
 
     contacts = joinAppContacts(user, contacts);

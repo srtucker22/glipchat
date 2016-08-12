@@ -89,14 +89,14 @@ export class IntroComponent extends React.Component {
           <RaisedButton
             onTouchTap={this.loginWithGoogle}
             label='Sign in with Google'
-            primary={true}
+            secondary={true}
             style={{marginBottom: '20px'}}
           />
           <br/>
           <RaisedButton
             onTouchTap={this.loginAsGuest}
             label='Continue as guest'
-            primary={true}
+            secondary={true}
             style={{marginBottom: '50px'}}
           />
         </div>

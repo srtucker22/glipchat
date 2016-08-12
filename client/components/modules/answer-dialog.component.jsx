@@ -69,7 +69,7 @@ export class AnswerDialogComponent extends React.Component {
       />,
       <FlatButton
         label='Answer'
-        primary={true}
+        secondary={true}
         keyboardFocused={true}
         onTouchTap={this.answer}
       />,

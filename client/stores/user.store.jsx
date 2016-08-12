@@ -20,10 +20,10 @@
  */
 
 import Browser from 'bowser';
-import GooglePeople from './google-people.jsx';
+import GooglePeople from '../lib/google-people';
 import urlJoin from 'url-join';
 
-let googlePeople = GooglePeople();
+let googlePeople = new GooglePeople();
 let NotificationActions;
 let RoomActions;
 let RTCActions;
@@ -222,11 +222,12 @@ var UserStore = function() {
   };
 
   _this.getContacts = ()=> {
-    if (googlePeople.readyForUse) {
+    if (googlePeople.readyForUse()) {
       // we need to wait for google to get their shit together before we can use the People API :/
       if (!_this.isGuest() && _this.user().services.google) {
 
         googlePeople.getContacts().then(function(res) {
+          console.log('res', res);
           let modified = _.map(res, (val)=> {
             // we're getting buggy returns from Google People for photos right now
             let photo = val.photos ? _.find(val.photos, (photo)=> {
@@ -305,7 +306,7 @@ var UserStore = function() {
         let permissions = [
           'https://www.googleapis.com/auth/contacts.readonly',
           'https://www.googleapis.com/auth/userinfo.email'];
-        googlePeople.readyForUse &&
+        googlePeople.readyForUse() &&
           permissions.push('https://www.googleapis.com/auth/plus.login');
         Meteor.loginWithGoogle({
           requestPermissions: permissions,

@@ -22,6 +22,7 @@
 // Dependencies
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
+import {browserHistory} from 'react-router';
 import {List, ListItem} from 'material-ui/List';
 import * as config from '../../lib/config';
 import AnswerDialogComponent from './modules/answer-dialog.component';
@@ -30,15 +31,16 @@ import Colors from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
 import Divider from 'material-ui/Divider';
 import FlatButton from 'material-ui/FlatButton';
+import GlobalStyles from '../styles/global.styles';
 import HeaderComponent from './modules/header.component';
 import IconButton from 'material-ui/IconButton';
 import IntroComponent from './intro.component';
+import LoadingDialogComponent from './modules/loading-dialog.component';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import TypeaheadContactComponent from './modules/typeahead-contact.component';
-import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -142,7 +144,7 @@ export class HomeMobileComponent extends React.Component {
       <FlatButton
         label='Invite'
         disabled={!this.props.user || !this.props.user.profile.name}
-        primary={true}
+        secondary={true}
         keyboardFocused={true}
         onTouchTap={this.invite.bind(this)}
       />,
@@ -165,11 +167,10 @@ export class HomeMobileComponent extends React.Component {
             </IconButton>) : null}
         />
         <div style={[styles.content.css]}>
-          {!!this.props.contacts ? <TypeaheadContactComponent
-            contacts={this.props.contacts}
+          <TypeaheadContactComponent
+            contacts={this.props.contacts || []}
             mobile={true}
-            onChange={this.onTypeaheadChange.bind(this)}/> : ''
-          }
+            onChange={this.onTypeaheadChange.bind(this)}/>
         </div>
         <Dialog
           title='Invite to Video Call?'

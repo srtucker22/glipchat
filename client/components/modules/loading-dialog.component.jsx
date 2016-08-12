@@ -62,7 +62,7 @@ export class LoadingDialogComponent extends React.Component {
           contentStyle={styles.content.css}
           open={this.props.open}
           style={this.props.style}>
-          <h4>{this.props.title}</h4>
+          <h4 style={styles.content.css}>{this.props.title}</h4>
           <CircularProgress mode='indeterminate'/>
         </Dialog>
       </div>

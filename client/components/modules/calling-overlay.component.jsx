@@ -69,7 +69,7 @@ export class CallingOverlayComponent extends React.Component {
                 <CircularProgress mode='indeterminate'/>
                 <div style={{display: 'block', paddingTop: '16px'}}>
                   <RaisedButton label='Cancel'
-                    primary={true}
+                    secondary={true}
                     onTouchTap={this.leave}>
                   </RaisedButton>
                 </div>
@@ -80,12 +80,12 @@ export class CallingOverlayComponent extends React.Component {
                 <h5>No contacts connected</h5>
                 <div style={{margin: 'auto', width: '100%'}}>
                   {this.props.invitees ? <RaisedButton label='Retry'
-                    primary={true}
+                    secondary={true}
                     onTouchTap={this.retry}
                     style={{margin: '0 10px'}}>
                   </RaisedButton> : ''}
                   <RaisedButton label={this.props.invitees ? 'Cancel' : 'Leave'}
-                    primary={true}
+                    secondary={true}
                     onTouchTap={this.leave}>
                   </RaisedButton>
                 </div>

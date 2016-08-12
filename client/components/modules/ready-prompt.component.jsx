@@ -84,7 +84,7 @@ export class ReadyPromptComponent extends React.Component {
             <div className='text-center' style={[GlobalStyles.cell]}>
               <p>Are you ready to join?</p>
               <RaisedButton label='Join'
-                primary={true}
+                secondary={true}
                 onTouchTap={this.joinRoomStream.bind(this)}>
               </RaisedButton>
             </div>

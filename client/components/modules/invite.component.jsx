@@ -197,7 +197,7 @@ export class InviteComponent extends React.Component {
         key='invite'
         label='Invite'
         disabled={(!this.state.invitees || !this.state.invitees.length || !this.props.user || !this.props.user.profile.name)}
-        primary={true}
+        secondary={true}
         onTouchTap={this.invite.bind(this)} />
     ];
 

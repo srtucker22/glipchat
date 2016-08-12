@@ -160,8 +160,32 @@ class ContactListComponent extends React.Component {
     this.shouldComponentUpdate =
       PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
-      visibleContacts: this.getVisibleContacts(props.query, props.contacts)
+      visibleContacts: this.getVisibleContacts(props.query, props.contacts),
+      isScrolling: false,
+      scrollingTimer: null
     };
+  }
+
+  componentDidMount() {
+    let _this = this;
+    if (!this.onScroll) {
+      this.onScroll = ()=> {
+        !!this.state.scrollingTimer && clearTimeout(this.state.scrollingTimer);
+        _this.setState({
+          isScrolling: true,
+          scrollingTimer: setTimeout(()=> {
+            _this.setState({
+              isScrolling: false,
+              scrollingTimer: null
+            });
+          }, 100)
+        });
+      };
+    }
+  }
+
+  onScrollThrottled() {
+    _.throttle(this.onScroll, 100);
   }
 
   getVisibleContacts(query, contacts) {
@@ -241,41 +265,62 @@ class ContactListComponent extends React.Component {
     } else {
       color = Colors.grey500;
     }
+
+    let title = contact.name || contact.email;
+    title = title.length > 24 && this.props.mobile ?
+      title.slice(0, 24) + '...' : title;
+
     return (
-      <ListItem
-        disabled={this.state.isScrolling}
-        key={'contact-' + index}
-        leftAvatar={<Avatar
-          src={contact.src || 'images/profile-default.jpg'}
-        />}
-        rightIcon={
+      <div
+        style={_.extend({}, GlobalStyles.table, {width: '100%', padding: 10})}
+        onTouchTap={this.props.onSelect.bind(null, contact)}
+        key={key}>
+        <div style={_.extend({}, GlobalStyles.cell, {width: '40px'})}>
+          <Avatar
+            src={!this.state.isScrolling && !!contact.src ? contact.src :
+              'images/profile-default.jpg'}
+          />
+        </div>
+        <div style={_.extend({
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          paddingLeft: '10px',
+        }, GlobalStyles.cell)}>
+          {title}
+        </div>
+        <div style={_.extend({
+          paddingLeft: '10px',
+          width: '40px'
+        }, GlobalStyles.cell)}>
           <FontIcon
             className='material-icons'
             style={{color}}>
               {contact.status ? 'lens' : 'send'}
           </FontIcon>
-        }
-        onTouchTap={this.props.onSelect.bind(null, contact)}
-        primaryText={
-          <div style={{
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-          }}>
-            {contact.name || contact.email}
-          </div>
-        }
-      />
+        </div>
+      </div>
     );
   }
+
+  // <ListItem
+  //   disabled={this.state.isScrolling}
+  //
+  //   leftAvatar={}
+  //   rightIcon={
+  //     <FontIcon
+  //       className='material-icons'
+  //       style={{color}}>
+  //         {contact.status ? 'lens' : 'send'}
+  //     </FontIcon>
+  //   }
+  // />
 
   render() {
     return (
       <div style={[!this.props.mobile && {
           maxHeight: '120px', overflowY: 'scroll'
         }]}>
-        <List
-          subheader={this.props.subheader}
-          style={{overflow: 'auto', height: '100vh'}}>
+        <div style={{overflow: 'auto', height: '100vh'}} onScroll={this.onScrollThrottled.bind(this)}>
           {this.props.contacts && this.props.contacts.length ? <Divider/> : ''}
           <ReactList
             itemRenderer={this.renderItem.bind(this)}
@@ -283,7 +328,7 @@ class ContactListComponent extends React.Component {
             type='uniform'
             useStaticSize={true}
           />
-        </List>
+        </div>
       </div>
     );
   }
@@ -295,14 +340,30 @@ export class TypeaheadContactComponent extends React.Component {
     super(props);
     this.shouldComponentUpdate =
       PureRenderMixin.shouldComponentUpdate.bind(this);
+
+    // sort the contacts by last login date
     this.state = {
-      invitees: []
+      invitees: [],
+      sorted: _.sortBy(props.contacts, (contact)=> {
+        return contact.status ? -contact.status.lastLogin.date : 0;
+      })
     };
   }
 
   componentWillUpdate(nextProps, nextState) {
     this.props.onChange && this.state.invitees !== nextState.invitees &&
     this.props.onChange(nextState);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const emails = _.pluck(this.state.invitees, 'email');
+    this.setState({
+      sorted: _.sortBy(_.filter(this.props.contacts, (contact)=> {
+        return !~emails.indexOf(contact.email);
+      }), (contact)=> {
+        return contact.status ? -contact.status.lastLogin.date : 0;
+      })
+    });
   }
 
   renderTag(props) {
@@ -358,7 +419,7 @@ export class TypeaheadContactComponent extends React.Component {
     let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum)\b/i;
 
     return re.test(tag) ||
-      (!_this.state.invitees || _this.state.invitees.indexOf(tag) === -1);
+      (!_this.state.invitees || !~_this.state.invitees.indexOf(tag));
   }
 
   renderInput(props) {
@@ -383,10 +444,6 @@ export class TypeaheadContactComponent extends React.Component {
   }
 
   render() {
-    // sort the contacts by last login date
-    let sorted = _.sortBy(this.props.contacts, (contact)=> {
-      return contact.status ? -contact.status.lastLogin.date : 0;
-    });
     return (
       <div className='typeahead'>
         <Style
@@ -414,7 +471,9 @@ export class TypeaheadContactComponent extends React.Component {
               onInputChange={this.updateQuery.bind(this)}
               style={this.props.mobile ? {padding: '10px'} : {}}/>
             <ContactListComponent
-              contacts={sorted}
+              contacts={this.state.query ? this.state.sorted : _.filter(this.state.sorted, (contact)=> {
+                return !!contact._id;
+              })}
               query={this.state.query}
               mobile={this.props.mobile}
               onSelect={this.addInvitee.bind(this)}/>

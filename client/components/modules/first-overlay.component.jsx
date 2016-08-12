@@ -91,7 +91,7 @@ export class FirstOverlayComponent extends React.Component {
                   styles.invite.cell.css]} className='text-left'>
                 <RaisedButton
                   label='Invite people'
-                  primary={true}
+                  secondary={true}
                   onTouchTap={RoomActions.showInviteModal}>
                 </RaisedButton>
               </div>
