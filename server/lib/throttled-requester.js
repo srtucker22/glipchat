@@ -1,4 +1,5 @@
 import Future from 'fibers/future';
+import moment from 'moment';
 
 // Function wrapping code.
 // fn - reference to function.
