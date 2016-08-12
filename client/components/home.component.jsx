@@ -23,12 +23,12 @@
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import Browser from 'bowser';
-import DownloadButtonComponent from './modules/download-button.component.jsx';
-import FooterComponent from './modules/footer.component.jsx';
-import GithubComponent from './modules/github.component.jsx';
-import HeaderComponent from './modules/header.component.jsx';
+import DownloadButtonComponent from './modules/download-button.component';
+import FooterComponent from './modules/footer.component';
+import GithubComponent from './modules/github.component';
+import HeaderComponent from './modules/header.component';
 import {browserHistory} from 'react-router';
-import LoadingDialogComponent from './modules/loading-dialog.component.jsx';
+import LoadingDialogComponent from './modules/loading-dialog.component';
 import Radium from 'radium';
 import React from 'react';
 import Colors from 'material-ui/styles/colors';

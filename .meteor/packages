@@ -43,7 +43,6 @@ raix:push
 cfs:gridfs
 force-ssl@1.0.12
 msavin:mongol
-srtucker22:throttled-requester
 standard-minifier-css@1.1.8
 standard-minifier-js@1.1.8
 ecmascript@0.5.7

@@ -20,6 +20,7 @@
  */
 
 import Future from 'fibers/future';
+import ThrottledRequester from '../lib/throttled-requester';
 
 // create request queue for Google Contacts API limited to 10 req/sec
 let contactsRequester = new ThrottledRequester(10, 1000);

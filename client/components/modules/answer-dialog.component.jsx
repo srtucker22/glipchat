@@ -23,7 +23,7 @@ import Colors from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import GlobalStyles from '../../styles/global.styles';
-import LoadingDialogComponent from './loading-dialog.component.jsx';
+import LoadingDialogComponent from './loading-dialog.component';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -76,7 +76,8 @@ export class AnswerDialogComponent extends React.Component {
     ];
     return (
       <Dialog
-        title={this.props.invitation && this.props.invitation.from + ' is calling'}
+        title={this.props.invitation &&
+          `${this.props.invitation.from} is calling`}
         actions={actions}
         modal={false}
         open={!!this.props.invitation}

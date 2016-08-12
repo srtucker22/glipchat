@@ -23,8 +23,8 @@
 import * as config from '../../lib/config';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
-import GithubComponent from './modules/github.component.jsx';
-import LoadingDialogComponent from './modules/loading-dialog.component.jsx';
+import GithubComponent from './modules/github.component';
+import LoadingDialogComponent from './modules/loading-dialog.component';
 import Colors from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
