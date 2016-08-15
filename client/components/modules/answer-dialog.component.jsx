@@ -47,6 +47,9 @@ export class AnswerDialogComponent extends React.Component {
     super(props);
     this.shouldComponentUpdate =
       PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.state = {
+      loading: false
+    };
   }
 
   answer() {

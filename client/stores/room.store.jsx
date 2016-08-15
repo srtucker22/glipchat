@@ -142,9 +142,7 @@ var RoomStore = function() {
       _this.createError.set('');
 
       UserStore.requireUser().then((user)=> {
-        console.log('creatingRoom');
         Meteor.call('createRoom', (err, id)=> {
-          console.log('room created', id, err);
           _this.creatingRoom.set(false);
           if (err) {
             _this.createError.set(err);
@@ -199,7 +197,7 @@ var RoomStore = function() {
           _this.inviteError.set(null);
           Meteor.call('invite', _this.currentRoomId.get(), invitees, (err, res)=> {
             if (err) {
-              console.log(err);
+              console.error(err);
               _this.inviteError.set(err);
             } else {
               _this.ring(); // start a ringer that will resolve when someone joins or timeout
@@ -242,7 +240,6 @@ var RoomStore = function() {
           if (!!_this.currentRoom.get() && _this.currentRoom.get()._id === r) {
             resolve(_this.currentRoom.get());
           } else {
-            console.log(_this.gettingCurrentRoom.get());
             reject({status: 404, description: 'ROOM_NOT_FOUND'});
           };
         });

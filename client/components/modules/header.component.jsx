@@ -283,7 +283,7 @@ export class HeaderComponent extends React.Component {
           }, {
             title: 'Feedback',
             icon: 'announcement',
-            href: 'https://www.facebook.com/groups/165149990531759/',
+            href: 'https://github.com/srtucker22/quasar/issues/new',
             target: '_blank'
           }
         ], [

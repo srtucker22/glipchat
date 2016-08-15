@@ -1,11 +1,16 @@
 **high**
+-  notifications not working
+-  validate all error messages
+-  add some settings settings ~ especially cordova related ones
+-  hide status icon until you implement that feature
+-  snooze notifications functionality
+
 -  Enhance invite workflow
   - mobile -- you send an invite
     - if an active invitee opens the app after a notification and the inviter is active, they will get a dialog asking to join the room and a notification in their quasar notification list for retrieval -- which shows 'join' cta until the users leave the room
     - if you invite non-users, they will go directly to room as guest. if the room is empty, user will be directed to notifications list on mobile or homepage on desktop. ~ implement with invitation codes in email
 -  Add raix push notifications for cordova to enhance mobile support
 -  Add TURN server support to make it more useful for real-world deployment
-- notifications not working
 - why is list so slow?
 - revive electron
 
@@ -25,6 +30,7 @@
 - getContacts should only get the updated contacts instead of all contacts -- a little bit of work here
 
 **low**
+- tags input css
 - bug -- bookmark needs to be instantly selected for copying
 - bug -- warning on name input
 - bug -- don't include electron in cordova builds :/
