@@ -31,8 +31,8 @@ import FontIcon from 'material-ui/FontIcon';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import {List, ListItem} from 'material-ui/List';
-import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import TypeaheadChipComponent from './typeahead-chip.component';
 import GlobalStyles from '../../styles/global.styles';
 import ReactList from 'react-list';
 
@@ -62,41 +62,6 @@ const styles = {
     padding: '10px',
   },
 
-  chip: {
-    css: {
-      borderRadius: '24px',
-      height: '24px',
-    },
-
-    border: {
-      css: {
-        display: 'inline-block',
-        padding: '5px 5px 5px 0',
-      },
-      mobile: {
-        css: {
-          marginBottom: '-10px'
-        }
-      }
-    },
-
-    icon: {
-      css: {
-        cursor: 'pointer',
-        verticalAlign: 'top',
-        width: '24px',
-      },
-    },
-
-    text: {
-      css: {
-        padding: '4px 5px 0 10px',
-        fontSize: '12px',
-        verticalAlign: 'top',
-      }
-    },
-  },
-
   input: {
     css: {
       display: 'block',
@@ -116,43 +81,6 @@ const styles = {
     }
   }
 };
-
-class TypeaheadMobileChipComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  render() {
-    return (
-      <div key={this.props.tag} style={[
-          styles.chip.border.css, this.props.mobile ?
-            styles.chip.border.mobile.css : '']}>
-        <Paper zDepth={1} style={styles.chip.css}>
-          <div style={[GlobalStyles.table]}>
-            {this.props.src ? <div style={[
-                GlobalStyles.cell,
-              ]}>
-              <img src={this.props.src} style={[
-                styles.chip.css,
-                styles.chip.icon.css]}/>
-            </div> : ''}
-            <div style={[
-                GlobalStyles.cell,
-                styles.chip.text.css
-              ]}>{this.props.tag}</div>
-            <FontIcon
-              onTouchTap={this.props.onRemove}
-              className='material-icons'
-              style={styles.chip.icon.css}>remove_circle</FontIcon>
-          </div>
-        </Paper>
-      </div>
-    );
-  }
-};
-TypeaheadMobileChipComponent = Radium(TypeaheadMobileChipComponent);
 
 class ContactListComponent extends React.Component {
   constructor(props) {
@@ -369,7 +297,7 @@ export class TypeaheadContactComponent extends React.Component {
   renderTag(props) {
     let _this = this;
     return (
-      <TypeaheadMobileChipComponent
+      <TypeaheadChipComponent
         onRemove={(e) => setTimeout(()=> {
           props.onRemove(props.key), 0;
         })}

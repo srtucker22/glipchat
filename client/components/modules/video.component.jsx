@@ -19,7 +19,6 @@
  *
  */
 
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
 
@@ -45,27 +44,31 @@ const styles = {
   },
 };
 
-export class VideoComponent extends React.Component {
-  constructor() {
-    super(...arguments);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-  render() {
-    return (
-      <video
-        style={[
-          styles.css,
-          this.props.flip && styles.flip.css,
-          this.props.fullScreen && styles.fullScreen.css
-        ]}
-        src={URL.createObjectURL(this.props.src)}
-        muted={this.props.muted}
-        autoPlay
-        onTouchTap={this.props.onTouchTap}>
-      </video>
-    );
-  }
+const VideoComponent = (props)=> {
+  return (
+    <video
+      style={[
+        styles.css,
+        props.flip && styles.flip.css,
+        props.fullScreen && styles.fullScreen.css
+      ]}
+      src={URL.createObjectURL(props.src)}
+      muted={props.muted}
+      autoPlay
+      onTouchTap={props.onTouchTap}>
+    </video>
+  );
+};
+
+VideoComponent.propTypes = {
+  flip: React.PropTypes.bool,
+  fullScreen: React.PropTypes.bool,
+  muted: React.PropTypes.bool,
+  onTouchTap: React.PropTypes.func,
+  src: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.string
+  ])
 };
 
 export default Radium(VideoComponent);

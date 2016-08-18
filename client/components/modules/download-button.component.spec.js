@@ -1,11 +1,13 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 import DownloadButtonComponent from './download-button.component';
 
 describe('DownloadButtonComponent', () => {
   it('should render', () => {
     const button = shallow(<DownloadButtonComponent platform='mac'/>);
-    chai.assert(button.contains(<a href='/downloads/darwin-x64/quasar.zip' download />));
+    chai.assert.equal(button.node.type, 'a');
+    chai.assert.equal(button.node.props.href, '/downloads/darwin-x64/quasar.zip');
+    chai.assert.isTrue(button.node.props.download);
   });
 });

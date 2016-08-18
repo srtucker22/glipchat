@@ -20,21 +20,22 @@
  */
 
 // Dependencies
-import { createContainer } from 'meteor/react-meteor-data';
-import { Meteor } from 'meteor/meteor';
+import {createContainer} from 'meteor/react-meteor-data';
+import {Meteor} from 'meteor/meteor';
+import {browserHistory} from 'react-router';
+import {COMPANY} from '../../lib/config';
 import Browser from 'bowser';
+import Colors from 'material-ui/styles/colors';
 import DownloadButtonComponent from './modules/download-button.component';
+import FontIcon from 'material-ui/FontIcon';
 import FooterComponent from './modules/footer.component';
 import GithubComponent from './modules/github.component';
+import GlobalStyles from '../styles/global.styles';
 import HeaderComponent from './modules/header.component';
-import {browserHistory} from 'react-router';
 import LoadingDialogComponent from './modules/loading-dialog.component';
 import Radium from 'radium';
-import React from 'react';
-import Colors from 'material-ui/styles/colors';
-import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-import GlobalStyles from '../styles/global.styles';
+import React from 'react';
 
 const styles = {
   css: {
@@ -118,7 +119,7 @@ export class HomeComponent extends React.Component {
             </div>
           </div>
         </div>
-        <FooterComponent />
+        <FooterComponent company={COMPANY}/>
       </div>
     );
   }

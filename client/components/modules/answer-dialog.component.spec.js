@@ -1,11 +1,14 @@
-import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import { shallow, mount } from 'enzyme';
+import ReactTestUtils from 'react-addons-test-utils';
 import { chai } from 'meteor/practicalmeteor:chai';
+import { shallow, mount } from 'enzyme';
 import AnswerDialogComponent from './answer-dialog.component';
-import LoadingDialogComponent from './loading-dialog.component';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import LoadingDialogComponent from './loading-dialog.component';
+import {NotificationActions} from '../../actions/notification.actions';
+import React from 'react';
 import sinon from 'sinon';
 
 describe('AnswerDialogComponent', () => {
@@ -39,5 +42,42 @@ describe('AnswerDialogComponent', () => {
     el.setState({loading: true});
     dialog = el.childAt(0);
     chai.assert.equal(dialog.find(LoadingDialogComponent).length, 1);
+  });
+
+  it('should change the loading state and call notification actions on accept', ()=> {
+    let acceptSpy = sinon.spy(NotificationActions.prototype, 'accept');
+
+    const test = 'test title';
+    class ContainerComponent extends React.Component {
+      constructor() {
+        super(...arguments);
+
+        this.constructor.childContextTypes = {
+          muiTheme: React.PropTypes.object,
+        };
+      }
+      getChildContext() {
+        return {
+          muiTheme: getMuiTheme(lightBaseTheme),
+        };
+      }
+
+      render() {
+        return (
+          <AnswerDialogComponent {...this.props}/>
+        );
+      }
+    }
+
+    const el = mount(
+      <ContainerComponent title={test}/>
+    );
+
+    chai.assert.equal(acceptSpy.callCount, 0);
+
+    let dialog = el.find(Dialog).node;
+    let renderLayer = dialog.renderLayer();
+    // buttons[0].simulate('click');
+    // chai.assert(acceptSpy.callCount, 0);
   });
 });

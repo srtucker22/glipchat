@@ -32,6 +32,7 @@
     "sinon": "^1.17.5"
   },
   "scripts": {
+    "start": "meteor --settings settings.json",
     "test": "meteor test --driver-package practicalmeteor:mocha"
   },
   "repository": {

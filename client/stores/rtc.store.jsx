@@ -22,6 +22,7 @@
  * Setup Dependencies
  * @type {null}
  */
+import * as WebRTC from 'webrtc-adapter';
 
 let RoomStore;
 let UserStore;
@@ -292,6 +293,7 @@ RTCStore = function() {
     _this.localStreamError.set(null);
     if (!_this.localStream.get() && !_this.gettingLocalStream.get()) {
       _this.gettingLocalStream.set(true);
+      console.log('HERE', window.RTCPeerConnection, navigator.getUserMedia);
       if (!window.RTCPeerConnection || !navigator.getUserMedia) {
         _this.localStreamError.set({
           status: 405,

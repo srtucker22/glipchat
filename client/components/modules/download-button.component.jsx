@@ -69,52 +69,48 @@ const styles = {
   },
 };
 
-export class DownloadButtonComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
+const DownloadButtonComponent = (props)=> {
+  let platforms = {
+    mac: {
+      icon: '/images/apple.svg',
+      link: '/downloads/darwin-x64/quasar.zip',
+      title: 'Mac OS X'
+    },
+    win: {
+      icon: '/images/windows.svg',
+      link: '/downloads/win-x64/quasar.zip',
+      title: 'Windows'
+    }
+  };
 
-  render() {
-    let platforms = {
-      mac: {
-        icon: '/images/apple.svg',
-        link: '/downloads/darwin-x64/quasar.zip',
-        title: 'Mac OS X'
-      },
-      win: {
-        icon: '/images/windows.svg',
-        link: '/downloads/win-x64/quasar.zip',
-        title: 'Windows'
-      }
-    };
+  let platform = platforms[props.platform];
 
-    let platform = platforms[this.props.platform];
-
-    return (
-      <a href={platform.link} download>
-        <RaisedButton
-          secondary={true}
-          labelPosition='after'
-          style={styles.button.css}>
-          <div style={[GlobalStyles.table, styles.button.container.css]}>
-            <div style={[GlobalStyles.cell, styles.button.container.icon.css]}>
-              <img src={platform.icon} style={[{width: '100%'}]}/>
+  return (
+    <a href={platform.link} download>
+      <RaisedButton
+        secondary={true}
+        labelPosition='after'
+        style={styles.button.css}>
+        <div style={[GlobalStyles.table, styles.button.container.css]}>
+          <div style={[GlobalStyles.cell, styles.button.container.icon.css]}>
+            <img src={platform.icon} style={[{width: '100%'}]}/>
+          </div>
+          <div style={[GlobalStyles.cell, styles.button.container.copy.css]}>
+            <div style={[styles.button.container.copy.top]}>
+              Download for
             </div>
-            <div style={[GlobalStyles.cell, styles.button.container.copy.css]}>
-              <div style={[styles.button.container.copy.top]}>
-                Download for
-              </div>
-              <div style={[styles.button.container.copy.bottom]}>
-                {platform.title}
-              </div>
+            <div style={[styles.button.container.copy.bottom]}>
+              {platform.title}
             </div>
           </div>
-        </RaisedButton>
-      </a>
-    );
-  }
-}
+        </div>
+      </RaisedButton>
+    </a>
+  );
+};
+
+DownloadButtonComponent.propTypes = {
+  platform: React.PropTypes.string.isRequired
+};
 
 export default Radium(DownloadButtonComponent);

@@ -19,32 +19,30 @@
  *
  */
 
-var NotificationActions = function() {
-  return {
-    accept() {
-      Dispatcher.dispatch({
-        actionType: 'NOTIFICATION_ACCEPT_INVITATION'
-      });
-    },
+export class NotificationActions {
+  accept() {
+    Dispatcher.dispatch({
+      actionType: 'NOTIFICATION_ACCEPT_INVITATION'
+    });
+  }
 
-    clearListener(id) {
-      Dispatcher.dispatch({actionType: 'NOTIFICATION_CLEAR_LISTENER', id});
-    },
+  clearListener(id) {
+    Dispatcher.dispatch({actionType: 'NOTIFICATION_CLEAR_LISTENER', id});
+  }
 
-    getPermission() {
-      Dispatcher.dispatch({actionType: 'NOTIFICATION_GET_PERMISSION'});
-    },
+  getPermission() {
+    Dispatcher.dispatch({actionType: 'NOTIFICATION_GET_PERMISSION'});
+  }
 
-    registerListener(id) {
-      Dispatcher.dispatch({actionType: 'NOTIFICATION_REGISTER_LISTENER', id});
-    },
+  registerListener(id) {
+    Dispatcher.dispatch({actionType: 'NOTIFICATION_REGISTER_LISTENER', id});
+  }
 
-    reject() {
-      Dispatcher.dispatch({
-        actionType: 'NOTIFICATION_REJECT_INVITATION'
-      });
-    },
-  };
+  reject() {
+    Dispatcher.dispatch({
+      actionType: 'NOTIFICATION_REJECT_INVITATION'
+    });
+  }
 };
 
 Dependency.add('NotificationActions', new NotificationActions());

@@ -18,10 +18,8 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Radium from 'radium';
 import React from 'react';
+import Radium from 'radium';
 import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
@@ -30,31 +28,26 @@ const styles = {
   }
 };
 
-let glipcode = {name: 'Glipcode', href: 'http://glipcode.com/'};
+const FooterComponent = ({company})=> {
+  return (
+    <footer
+      className='col-xs-12'
+      style={[
+        GlobalStyles.table,
+        styles.css,
+        {height: GlobalStyles.footerHeight}
+      ]}>
+      <div className='text-left' style={[GlobalStyles.cell]}>
+        Copyright <a href={company.href} target='_blank'>
+          {company.name}
+        </a> 2016
+      </div>
+    </footer>
+  );
+};
 
-export class FooterComponent extends React.Component {
-  constructor() {
-    super(...arguments);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-  render() {
-    return (
-      <footer
-        className='col-xs-12'
-        style={[
-          GlobalStyles.table,
-          styles.css,
-          {height: GlobalStyles.footerHeight}
-        ]}>
-        <div className='text-left' style={[GlobalStyles.cell]}>
-          Copyright <a href={glipcode.href} target='_blank'>
-            {glipcode.name}
-          </a> 2016
-        </div>
-      </footer>
-    );
-  }
-}
+FooterComponent.propTypes = {
+  company: React.PropTypes.object.isRequired
+};
 
 export default Radium(FooterComponent);

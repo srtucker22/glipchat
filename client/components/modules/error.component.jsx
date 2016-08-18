@@ -20,6 +20,7 @@
  */
 
 import Browser from 'bowser';
+import DownloadButtonComponent from './download-button.component';
 import {browserHistory} from 'react-router';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
