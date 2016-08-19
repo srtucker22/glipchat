@@ -1,3 +1,6 @@
+import {Accounts} from 'meteor/accounts-base';
+import {Meteor} from 'meteor/meteor';
+
 Meteor.methods({
   // Obtain a new access token using the refresh token
   exchangeRefreshToken: function() {

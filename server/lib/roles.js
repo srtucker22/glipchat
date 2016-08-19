@@ -18,6 +18,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import { Meteor } from 'meteor/meteor';
 
 // update a users permissions
 Meteor.methods({

@@ -18,6 +18,8 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import {check, Match} from 'meteor/check';
+import {Meteor} from 'meteor/meteor';
 
 // publish current user
 Meteor.publish('user', function() {

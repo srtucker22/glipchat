@@ -19,7 +19,10 @@
  *
  */
 
+import {check, Match} from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
+import {notificationStream} from '../../lib/streams';
+import {Rooms} from '../../lib/rooms';
 import urlJoin from 'url-join';
 import * as config from '../../lib/config';
 

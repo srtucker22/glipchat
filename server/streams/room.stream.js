@@ -18,6 +18,8 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import {Rooms} from '../../lib/rooms';
+import {roomStream} from '../../lib/streams';
 
 // room permissions
 roomStream.allowRead(function(eventName) {

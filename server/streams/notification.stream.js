@@ -18,6 +18,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import {notificationStream} from '../../lib/streams';
 
 // notification permissions
 notificationStream.allowRead((eventName)=> {

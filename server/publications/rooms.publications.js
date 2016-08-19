@@ -18,6 +18,9 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import {check, Match} from 'meteor/check';
+import {Meteor} from 'meteor/meteor';
+import {Rooms} from '../../lib/rooms';
 
 // publish all rooms
 Meteor.publish('rooms', function() {

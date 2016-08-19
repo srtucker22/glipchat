@@ -18,6 +18,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import {notificationStream} from '../../lib/streams';
 
 let RoomActions;
 let RoomStore;

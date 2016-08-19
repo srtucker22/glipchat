@@ -18,8 +18,10 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import { Meteor } from 'meteor/meteor';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-var Schema = {};
+let Schema = {};
 
 Schema.UserProfile = new SimpleSchema({
   name: {

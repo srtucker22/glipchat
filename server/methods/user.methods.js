@@ -18,7 +18,8 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-
+import {check, Match} from 'meteor/check';
+import {Meteor} from 'meteor/meteor';
 import Future from 'fibers/future';
 import ThrottledRequester from '../lib/throttled-requester';
 

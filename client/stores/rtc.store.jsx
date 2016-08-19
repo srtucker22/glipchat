@@ -23,6 +23,7 @@
  * @type {null}
  */
 import * as WebRTC from 'webrtc-adapter';
+import {notificationStream, roomStream} from '../../lib/streams';
 
 let RoomStore;
 let UserStore;

@@ -18,6 +18,9 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import {Meteor} from 'meteor/meteor';
+import {Push} from 'meteor/raix:push';
+import {ServiceConfiguration} from 'meteor/service-configuration';
 
 // first, remove configuration entry in case service is already configured
 ServiceConfiguration.configurations.remove({

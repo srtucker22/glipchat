@@ -23,7 +23,7 @@
 import {createContainer} from 'meteor/react-meteor-data';
 import {Meteor} from 'meteor/meteor';
 import {browserHistory} from 'react-router';
-import {COMPANY} from '../../lib/config';
+import {COMPANY, GITHUB_URL} from '../../lib/config';
 import Browser from 'bowser';
 import Colors from 'material-ui/styles/colors';
 import DownloadButtonComponent from './modules/download-button.component';
@@ -97,7 +97,7 @@ export class HomeComponent extends React.Component {
   render() {
     return (
       <div style={[styles.css]}>
-        <GithubComponent />
+        <GithubComponent link={GITHUB_URL}/>
         {this.state.loading ?
           <LoadingDialogComponent open={true} title='Starting video call'/> : ''
         }

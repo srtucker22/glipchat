@@ -21,6 +21,7 @@
 
 // Dependencies
 import { Meteor } from 'meteor/meteor';
+import { Rooms } from '../../lib/rooms';
 import { Tracker } from 'meteor/tracker';
 let RTCStore;
 let UserStore;
