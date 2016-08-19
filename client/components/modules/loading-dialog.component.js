@@ -23,7 +23,6 @@
 import CircularProgress from 'material-ui/CircularProgress';
 import Colors from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
 
@@ -46,28 +45,27 @@ const styles = {
   }
 };
 
-export class LoadingDialogComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
+const LoadingDialogComponent = (props)=> {
+  return (
+    <div className='LoadingDialog'>
+      <Dialog
+        onRequestClose={props.onTouchTap}
+        bodyStyle={styles.body.css}
+        contentStyle={styles.content.css}
+        open={props.open}
+        style={props.style}>
+        <h4 style={styles.content.css}>{props.title}</h4>
+        <CircularProgress mode='indeterminate'/>
+      </Dialog>
+    </div>
+  );
+};
 
-  render() {
-    return (
-      <div className='LoadingDialog'>
-        <Dialog
-          onRequestClose={this.props.onTouchTap}
-          bodyStyle={styles.body.css}
-          contentStyle={styles.content.css}
-          open={this.props.open}
-          style={this.props.style}>
-          <h4 style={styles.content.css}>{this.props.title}</h4>
-          <CircularProgress mode='indeterminate'/>
-        </Dialog>
-      </div>
-    );
-  }
+LoadingDialogComponent.propTypes = {
+  onTouchTap: React.PropTypes.func,
+  open: React.PropTypes.bool,
+  style: React.PropTypes.object,
+  title: React.PropTypes.string,
 };
 
 export default Radium(LoadingDialogComponent);

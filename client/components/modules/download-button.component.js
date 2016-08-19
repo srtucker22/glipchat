@@ -19,7 +19,6 @@
  *
  */
 
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';

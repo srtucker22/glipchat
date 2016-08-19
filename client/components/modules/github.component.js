@@ -19,8 +19,6 @@
  *
  */
 
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Radium from 'radium';
 import React from 'react';
 
 const styles = {
@@ -33,23 +31,19 @@ const styles = {
   }
 };
 
-export class GithubComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
+const GithubComponent = ({link})=> {
+  return (
+    <a href={link} target='_blank'>
+      <img
+        style={styles.css}
+        src='images/github.png'
+        alt='Fork me on GitHub'/>
+    </a>
+  );
+};
 
-  render() {
-    return (
-      <a href={this.props.link} target='_blank'>
-        <img
-          style={[styles.css]}
-          src='images/github.png'
-          alt='Fork me on GitHub'/>
-      </a>
-    );
-  }
-}
+GithubComponent.propTypes = {
+  link: React.PropTypes.string
+};
 
-export default Radium(GithubComponent);
+export default GithubComponent;

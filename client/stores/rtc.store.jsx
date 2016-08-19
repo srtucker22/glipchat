@@ -293,7 +293,6 @@ RTCStore = function() {
     _this.localStreamError.set(null);
     if (!_this.localStream.get() && !_this.gettingLocalStream.get()) {
       _this.gettingLocalStream.set(true);
-      console.log('HERE', window.RTCPeerConnection, navigator.getUserMedia);
       if (!window.RTCPeerConnection || !navigator.getUserMedia) {
         _this.localStreamError.set({
           status: 405,
@@ -330,7 +329,7 @@ RTCStore = function() {
           _this.gettingLocalStream.set(false);
 
           /** If permission is denied retry getUserMedia every interval until permissions change. */
-          if (e.name === 'PermissionDeniedError' &&
+          if (~['NotAllowedError', 'PermissionDeniedError'].indexOf(e.name) &&
               RoomStore.currentRoom.get()) {
             Meteor.setTimeout(getUserMedia, interval);
           }

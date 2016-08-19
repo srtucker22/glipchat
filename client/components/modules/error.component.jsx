@@ -22,7 +22,6 @@
 import Browser from 'bowser';
 import DownloadButtonComponent from './download-button.component';
 import {browserHistory} from 'react-router';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
@@ -81,167 +80,132 @@ const styles = {
 };
 
 // Ask for permission to use the camera and microphone on the user's computer
-class PermissionDeniedComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  render() {
-    return (
-      <div style={[styles.permissionDenied.css]}>
-        <div className='row'>
-          <div className='col-xs-12 text-center' style={[GlobalStyles.table]}>
-            <img style={[
-              GlobalStyles.cell,
-              styles.permissionDenied.cell.css,
-              styles.permissionDenied.arrow.css
-            ]} src='/images/arrow-left.png' />
-            <div style={[GlobalStyles.cell, styles.permissionDenied.cell.css]}>
-              Click the <FontIcon
-                className='material-icons'
-                style={styles.permissionDenied.icon.css}
-                color={Colors.red500}>
-                videocam_off
-              </FontIcon> icon in the URL bar above to give access to your computers camera and microphone.
-            </div>
-            <img style={[
-              GlobalStyles.cell,
-              styles.permissionDenied.cell.css,
-              styles.permissionDenied.arrow.css
-            ]} src='/images/arrow-right.png' />
+const PermissionDeniedComponent = ({action})=> {
+  return (
+    <div style={[styles.permissionDenied.css]}>
+      <div className='row'>
+        <div className='col-xs-12 text-center' style={[GlobalStyles.table]}>
+          <img style={[
+            GlobalStyles.cell,
+            styles.permissionDenied.cell.css,
+            styles.permissionDenied.arrow.css
+          ]} src='/images/arrow-left.png' />
+          <div style={[GlobalStyles.cell, styles.permissionDenied.cell.css]}>
+            Click the <FontIcon
+              className='material-icons'
+              style={styles.permissionDenied.icon.css}
+              color={Colors.red500}>
+              videocam_off
+            </FontIcon> icon in the URL bar above to give access to your computers camera and microphone.
           </div>
-          <div className='col-xs-12 text-center'>
-            <br />
-            <RaisedButton
-              label='Go Back'
-              onTouchTap={this.props.action}
-              secondary={true}/>
-          </div>
+          <img style={[
+            GlobalStyles.cell,
+            styles.permissionDenied.cell.css,
+            styles.permissionDenied.arrow.css
+          ]} src='/images/arrow-right.png' />
+        </div>
+        <div className='col-xs-12 text-center'>
+          <br />
+          <RaisedButton
+            label='Go Back'
+            onTouchTap={action}
+            secondary={true}/>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
-PermissionDeniedComponent = Radium(PermissionDeniedComponent);
+PermissionDenied = Radium(PermissionDeniedComponent);
 
 // Warn that the user is already connected to the room in a different window, tab or browser
-class DuplicateErrorComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  render() {
-    return (
-      <div className='row' style={[styles.general.css]}>
-        <div className='col-xs-12 text-center'>
-          <img src='/images/camel.png' style={[styles.general.icon.css]}/>
-          <p>You are already connected to this room in a different window, tab, or browser.</p>
-          <p> To fix this problem you can try returning to that view of this room.</p>
-          <br/>
-          <RaisedButton
-            label='Go Back'
-            onTouchTap={this.props.action}
-            secondary={true}/>
-        </div>
+const DuplicateErrorComponent = ({action})=> {
+  return (
+    <div className='row' style={[styles.general.css]}>
+      <div className='col-xs-12 text-center'>
+        <img src='/images/camel.png' style={[styles.general.icon.css]}/>
+        <p>You are already connected to this room in a different window, tab, or browser.</p>
+        <p> To fix this problem you can try returning to that view of this room.</p>
+        <br/>
+        <RaisedButton
+          label='Go Back'
+          onTouchTap={action}
+          secondary={true}/>
       </div>
-    );
-  }
+    </div>
+  );
 };
-DuplicateErrorComponent = Radium(DuplicateErrorComponent);
+DuplicateError = Radium(DuplicateErrorComponent);
 
 // Warn that there has been a general error and ask the user to refresh the session
-class GeneralErrorComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  render() {
-    return (
-      <div className='row' style={[styles.general.css]}>
-        <div className='col-xs-12 text-center'>
-          <img src='/images/atomic.png' style={[styles.general.icon.css]}/>
-          <p>Something went wrong. Please try refreshing the page.</p>
-          <p>If this does not fix the problem please close the tab or window and try again.</p>
-          <br/>
-          <RaisedButton
-            label='Go Back'
-            onTouchTap={this.props.action}
-            secondary={true}/>
-        </div>
+const GeneralErrorComponent = ({action})=> {
+  return (
+    <div className='row' style={[styles.general.css]}>
+      <div className='col-xs-12 text-center'>
+        <img src='/images/atomic.png' style={[styles.general.icon.css]}/>
+        <p>Something went wrong. Please try refreshing the page.</p>
+        <p>If this does not fix the problem please close the tab or window and try again.</p>
+        <br/>
+        <RaisedButton
+          label='Go Back'
+          onTouchTap={action}
+          secondary={true}/>
       </div>
-    );
-  }
+    </div>
+  );
 };
-GeneralErrorComponent = Radium(GeneralErrorComponent);
+GeneralError = Radium(GeneralErrorComponent);
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
-class NotSupportedErrorComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  render() {
-    return (
-      <div className='row' style={[styles.general.css]}>
-        <div className='col-xs-12 text-center'>
-          <img src='/images/astronaut.png' style={[styles.general.icon.css]}/>
-          <p>Sorry, we do not currently support your browser.</p>
-          <p>You can download <a href='https://www.google.com/chrome/'>Google Chrome</a> or <a href='https://www.mozilla.org/firefox'>Mozilla Firefox</a> for free to use this video chatroom.</p>
-          <br/>
-          {(Browser.mac && !Browser.electron) ?
-            <DownloadButtonComponent platform='mac' /> : ''}
-          <br/>
-          <RaisedButton
-            label='Go Back'
-            onTouchTap={this.props.action}
-            secondary={true}/>
-        </div>
+const NotSupportedErrorComponent = ({action})=> {
+  return (
+    <div className='row' style={[styles.general.css]}>
+      <div className='col-xs-12 text-center'>
+        <img src='/images/astronaut.png' style={[styles.general.icon.css]}/>
+        <p>Sorry, we do not currently support your browser.</p>
+        <p>You can download <a href='https://www.google.com/chrome/'>Google Chrome</a> or <a href='https://www.mozilla.org/firefox'>Mozilla Firefox</a> for free to use this video chatroom.</p>
+        <br/>
+        {(Browser.mac && !Browser.electron) ?
+          <DownloadButtonComponent platform='mac' /> : ''}
+        <br/>
+        <RaisedButton
+          label='Go Back'
+          onTouchTap={action}
+          secondary={true}/>
       </div>
-    );
-  }
-}
-NotSupportedErrorComponent = Radium(NotSupportedErrorComponent);
+    </div>
+  );
+};
+NotSupportedError = Radium(NotSupportedErrorComponent);
 
 // Logic for determining which error message to show when something goes wrong
-export class ErrorComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  back() {
+const ErrorComponent = ({error})=> {
+  function back() {
     browserHistory.push('/');
   }
 
-  render() {
-    var errorComponent = <div>{this.props.error.status}</div>;
+  let errorComponent = <div>{error.status}</div>;
 
-    switch (this.props.error.status){
-      case 'PermissionDeniedError':
-        errorComponent = <PermissionDeniedComponent action={this.back}/>;
-        break;
-      case 405:
-        errorComponent = <NotSupportedErrorComponent action={this.back}/>;
-        break;
-      case 409:
-        errorComponent = <DuplicateErrorComponent action={this.back}/>;
-        break;
-      default:
-        errorComponent = <GeneralErrorComponent action={this.back}/>;
-        break;
-    }
-
-    return errorComponent;
+  switch (error.status){
+    case 'NotAllowedError':
+    case 'PermissionDeniedError':
+      errorComponent = <PermissionDenied action={back}/>;
+      break;
+    case 405:
+      errorComponent = <NotSupportedError action={back}/>;
+      break;
+    case 409:
+      errorComponent = <DuplicateError action={back}/>;
+      break;
+    default:
+      errorComponent = <GeneralError action={back}/>;
+      break;
   }
+
+  return errorComponent;
+};
+
+ErrorComponent.propTypes = {
+  error: React.PropTypes.object
 };
 
 export default ErrorComponent;
