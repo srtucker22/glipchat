@@ -19,29 +19,35 @@
  *
  */
 
+import Radium from 'radium';
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { chai } from 'meteor/practicalmeteor:chai';
-import HomeComponent from './home.component';
+import GlobalStyles from '../styles/global.styles';
+import FooterComponent from './modules/footer.component';
 
-describe('HomeComponent', () => {
-  describe('when desktop browser', ()=> {
-    describe('when mac browser', ()=> {
-      it('should show mac download button', ()=> {
-        chai.assert(false);
-      });
-    });
-  });
+const styles = {
+  main: {
+    css: {
+      fontSize: '20px',
+      fontWeight: 'bold',
+      margin: '20px 0',
+    },
+  },
+};
 
-  describe('when electron app', ()=> {
-    it('should not show download button', ()=> {
-      chai.assert(false);
-    });
-  });
+export const NotFoundComponent = ()=> {
+  return (
+    <div>
+      <div style={[GlobalStyles.stickyFooterPage]}>
+        <div className='row'>
+          <div className='col-xs-12 text-center' style={[styles.main.css]}>
+            <img src='/images/dog.png' />
+            <p>page not found</p>
+          </div>
+        </div>
+      </div>
+      <FooterComponent />
+    </div>
+  );
+};
 
-  describe('when tapping create room', ()=> {
-    it('should attempt to create a room and show loading dialog', ()=> {
-      chai.assert(false);
-    });
-  });
-});
+export default Radium(NotFoundComponent);

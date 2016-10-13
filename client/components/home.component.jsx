@@ -124,6 +124,9 @@ export class HomeComponent extends React.Component {
     );
   }
 };
+HomeComponent.propTypes = {
+  currentRoom: React.PropTypes.object
+};
 
 export default createContainer(({params}) => {
   return {

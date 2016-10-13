@@ -18,7 +18,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-
+import _ from 'underscore';
 import Browser from 'bowser';
 import GooglePeople from '../lib/google-people';
 import urlJoin from 'url-join';

@@ -21,6 +21,7 @@
 
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
+import _ from 'underscore';
 import Radium from 'radium';
 import React from 'react';
 import Colors from 'material-ui/styles/colors';
@@ -188,6 +189,15 @@ export class VideoOverlayComponent extends React.Component {
       </div>
     );
   }
+};
+
+VideoOverlayComponent.propTypes = {
+  params: React.PropTypes.object,
+  isRemoteEnabled: React.PropTypes.shape({
+    audio: React.PropTypes.bool,
+    video: React.PropTypes.bool
+  }),
+  isAudioEnabled: React.PropTypes.bool
 };
 
 export default createContainer(({params}) => {

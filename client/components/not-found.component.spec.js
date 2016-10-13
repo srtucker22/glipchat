@@ -19,42 +19,16 @@
  *
  */
 
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Radium from 'radium';
 import React from 'react';
-import GlobalStyles from '../styles/global.styles';
+import { shallow, mount } from 'enzyme';
+import { chai } from 'meteor/practicalmeteor:chai';
+import NotFoundComponent from './not-found.component';
 
-const styles = {
-  main: {
-    css: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      margin: '20px 0',
-    },
-  },
-};
+describe('Component: NotFoundComponent', () => {
+  it('should render with company deets and dog image', () => {
+    const el = shallow(<NotFoundComponent/>);
 
-export class NotFoundComponent extends React.Component {
-  constructor() {
-    super(...arguments);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  render() {
-    return (
-      <div>
-        <div style={[GlobalStyles.stickyFooterPage]}>
-          <div className='row'>
-            <div className='col-xs-12 text-center' style={[styles.main.css]}>
-              <img src='/images/dog.png' />
-              <p>page not found</p>
-            </div>
-          </div>
-        </div>
-        <FooterComponent />
-      </div>
-    );
-  }
-};
-
-export default Radium(NotFoundComponent);
+    const img = el.find('img');
+    chai.assert.equal(img.node.props.src, '/images/dog.png');
+  });
+});

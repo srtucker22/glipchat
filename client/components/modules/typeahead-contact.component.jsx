@@ -20,6 +20,7 @@
  */
 
 // Dependencies
+import _ from 'underscore';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
@@ -82,7 +83,7 @@ const styles = {
   }
 };
 
-class ContactListComponent extends React.Component {
+export class ContactListComponent extends React.Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate =
@@ -261,6 +262,12 @@ class ContactListComponent extends React.Component {
     );
   }
 };
+ContactListComponent.propTypes = {
+  contacts: React.PropTypes.array,
+  mobile: React.PropTypes.bool,
+  onSelect: React.PropTypes.func,
+  query: React.PropTypes.string,
+};
 ContactListComponent = Radium(ContactListComponent);
 
 export class TypeaheadContactComponent extends React.Component {
@@ -410,6 +417,9 @@ export class TypeaheadContactComponent extends React.Component {
       </div>
     );
   }
+};
+TypeaheadContactComponent.propTypes = {
+  mobile: React.PropTypes.bool,
 };
 
 export default Radium(TypeaheadContactComponent);

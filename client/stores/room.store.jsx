@@ -20,6 +20,7 @@
  */
 
 // Dependencies
+import _ from 'underscore';
 import { Meteor } from 'meteor/meteor';
 import { Rooms } from '../../lib/rooms';
 import { Tracker } from 'meteor/tracker';

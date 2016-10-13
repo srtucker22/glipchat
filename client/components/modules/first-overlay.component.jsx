@@ -98,7 +98,7 @@ export class FirstOverlayComponent extends React.Component {
             </div>
             <div>
               <div className='text-center'>
-                Share the permanent link. Bookmark and come back anytime.
+                {`Share the permanent link. Bookmark and come back anytime.`}
               </div>
               <div
                 style={[
@@ -113,6 +113,10 @@ export class FirstOverlayComponent extends React.Component {
       </div>
     );
   }
+};
+FirstOverlayComponent.propTypes = {
+  linkUrl: React.PropTypes.string,
+  onTouchTap: React.PropTypes.func
 };
 
 export default Radium(FirstOverlayComponent);

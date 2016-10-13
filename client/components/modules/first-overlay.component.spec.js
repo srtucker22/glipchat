@@ -20,27 +20,28 @@
  */
 
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { chai } from 'meteor/practicalmeteor:chai';
-import HomeComponent from './home.component';
+import {shallow, mount} from 'enzyme';
+import {chai} from 'meteor/practicalmeteor:chai';
+import {FirstOverlayComponent} from './first-overlay.component';
 
-describe('HomeComponent', () => {
-  describe('when desktop browser', ()=> {
-    describe('when mac browser', ()=> {
-      it('should show mac download button', ()=> {
-        chai.assert(false);
-      });
-    });
+describe('Component: FirstOverlayComponent', () => {
+  const el = shallow(<FirstOverlayComponent
+    linkUrl={'cheese'}
+    onTouchTap={()=> {}}
+  />);
+
+  it('should render with proper linkUrl', () => {
+    chai.assert(false);
   });
 
-  describe('when electron app', ()=> {
-    it('should not show download button', ()=> {
+  describe('when touching invite', ()=> {
+    it('should show invite modal', () => {
       chai.assert(false);
     });
   });
 
-  describe('when tapping create room', ()=> {
-    it('should attempt to create a room and show loading dialog', ()=> {
+  describe('when touching root', ()=> {
+    it('should trigger onTouchTap', () => {
       chai.assert(false);
     });
   });

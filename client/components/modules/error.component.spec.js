@@ -22,25 +22,47 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
-import HomeComponent from './home.component';
+import {ErrorComponent} from './error.component';
 
-describe('HomeComponent', () => {
-  describe('when desktop browser', ()=> {
-    describe('when mac browser', ()=> {
-      it('should show mac download button', ()=> {
-        chai.assert(false);
-      });
-    });
-  });
+describe('Component: ErrorComponent', () => {
+  describe('when NotAllowedError or PermissionDeniedError', ()=> {
+    it('should render <PermissionDenied/>', () => {
+      let el = shallow(<ErrorComponent error={{status: 'NotAllowedError'}}
+      />);
+      chai.assert(false);
 
-  describe('when electron app', ()=> {
-    it('should not show download button', ()=> {
+      el = shallow(<ErrorComponent error={{status: 'PermissionDeniedError'}}
+      />);
       chai.assert(false);
     });
   });
 
-  describe('when tapping create room', ()=> {
-    it('should attempt to create a room and show loading dialog', ()=> {
+  describe('when 405', ()=> {
+    it('should render <NotSupportedError/>', () => {
+      let el = shallow(<ErrorComponent error={{status: 405}}
+      />);
+      chai.assert(false);
+    });
+  });
+
+  describe('when 409', ()=> {
+    it('should render <DuplicateError/>', () => {
+      let el = shallow(<ErrorComponent error={{status: 409}}
+      />);
+      chai.assert(false);
+    });
+  });
+
+  describe('when general error', ()=> {
+    it('should render <GeneralError/>', () => {
+      let el = shallow(<ErrorComponent error={{status: 'cheese'}}
+      />);
+      chai.assert(false);
+    });
+  });
+
+  describe('when clicking back', ()=> {
+    it('should route back', ()=> {
       chai.assert(false);
     });
   });

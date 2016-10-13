@@ -80,7 +80,7 @@ const styles = {
 };
 
 // Ask for permission to use the camera and microphone on the user's computer
-const PermissionDeniedComponent = ({action})=> {
+export const PermissionDeniedComponent = ({action})=> {
   return (
     <div style={[styles.permissionDenied.css]}>
       <div className='row'>
@@ -118,13 +118,13 @@ const PermissionDeniedComponent = ({action})=> {
 PermissionDenied = Radium(PermissionDeniedComponent);
 
 // Warn that the user is already connected to the room in a different window, tab or browser
-const DuplicateErrorComponent = ({action})=> {
+export const DuplicateErrorComponent = ({action})=> {
   return (
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
         <img src='/images/camel.png' style={[styles.general.icon.css]}/>
-        <p>You are already connected to this room in a different window, tab, or browser.</p>
-        <p> To fix this problem you can try returning to that view of this room.</p>
+        <p>{`You are already connected to this room in a different window, tab, or browser.`}</p>
+        <p>{`To fix this problem you can try returning to that view of this room.`}</p>
         <br/>
         <RaisedButton
           label='Go Back'
@@ -137,13 +137,15 @@ const DuplicateErrorComponent = ({action})=> {
 DuplicateError = Radium(DuplicateErrorComponent);
 
 // Warn that there has been a general error and ask the user to refresh the session
-const GeneralErrorComponent = ({action})=> {
+export const GeneralErrorComponent = ({action})=> {
   return (
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
-        <img src='/images/atomic.png' style={[styles.general.icon.css]}/>
-        <p>Something went wrong. Please try refreshing the page.</p>
-        <p>If this does not fix the problem please close the tab or window and try again.</p>
+        <img
+          src='/images/atomic.png' style={[styles.general.icon.css]}
+        />
+        <p>{`Something went wrong. Please try refreshing the page.`}</p>
+        <p>{`If this does not fix the problem please close the tab or window and try again.`}</p>
         <br/>
         <RaisedButton
           label='Go Back'
@@ -156,12 +158,12 @@ const GeneralErrorComponent = ({action})=> {
 GeneralError = Radium(GeneralErrorComponent);
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
-const NotSupportedErrorComponent = ({action})=> {
+export const NotSupportedErrorComponent = ({action})=> {
   return (
     <div className='row' style={[styles.general.css]}>
       <div className='col-xs-12 text-center'>
         <img src='/images/astronaut.png' style={[styles.general.icon.css]}/>
-        <p>Sorry, we do not currently support your browser.</p>
+        <p>{`Sorry, we do not currently support your browser.`}</p>
         <p>You can download <a href='https://www.google.com/chrome/'>Google Chrome</a> or <a href='https://www.mozilla.org/firefox'>Mozilla Firefox</a> for free to use this video chatroom.</p>
         <br/>
         {(Browser.mac && !Browser.electron) ?
@@ -178,7 +180,7 @@ const NotSupportedErrorComponent = ({action})=> {
 NotSupportedError = Radium(NotSupportedErrorComponent);
 
 // Logic for determining which error message to show when something goes wrong
-const ErrorComponent = ({error})=> {
+export const ErrorComponent = ({error})=> {
   function back() {
     browserHistory.push('/');
   }

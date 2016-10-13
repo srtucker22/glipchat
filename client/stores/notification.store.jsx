@@ -18,6 +18,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import _ from 'underscore';
 import {notificationStream} from '../../lib/streams';
 
 let RoomActions;

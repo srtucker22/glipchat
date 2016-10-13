@@ -18,18 +18,18 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-
+import _ from 'underscore';
 import { browserHistory } from 'react-router';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import Colors from 'material-ui/styles/colors';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
+import GlobalStyles from '../../styles/global.styles';
 import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
 import Radium from 'radium';
 import React from 'react';
-import GlobalStyles from '../../styles/global.styles';
 
 const styles = {
   css: {
@@ -185,6 +185,12 @@ export class ControlsComponent extends React.Component {
       </div>
     );
   }
+};
+ControlsComponent.propTypes = {
+  controlsVisible: React.PropTypes.bool,
+  isLocalAudioEnabled: React.PropTypes.bool,
+  isLocalVideoEnabled: React.PropTypes.bool,
+  onTouchTap: React.PropTypes.func,
 };
 
 export default createContainer(({params}) => {

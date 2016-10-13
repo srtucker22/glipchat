@@ -22,6 +22,7 @@
 // Dependencies
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
+import _ from 'underscore';
 import moment from 'moment';
 import Colors from 'material-ui/styles/colors';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -130,7 +131,7 @@ Dependency.autorun(()=> {
   UserActions = Dependency.get('UserActions');
 });
 
-class NotificationDropdownComponent extends React.Component {
+export class NotificationDropdownComponent extends React.Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate =
@@ -184,9 +185,14 @@ class NotificationDropdownComponent extends React.Component {
     );
   }
 };
+
+NotificationDropdownComponent.propTypes = {
+  history: React.PropTypes.array
+};
+
 NotificationDropdownComponent = Radium(NotificationDropdownComponent);
 
-class ProfileDropdownComponent extends React.Component {
+export class ProfileDropdownComponent extends React.Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate =
@@ -223,6 +229,11 @@ class ProfileDropdownComponent extends React.Component {
     );
   }
 };
+
+ProfileDropdownComponent.propTypes = {
+  user: React.PropTypes.object
+};
+
 ProfileDropdownComponent = Radium(ProfileDropdownComponent);
 
 export class HeaderComponent extends React.Component {
@@ -321,67 +332,83 @@ export class HeaderComponent extends React.Component {
         />;
       }
     }
+
+    let drawer = '';
+
+    if (!!this.props.user && mobile) {
+      drawer = (<Drawer
+        docked={false}
+        open={this.state.open}
+        onRequestChange={open => this.setState({open})}>
+          <div style={[styles.sidenav.profile.css]}>
+            <Avatar
+              src={!UserStore.isGuest() &&
+                !!this.props.user.services.google.picture ?
+                this.props.user.services.google.picture :
+                'images/profile-default.jpg'}
+              style={{display: 'block'}}
+              size={50}/>
+            <div style={styles.sidenav.profile.details.css}>
+              <p style={styles.sidenav.profile.details.text.css}>
+                {this.props.user.profile.name}
+              </p>
+              {!UserStore.isGuest() ?
+                <p style={styles.sidenav.profile.details.text.css}>
+                  {this.props.user.services.google.email}
+                </p> : <FlatButton onTouchTap={this.loginWithGoogle} label='Sign in with Google' style={{
+                  color: Colors.fullWhite,
+                  marginLeft: '-10px'}}/>}
+            </div>
+          </div>
+          {_.map(menuItems, (list, index)=> {
+            let items = (_.map(list, (item)=> {
+              return (
+                <MenuItem
+                  key={'left-nav-' + item.title.toLowerCase()}
+                  primaryText={item.title}
+                  onTouchTap={item.action}
+                  href={item.href}
+                  target={item.target}
+                  leftIcon={
+                    <FontIcon
+                      className='material-icons'
+                      color={Colors.grey600}>{item.icon}
+                    </FontIcon>
+                  }
+                />
+              );
+            }));
+            index !== list.length - 1 && items.push(<Divider />);
+            return items;
+          })}
+      </Drawer>);
+    }
+
     return (
       <header>
         <AppBar
           title={''}
           iconElementRight={mobile ? (
             this.props.iconElementRight
-          ) :
-            (loginButton ? loginButton : profileButtons)}
+          ) : (loginButton ? loginButton : profileButtons)}
           onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
-          style={_.extend({}, mobile ? styles.mobile.css : styles.css)}
-          {...other}/>
-        {!!this.props.user && mobile ? (
-          <Drawer
-          docked={false}
-          open={this.state.open}
-          onRequestChange={open => this.setState({open})}>
-            <div style={[styles.sidenav.profile.css]}>
-              <Avatar
-                src={!UserStore.isGuest() &&
-                  !!this.props.user.services.google.picture ?
-                  this.props.user.services.google.picture :
-                  'images/profile-default.jpg'}
-                style={{display: 'block'}}
-                size={50}/>
-              <div style={styles.sidenav.profile.details.css}>
-                <p style={styles.sidenav.profile.details.text.css}>
-                  {this.props.user.profile.name}
-                </p>
-                {!UserStore.isGuest() ?
-                  <p style={styles.sidenav.profile.details.text.css}>
-                    {this.props.user.services.google.email}
-                  </p> : <FlatButton onTouchTap={this.loginWithGoogle} label='Sign in with Google' style={{
-                    color: Colors.fullWhite,
-                    marginLeft: '-10px'}}/>}
-              </div>
-            </div>
-            {_.map(menuItems, (list, index)=> {
-              let items = (_.map(list, (item)=> {
-                return (
-                  <MenuItem
-                    key={'left-nav-' + item.title.toLowerCase()}
-                    primaryText={item.title}
-                    onTouchTap={item.action}
-                    href={item.href}
-                    target={item.target}
-                    leftIcon={
-                      <FontIcon
-                        className='material-icons'
-                        color={Colors.grey600}>{item.icon}
-                      </FontIcon>
-                    }
-                  />
-                );
-              }));
-              index !== list.length - 1 && items.push(<Divider />);
-              return items;
-            })}
-        </Drawer>) : ''}
+          style={
+            _.extend({}, mobile ? styles.mobile.css : styles.css)
+          }
+          {...other}
+        />
+        {drawer}
       </header>
     );
   }
+};
+
+HeaderComponent.propTypes = {
+  iconElementRight: React.PropTypes.element,
+  loggingIn: React.PropTypes.bool,
+  mobile: React.PropTypes.bool,
+  subscribed: React.PropTypes.bool,
+  user: React.PropTypes.object,
 };
 
 export default createContainer(({params}) => {

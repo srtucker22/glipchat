@@ -22,6 +22,7 @@
  * Setup Dependencies
  * @type {null}
  */
+import _ from 'underscore';
 import * as WebRTC from 'webrtc-adapter';
 import {notificationStream, roomStream} from '../../lib/streams';
 
@@ -101,9 +102,8 @@ RTCStore = function() {
           ReactiveVar(evnt.stream.getAudioTracks()[0].enabled);
 
       /** Create a reactive var for the remote tracks and default to true. */
-      _this.isRemoteEnabled[id] = _this.isRemoteEnabled[id] || ReactiveVar({
-            audio: true, video: true
-          });
+      _this.isRemoteEnabled[id] = _this.isRemoteEnabled[id] ||
+        ReactiveVar({audio: true, video: true});
 
       /** Emit local track settings to peer. */
       roomStream.emit('msg', {

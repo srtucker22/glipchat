@@ -22,26 +22,34 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
-import HomeComponent from './home.component';
+import IntroComponent from './intro.component';
 
-describe('HomeComponent', () => {
-  describe('when desktop browser', ()=> {
-    describe('when mac browser', ()=> {
-      it('should show mac download button', ()=> {
+describe('Component: IntroComponent', () => {
+  describe('when logging in', ()=> {
+    it('should show a loading dialog', ()=> {
+      chai.assert(false);
+    });
+
+    it('should disable logging options', ()=> {
+      chai.assert(false);
+    });
+  });
+
+  describe('when not logging in', ()=> {
+    it('should not show a loading dialog', ()=> {
+      chai.assert(false);
+    });
+
+    describe('when tapping login with google', ()=> {
+      it('should attempt to login with google', ()=> {
         chai.assert(false);
       });
     });
-  });
 
-  describe('when electron app', ()=> {
-    it('should not show download button', ()=> {
-      chai.assert(false);
-    });
-  });
-
-  describe('when tapping create room', ()=> {
-    it('should attempt to create a room and show loading dialog', ()=> {
-      chai.assert(false);
+    describe('when tapping login as guest', ()=> {
+      it('should attempt to login as guest', ()=> {
+        chai.assert(false);
+      });
     });
   });
 });

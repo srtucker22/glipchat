@@ -188,7 +188,7 @@ export class InviteComponent extends React.Component {
 
   render() {
     //Custom Actions
-    let customActions = [
+    const customActions = [
       <FlatButton
         key='cancel'
         label='Cancel'
@@ -202,62 +202,63 @@ export class InviteComponent extends React.Component {
     ];
 
     let mobile = Browser.mobile || Browser.tablet;
-    return (mobile ?
-      <ReactCSSTransitionGroup transitionName='modal' transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-      {this.props.inviteModalVisible ?
-      <div key='invite-modal' style={[styles.mobile.css]}>
-        <Dialog
-          title='Please enter your name'
-          actions={customActions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
-        >
-          <TextField
-            value={this.props.user.profile.name}
-            onChange={this.updateProfileName.bind(this)}
-            errorText={!this.props.user.profile.name ? ' ' : null}
-            floatingLabelText='Your name'/>
-        </Dialog>
-        <AppBar
-          showMenuIconButton={false}
-          title={'Invite Contacts'}
-          iconElementRight={<IconButton
-            iconClassName='material-icons'
-            onTouchTap={this.cancel.bind(this)}>
-            clear
-          </IconButton>}
-        />
-        {!!this.props.contacts ? <TypeaheadContactComponent
-          contacts={this.props.contacts}
-          mobile={true}
-          onChange={this.onTypeaheadChange.bind(this)}/> : ''}
-        {this.state.invitees ? <div style={[GlobalStyles.table, {
-            position: 'fixed',
-            width: '100%',
-            bottom: 0
-          }]}>
-          <div style={[GlobalStyles.cell, {width: '50%'}]}>
-            <FlatButton
-              backgroundColor={Colors.red500}
-              key='cancel'
-              label='Cancel'
-              onTouchTap={this.cancel.bind(this)}
-              style={{color: Colors.fullWhite, width: '100%'}}/>
-          </div>
-          <div style={[GlobalStyles.cell, {width: '50%'}]}>
-            <FlatButton
-              backgroundColor={Colors.cyan500}
-              key='invite'
-              label='Invite'
-              onTouchTap={this.invite.bind(this)}
-              style={{color: Colors.fullWhite, width: '100%'}}/>
-          </div>
-        </div> : ''}
-      </div> : <div></div>}
-    </ReactCSSTransitionGroup> :
 
-      (<Dialog
+    if (mobile) {
+      return (<ReactCSSTransitionGroup transitionName='modal' transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+        {this.props.inviteModalVisible ?
+        <div key='invite-modal' style={[styles.mobile.css]}>
+          <Dialog
+            title='Please enter your name'
+            actions={customActions}
+            modal={false}
+            open={this.state.open}
+            onRequestClose={this.handleClose}
+          >
+            <TextField
+              value={this.props.user.profile.name}
+              onChange={this.updateProfileName.bind(this)}
+              errorText={!this.props.user.profile.name ? ' ' : null}
+              floatingLabelText='Your name'/>
+          </Dialog>
+          <AppBar
+            showMenuIconButton={false}
+            title={'Invite Contacts'}
+            iconElementRight={<IconButton
+              iconClassName='material-icons'
+              onTouchTap={this.cancel.bind(this)}>
+              clear
+            </IconButton>}
+          />
+          {!!this.props.contacts ? <TypeaheadContactComponent
+            contacts={this.props.contacts}
+            mobile={true}
+            onChange={this.onTypeaheadChange.bind(this)}/> : ''}
+          {this.state.invitees ? <div style={[GlobalStyles.table, {
+              position: 'fixed',
+              width: '100%',
+              bottom: 0
+            }]}>
+            <div style={[GlobalStyles.cell, {width: '50%'}]}>
+              <FlatButton
+                backgroundColor={Colors.red500}
+                key='cancel'
+                label='Cancel'
+                onTouchTap={this.cancel.bind(this)}
+                style={{color: Colors.fullWhite, width: '100%'}}/>
+            </div>
+            <div style={[GlobalStyles.cell, {width: '50%'}]}>
+              <FlatButton
+                backgroundColor={Colors.cyan500}
+                key='invite'
+                label='Invite'
+                onTouchTap={this.invite.bind(this)}
+                style={{color: Colors.fullWhite, width: '100%'}}/>
+            </div>
+          </div> : ''}
+        </div> : <div></div>}
+      </ReactCSSTransitionGroup>);
+    } else {
+      return (<Dialog
         actions={customActions}
         contentStyle={styles.content.css}
         open={this.props.inviteModalVisible}
@@ -292,9 +293,16 @@ export class InviteComponent extends React.Component {
             onChange={this.onTypeaheadChange.bind(this)}/>
           </div>
         </div>
-      </Dialog>)
-    );
+      </Dialog>);
+    }
   }
+};
+InviteComponent.propTypes = {
+  contacts: React.PropTypes.array,
+  invitees: React.PropTypes.array,
+  inviteModalVisible: React.PropTypes.bool,
+  linkUrl: React.PropTypes.string,
+  user: React.PropTypes.object,
 };
 
 export default createContainer(({params}) => {

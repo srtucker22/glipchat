@@ -23,6 +23,7 @@
 import { browserHistory } from 'react-router';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
+import _ from 'underscore';
 import Browser from 'bowser';
 import CallingOverlayComponent from './modules/calling-overlay.component';
 import Colors from 'material-ui/styles/colors';

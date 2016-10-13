@@ -1,7 +1,7 @@
 **high**
 -  notifications not working
 -  validate all error messages
--  add some settings settings ~ especially cordova related ones
+-  add some settings ~ especially cordova related ones
 -  hide status icon until you implement that feature
 -  snooze notifications functionality
 

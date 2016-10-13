@@ -149,49 +149,57 @@ export class HomeMobileComponent extends React.Component {
         onTouchTap={this.invite.bind(this)}
       />,
     ];
-    return (
-      (!!this.props.user) ?
-      (<div style={[styles.css]}>
-        {this.state.loading ?
-          <LoadingDialogComponent open={true} title='Starting video call'/> : ''
-        }
-        <HeaderComponent mobile={true}
-          showMenuIconButton={true}
-          iconElementRight={
-            (!!this.state.invitees && this.state.invitees.length) ?
-            (<IconButton
-              iconStyle={styles.icon.css}
-              iconClassName='material-icons'
-              onTouchTap={this.openInviteModal.bind(this)}>
-              done
-            </IconButton>) : null}
-        />
-        <div style={[styles.content.css]}>
-          <TypeaheadContactComponent
-            contacts={this.props.contacts || []}
-            mobile={true}
-            onChange={this.onTypeaheadChange.bind(this)}/>
-        </div>
-        <Dialog
-          title='Invite to Video Call?'
-          actions={actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose.bind(this)}
-        >
-          {UserStore.isGuest() ? <TextField
-            value={this.props.user.profile.name}
-            onChange={this.updateProfileName.bind(this)}
-            errorText={!this.props.user.profile.name ? ' ' : null}
-            floatingLabelText='Your name'/> : ''}
-          {'Contacts who are already using ' + config.APP_NAME + ' will receive a notification. New users will be sent an email request.'}
-        </Dialog>
-        <AnswerDialogComponent
-          invitation={this.props.invitations && this.props.invitations.length ?
-            this.props.invitations[0] : undefined}/>
-      </div>) : <IntroComponent/>
-    );
+
+    if (!this.props.user) {
+      return <IntroComponent/>;
+    }
+
+    return (<div style={[styles.css]}>
+      {this.state.loading ?
+        <LoadingDialogComponent open={true} title='Starting video call'/> : ''
+      }
+      <HeaderComponent mobile={true}
+        showMenuIconButton={true}
+        iconElementRight={
+          (!!this.state.invitees && this.state.invitees.length) ?
+          (<IconButton
+            iconStyle={styles.icon.css}
+            iconClassName='material-icons'
+            onTouchTap={this.openInviteModal.bind(this)}>
+            done
+          </IconButton>) : null}
+      />
+      <div style={[styles.content.css]}>
+        <TypeaheadContactComponent
+          contacts={this.props.contacts || []}
+          mobile={true}
+          onChange={this.onTypeaheadChange.bind(this)}/>
+      </div>
+      <Dialog
+        title='Invite to Video Call?'
+        actions={actions}
+        modal={false}
+        open={this.state.open}
+        onRequestClose={this.handleClose.bind(this)}
+      >
+        {UserStore.isGuest() ? <TextField
+          value={this.props.user.profile.name}
+          onChange={this.updateProfileName.bind(this)}
+          errorText={!this.props.user.profile.name ? ' ' : null}
+          floatingLabelText='Your name'/> : ''}
+        {`Contacts who are already using ${config.APP_NAME} will receive a notification. New users will be sent an email request.`}
+      </Dialog>
+      <AnswerDialogComponent
+        invitation={this.props.invitations && this.props.invitations.length ?
+          this.props.invitations[0] : undefined}/>
+    </div>);
   }
+};
+HomeMobileComponent.propTypes = {
+  contacts: React.PropTypes.array,
+  currentRoom: React.PropTypes.string,
+  invitations: React.PropTypes.array,
+  user: React.PropTypes.object
 };
 
 export default createContainer(({params}) => {

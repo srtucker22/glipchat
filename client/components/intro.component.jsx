@@ -104,6 +104,10 @@ export class IntroComponent extends React.Component {
     );
   }
 };
+IntroComponent.propTypes = {
+  loggingIn: React.PropTypes.bool,
+  loggingOut: React.PropTypes.bool,
+};
 
 export default createContainer(({params}) => {
   return {

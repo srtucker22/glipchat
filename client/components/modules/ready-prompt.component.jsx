@@ -21,12 +21,12 @@
 
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
-import LoadingDialogComponent from './loading-dialog.component';
 import Colors from 'material-ui/styles/colors';
-import RaisedButton from 'material-ui/RaisedButton';
-import Radium from 'radium';
-import React from 'react';
 import GlobalStyles from '../../styles/global.styles';
+import LoadingDialogComponent from './loading-dialog.component';
+import Radium from 'radium';
+import RaisedButton from 'material-ui/RaisedButton';
+import React from 'react';
 
 const styles = {
   css: {
@@ -71,29 +71,39 @@ export class ReadyPromptComponent extends React.Component {
   }
 
   render() {
+    let loading = '';
+
+    if (this.props.room.connected.length &&
+      !~this.props.room.connected.indexOf(this.props.user._id)) {
+      loading = (<div style={[GlobalStyles.table, styles.css]}>
+        <LoadingDialogComponent
+          open={(!!this.state.loading)}
+          onTouchTap={this.props.onTouchTap}
+          title='Joining'
+          style={{zIndex: 3}}/>
+        <div className='text-center' style={[GlobalStyles.cell]}>
+          <p>Are you ready to join?</p>
+          <RaisedButton label='Join'
+            secondary={true}
+            onTouchTap={this.joinRoomStream.bind(this)}>
+          </RaisedButton>
+        </div>
+      </div>);
+    }
+
     return (
       <div onTouchTap={this.props.onTouchTap}>
-        {(this.props.room.connected.length &&
-          !_.contains(this.props.room.connected, this.props.user._id)) ? (
-          <div style={[GlobalStyles.table, styles.css]}>
-            <LoadingDialogComponent
-              open={(!!this.state.loading)}
-              onTouchTap={this.props.onTouchTap}
-              title='Joining'
-              style={{zIndex: 3}}/>
-            <div className='text-center' style={[GlobalStyles.cell]}>
-              <p>Are you ready to join?</p>
-              <RaisedButton label='Join'
-                secondary={true}
-                onTouchTap={this.joinRoomStream.bind(this)}>
-              </RaisedButton>
-            </div>
-          </div>
-        ) : ''}
+        {loading}
       </div>
     );
   }
 }
+
+ReadyPromptComponent.propTypes = {
+  onTouchTap: React.PropTypes.func,
+  room: React.PropTypes.object,
+  user: React.PropTypes.object,
+};
 
 export default createContainer(({params}) => {
   return {
