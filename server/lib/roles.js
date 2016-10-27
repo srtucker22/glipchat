@@ -18,7 +18,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import { Accounts } from 'meteor/accounts-base';
 import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
+import { MANAGER_ROLES } from '../../lib/roles';
+import { check, Match } from 'meteor/check';
 
 // update a users permissions
 Meteor.methods({

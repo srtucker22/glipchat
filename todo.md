@@ -1,4 +1,19 @@
 **high**
+-  reduxify
+  - **state issues with routing**
+    - you are always going back to the same room right now
+    - leaving doesn't clear the current room
+  - interval in component for mic/vid rights gUM
+  - slow to create room why?
+  - **still need to reimplement invitations**
+    - full screen the react-select and always open!!
+    - custom tags
+    - exclude already selected contacts from list
+    - don't allow dupes
+    - proper invite functionality
+  - need to add/fix notifications
+  - mobile hasn't been tested/fixed at all
+
 -  notifications not working
 -  validate all error messages
 -  add some settings ~ especially cordova related ones

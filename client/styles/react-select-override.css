@@ -1,0 +1,24 @@
+.Select-value {
+  background: none !important;
+  margin: 0 !important;
+  border: none !important
+}
+
+.Select--multi .Select-value-icon {
+  display: none !important;
+  border: none !important;
+}
+
+.Select-menu-outer {
+  max-height: none !important;
+}
+
+.Select-menu {
+  max-height: none !important;
+}
+
+/*.ReactVirtualized__Grid__innerScrollContainer {
+  position: absolute !important;
+  top: 0 !important;
+  padding-top: 300px;
+}*/

@@ -18,7 +18,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-import _ from 'underscore';
+import { _ } from 'meteor/underscore';
 import {notificationStream} from '../../lib/streams';
 
 let RoomActions;

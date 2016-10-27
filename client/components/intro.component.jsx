@@ -19,18 +19,17 @@
  *
  */
 
-// Dependencies
-import * as config from '../../lib/config';
-import { createContainer } from 'meteor/react-meteor-data';
-import { Meteor } from 'meteor/meteor';
-import GithubComponent from './modules/github.component';
-import LoadingDialogComponent from './modules/loading-dialog.component';
+import { connect } from 'react-redux';
+import {APP_NAME, GITHUB_URL} from '../../lib/config';
+import * as Actions from '../actions/actions';
 import Colors from 'material-ui/styles/colors';
-import RaisedButton from 'material-ui/RaisedButton';
+import GithubComponent from './github.component';
+import GlobalStyles from '../styles/global.styles';
+import LoadingDialogComponent from './loading-dialog.component';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
+import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
-import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -53,14 +52,6 @@ const styles = {
   },
 };
 
-let UserActions;
-let UserStore;
-
-Dependency.autorun(()=> {
-  UserActions = Dependency.get('UserActions');
-  UserStore = Dependency.get('UserStore');
-});
-
 export class IntroComponent extends React.Component {
   constructor() {
     super(...arguments);
@@ -69,32 +60,34 @@ export class IntroComponent extends React.Component {
   }
 
   loginAsGuest() {
-    UserActions.loginAsGuest();
+    // UserActions.loginAsGuest();
+    this.props.dispatch(Actions.loginAsGuest());
   }
 
   loginWithGoogle() {
-    UserActions.loginWithGoogle();
+    this.props.dispatch(Actions.loginWithGoogle());
   }
 
   render() {
+    const {user} = this.props;
     return (
       <div style={[GlobalStyles.table, styles.css]}>
-        <GithubComponent link={config.GITHUB_URL}/>
+        <GithubComponent link={GITHUB_URL}/>
         <LoadingDialogComponent
-          open={(!!this.props.loggingIn && !this.props.loggingOut)}
+          open={!!user && !!user.loggingIn}
           title='Signing in'/>
         <div className='text-center' style={[GlobalStyles.cell]}>
-          <h1 style={[styles.title.css]}>{config.APP_NAME}</h1>
+          <h1 style={[styles.title.css]}>{APP_NAME}</h1>
           <br />
           <RaisedButton
-            onTouchTap={this.loginWithGoogle}
+            onTouchTap={this.loginWithGoogle.bind(this)}
             label='Sign in with Google'
             secondary={true}
             style={{marginBottom: '20px'}}
           />
           <br/>
           <RaisedButton
-            onTouchTap={this.loginAsGuest}
+            onTouchTap={this.loginAsGuest.bind(this)}
             label='Continue as guest'
             secondary={true}
             style={{marginBottom: '50px'}}
@@ -104,14 +97,15 @@ export class IntroComponent extends React.Component {
     );
   }
 };
-IntroComponent.propTypes = {
-  loggingIn: React.PropTypes.bool,
-  loggingOut: React.PropTypes.bool,
+
+IntroComponent = Radium(IntroComponent);
+
+const mapStateToProps = ({users: {user}}) => {
+  return {
+    user,
+  };
 };
 
-export default createContainer(({params}) => {
-  return {
-    loggingIn: UserStore.loggingIn(),
-    loggingOut: UserStore.loggingOut.get()
-  };
-}, Radium(IntroComponent));
+export default connect(
+  mapStateToProps,
+)(IntroComponent);

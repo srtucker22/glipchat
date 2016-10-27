@@ -19,23 +19,23 @@
  *
  */
 
-// Dependencies
+import { _ } from 'meteor/underscore';
 import { browserHistory } from 'react-router';
-import { createContainer } from 'meteor/react-meteor-data';
-import { Meteor } from 'meteor/meteor';
-import _ from 'underscore';
+import {connect} from 'react-redux';
+import * as Actions from '../actions/actions';
 import Browser from 'bowser';
-import CallingOverlayComponent from './modules/calling-overlay.component';
+import CallingOverlayComponent from './calling-overlay.component';
 import Colors from 'material-ui/styles/colors';
-import ControlsComponent from './modules/controls.component';
-import FirstOverlayComponent from './modules/first-overlay.component';
-import InviteComponent from './modules/invite.component';
+import ControlsComponent from './controls.component';
+import ErrorComponent from './error.component';
+import FirstOverlayComponent from './first-overlay.component';
+import InviteComponent from './invite.component';
+import MediaStore from '../stores/media.store';
 import Radium from 'radium';
 import React from 'react';
-import ReadyPromptComponent from './modules/ready-prompt.component';
-import VideoComponent from './modules/video.component';
-import VideoOverlayComponent from './modules/video-overlay.component';
-import ErrorComponent from './modules/error.component';
+import ReadyPromptComponent from './ready-prompt.component';
+import VideoComponent from './video.component';
+import VideoOverlayComponent from './video-overlay.component';
 
 const styles = {
   css: {
@@ -69,135 +69,214 @@ const styles = {
   },
 };
 
-let RoomActions;
-let RoomStore;
-let RTCActions;
-let RTCStore;
-let UserStore;
-
-Dependency.autorun(()=> {
-  RoomActions = Dependency.get('RoomActions');
-  RoomStore   = Dependency.get('RoomStore');
-  RTCStore    = Dependency.get('RTCStore');
-  RTCActions  = Dependency.get('RTCActions');
-  UserStore   = Dependency.get('UserStore');
-});
-
-//Standard Actions
-let standardActions = [
-  {text: 'Cancel'},
-  {text: 'Submit', onTouchTap: this._onDialogSubmit, ref: 'submit'},
-];
-
 export class RoomComponent extends React.Component {
   constructor() {
     super(...arguments);
+    this.state = {
+      showInviteModal: false
+    };
+  }
+
+  componentDidMount() {
+    const {localStream, dispatch} = this.props;
+    if (!localStream.error && !localStream.loading && !MediaStore.local) {
+      dispatch(Actions.getLocalStream());
+    }
   }
 
   componentWillUnmount() {
-    RTCActions.disconnect();
-    RTCActions.stopLocalStream();
-    RoomActions.leaveRoom();
+    this.props.dispatch(Actions.stopLocalStream());
+    // RTCActions.disconnect();
+    // RTCActions.stopLocalStream();
+    // RoomActions.leaveRoom();
   }
 
   componentWillUpdate(nextProps, nextState) {
-    // if the user logs out on a different tab, leave the room
-    if (nextProps.userId !== this.props.userId) {
-      RTCActions.disconnect(this.props.userId);
-      browserHistory.push('/');
+    // // if the user logs out on a different tab, leave the room
+    // if (nextProps.userId !== this.props.userId) {
+    //   RTCActions.disconnect(this.props.userId);
+    //   browserHistory.push('/');
+    // }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.localStream.loading && this.props.localStream.loading && !nextProps.localStream.error && !!MediaStore.local) {
+      this.setState({
+        primaryStream: 'local'
+      });
+
+      if (!nextProps.room.connected.length) {
+        console.log(nextProps);
+        nextProps.dispatch(Actions.joinRoomStream(nextProps.room._id));
+      }
     }
+  }
+
+  joinRoomStream(id) {
+    this.props.dispatch(Actions.joinRoomStream(id));
+  }
+
+  setPrimaryStream(id) {
+    this.setState({
+      primaryStream: id
+    });
+  }
+
+  toggleInviteModal() {
+    this.setState({
+      showInviteModal: !this.state.showInviteModal
+    });
   }
 
   toggleControls() {
-    if (RoomStore.controlsVisible.get()) {
-      RoomActions.hideControls();
-    }else {
-      RoomActions.showControls();
-    }
+    // if (RoomStore.controlsVisible.get()) {
+    //   RoomActions.hideControls();
+    // }else {
+    //   RoomActions.showControls();
+    // }
   }
 
   render() {
+    const {
+      dispatch,
+      localStream,
+      remoteStreams,
+      room,
+      user,
+      ...other
+    } = this.props;
+
     // log the errors for now
-    if (this.props.localStreamError) {
-      console.error(this.props.localStreamError);
-    }
-    if (this.props.streamError) {
-      console.error(this.props.streamError);
+    if (!!localStream.error) {
+      console.error(localStream.error);
     }
 
-    var {...other} = this.props;
+    // if we have an error, just render the error component
+    if (!!localStream.error) {
+      return (
+        <div style={[styles.css]}>
+          <ErrorComponent
+            error={localStream.error}
+            {...other}
+          />
+        </div>
+      );
+    }
 
-    let overlay;
-
-    if (!this.props.localStreamError && !!this.props.stream &&
-      this.props.room.connected.length === 1 &&
-      this.props.room.connected[0] === this.props.userId) {
-      overlay = (Browser.mobile || Browser.tablet) ?
-        <CallingOverlayComponent onTouchTap={this.toggleControls}/> :
+    let overlayComponent;
+    if (!!MediaStore.local && !!room &&
+      room.connected.length === 1 && room.connected[0] === user._id) {
+      overlayComponent = (Browser.mobile || Browser.tablet) ? (
+        <CallingOverlayComponent
+          onClick={this.toggleControls.bind(this)}
+        />
+      ) : (
         <FirstOverlayComponent
           linkUrl={window.location.href}
-          onTouchTap={this.toggleControls}/>;
+          onClick={this.toggleControls.bind(this)}
+          action={this.toggleInviteModal.bind(this)}
+        />
+      );
     }
+
+    const readyPromptComponent = (!!MediaStore.local) ? (
+      <ReadyPromptComponent
+        joinRoomStream={this.joinRoomStream.bind(this, room._id)}
+        onClick={this.toggleControls.bind(this)}
+        room={room}
+        user={user}
+      />
+    ) : undefined;
+
+    const inviteComponent = (
+      <InviteComponent
+        dispatch={dispatch}
+        linkUrl={window.location.href}
+        showInviteModal={this.state.showInviteModal}
+        hideInviteModal={this.toggleInviteModal.bind(this)}
+        ref='invite'
+        user={user}
+      />
+    );
+
+    const controlsComponent = (!!MediaStore.local) ? (
+      <ControlsComponent
+        dispatch={dispatch}
+        isLocalAudioEnabled={localStream.audio}
+        isLocalVideoEnabled={localStream.video}
+        onClick={this.toggleControls.bind(this)}
+        toggleInviteModal={this.toggleInviteModal.bind(this)}
+      />
+    ) : undefined;
+
+    const remoteStreamComponents = (!!remoteStreams && _.keys(remoteStreams).length) ?
+      (<div style={[styles.videos.css]}>
+        <div key='local' style={[styles.videos.video.css]}>
+          <VideoOverlayComponent
+            id={'local'}
+            dispatch={dispatch}
+            isAudioEnabled={localStream.audio}
+            setPrimaryStream={this.setPrimaryStream.bind(this, 'local')}/>
+          <VideoComponent
+            src={MediaStore.local}
+            muted={true}
+            flip={true}
+          />
+        </div>
+        {_.map(remoteStreams, (val, key)=> {
+          return (
+            <div
+              key={key}
+              style={[styles.videos.video.css]}>
+              <VideoOverlayComponent
+                id={key}
+                isAudioEnabled={!val.muted}
+                isRemoteEnabled={val}
+                dispatch={dispatch}
+                setPrimaryStream={this.setPrimaryStream.bind(this, key)}
+              />
+              <VideoComponent src={MediaStore[key]}/>
+            </div>
+          );
+        })}
+      </div>) : undefined;
 
     return (
       <div style={[styles.css]}>
-        {!!this.props.localStreamError ?
-          (<ErrorComponent
-            error={this.props.localStreamError} {...other}/>) : ''}
-
-        <InviteComponent ref='invite' linkUrl={window.location.href}/>
-
-        {(!this.props.localStreamError && !!this.props.stream) ?
-          (<ReadyPromptComponent
-            onTouchTap={this.toggleControls}
-            room={this.props.room}/>) : ''}
-
-        {(!this.props.localStreamError && !!this.props.stream) ?
-          <ControlsComponent onTouchTap={this.toggleControls}/> : ''}
-
-        {!!overlay ? overlay : ''}
-
-        {!!this.props.primaryStream ?
+        {!!this.state.primaryStream ?
           (<VideoComponent
-            src={
-              (this.props.primaryStream === 'local') ?
-              this.props.stream : this.props.peers[this.props.primaryStream]
-            }
-            flip={(this.props.primaryStream === 'local')}
+            src={MediaStore[this.state.primaryStream]}
+            flip={(this.state.primaryStream === 'local')}
             fullScreen={true}
-            muted={(this.props.primaryStream === 'local')}
-            onTouchTap={this.toggleControls}/>
+            muted={(this.state.primaryStream === 'local')}
+            onClick={this.toggleControls.bind(this)}/>
           ) : ''
         }
-
-        {(!!this.props.peers && _.keys(this.props.peers).length) ?
-          (<div style={[styles.videos.css]}>
-            <div key='local' style={[styles.videos.video.css]}>
-              <VideoOverlayComponent params={{id: 'local'}}/>
-              <VideoComponent src={this.props.stream} muted={true} flip={true}/>
-            </div>
-            {_.map(this.props.peers, (val, key)=> {
-              return (
-                <div key={key} style={[styles.videos.video.css]}>
-                  <VideoOverlayComponent params={{id: key}}/>
-                  <VideoComponent src={val}/>
-                </div>
-              );
-            })}
-          </div>) : ''}
+        {inviteComponent}
+        {readyPromptComponent}
+        {controlsComponent}
+        {overlayComponent}
+        {remoteStreamComponents}
       </div>
     );
   }
 };
 
-export default createContainer(({params}) => {
+RoomComponent = Radium(RoomComponent);
+
+const mapStateToProps = ({
+  rooms,
+  rtc: {localStream, remoteStreams},
+  users: {user}
+}) => {
   return {
-    localStreamError: RTCStore.localStreamError.get(),
-    peers: RTCStore.peers.get(),
-    primaryStream: RTCStore.primaryStream.get(),
-    room: RoomStore.currentRoom.get(),
-    stream: RTCStore.localStream.get(),
-    streamError: RTCStore.streamError.get(),
-    userId: UserStore.userId(),
+    room: _.first(rooms.available),
+    localStream,
+    remoteStreams,
+    user,
   };
-}, Radium(RoomComponent));
+};
+
+export default connect(
+  mapStateToProps,
+)(RoomComponent);

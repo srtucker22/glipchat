@@ -20,31 +20,29 @@
  */
 
 import React from 'react';
-import GlobalStyles from '../styles/global.styles';
+import {shallow, mount} from 'enzyme';
+import {chai} from 'meteor/practicalmeteor:chai';
+import {FirstOverlayComponent} from './first-overlay.component';
 
-const styles = {
-  main: {
-    css: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      margin: '20px 0',
-    },
-  },
-};
+describe('Component: FirstOverlayComponent', () => {
+  const el = shallow(<FirstOverlayComponent
+    linkUrl={'cheese'}
+    onClick={()=> {}}
+  />);
 
-export const NotFoundComponent = ()=> {
-  return (
-    <div>
-      <div style={GlobalStyles.stickyFooterPage}>
-        <div className='row'>
-          <div className='col-xs-12 text-center' style={styles.main.css}>
-            <img src='/images/dog.png' />
-            <p>page not found</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+  it('should render with proper linkUrl', () => {
+    chai.assert(false);
+  });
 
-export default NotFoundComponent;
+  describe('when touching invite', ()=> {
+    it('should show invite modal', () => {
+      chai.assert(false);
+    });
+  });
+
+  describe('when touching root', ()=> {
+    it('should trigger onTouchTap', () => {
+      chai.assert(false);
+    });
+  });
+});

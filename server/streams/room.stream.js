@@ -18,8 +18,12 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import { Meteor } from 'meteor/meteor';
 import {Rooms} from '../../lib/rooms';
 import {roomStream} from '../../lib/streams';
+import { UserStatus } from 'meteor/mizzao:user-status';
+import { _ } from 'meteor/underscore';
+import { check, Match } from 'meteor/check';
 
 // room permissions
 roomStream.allowRead(function(eventName) {
@@ -48,10 +52,11 @@ function disconnect(userId, roomId) {
 // join a room
 roomStream.on('join', function(roomId) {
   check(roomId, String);
-  var _this = this;
+  console.log('join', roomId, this.userId);
+  const _this = this;
 
   // notify everyone in the room that the peer has connected
-  var room = Rooms.findOne({_id: roomId});
+  const room = Rooms.findOne({_id: roomId});
 
   // don't let connected users add connection in different browser or tab
   if (_.contains(room.connected, _this.userId)) {
@@ -66,7 +71,7 @@ roomStream.on('join', function(roomId) {
     return;
   }
 
-  _.each(_.without(room.connected, _this.userId), function(userId) {
+  _.each(_.without(room.connected, _this.userId), (userId)=> {
     console.log('emitting', userId);
     roomStream.emit(
       userId,
@@ -74,15 +79,27 @@ roomStream.on('join', function(roomId) {
     );
   });
 
-  Rooms.update({_id: roomId}, {$addToSet: {connected: _this.userId}});
+  Rooms.update({_id: roomId}, {
+    $addToSet: {connected: _this.userId}
+  });
+
   Meteor.users.update(_this.userId,
     {$addToSet: {history: {room: roomId, createdAt: new Date}}}
   );
 
+  // TODO: this isn't working for whatever reason
+  // _this.connection.onClose = function () {
+  //   console.log('onClose');
+  //   disconnect(_this.userId, roomId);
+  // };
+
+  // alternative connection tracker
   // when someone disconnects, remove them from the Room's connected list
-  _this.connection.onClose = function() {
-    disconnect(_this.userId, roomId);
-  };
+  UserStatus.events.once('connectionLogout', ({userId})=> {
+    if (_this.userId == userId) {
+      disconnect(_this.userId, roomId);
+    }
+  });
 });
 
 // send messages between people in the room

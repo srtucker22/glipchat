@@ -18,33 +18,36 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-
 import React from 'react';
+import Radium from 'radium';
 import GlobalStyles from '../styles/global.styles';
 
 const styles = {
-  main: {
-    css: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      margin: '20px 0',
-    },
-  },
+  css: {
+    width: '100%',
+  }
 };
 
-export const NotFoundComponent = ()=> {
+const FooterComponent = ({company})=> {
   return (
-    <div>
-      <div style={GlobalStyles.stickyFooterPage}>
-        <div className='row'>
-          <div className='col-xs-12 text-center' style={styles.main.css}>
-            <img src='/images/dog.png' />
-            <p>page not found</p>
-          </div>
-        </div>
+    <footer
+      className='col-xs-12'
+      style={[
+        GlobalStyles.table,
+        styles.css,
+        {height: GlobalStyles.footerHeight}
+      ]}>
+      <div className='text-left' style={[GlobalStyles.cell]}>
+        Copyright <a href={company.href} target='_blank'>
+          {company.name}
+        </a> 2016
       </div>
-    </div>
+    </footer>
   );
 };
 
-export default NotFoundComponent;
+FooterComponent.propTypes = {
+  company: React.PropTypes.object.isRequired
+};
+
+export default Radium(FooterComponent);

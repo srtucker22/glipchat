@@ -20,27 +20,30 @@
  */
 
 // Dependencies
+import {connect} from 'react-redux';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import {browserHistory} from 'react-router';
 import {List, ListItem} from 'material-ui/List';
-import * as config from '../../lib/config';
-import AnswerDialogComponent from './modules/answer-dialog.component';
+import {APP_NAME} from '../../lib/config';
+import AnswerDialogComponent from './answer-dialog.component';
 import Avatar from 'material-ui/Avatar';
 import Colors from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
 import Divider from 'material-ui/Divider';
 import FlatButton from 'material-ui/FlatButton';
 import GlobalStyles from '../styles/global.styles';
-import HeaderComponent from './modules/header.component';
+import HeaderComponent from './header.component';
 import IconButton from 'material-ui/IconButton';
 import IntroComponent from './intro.component';
-import LoadingDialogComponent from './modules/loading-dialog.component';
+import LoadingDialogComponent from './loading-dialog.component';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import TextField from 'material-ui/TextField';
-import TypeaheadContactComponent from './modules/typeahead-contact.component';
+import TypeaheadContactComponent from './typeahead-contact.component';
+import ContactListComponent from './contact-list.component';
+import * as Actions from '../actions/actions';
 
 const styles = {
   css: {
@@ -60,22 +63,6 @@ const styles = {
   },
 };
 
-let NotificationActions;
-let NotificationStore;
-let RoomStore;
-let RoomActions;
-let UserActions;
-let UserStore;
-
-Dependency.autorun(()=> {
-  NotificationActions = Dependency.get('NotificationActions');
-  NotificationStore = Dependency.get('NotificationStore');
-  RoomActions = Dependency.get('RoomActions');
-  RoomStore = Dependency.get('RoomStore');
-  UserActions = Dependency.get('UserActions');
-  UserStore = Dependency.get('UserStore');
-});
-
 export class HomeMobileComponent extends React.Component {
   constructor() {
     super(...arguments);
@@ -85,72 +72,69 @@ export class HomeMobileComponent extends React.Component {
     };
   }
 
-  handleOpen() {
-    setTimeout(()=> {
-      this.setState({open: true});
-    }, 0);
-  }
+  closeInviteModal() {
+    // update the profile name
+    !!this.state.name && this.state.name !== this.props.user.profile.name && this.props.dispatch(Actions.updateProfileName(this.state.name));
 
-  handleClose() {
-    setTimeout(()=> {
-      this.setState({open: false});
-    }, 0);
+    this.setState({open: false});
   }
 
   invite() {
-    setTimeout(()=> {
-      if (this.state.invitees) {
-        RoomActions.invite(this.state.invitees);
-        this.setState({
-          loading: true
-        });
-      }
-    }, 0);
-  }
+    if(!!this.state.invitees && this.state.invitees.length){
+      !!this.state.name && this.state.name !== this.props.user.profile.name && this.props.dispatch(Actions.updateProfileName(this.state.name));
+      this.props.dispatch(Actions.createRoom(this.state.invitees));
 
-  componentWillMount() {
-    NotificationActions.getPermission();
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    if (!!nextProps.currentRoom) {
-      browserHistory.push('/room/' + nextProps.currentRoom._id);
+      this.setState({loading: true});
     }
   }
 
-  onTypeaheadChange(state) {
-    this.setState({
-      invitees: state.invitees
-    });
+  componentWillMount() {
+    // NotificationActions.getPermission();
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    // push to room route if we have a room
+    // TODO: hacky way to make sure only called once -- maybe belongs in router as listener
+    if (!!nextProps.currentRoom && this.props.currentRoom !== nextProps.currentRoom) {
+      browserHistory.push(`/room/${nextProps.currentRoom._id}`);
+    }
+  }
+
+  onContactListChange(invitees) {
+    this.setState({invitees});
   }
 
   openInviteModal() {
+    this.setState({open: true});
+  }
+
+  updateProfileNameState(e) {
     this.setState({
-      open: true
+      name: e.target.value
     });
   }
 
-  updateProfileName(e) {
-    UserActions.updateProfileName(e.target.value);
-  }
-
   render() {
+    const {dispatch, invitations, user} = this.props;
+
+    const contacts = !!user && !!user.services && !!user.services.google && user.services.google.contacts || [];
+
     const actions = [
       <FlatButton
         label='Cancel'
         secondary={true}
-        onTouchTap={this.handleClose.bind(this)}
+        onTouchTap={this.closeInviteModal.bind(this)}
       />,
       <FlatButton
         label='Invite'
-        disabled={!this.props.user || !this.props.user.profile.name}
+        disabled={!this.state.name && (!user || !user.profile || !user.profile.name)}
         secondary={true}
         keyboardFocused={true}
         onTouchTap={this.invite.bind(this)}
       />,
     ];
 
-    if (!this.props.user) {
+    if (!user) {
       return <IntroComponent/>;
     }
 
@@ -169,44 +153,54 @@ export class HomeMobileComponent extends React.Component {
             done
           </IconButton>) : null}
       />
-      <div style={[styles.content.css]}>
-        <TypeaheadContactComponent
-          contacts={this.props.contacts || []}
-          mobile={true}
-          onChange={this.onTypeaheadChange.bind(this)}/>
+    <div ref={'content'} style={[styles.content.css]}>
+        <ContactListComponent
+          onChange={this.onContactListChange.bind(this)}
+          isOpen={true}
+          contacts={contacts}
+          dispatch={dispatch}
+        />
       </div>
       <Dialog
         title='Invite to Video Call?'
         actions={actions}
         modal={false}
         open={this.state.open}
-        onRequestClose={this.handleClose.bind(this)}
+        onRequestClose={this.closeInviteModal.bind(this)}
       >
-        {UserStore.isGuest() ? <TextField
-          value={this.props.user.profile.name}
-          onChange={this.updateProfileName.bind(this)}
-          errorText={!this.props.user.profile.name ? ' ' : null}
+        {!user.services || !user.services.google ? <TextField
+          defaultValue={this.state.name || (!!user.profile && user.profile.name) || ''}
+          onChange={this.updateProfileNameState.bind(this)}
+          errorText={(!user.profile || !user.profile.name) && !this.state.name ? ' ' : null}
           floatingLabelText='Your name'/> : ''}
-        {`Contacts who are already using ${config.APP_NAME} will receive a notification. New users will be sent an email request.`}
+        {`Contacts who are already using ${APP_NAME} will receive a notification. New users will be sent an email request.`}
       </Dialog>
       <AnswerDialogComponent
-        invitation={this.props.invitations && this.props.invitations.length ?
-          this.props.invitations[0] : undefined}/>
+        invitation={!!invitations && invitations.length ?
+          invitations[0] : undefined}/>
     </div>);
   }
 };
 HomeMobileComponent.propTypes = {
+  dispatch: React.PropTypes.func,
   contacts: React.PropTypes.array,
-  currentRoom: React.PropTypes.string,
+  currentRoom: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.bool,
+  ]),
   invitations: React.PropTypes.array,
   user: React.PropTypes.object
 };
 
-export default createContainer(({params}) => {
+HomeMobileComponent = Radium(HomeMobileComponent);
+
+const mapStateToProps = ({rooms: {available}, users: {user}}) => {
   return {
-    contacts: UserStore.contacts.get(),
-    currentRoom: RoomStore.currentRoom.get(),
-    invitations: NotificationStore.invitations.get(),
-    user: UserStore.user()
+    currentRoom: !available || _.first(available),  // TODO: a little hacky way of getting the room and knowing we are subscribed
+    user,
   };
-}, Radium(HomeMobileComponent));
+};
+
+export default connect(
+  mapStateToProps,
+)(HomeMobileComponent);

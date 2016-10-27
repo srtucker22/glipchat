@@ -18,33 +18,43 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+import {MANAGER_ROLES} from '../../lib/roles';
+import {check, Match} from 'meteor/check';
+import {Meteor} from 'meteor/meteor';
+import {Rooms} from '../../lib/rooms';
 
-import React from 'react';
-import GlobalStyles from '../styles/global.styles';
+// publish all rooms
+Meteor.publish('rooms', function(opts) {
+  check(opts, {
+    room: Match.Maybe(String),
+    available: Match.Maybe(String),
+  });
+  const _this = this;
 
-const styles = {
-  main: {
-    css: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      margin: '20px 0',
-    },
-  },
-};
+  if (Roles.userIsInRole(this.userId, MANAGER_ROLES)) {
+    return Rooms.find();
+  } else {
+    _this.autorun((computation)=> {
+      const user = Meteor.users.findOne(this.userId);
+      if (!user) {
+        return _this.ready();
+      }
 
-export const NotFoundComponent = ()=> {
-  return (
-    <div>
-      <div style={GlobalStyles.stickyFooterPage}>
-        <div className='row'>
-          <div className='col-xs-12 text-center' style={styles.main.css}>
-            <img src='/images/dog.png' />
-            <p>page not found</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+      // return all available rooms
+      if (!!opts.available) {
+        return Rooms.find({_id: {$in: user.roles[Roles.GLOBAL_GROUP]}});
+      }
 
-export default NotFoundComponent;
+      // return current room
+      if (!!opts.room) {
+        if (Roles.userIsInRole(_this.userId, opts.room)) {
+          return Rooms.find(opts.room);
+        } else {
+          return _this.ready();
+        }
+      }
+
+      return _this.ready();
+    });
+  }
+});

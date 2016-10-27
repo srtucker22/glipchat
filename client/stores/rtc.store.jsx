@@ -22,8 +22,7 @@
  * Setup Dependencies
  * @type {null}
  */
-import _ from 'underscore';
-import * as WebRTC from 'webrtc-adapter';
+import { _ } from 'meteor/underscore';
 import {notificationStream, roomStream} from '../../lib/streams';
 
 let RoomStore;
