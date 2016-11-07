@@ -1,21 +1,31 @@
-import Browser from 'bowser';
+// TODO: import Notifications from '../../lib/notifications';
 import { _ } from 'meteor/underscore';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Meteor } from 'meteor/meteor';
 import { persistStore } from 'redux-persist';
 import { Session } from 'meteor/session';
+import {AccountsGuest} from 'meteor/artwells:accounts-guest';
 import * as constants from '../constants/constants';
+import Browser from 'bowser';
 import localForage from 'localForage';
 import Messages from '../../lib/messages';
-// import Notifications from '../../lib/notifications';
 import Rooms from '../../lib/rooms';
-import {AccountsGuest} from 'meteor/artwells:accounts-guest';
-let store;
+import rootReducer from '../reducers/reducer';
+import thunk from 'redux-thunk';
 
-if (Meteor.isProduction) {
-  store = require('./store.prod').default;
-} else {
-  store = require('./store.dev').default;
-}
+// Required! Enable Redux DevTools with the monitors you chose
+const composeEnhancers = Meteor.isDevelopment ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose;
+
+const enhancer = composeEnhancers(
+  // Middleware you want to use in development:
+  applyMiddleware(thunk),
+);
+
+// Note: this API requires redux@>=3.1.0
+const store = createStore(
+  rootReducer,
+  enhancer
+);
 
 // force/unforce login depending on browser
 AccountsGuest.enabled = true;
@@ -29,6 +39,7 @@ if(!Browser.mobile && !Browser.tablet){
 persistStore(store, {storage: localForage});
 
 // super simplified tracker -- we get all the users all the time under one subscription
+let currentUser;
 Tracker.autorun(()=> {
   let available = Session.get('availableUsers');
   let room = Session.get('currentRoom');
@@ -45,7 +56,17 @@ Tracker.autorun(()=> {
 
   if (sub.ready()) {
     const users = Meteor.users.find().fetch();
-    const currentUser = Meteor.user();
+    const newUser = Meteor.user();
+    if(!!newUser && (!currentUser || !currentUser._id || currentUser._id !== newUser._id) && !!newUser.services && !!newUser.services.google){
+      Meteor.call('getContacts', (err, contacts)=> {
+        if (err) {
+
+        } else {
+          console.log('contacts', contacts);
+        }
+      });
+    }
+    currentUser = newUser;
 
     store.dispatch({
       type: constants.SET_USERS,

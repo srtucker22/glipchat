@@ -1,23 +1,3 @@
-/**
- * quasar
- *
- * Copyright (c) 2015 Glipcode http://glipcode.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions
- * of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- *
- */
 import { _ } from 'meteor/underscore';
 import { browserHistory } from 'react-router';
 import * as Actions from '../actions/actions';
@@ -88,9 +68,7 @@ export class ControlsComponent extends React.Component {
   }
 
   leave() {
-    setTimeout(()=> {
-      browserHistory.push('/');
-    }, 0);
+    browserHistory.push('/');
   }
 
   toggleLocalAudio() {
@@ -106,22 +84,25 @@ export class ControlsComponent extends React.Component {
       <div
         key='overlay'
         style={[styles.css]}
-        onClick={this.props.onTouchTap}>
+        onTouchTap={this.props.onTouchTap}>
         <Paper zDepth={1} style={_.extend({},
           GlobalStyles.table,
           styles.controls.css,
           (Radium.getState(this.state, 'overlay', ':hover') ||
             this.props.controlsVisible) ? styles.controls.visible : {}
         )}>
-          <div key='invite'
-            on={this.props.toggleInviteModal}
+          <div
+            key='invite'
+            onTouchTap={this.props.toggleInviteModal}
             style={[GlobalStyles.cell, styles.controls.button.css]}>
             <IconButton>
               <FontIcon className='material-icons'
                 color={Colors.fullWhite}>person_add</FontIcon>
             </IconButton>
           </div>
-          <div key='video' onClick={this.toggleLocalVideo.bind(this)} style={[
+          <div
+            key='video'
+            onTouchTap={this.toggleLocalVideo.bind(this)} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
             !this.props.isLocalVideoEnabled && styles.controls.red.css
@@ -132,7 +113,9 @@ export class ControlsComponent extends React.Component {
                 color={Colors.fullWhite}>videocam_off</FontIcon>
             </IconButton>
           </div>
-          <div key='audio' onClick={this.toggleLocalAudio.bind(this)} style={[
+          <div
+            key='audio'
+            onTouchTap={this.toggleLocalAudio.bind(this)} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
             !this.props.isLocalAudioEnabled && styles.controls.red.css
@@ -155,7 +138,7 @@ export class ControlsComponent extends React.Component {
               styles.controls.button.css,
               styles.controls.buttonEnd.css
             ]}
-            onClick={this.leave.bind(this)}>
+            onTouchTap={this.leave.bind(this)}>
             <IconButton>
               <FontIcon
                 className='material-icons'

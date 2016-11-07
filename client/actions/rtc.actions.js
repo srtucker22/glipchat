@@ -1,32 +1,12 @@
-/**
- * quasar
- *
- * Copyright (c) 2015 Glipcode http://glipcode.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions
- * of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- *
- */
 import {ICE_CONFIG} from '../../lib/config';
-import {roomStream} from '../../lib/streams';
-import PeerConnectionStore from '../stores/peer-connection.store';
-import MediaStore from '../stores/media.store';
 import {Meteor} from 'meteor/meteor';
+import {roomStream} from '../../lib/streams';
 import * as constants from '../constants/constants';
-import store from '../stores/store';
-import DataChannelStore from '../stores/data-channel.store';
 import * as dataActions from './data.actions';
+import DataChannelStore from '../stores/data-channel.store';
+import MediaStore from '../stores/media.store';
+import PeerConnectionStore from '../stores/peer-connection.store';
+import store from '../stores/store';
 
 const GUM_INTERVAL = 2000;  // Interval between getUserMedia
 
@@ -59,25 +39,21 @@ export const getLocalStream = ()=> {
         });
       }
 
-      function getUserMedia(constraints = GUM_CONSTRAINTS) {
-        navigator.mediaDevices.getUserMedia(constraints)
-          .then((s)=> {
-            console.log('received local stream');
-            MediaStore.local = s; // add the local stream to the MediaStore -- this store holds MediaStream objects outside of redux
-            dispatch({
-              type: constants.SET_LOCAL_STREAM
-            });
-          })
-          .catch((error)=> {
-            error.status = error.status || error.name;
-            dispatch({
-              type: constants.LOCAL_STREAM_ERROR,
-              error,
-            });
+      return navigator.mediaDevices.getUserMedia(GUM_CONSTRAINTS)
+        .then((s)=> {
+          console.log('received local stream');
+          MediaStore.local = s; // add the local stream to the MediaStore -- this store holds MediaStream objects outside of redux
+          return dispatch({
+            type: constants.SET_LOCAL_STREAM
           });
-      }
-
-      getUserMedia(); // get the local stream
+        })
+        .catch((error)=> {
+          error.status = error.status || error.name;
+          return dispatch({
+            type: constants.LOCAL_STREAM_ERROR,
+            error,
+          });
+        });
     }
   };
 };

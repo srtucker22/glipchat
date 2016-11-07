@@ -4,6 +4,7 @@
 
 import 'react-fastclick';
 import 'webrtc-adapter';
+import 'buffer';
 import { analytics } from 'meteor/okgrow:analytics';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';

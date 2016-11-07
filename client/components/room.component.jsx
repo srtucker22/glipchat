@@ -1,24 +1,4 @@
-/**
- * quasar
- *
- * Copyright (c) 2015 Glipcode http://glipcode.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions
- * of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- *
- */
-
+import {RING_DURATION} from '../../lib/config';
 import { _ } from 'meteor/underscore';
 import { browserHistory } from 'react-router';
 import {connect} from 'react-redux';
@@ -86,17 +66,17 @@ export class RoomComponent extends React.Component {
 
   componentWillUnmount() {
     this.props.dispatch(Actions.stopLocalStream());
+    this.props.dispatch(Actions.leaveRoom());
     // RTCActions.disconnect();
     // RTCActions.stopLocalStream();
     // RoomActions.leaveRoom();
   }
 
   componentWillUpdate(nextProps, nextState) {
-    // // if the user logs out on a different tab, leave the room
-    // if (nextProps.userId !== this.props.userId) {
-    //   RTCActions.disconnect(this.props.userId);
-    //   browserHistory.push('/');
-    // }
+    // if the user logs out on a different tab, leave the room
+    if (nextProps.userId !== this.props.userId) {
+      browserHistory.push('/');
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -106,10 +86,28 @@ export class RoomComponent extends React.Component {
       });
 
       if (!nextProps.room.connected.length) {
-        console.log(nextProps);
         nextProps.dispatch(Actions.joinRoomStream(nextProps.room._id));
+
+        this.setState({
+          ringing: true
+        });
+
+        const _this = this;
+        setTimeout(()=> {
+          _this.setState({
+            ringing: false
+          });
+        }, RING_DURATION);
+      } else if(nextProps.room.connected.length > 1){
+        this.setState({
+          ringing: false
+        });
       }
     }
+  }
+
+  pingInvitees() {
+    console.log('pingInvitees');
   }
 
   joinRoomStream(id) {
@@ -129,11 +127,9 @@ export class RoomComponent extends React.Component {
   }
 
   toggleControls() {
-    // if (RoomStore.controlsVisible.get()) {
-    //   RoomActions.hideControls();
-    // }else {
-    //   RoomActions.showControls();
-    // }
+    this.setState({
+      controlsVisible: !this.state.controlsVisible
+    });
   }
 
   render() {
@@ -168,13 +164,15 @@ export class RoomComponent extends React.Component {
       room.connected.length === 1 && room.connected[0] === user._id) {
       overlayComponent = (Browser.mobile || Browser.tablet) ? (
         <CallingOverlayComponent
-          onClick={this.toggleControls.bind(this)}
+          onTouchTap={this.toggleControls.bind(this)}
+          ringing={this.state.ringing}
+          retry={this.pingInvitees.bind(this)}
         />
       ) : (
         <FirstOverlayComponent
-          linkUrl={window.location.href}
-          onClick={this.toggleControls.bind(this)}
           action={this.toggleInviteModal.bind(this)}
+          linkUrl={window.location.href}
+          onTouchTap={this.toggleControls.bind(this)}
         />
       );
     }
@@ -182,7 +180,7 @@ export class RoomComponent extends React.Component {
     const readyPromptComponent = (!!MediaStore.local) ? (
       <ReadyPromptComponent
         joinRoomStream={this.joinRoomStream.bind(this, room._id)}
-        onClick={this.toggleControls.bind(this)}
+        onTouchTap={this.toggleControls.bind(this)}
         room={room}
         user={user}
       />
@@ -201,10 +199,11 @@ export class RoomComponent extends React.Component {
 
     const controlsComponent = (!!MediaStore.local) ? (
       <ControlsComponent
+        controlsVisible={this.state.controlsVisible}
         dispatch={dispatch}
         isLocalAudioEnabled={localStream.audio}
         isLocalVideoEnabled={localStream.video}
-        onClick={this.toggleControls.bind(this)}
+        onTouchTap={this.toggleControls.bind(this)}
         toggleInviteModal={this.toggleInviteModal.bind(this)}
       />
     ) : undefined;
@@ -249,7 +248,7 @@ export class RoomComponent extends React.Component {
             flip={(this.state.primaryStream === 'local')}
             fullScreen={true}
             muted={(this.state.primaryStream === 'local')}
-            onClick={this.toggleControls.bind(this)}/>
+            onTouchTap={this.toggleControls.bind(this)}/>
           ) : ''
         }
         {inviteComponent}
@@ -270,7 +269,7 @@ const mapStateToProps = ({
   users: {user}
 }) => {
   return {
-    room: _.first(rooms.available),
+    room: _.first(rooms.available), // TODO: this is a hack
     localStream,
     remoteStreams,
     user,

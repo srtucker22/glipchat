@@ -1,20 +1,17 @@
 **high**
 -  reduxify
-  - **state issues with routing**
-    - you are always going back to the same room right now
-    - leaving doesn't clear the current room
+  - **firefox testing and fixes**
+  - **fix contacts ~ needs a new fs system** --> i would also suggest putting all the contact updating inside the first getContacts request :)
+  - **invite modal component broken**
+  - **revive electron**
   - interval in component for mic/vid rights gUM
   - slow to create room why?
   - **still need to reimplement invitations**
     - full screen the react-select and always open!!
-    - custom tags
     - exclude already selected contacts from list
-    - don't allow dupes
-    - proper invite functionality
+    - proper invite functionality (meteorMethod -- createRoom)
+    - fix or replace react-select for all its bugs
   - need to add/fix notifications
-  - mobile hasn't been tested/fixed at all
-
--  notifications not working
 -  validate all error messages
 -  add some settings ~ especially cordova related ones
 -  hide status icon until you implement that feature
@@ -26,13 +23,11 @@
     - if you invite non-users, they will go directly to room as guest. if the room is empty, user will be directed to notifications list on mobile or homepage on desktop. ~ implement with invitation codes in email
 -  Add raix push notifications for cordova to enhance mobile support
 -  Add TURN server support to make it more useful for real-world deployment
-- why is list so slow?
-- revive electron
 
 **med**
 - build CI into deployment
 - tests for all components
-- figure out component tests with meteor + flux
+- figure out component tests with meteor + redux
 - tests for actions
 - tests for stores
 - test multiple users on desktop native
@@ -40,20 +35,15 @@
 - test everything on mobile
 - test everything on desktop native
 - test the contact list component
-- improve image storing
 - remove yourself from the contact list
 - getContacts should only get the updated contacts instead of all contacts -- a little bit of work here
 
 **low**
 - tags input css
 - bug -- bookmark needs to be instantly selected for copying
-- bug -- warning on name input
 - bug -- don't include electron in cordova builds :/
 - move the contacts from google to user level so google gets less importance
-- bug -- logout spinner
 - bug -- android photos not working
 - transition the intro page nicely ~ maybe have the typeahead popup/down like in view mode
 - notification collection for tracking all sorts of notifications
 - show contact photo in answer-overlay
-- small photo bug when first downloading with CollectionFS
-https://github.com/CollectionFS/Meteor-CollectionFS/issues/591

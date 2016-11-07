@@ -4,52 +4,38 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-accounts-google@1.0.10
-accounts-password@1.2.12
-accounts-ui@1.1.9
+meteor-base@1.0.4             # Packages every Meteor app needs to have
+mobile-experience@1.0.4       # Packages for a great mobile UX
+mongo@1.1.14                   # The database Meteor supports right now
+blaze-html-templates@1.0.4 # Compile .html files into Meteor Blaze views
+reactive-var@1.0.11            # Reactive variable for tracker
+jquery@1.11.10                  # Helpful client-side library
+tracker@1.1.1                 # Meteor's client-side reactive programming library
+
+standard-minifier-css@1.3.2   # CSS minifier run for production mode
+standard-minifier-js@1.2.1    # JS minifier run for production mode
+es5-shim@4.6.15                # ECMAScript 5 compatibility for older browsers.
+ecmascript@0.5.9              # Enable ECMAScript2015+ syntax in app code
+shell-server@0.2.1            # Server-side component of the `meteor shell` command
+
+accounts-google@1.0.11
+artwells:accounts-guest
+check@1.2.4
+email@1.1.18
+force-ssl@1.0.13
+session@1.1.7
 alanning:roles
 aldeed:collection2
-artwells:accounts-guest
-blaze-html-templates@1.0.4
-check@1.2.3
-ejson@1.0.12
-email@1.1.16
-fastclick@1.0.12
-johnantoni:meteor-normalize
-logging@1.1.14
-meteor-base@1.0.4
-meteorflux:dispatcher
-meteorflux:reactive-dependency
-meteorhacks:kadira
-mobile-experience@1.0.4
-mongo@1.1.10
-random@1.0.10
-reactive-var@1.0.10
-reload@1.1.10
-service-configuration@1.0.10
-session@1.1.6
-spacebars@1.0.12
-spiderable@1.0.13
-tracker@1.1.0
-twbs:bootstrap
-underscore@1.0.9
-okgrow:analytics
-mizzao:user-status
-crosswalk@1.6.2
-long:google-contacts
-cfs:standard-packages
-http@1.2.8
-raix:push
-cfs:gridfs
-force-ssl@1.0.12
-msavin:mongol
-standard-minifier-css@1.1.8
-standard-minifier-js@1.1.8
-ecmascript@0.5.7
-react-meteor-data
-meson:electron
+accounts-password@1.3.1
 practicalmeteor:mocha
-dburles:factory
+random@1.0.10
+http@1.2.10
+raix:push
 rocketchat:streamer
-xolvio:cleaner
-hwillson:stub-collections
+mrt:smart-publish
+mizzao:user-status
+peerlibrary:reactive-publish
+okgrow:analytics
+meson:electron
+ostrio:files
+long:google-contacts

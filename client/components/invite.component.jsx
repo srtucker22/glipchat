@@ -1,25 +1,3 @@
-/**
- * quasar
- *
- * Copyright (c) 2015 Glipcode http://glipcode.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions
- * of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- *
- */
-
-// Dependencies
 import AppBar from 'material-ui/AppBar';
 import Browser from 'bowser';
 import Colors from 'material-ui/styles/colors';
@@ -31,7 +9,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TextField from 'material-ui/TextField';
-import TypeaheadContactComponent from './typeahead-contact.component';
 import ContactListComponent from './contact-list.component';
 import GlobalStyles from '../styles/global.styles';
 
@@ -48,7 +25,7 @@ const styles = {
       overflow: 'scroll',
       position: 'fixed',
       width: '100%',
-      zIndex: 5
+      zIndex: 5,
     }
   },
 
@@ -168,6 +145,16 @@ export class InviteComponent extends React.Component {
     });
   }
 
+  onContactListChange(invitees) {
+    this.setState({invitees});
+  }
+
+  handleClose() {
+    this.setState({
+      ready: false
+    });
+  }
+
   render() {
     const {user, dispatch} = this.props;
 
@@ -194,15 +181,18 @@ export class InviteComponent extends React.Component {
 
     if (mobile) {
       return (<ReactCSSTransitionGroup
-        transitionName='modal'
+        transitionName='invite-modal'
         transitionEnterTimeout={300} transitionLeaveTimeout={300}>
         {this.props.showInviteModal ?
-        <div key='invite-modal' style={[styles.mobile.css]}>
+        <div
+          className='invite-modal'
+          key='invite-modal'
+          style={[styles.mobile.css]}>
           <Dialog
             title={'Please enter your name'}
             actions={customActions}
             modal={false}
-            open={this.props.showInviteModal}
+            open={this.state.ready || false}
             onRequestClose={this.handleClose}
           >
             <TextField
@@ -220,35 +210,36 @@ export class InviteComponent extends React.Component {
               clear
             </IconButton>}
           />
-        {!!this.props.contacts ? (
           <ContactListComponent
             contacts={contacts}
             dispatch={dispatch}
+            onChange={this.onContactListChange.bind(this)}
           />
-        ) : undefined}
-          {this.state.invitees ? <div style={[GlobalStyles.table, {
+          {this.state.invitees ? (
+            <div style={[GlobalStyles.table, {
               position: 'fixed',
               width: '100%',
               bottom: 0
             }]}>
-            <div style={[GlobalStyles.cell, {width: '50%'}]}>
-              <FlatButton
-                backgroundColor={Colors.red500}
-                key='cancel'
-                label='Cancel'
-                onTouchTap={this.props.hideInviteModal}
-                style={{color: Colors.fullWhite, width: '100%'}}/>
+              <div style={[GlobalStyles.cell, {width: '50%'}]}>
+                <FlatButton
+                  backgroundColor={Colors.red500}
+                  key='cancel'
+                  label='Cancel'
+                  onTouchTap={this.props.hideInviteModal}
+                  style={{color: Colors.fullWhite, width: '100%'}}/>
+              </div>
+              <div style={[GlobalStyles.cell, {width: '50%'}]}>
+                <FlatButton
+                  backgroundColor={Colors.cyan500}
+                  key='invite'
+                  label='Invite'
+                  onTouchTap={this.invite.bind(this)}
+                  style={{color: Colors.fullWhite, width: '100%'}}/>
+              </div>
             </div>
-            <div style={[GlobalStyles.cell, {width: '50%'}]}>
-              <FlatButton
-                backgroundColor={Colors.cyan500}
-                key='invite'
-                label='Invite'
-                onTouchTap={this.invite.bind(this)}
-                style={{color: Colors.fullWhite, width: '100%'}}/>
-            </div>
-          </div> : ''}
-        </div> : <div></div>}
+          ) : undefined}
+        </div> : undefined}
       </ReactCSSTransitionGroup>);
     } else {
       return (<Dialog
@@ -284,6 +275,7 @@ export class InviteComponent extends React.Component {
             <ContactListComponent
               contacts={contacts}
               dispatch={dispatch}
+              onChange={this.onContactListChange.bind(this)}
             />
           </div>
         </div>

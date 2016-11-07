@@ -1,6 +1,6 @@
+import { Meteor } from 'meteor/meteor';
 import * as constants from '../constants/constants';
 import deepExtend from 'deep-extend';
-import { Meteor } from 'meteor/meteor';
 
 export const usersReducer = (state = {}, action = {})=> {
   switch (action.type) {

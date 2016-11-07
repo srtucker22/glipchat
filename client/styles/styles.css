@@ -52,31 +52,24 @@ button {
   margin: 0;
 }
 
-.modal-enter {
-  position: fixed;
+.invite-modal {
+  top: 0;
+}
+
+.invite-modal.invite-modal-enter {
   top: 100%;
 }
 
-.modal-enter.modal-enter-active {
+.invite-modal.invite-modal-enter.invite-modal-enter-active {
   top: 0;
   transition: all 300ms ease;
 }
 
-.modal-leave {
+.invite-modal-leave {
   top: 0;
 }
 
-.modal-leave.modal-leave-active {
+.invite-modal-leave.invite-modal-leave-active {
   top: 100%;
-  transition: all 300ms ease;
-}
-
-.modal-appear {
-  position: absolute;
-  top: 100%;
-}
-
-.modal-appear.modal-appear-active {
-  top: 0;
   transition: all 300ms ease;
 }

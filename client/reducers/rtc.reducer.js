@@ -1,8 +1,8 @@
-import * as constants from '../constants/constants';
 import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
-import deepExtend from 'deep-extend';
 import { REHYDRATE } from 'redux-persist/constants';
+import * as constants from '../constants/constants';
+import deepExtend from 'deep-extend';
 
 const initialState = {
   localStream: {},

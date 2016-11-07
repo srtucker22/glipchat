@@ -1,24 +1,3 @@
-/**
- * quasar
- *
- * Copyright (c) 2015 Glipcode http://glipcode.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions
- * of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- *
- */
-
 import {check, Match} from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import {notificationStream} from '../../lib/streams';
@@ -71,6 +50,7 @@ function renderEmailTemplate(filename, vals) {
 // this is mildly insecure -- if you know a roomId, you can sneak in
 // we can make rooms more private in the future by requiring auth types and tracking invites, but this can get tricky if we add more than 1 auth type, like email and google account
 
+// TODO: add invitees to room
 // room access server methods
 Meteor.methods({
   // create a room and get access
@@ -121,12 +101,14 @@ Meteor.methods({
     check(roomId, String);
     check(invitees, [Match.ObjectIncluding({email: String})]);
 
-    // Let other method calls from the same client start running,
-    // without waiting for the email sending to complete.
     this.unblock();
 
+    if (!this.userId) {
+      throw new Meteor.Error(401, 'No user');
+    }
+
     try {
-      let user = Meteor.user();
+      const user = Meteor.users.findOne({_id: this.userId});
 
       let nonUsers = _.reject(invitees, (invitee)=> {
         return !!invitee._id;
@@ -136,7 +118,7 @@ Meteor.methods({
         // send invite emails to non-users
         let subject = 'You\'ve been invited to a ' + appName + ' video chat';
 
-        let basicMessage = renderEmailTemplate('basic-message.html', {
+        const joinTemplate = renderEmailTemplate('join-template.html', {
           appName,
           url: urlJoin(roomURL, roomId),
           username: user.profile.name,
@@ -146,7 +128,7 @@ Meteor.methods({
           to: _.pluck(nonUsers, 'email'),
           from: 'mail@' + appName + '.meteor.com',
           subject: subject,
-          html: basicMessage
+          html: joinTemplate
         });
       }
 

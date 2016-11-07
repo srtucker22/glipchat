@@ -3,8 +3,6 @@
 
 // Then import the virtualized Select HOC
 import 'react-select/dist/react-select.css';
-import 'react-virtualized/styles.css';
-import 'react-virtualized-select/styles.css';
 import '../styles/react-select-override.css';
 
 import { _ } from 'meteor/underscore';
@@ -13,7 +11,6 @@ import createFilterOptions from 'react-select-fast-filter-options';
 import React from 'react';
 import ContactListItemComponent from './contact-list-item.component';
 import Select from 'react-select';
-import VirtualizedSelect from 'react-virtualized-select';
 import ContactListChipComponent from './contact-list-chip.component';
 import ReactList from 'react-list'
 
