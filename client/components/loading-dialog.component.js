@@ -8,7 +8,7 @@ const styles = {
   body: {
     css: {
       background: Colors.grey900,
-    }
+    },
   },
 
   content: {
@@ -18,9 +18,9 @@ const styles = {
       borderRadius: '10px',
       maxWidth: '300px',
       textAlign: 'center',
-      textTransform: 'uppercase'
+      textTransform: 'uppercase',
     },
-  }
+  },
 };
 
 const LoadingDialogComponent = (props)=> {

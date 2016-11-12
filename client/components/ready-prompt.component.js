@@ -21,7 +21,7 @@ export class ReadyPromptComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
     };
   }
 
@@ -29,7 +29,7 @@ export class ReadyPromptComponent extends React.Component {
     // join room stream directly if alone in room
     if (!this.props.room.connected.length) {
       this.setState({
-        loading: true
+        loading: true,
       });
     };
   }

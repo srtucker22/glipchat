@@ -1,22 +1,20 @@
 // configure first upperclass users
 Meteor.startup(() => {
   if (Meteor.users.find().fetch().length === 0) {
-
     let users = Meteor.settings.admins || [
       {
         name: 'Manage-Users User',
         email: 'manage@example.com',
-        roles: ['manage-users']
+        roles: ['manage-users'],
       },
       {
         name: 'Administrator',
         email: 'admin@example.com',
-        roles: ['admin']
+        roles: ['admin'],
       },
     ];
 
     _.each(users, (user) => {
-
       let id = Accounts.createUser({
         email: user.email,
         password: user.password || 'apple1',

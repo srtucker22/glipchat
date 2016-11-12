@@ -37,12 +37,12 @@ Meteor.smartPublish('users', function(opts) {
     }, userProjection)));
 
     !!opts.contacts && res.push(Meteor.users.find({
-        'services.google.email': {$in: _.pluck(contacts, 'email')}
+        'services.google.email': {$in: _.pluck(contacts, 'email')},
       }, {
         fields: {
           profile: 1,
           status: 1,
-        }
+        },
       }
     ));
 
@@ -61,11 +61,11 @@ Meteor.publish('contacts', function(contacts) {
   }
 
   return Meteor.users.find({
-    'services.google.email': {$in: _.pluck(contacts, 'email')}
+    'services.google.email': {$in: _.pluck(contacts, 'email')},
   }, {
     fields: {
       profile: 1,
       status: 1,
-    }
+    },
   });
 });

@@ -1,7 +1,6 @@
 import * as Actions from '../actions/actions';
-import { _ } from 'meteor/underscore';
-import { connect } from 'react-redux';
-import { Meteor } from 'meteor/meteor';
+import {_} from 'meteor/underscore';
+import {connect} from 'react-redux';
 import {Card, CardActions, CardText} from 'material-ui/Card';
 import AppBar from 'material-ui/AppBar';
 import Avatar from 'material-ui/Avatar';
@@ -38,27 +37,27 @@ const styles = {
         backgroundSize: '100%',
         backgroundRepeat: 'no-repeat',
         padding: 10,
-        color: 'white'
+        color: 'white',
       },
       details: {
         css: {
-          marginTop: 10
+          marginTop: 10,
         },
         text: {
           css: {
             margin: 0,
-            fontSize: '20px'
-          }
-        }
-      }
-    }
+            fontSize: '20px',
+          },
+        },
+      },
+    },
   },
 
   mobile: {
     css: {
       position: 'fixed',
-      top: 0
-    }
+      top: 0,
+    },
   },
 
   icon: {
@@ -80,7 +79,7 @@ const styles = {
         textOverflow: 'ellipsis',
       },
     },
-  }
+  },
 };
 
 let Style = Radium.Style;
@@ -108,7 +107,7 @@ export class NotificationDropdownComponent extends React.Component {
   }
 
   componentDidMount() {
-    var _this = this;
+    let _this = this;
     this.interval = window.setInterval(function() {
       _this.setState({lastUpdated: new Date()});
     }, 1000);
@@ -121,7 +120,7 @@ export class NotificationDropdownComponent extends React.Component {
   }
 
   joinRoom(r) {
-    //RoomActions.joinRoom(r);
+    // RoomActions.joinRoom(r);
   }
 
   render() {
@@ -156,7 +155,7 @@ export class NotificationDropdownComponent extends React.Component {
 };
 
 NotificationDropdownComponent.propTypes = {
-  history: React.PropTypes.array
+  history: React.PropTypes.array,
 };
 
 NotificationDropdownComponent = Radium(NotificationDropdownComponent);
@@ -198,7 +197,7 @@ export class ProfileDropdownComponent extends React.Component {
 };
 
 ProfileDropdownComponent.propTypes = {
-  user: React.PropTypes.object
+  user: React.PropTypes.object,
 };
 
 ProfileDropdownComponent = Radium(ProfileDropdownComponent);
@@ -232,7 +231,7 @@ export class HeaderComponent extends React.Component {
 
   render() {
     const {mobile, user, ...other} = _.omit(this.props, [
-      'loggingIn', 'subscribed', 'users', 'dispatch'
+      'loggingIn', 'subscribed', 'users', 'dispatch',
     ]);
 
     let avatarButton;
@@ -245,36 +244,36 @@ export class HeaderComponent extends React.Component {
       menuItems = [[
           {
             title: 'Invitations',
-            icon: 'drafts'
+            icon: 'drafts',
           }, {
             title: 'Snooze notifications',
-            icon: 'notifications_paused'
+            icon: 'notifications_paused',
           }, {
             title: 'Status',
-            icon: 'mood'
-          }
+            icon: 'mood',
+          },
         ], [
           {
             title: 'Settings',
-            icon: 'settings'
+            icon: 'settings',
           }, {
             title: 'GitHub',
             icon: 'code',
             href: 'https://github.com/srtucker22/quasar',
-            target: '_blank'
+            target: '_blank',
           }, {
             title: 'Feedback',
             icon: 'announcement',
             href: 'https://github.com/srtucker22/quasar/issues/new',
-            target: '_blank'
-          }
+            target: '_blank',
+          },
         ], [
           {
             title: 'Logout',
             icon: 'power_settings_new',
-            action: this.logout.bind(this)
-          }
-        ]
+            action: this.logout.bind(this),
+          },
+        ],
       ];
     }
 
@@ -310,7 +309,7 @@ export class HeaderComponent extends React.Component {
       drawer = (<Drawer
         docked={false}
         open={this.state.open}
-        onRequestChange={open => this.setState({open})}>
+        onRequestChange={(open) => this.setState({open})}>
           <div style={[styles.sidenav.profile.css]}>
             <Avatar
               src={!!user.services && !!user.services.google && !!user.services.google.picture ?

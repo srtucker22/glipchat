@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {APP_NAME, GITHUB_URL} from '../../lib/config';
 import * as Actions from '../actions/actions';
 import Colors from 'material-ui/styles/colors';
@@ -19,7 +19,7 @@ const styles = {
     backgroundSize: 'cover',
     color: Colors.fullWhite,
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
 
   title: {
@@ -32,8 +32,8 @@ const styles = {
 };
 
 export class IntroComponent extends React.Component {
-  constructor() {
-    super(...arguments);
+  constructor(props) {
+    super(props);
     this.shouldComponentUpdate =
       PureRenderMixin.shouldComponentUpdate.bind(this);
   }

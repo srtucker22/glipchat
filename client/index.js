@@ -5,9 +5,9 @@
 import 'react-fastclick';
 import 'webrtc-adapter';
 import 'buffer';
-import { analytics } from 'meteor/okgrow:analytics';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import {analytics} from 'meteor/okgrow:analytics';
+import {Meteor} from 'meteor/meteor';
+import {render} from 'react-dom';
 import * as config from '../lib/config';
 import Browser from 'bowser';
 import injectTapEventPlugin from 'react-tap-event-plugin';

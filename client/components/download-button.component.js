@@ -7,13 +7,13 @@ const styles = {
   button: {
     css: {
       height: '50px',
-      marginBottom: '30px'
+      marginBottom: '30px',
     },
 
     container: {
       css: {
         height: '50px',
-        width: '100%'
+        width: '100%',
       },
 
       copy: {
@@ -27,23 +27,23 @@ const styles = {
         bottom: {
           fontWeight: 400,
           fontSize: '16px',
-          letterSpacing: '-0.7px'
+          letterSpacing: '-0.7px',
         },
 
         top: {
           fontWeight: 300,
-          fontSize: '12px'
-        }
+          fontSize: '12px',
+        },
       },
 
       icon: {
         css: {
           verticalAlign: 'middle',
           width: '40px',
-          paddingLeft: '10px'
-        }
-      }
-    }
+          paddingLeft: '10px',
+        },
+      },
+    },
   },
 };
 
@@ -52,13 +52,13 @@ const DownloadButtonComponent = (props)=> {
     mac: {
       icon: '/images/apple.svg',
       link: '/downloads/darwin-x64/quasar.zip',
-      title: 'Mac OS X'
+      title: 'Mac OS X',
     },
     win: {
       icon: '/images/windows.svg',
       link: '/downloads/win-x64/quasar.zip',
-      title: 'Windows'
-    }
+      title: 'Windows',
+    },
   };
 
   let platform = platforms[props.platform];
@@ -88,7 +88,7 @@ const DownloadButtonComponent = (props)=> {
 };
 
 DownloadButtonComponent.propTypes = {
-  platform: React.PropTypes.string.isRequired
+  platform: React.PropTypes.string.isRequired,
 };
 
 export default Radium(DownloadButtonComponent);

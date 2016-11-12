@@ -1,8 +1,8 @@
-import { check, Match } from 'meteor/check';
-import { MANAGER_ROLES } from '../../lib/roles';
-import { Meteor } from 'meteor/meteor';
-import { Roles } from 'meteor/alanning:roles';
-import { Messages } from '../../lib/messages';
+import {check, Match} from 'meteor/check';
+import {MANAGER_ROLES} from '../../lib/roles';
+import {Meteor} from 'meteor/meteor';
+import {Roles} from 'meteor/alanning:roles';
+import {Messages} from '../../lib/messages';
 
 // publish all messages
 Meteor.publish('messages', function(room) {

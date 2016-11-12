@@ -1,5 +1,4 @@
-import { analytics } from 'meteor/okgrow:analytics';
-import { render } from 'react-dom';
+import {analytics} from 'meteor/okgrow:analytics';
 import {browserHistory} from 'react-router';
 import * as Actions from './actions/actions';
 import AppComponent from './components/app.component';
@@ -7,7 +6,6 @@ import Browser from 'bowser';
 import HomeComponent from './components/home.component';
 import HomeMobileComponent from './components/home-mobile.component';
 import NotFoundComponent from './components/not-found.component';
-import React from 'react';
 import RoomComponent from './components/room.component';
 import store from './stores/store';
 
@@ -15,16 +13,16 @@ import store from './stores/store';
 // don't trust components to handle this routing
 let currentRoom;
 const currentRoomSubscription = store.subscribe(()=> {
-  let {rooms, routing} = store.getState();
+  let {rooms} = store.getState();
 
-  if(rooms.current !== currentRoom){
+  if(rooms.current !== currentRoom) {
     currentRoom = rooms.current;
 
     // if current room changes to id, route to that room
     // don't route if already there
     // can only already be at this route if the app was loaded directly at this path (e.g. a user clicks a link to the room from their email)
     const nextPath = `/room/${currentRoom}`;
-    if(!!currentRoom && window.location.pathname !== nextPath){
+    if(!!currentRoom && window.location.pathname !== nextPath) {
       browserHistory.push(nextPath);
     }
   }
@@ -36,7 +34,7 @@ export const routeConfig = [{
   component: AppComponent,
   indexRoute: {
     component: (Browser.mobile || Browser.tablet) ?
-      HomeMobileComponent : HomeComponent
+      HomeMobileComponent : HomeComponent,
   },
   onEnter: (nextState, replaceState) => {
     analytics.page('home');
@@ -69,7 +67,7 @@ export const routeConfig = [{
           }
         }
       });
-    }
+    },
   }],
 }, {
   path: '*',

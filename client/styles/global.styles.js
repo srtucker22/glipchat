@@ -11,7 +11,7 @@ const GlobalStyles = {
   table: {
     display: 'table',
     margin: 0,
-    width: 'initial'
+    width: 'initial',
   },
 
   cell: {

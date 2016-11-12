@@ -14,7 +14,7 @@ export const createRoom = (invitees)=> (dispatch, getState)=> {
       return dispatch({
         type: constants.ROOM_ERROR,
         error,
-      })
+      });
     } else {
       return dispatch(setCurrentRoom(id));
     }
@@ -28,7 +28,7 @@ export const inviteUsersToRoom = (invitees)=> ({
 
 export const leaveRoom = ()=> {
   Session.set('currentRoom', undefined);
-  return {type: constants.LEAVE_ROOM,};
+  return {type: constants.LEAVE_ROOM};
 };
 
 export const retryInvitiations = ()=> {
@@ -46,7 +46,7 @@ export const setCurrentRoom = (id)=> (dispatch, getState)=> {
     });
   };
 
-  const {users : user} = getState();
+  const {users: user} = getState();
 
   if (Roles.userIsInRole(user._id, [id])) {
     return success();

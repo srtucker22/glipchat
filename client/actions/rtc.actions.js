@@ -8,8 +8,6 @@ import MediaStore from '../stores/media.store';
 import PeerConnectionStore from '../stores/peer-connection.store';
 import store from '../stores/store';
 
-const GUM_INTERVAL = 2000;  // Interval between getUserMedia
-
 // consistent constraints for getUserMedia
 // we can modify these later for fancier things
 const GUM_CONSTRAINTS = {
@@ -17,7 +15,7 @@ const GUM_CONSTRAINTS = {
   audio: {
     googEchoCancellation: true,
     echoCancellation: true,
-  }
+  },
 };
 
 export const getLocalStream = ()=> {
@@ -34,7 +32,7 @@ export const getLocalStream = ()=> {
           type: constants.LOCAL_STREAM_ERROR,
           error: {
             status: 405,
-            description: 'I am sorry, WebRTC is not supported by your browser.'
+            description: 'I am sorry, WebRTC is not supported by your browser.',
           },
         });
       }
@@ -42,9 +40,11 @@ export const getLocalStream = ()=> {
       return navigator.mediaDevices.getUserMedia(GUM_CONSTRAINTS)
         .then((s)=> {
           console.log('received local stream');
-          MediaStore.local = s; // add the local stream to the MediaStore -- this store holds MediaStream objects outside of redux
+          // add the local stream to the MediaStore
+          // this store holds MediaStream objects outside of redux
+          MediaStore.local = s;
           return dispatch({
-            type: constants.SET_LOCAL_STREAM
+            type: constants.SET_LOCAL_STREAM,
           });
         })
         .catch((error)=> {
@@ -79,20 +79,41 @@ export const stopLocalStream = ()=> {
   };
 };
 
+export const leaveRoomStream = (room)=> (dispatch, getState)=> {
+  if (!room) {
+    room = getState().rooms.current;
+  }
+
+  roomStream.emit('msg', {
+    type: 'disconnect',
+    room,
+  });
+
+  // clear MediaStore of remote media streams
+  Object.keys(PeerConnectionStore).map((key)=> {
+    clearPeerConnection(key);
+  });
+
+  return dispatch({
+    type: constants.LEAVE_ROOM_STREAM,
+    room,
+  });
+}
+
 export const toggleTrack = (id, source, type)=> {
   if (!!MediaStore[id]) {
     const track = MediaStore[id][`get${type}Tracks`]()[0];
     track.enabled = !track.enabled;
 
-    if(source == 'local'){
+    if(source == 'local') {
       const action = {
         type: constants.UPDATE_REMOTE_STREAM,
-        tracks: {}
+        tracks: {},
       };
       action.tracks[type.toLowerCase()] = track.enabled;
       _.each(DataChannelStore, (channel, key)=> {
         dataActions.sendAction(key, action);
-      })
+      });
     }
 
     return {
@@ -101,7 +122,7 @@ export const toggleTrack = (id, source, type)=> {
       id,
     };
   }
-}
+};
 
 export const toggleLocalTrack = (type)=> (toggleTrack('local', 'local', type));
 
@@ -111,6 +132,29 @@ export const toggleLocalVideo = ()=> (toggleLocalTrack('Video'));
 
 export const toggleRemoteAudio = (id)=> (toggleTrack(id, 'remote', 'Audio'));
 
+// remove all MediaStreams, delete the reference and close RTCPeerConnection
+function clearPeerConnection(id) {
+  if(!!PeerConnectionStore[id]){
+    if(MediaStore[id] instanceof MediaStream) {
+      PeerConnectionStore[id].removeStream(MediaStore[id]);
+      delete MediaStore[id];
+    }
+    PeerConnectionStore[id].close();
+    delete PeerConnectionStore[id];
+  }
+
+  store.dispatch({
+    type: constants.REMOVE_REMOTE_STREAM,
+    id,
+  });
+}
+
+/**
+ * [getPeerConnection description]
+ * @param  {String} id   [description]
+ * @param  {String} room [description]
+ * @return {RTCPeerConnection}      [description]
+ */
 function getPeerConnection(id, room) {
   if (!!PeerConnectionStore[id]) {
     return PeerConnectionStore[id];
@@ -134,7 +178,7 @@ function getPeerConnection(id, room) {
   });
 
   // establish the RTCDataChannel
-  pc.ondatachannel = function ({ channel }) {
+  pc.ondatachannel = function({channel}) {
     DataChannelStore[id] = channel;
     dataActions.setDataChannel(channel, id);
   };
@@ -169,6 +213,11 @@ function getPeerConnection(id, room) {
   return pc;
 }
 
+/**
+ * [makeOffer description]
+ * @param  {String} id   [description]
+ * @param  {String} room [description]
+ */
 function makeOffer(id, room) {
   const pc = getPeerConnection(id, room);
 
@@ -189,7 +238,7 @@ function makeOffer(id, room) {
         to: id,
         sdp: {
           type: sessionDescription.type,
-          sdp: sessionDescription.sdp
+          sdp: sessionDescription.sdp,
         },
         room,
       });
@@ -201,7 +250,10 @@ function makeOffer(id, room) {
   });
 }
 
-// Handle all room stream emissions
+/**
+ * handle all room stream emissions
+ * @param  {Object} data [description]
+ */
 function handleMessage(data) {
   console.log('data', data);
   const pc = getPeerConnection(data.from, data.room);
@@ -241,7 +293,6 @@ function handleMessage(data) {
         }, (err)=> {
           console.error(err);
         });
-
       }, (err)=> {
         console.error(err);
       });

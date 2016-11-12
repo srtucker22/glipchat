@@ -1,6 +1,6 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { chai } from 'meteor/practicalmeteor:chai';
+import {shallow, mount} from 'enzyme';
+import {chai} from 'meteor/practicalmeteor:chai';
 import CallingOverlayComponent from './calling-overlay.component';
 
 describe('Component: CallingOverlayComponent', () => {

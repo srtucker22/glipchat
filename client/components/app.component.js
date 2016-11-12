@@ -8,12 +8,12 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 const styles = {
   css: {
     height: 'inherit',
-  }
+  },
 };
 
 export class AppComponent extends React.Component {
-  constructor() {
-    super(...arguments);
+  constructor(props) {
+    super(props);
 
     this.constructor.childContextTypes = {
       muiTheme: React.PropTypes.object,
@@ -50,7 +50,7 @@ export class AppComponent extends React.Component {
 }
 
 const mapStateToProps = ({
-  users: {user}
+  users: {user},
 }) => {
   return {
     user,

@@ -1,4 +1,4 @@
-import { _ } from 'meteor/underscore';
+import {_} from 'meteor/underscore';
 import {browserHistory} from 'react-router';
 import {COMPANY, GITHUB_URL} from '../../lib/config';
 import {connect} from 'react-redux';
@@ -38,14 +38,14 @@ const styles = {
 };
 
 export class HomeComponent extends React.Component {
-  constructor() {
-    super(...arguments);
+  constructor(props) {
+    super(props);
     this.state = {
-      loading: false
+      loading: false,
     };
   }
   componentWillMount() {
-    //NotificationActions.getPermission();
+    // NotificationActions.getPermission();
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -56,7 +56,7 @@ export class HomeComponent extends React.Component {
     this.props.dispatch(Actions.createRoom());
 
     this.setState({
-      loading: true
+      loading: true,
     });
   }
 

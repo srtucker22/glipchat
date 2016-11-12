@@ -5,7 +5,6 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TextField from 'material-ui/TextField';
@@ -26,7 +25,7 @@ const styles = {
       position: 'fixed',
       width: '100%',
       zIndex: 5,
-    }
+    },
   },
 
   content: {
@@ -61,7 +60,7 @@ const styles = {
           padding: '10px',
           textOverflow: 'ellipsis',
         },
-      }
+      },
     },
 
     inviteRow: {
@@ -79,7 +78,7 @@ const styles = {
         label: {
           css: {
             paddingRight: '10px',
-          }
+          },
         },
 
         inputName: {
@@ -94,24 +93,24 @@ const styles = {
             bottom: '5px',
             margin: '10px 0 5px',
             position: 'relative',
-          }
-        }
+          },
+        },
       },
 
       textarea: {
         css: {
-          border: 'none',
-          marginBottom: '10px',
-          padding: '10px',
-          resize: 'none',
-          width: '100%',
+          'border': 'none',
+          'marginBottom': '10px',
+          'padding': '10px',
+          'resize': 'none',
+          'width': '100%',
 
           ':focus': {
             outline: 'none',
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   },
 };
 
@@ -119,7 +118,7 @@ export class InviteComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
     };
   }
   invite() {
@@ -141,7 +140,7 @@ export class InviteComponent extends React.Component {
 
   onTypeaheadChange(state) {
     this.setState({
-      invitees: state.invitees
+      invitees: state.invitees,
     });
   }
 
@@ -151,7 +150,7 @@ export class InviteComponent extends React.Component {
 
   handleClose() {
     this.setState({
-      ready: false
+      ready: false,
     });
   }
 
@@ -161,7 +160,7 @@ export class InviteComponent extends React.Component {
     // get the contacts
     const contacts = !!user.services && !!user.services.google && user.services.google.contacts || [];
 
-    //Custom Actions
+    // Custom Actions
     const customActions = [
       <FlatButton
         key='cancel'
@@ -174,7 +173,7 @@ export class InviteComponent extends React.Component {
         disabled={(!this.state.invitees || !this.state.invitees.length || !user.profile)}
         secondary={true}
         onTouchTap={this.invite.bind(this)}
-      />
+      />,
     ];
 
     let mobile = Browser.mobile || Browser.tablet;
@@ -219,7 +218,7 @@ export class InviteComponent extends React.Component {
             <div style={[GlobalStyles.table, {
               position: 'fixed',
               width: '100%',
-              bottom: 0
+              bottom: 0,
             }]}>
               <div style={[GlobalStyles.cell, {width: '50%'}]}>
                 <FlatButton
@@ -261,7 +260,7 @@ export class InviteComponent extends React.Component {
             <div style={[styles.content.inviteRow.header.css]}>
               <div style={[
                 GlobalStyles.inline,
-                styles.content.inviteRow.header.label.css
+                styles.content.inviteRow.header.label.css,
               ]}>
                 Send invite as
               </div>

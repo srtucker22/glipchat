@@ -1,10 +1,10 @@
-import { browserHistory } from 'react-router';
-import CircularProgress from 'material-ui/CircularProgress';
+import {browserHistory} from 'react-router';
 import Colors from 'material-ui/styles/colors';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import GlobalStyles from '../styles/global.styles';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const styles = {
   css: {

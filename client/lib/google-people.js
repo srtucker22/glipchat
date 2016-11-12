@@ -1,7 +1,7 @@
 import moment from 'moment';
-import { Meteor } from 'meteor/meteor';
-import { Tracker } from 'meteor/tracker';
-import { HTTP } from 'meteor/http';
+import {Meteor} from 'meteor/meteor';
+import {Tracker} from 'meteor/tracker';
+import {HTTP} from 'meteor/http';
 
 const API_URL = 'https://people.googleapis.com/v1/people/me/connections';
 const READY_FOR_USE = false;  // still not ready for production
@@ -45,7 +45,7 @@ export default class GooglePeople {
       },
       params: {
         pageSize: 500,
-      }
+      },
     };
 
     // if we have contacts and a syncToken, just look for contact updates
@@ -87,7 +87,7 @@ export default class GooglePeople {
         getNextPage().then((res)=> {
           let updatedContacts = _this.contacts || {
             syncToken: res.data.nextSyncToken,
-            connections: res.data.connections
+            connections: res.data.connections,
           };
 
           // resolve changes between existing contacts and modified contacts
@@ -115,8 +115,8 @@ export default class GooglePeople {
               {
                 $set: {'services.google.contacts': {
                   connections: updatedContacts.connections,
-                  syncToken: updatedContacts.syncToken
-                }}
+                  syncToken: updatedContacts.syncToken,
+                }},
               }
             );
           }

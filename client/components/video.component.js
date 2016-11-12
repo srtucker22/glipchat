@@ -56,7 +56,7 @@ export class VideoComponent extends React.Component {
         style={[
           styles.css,
           props.flip && styles.flip.css,
-          props.fullScreen && styles.fullScreen.css
+          props.fullScreen && styles.fullScreen.css,
         ]}
         muted={props.muted}
         autoPlay
@@ -73,8 +73,8 @@ VideoComponent.propTypes = {
   onTouchTap: React.PropTypes.func,
   src: React.PropTypes.oneOfType([
     React.PropTypes.object,
-    React.PropTypes.string
-  ])
+    React.PropTypes.string,
+  ]),
 };
 
 export default Radium(VideoComponent);

@@ -1,8 +1,8 @@
 import Radium from 'radium';
 import React from 'react';
+import GlobalStyles from '../styles/global.styles';
 import FontIcon from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper';
-import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -17,9 +17,9 @@ const styles = {
     },
     mobile: {
       css: {
-        marginBottom: '-10px'
-      }
-    }
+        marginBottom: '-10px',
+      },
+    },
   },
 
   icon: {
@@ -35,7 +35,7 @@ const styles = {
       padding: '4px 5px 0 10px',
       fontSize: '12px',
       verticalAlign: 'top',
-    }
+    },
   },
 };
 
@@ -55,7 +55,7 @@ export const ContactListChipComponent = (props)=> {
           </div> : ''}
           <div style={[
               GlobalStyles.cell,
-              styles.text.css
+              styles.text.css,
             ]}>{props.tag}</div>
           <FontIcon
             onClick={props.onRemove}

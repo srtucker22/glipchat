@@ -1,6 +1,5 @@
-import { _ } from 'meteor/underscore';
-import { Meteor } from 'meteor/meteor';
-import { REHYDRATE } from 'redux-persist/constants';
+import {_} from 'meteor/underscore';
+import {REHYDRATE} from 'redux-persist/constants';
 import * as constants from '../constants/constants';
 import deepExtend from 'deep-extend';
 
@@ -18,7 +17,7 @@ export const rtcReducer = (state = initialState, action = {})=> {
     case constants.SET_REMOTE_VIDEO: {
       const newStream = {};
       newStream[action.id] = {hideVideo: action.hideVideo};
-      return deepExtend({}, state, {remoteStreams: newStream,});
+      return deepExtend({}, state, {remoteStreams: newStream});
     }
     case constants.ADD_REMOTE_STREAM:
     case constants.UPDATE_REMOTE_STREAM: {

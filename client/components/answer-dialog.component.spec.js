@@ -1,9 +1,8 @@
 import ReactTestUtils from 'react-addons-test-utils';
-import { chai } from 'meteor/practicalmeteor:chai';
-import { shallow, mount } from 'enzyme';
+import {chai} from 'meteor/practicalmeteor:chai';
+import {shallow, mount} from 'enzyme';
 import AnswerDialogComponent from './answer-dialog.component';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import LoadingDialogComponent from './loading-dialog.component';
@@ -22,7 +21,7 @@ describe('AnswerDialogComponent', () => {
     chai.assert.isFalse(emptyDialog.node.props.open);
 
     const el = shallow(<AnswerDialogComponent invitation={{
-      from: test
+      from: test,
     }}/>);
     let dialog = el.find(Dialog);
     chai.assert.equal(dialog.length, 1);
@@ -32,7 +31,7 @@ describe('AnswerDialogComponent', () => {
 
   it('should render a loading component within the dialog', () => {
     const el = shallow(<AnswerDialogComponent invitation={{
-      from: test
+      from: test,
     }}/>);
     let dialog = el.find(Dialog);
 

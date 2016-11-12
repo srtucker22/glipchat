@@ -6,8 +6,8 @@ const styles = {
     top: 0,
     left: 0,
     border: 0,
-    zIndex: 6
-  }
+    zIndex: 6,
+  },
 };
 
 const GithubComponent = ({link})=> {
@@ -22,7 +22,7 @@ const GithubComponent = ({link})=> {
 };
 
 GithubComponent.propTypes = {
-  link: React.PropTypes.string
+  link: React.PropTypes.string,
 };
 
 export default GithubComponent;

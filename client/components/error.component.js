@@ -54,7 +54,7 @@ const styles = {
       css: {
         padding: '50px 0 0 0',
       },
-    }
+    },
   },
 };
 
@@ -67,7 +67,7 @@ export const PermissionDeniedComponent = ({action})=> {
           <img style={[
             GlobalStyles.cell,
             styles.permissionDenied.cell.css,
-            styles.permissionDenied.arrow.css
+            styles.permissionDenied.arrow.css,
           ]} src='/images/arrow-left.png' />
           <div style={[GlobalStyles.cell, styles.permissionDenied.cell.css]}>
             Click the <FontIcon
@@ -80,7 +80,7 @@ export const PermissionDeniedComponent = ({action})=> {
           <img style={[
             GlobalStyles.cell,
             styles.permissionDenied.cell.css,
-            styles.permissionDenied.arrow.css
+            styles.permissionDenied.arrow.css,
           ]} src='/images/arrow-right.png' />
         </div>
         <div className='col-xs-12 text-center'>
@@ -166,7 +166,7 @@ export const ErrorComponent = ({error})=> {
 
   let errorComponent = <div>{error.status}</div>;
 
-  switch (error.status){
+  switch (error.status) {
     case 'NotAllowedError':
     case 'PermissionDeniedError':
       errorComponent = <PermissionDenied action={back}/>;
@@ -186,7 +186,7 @@ export const ErrorComponent = ({error})=> {
 };
 
 ErrorComponent.propTypes = {
-  error: React.PropTypes.object
+  error: React.PropTypes.object,
 };
 
 export default ErrorComponent;

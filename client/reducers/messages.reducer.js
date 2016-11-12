@@ -1,5 +1,4 @@
 import constants from '../constants/constants';
-import deepExtend from 'deep-extend';
 
 export const messagesReducer = (state = [], action = {})=> {
   switch (action.type) {

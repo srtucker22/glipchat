@@ -1,20 +1,14 @@
 import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {List, ListItem} from 'material-ui/List';
 import {APP_NAME} from '../../lib/config';
 import AnswerDialogComponent from './answer-dialog.component';
-import Avatar from 'material-ui/Avatar';
 import Colors from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
-import Divider from 'material-ui/Divider';
 import FlatButton from 'material-ui/FlatButton';
-import GlobalStyles from '../styles/global.styles';
 import HeaderComponent from './header.component';
 import IconButton from 'material-ui/IconButton';
 import IntroComponent from './intro.component';
 import LoadingDialogComponent from './loading-dialog.component';
 import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import ContactListComponent from './contact-list.component';
@@ -27,8 +21,8 @@ const styles = {
 
   content: {
     css: {
-      marginTop: '64px'
-    }
+      marginTop: '64px',
+    },
   },
 
   icon: {
@@ -43,7 +37,7 @@ export class HomeMobileComponent extends React.Component {
     super(...arguments);
     this.state = {
       loading: false,
-      open: false
+      open: false,
     };
   }
 
@@ -55,7 +49,7 @@ export class HomeMobileComponent extends React.Component {
   }
 
   invite() {
-    if(!!this.state.invitees && this.state.invitees.length){
+    if(!!this.state.invitees && this.state.invitees.length) {
       !!this.state.name && this.state.name !== this.props.user.profile.name && this.props.dispatch(Actions.updateProfileName(this.state.name));
       this.props.dispatch(Actions.createRoom(this.state.invitees));
 
@@ -77,7 +71,7 @@ export class HomeMobileComponent extends React.Component {
 
   updateProfileNameState(e) {
     this.setState({
-      name: e.target.value
+      name: e.target.value,
     });
   }
 
@@ -156,7 +150,7 @@ HomeMobileComponent.propTypes = {
     React.PropTypes.bool,
   ]),
   invitations: React.PropTypes.array,
-  user: React.PropTypes.object
+  user: React.PropTypes.object,
 };
 
 HomeMobileComponent = Radium(HomeMobileComponent);

@@ -6,7 +6,7 @@ const styles = {
   table: {
     css: {
       // position: 'relative',
-      width: '100%',
+      'width': '100%',
       ':hover': {
         background: '#ababab',
       },
@@ -26,18 +26,22 @@ const styles = {
   },
 };
 
-export const ContactListItemComponent = ({ user, onClick, action})=> {
+export const ContactListItemComponent = ({user, onClick, action})=> {
   return (
     <div
       style={[
         GlobalStyles.table, styles.table.css,
       ]}
-      onClick={onClick.bind(this, user)}>
-      <div style={[GlobalStyles.cell, styles.cell.css, {width: 50, height: 50}]}>
+      onClick={onClick.bind(user)}>
+      <div style={[
+        GlobalStyles.cell,
+        styles.cell.css,
+        {width: 50, height: 50},
+      ]}>
         <img style={{
             width: '100%',
             height: '100%',
-            borderRadius: '50%'
+            borderRadius: '50%',
           }} src={user.src}/>
       </div>
       <div style={[GlobalStyles.cell, styles.cell.css]}>
@@ -45,10 +49,14 @@ export const ContactListItemComponent = ({ user, onClick, action})=> {
       </div>
       <div style={[GlobalStyles.cell, styles.cell.css]}>
       </div>
-      <div className="text-left" style={[GlobalStyles.cell, styles.cell.css, { width: '50px' }]}>
+      <div className="text-left" style={[
+        GlobalStyles.cell,
+        styles.cell.css,
+        {width: '50px'},
+      ]}>
         <div style={[
             styles.dot.css,
-            { background: !!user.status && user.status.online ? 'green' : 'red' },
+            {background: !!user.status && user.status.online ? 'green' : 'red'},
           ]}>
         </div>
       </div>

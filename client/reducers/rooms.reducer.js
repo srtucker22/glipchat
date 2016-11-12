@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import * as constants from '../constants/constants';
 import deepExtend from 'deep-extend';
 
@@ -6,7 +5,7 @@ export const roomsReducer = (state = {}, action = {})=> {
   switch (action.type) {
     case constants.LEAVE_ROOM:
       return Object.assign({}, state, {
-        current: null
+        current: null,
       });
     case constants.SET_CURRENT_ROOM:
       return deepExtend({}, state, {

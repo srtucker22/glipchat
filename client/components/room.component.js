@@ -1,6 +1,6 @@
 import {RING_DURATION} from '../../lib/config';
-import { _ } from 'meteor/underscore';
-import { browserHistory } from 'react-router';
+import {_} from 'meteor/underscore';
+import {browserHistory} from 'react-router';
 import {connect} from 'react-redux';
 import * as Actions from '../actions/actions';
 import Browser from 'bowser';
@@ -53,7 +53,7 @@ export class RoomComponent extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      showInviteModal: false
+      showInviteModal: false,
     };
   }
 
@@ -65,11 +65,12 @@ export class RoomComponent extends React.Component {
   }
 
   componentWillUnmount() {
+    // clear the ringer timeout
+    !!this.ringerTimeout && window.clearTimeout(this.ringerTimeout);
+    this.props.dispatch(Actions.leaveRoomStream());
     this.props.dispatch(Actions.stopLocalStream());
     this.props.dispatch(Actions.leaveRoom());
     // RTCActions.disconnect();
-    // RTCActions.stopLocalStream();
-    // RoomActions.leaveRoom();
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -82,25 +83,26 @@ export class RoomComponent extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!nextProps.localStream.loading && this.props.localStream.loading && !nextProps.localStream.error && !!MediaStore.local) {
       this.setState({
-        primaryStream: 'local'
+        primaryStream: 'local',
       });
 
       if (!nextProps.room.connected.length) {
         nextProps.dispatch(Actions.joinRoomStream(nextProps.room._id));
 
         this.setState({
-          ringing: true
+          ringing: true,
         });
 
         const _this = this;
-        setTimeout(()=> {
+        _this.ringerTimeout = setTimeout(()=> {
+          _this.ringerTimeout = undefined;
           _this.setState({
-            ringing: false
+            ringing: false,
           });
         }, RING_DURATION);
-      } else if(nextProps.room.connected.length > 1){
+      } else if(nextProps.room.connected.length > 1) {
         this.setState({
-          ringing: false
+          ringing: false,
         });
       }
     }
@@ -116,19 +118,19 @@ export class RoomComponent extends React.Component {
 
   setPrimaryStream(id) {
     this.setState({
-      primaryStream: id
+      primaryStream: id,
     });
   }
 
   toggleInviteModal() {
     this.setState({
-      showInviteModal: !this.state.showInviteModal
+      showInviteModal: !this.state.showInviteModal,
     });
   }
 
   toggleControls() {
     this.setState({
-      controlsVisible: !this.state.controlsVisible
+      controlsVisible: !this.state.controlsVisible,
     });
   }
 
@@ -266,7 +268,7 @@ RoomComponent = Radium(RoomComponent);
 const mapStateToProps = ({
   rooms,
   rtc: {localStream, remoteStreams},
-  users: {user}
+  users: {user},
 }) => {
   return {
     room: _.first(rooms.available), // TODO: this is a hack

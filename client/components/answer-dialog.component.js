@@ -1,13 +1,8 @@
-import Colors from 'material-ui/styles/colors';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import GlobalStyles from '../styles/global.styles';
-import LoadingDialogComponent from './loading-dialog.component';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
-import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 const styles = {
   css: {
@@ -21,7 +16,7 @@ export class AnswerDialogComponent extends React.Component {
     this.shouldComponentUpdate =
       PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
-      loading: false
+      loading: false,
     };
   }
 

@@ -25,7 +25,7 @@ const styles = {
       css: {
         padding: '10px',
         width: '50%',
-      }
+      },
     },
   },
 
@@ -37,8 +37,8 @@ const styles = {
       overflow: 'hidden',
       padding: '10px',
       textOverflow: 'ellipsis',
-    }
-  }
+    },
+  },
 };
 
 export class FirstOverlayComponent extends React.Component {

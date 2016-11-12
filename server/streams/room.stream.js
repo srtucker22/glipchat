@@ -1,9 +1,9 @@
-import { Meteor } from 'meteor/meteor';
+import {Meteor} from 'meteor/meteor';
 import {Rooms} from '../../lib/rooms';
 import {roomStream} from '../../lib/streams';
-import { UserStatus } from 'meteor/mizzao:user-status';
-import { _ } from 'meteor/underscore';
-import { check, Match } from 'meteor/check';
+import {UserStatus} from 'meteor/mizzao:user-status';
+import {_} from 'meteor/underscore';
+import {check, Match} from 'meteor/check';
 
 // room permissions
 roomStream.allowRead(function(eventName) {
@@ -15,7 +15,7 @@ roomStream.allowWrite('join', 'logged');
 roomStream.allowWrite('msg', 'logged');
 
 function disconnect(userId, roomId) {
-  var room = Rooms.findOne({_id: roomId});
+  let room = Rooms.findOne({_id: roomId});
   if (room && _.contains(room.connected, userId)) {  // make sure they are still technically in the Room model
     Rooms.update({_id: roomId}, {$pull: {connected: userId}});
 
@@ -45,8 +45,8 @@ roomStream.on('join', function(roomId) {
       type: 'error.duplicate',
       error: {
         status: 409,
-        description: 'Conflict: user is already connected to this room'
-      }
+        description: 'Conflict: user is already connected to this room',
+      },
     });
     return;
   }
@@ -60,7 +60,7 @@ roomStream.on('join', function(roomId) {
   });
 
   Rooms.update({_id: roomId}, {
-    $addToSet: {connected: _this.userId}
+    $addToSet: {connected: _this.userId},
   });
 
   Meteor.users.update(_this.userId,
@@ -90,25 +90,25 @@ roomStream.on('msg', function(data) {
   check(data.to, Match.OneOf(null, String, undefined));
   check(_.omit(data, ['type', 'room', 'to']), Match.OneOf(
     {
-      sdp: {sdp: String, type: String}
+      sdp: {sdp: String, type: String},
     }, {
       ice: Match.OneOf({
         sdpMLineIndex: Number,
         sdpMid: String,
-        candidate: String
+        candidate: String,
       },
       {},
       null
     )}, {
       tracks: {
         audio: Boolean,
-        video: Boolean
-      }
+        video: Boolean,
+      },
     },
     {},
   ));
 
-  var _this = this;
+  let _this = this;
 
   console.log(data.type + ' received from user ' + _this.userId);
 
@@ -119,7 +119,7 @@ roomStream.on('msg', function(data) {
   }
 
   // find the room
-  var room = Rooms.findOne({_id: data.room});
+  let room = Rooms.findOne({_id: data.room});
   console.log('emitting ' + data.type + ' to ' + data.to);
 
   // emit message to recipients

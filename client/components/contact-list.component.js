@@ -5,20 +5,20 @@
 import 'react-select/dist/react-select.css';
 import '../styles/react-select-override.css';
 
-import { _ } from 'meteor/underscore';
+import {_} from 'meteor/underscore';
 import Actions from '../actions/actions';
 import createFilterOptions from 'react-select-fast-filter-options';
 import React from 'react';
 import ContactListItemComponent from './contact-list-item.component';
 import Select from 'react-select';
 import ContactListChipComponent from './contact-list-chip.component';
-import ReactList from 'react-list'
+import ReactList from 'react-list';
 
 // add a key with all the searchable strings for a given user
 // simpler than modifying createFilterOptions
 function addLabelKey(contacts) {
   return _.map(contacts, (user)=> {
-    return Object.assign({}, user, { labelKey: [
+    return Object.assign({}, user, {labelKey: [
       user.name, // name
       user.email, // email addresses
     ].join(' '), });
@@ -26,10 +26,10 @@ function addLabelKey(contacts) {
 };
 
 export class ContactListComponent extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
-      selectValues: []
+      selectValues: [],
     };
   }
 
@@ -59,7 +59,7 @@ export class ContactListComponent extends React.Component {
     />);
   }
 
-  onAdd(option){
+  onAdd(option) {
     const selectValues = _.unique([...this.state.selectValues, option]);
     this.props.onChange(selectValues);
     this.setState({selectValues});
@@ -69,10 +69,10 @@ export class ContactListComponent extends React.Component {
     const selectValues = this.state.selectValues.slice(0);
     selectValues.splice(index, 1);
     this.props.onChange(selectValues);
-    this.setState({selectValues})
+    this.setState({selectValues});
   }
 
-  valueRenderer(option, index){
+  valueRenderer(option, index) {
     return (
       <ContactListChipComponent
         onRemove={this.onRemove.bind(this, index)}
@@ -98,7 +98,7 @@ export class ContactListComponent extends React.Component {
   }
 
   onChange(vals) {
-    const selectValues = _.unique(vals)
+    const selectValues = _.unique(vals);
     this.props.onChange(selectValues);
     this.setState({selectValues});
   }
@@ -108,7 +108,7 @@ export class ContactListComponent extends React.Component {
       case 9:   // TAB
       case 13: // ENTER
         this.state.inputValue && this.onAdd({
-          email: this.state.inputValue
+          email: this.state.inputValue,
         });
         break;
     }
@@ -123,18 +123,21 @@ export class ContactListComponent extends React.Component {
     />);
   }
 
-  menuRenderer({ focusedOption, focusOption, options, selectValue, valueArray }){
-    return (<div style={{overflow: 'auto', maxHeight: window.innerHeight - 100}}><ReactList
+  menuRenderer({focusedOption, focusOption, options, selectValue, valueArray}) {
+    return (<div
+      style={{overflow: 'auto', maxHeight: window.innerHeight - 100}}>
+      <ReactList
       itemRenderer={this.renderItem.bind(this, options)}
       length={options.length}
-      type='uniform'/></div>)
+      type='uniform'/>
+    </div>);
   }
 
-  onInputChange(inputValue){
+  onInputChange(inputValue) {
     this.setState({inputValue});
   }
 
-  render () {
+  render() {
     const {contacts, onChange, ...other} = this.props;
     return (
       <Select

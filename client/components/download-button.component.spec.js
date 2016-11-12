@@ -1,6 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { chai } from 'meteor/practicalmeteor:chai';
+import {shallow} from 'enzyme';
+import {chai} from 'meteor/practicalmeteor:chai';
 import DownloadButtonComponent from './download-button.component';
 
 describe('DownloadButtonComponent', () => {

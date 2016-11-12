@@ -1,10 +1,11 @@
 // TODO: import Notifications from '../../lib/notifications';
-import { _ } from 'meteor/underscore';
-import { createStore, applyMiddleware, compose } from 'redux';
-import { Meteor } from 'meteor/meteor';
-import { persistStore } from 'redux-persist';
-import { Session } from 'meteor/session';
+import {_} from 'meteor/underscore';
+import {createStore, applyMiddleware, compose} from 'redux';
+import {Meteor} from 'meteor/meteor';
+import {persistStore} from 'redux-persist';
+import {Session} from 'meteor/session';
 import {AccountsGuest} from 'meteor/artwells:accounts-guest';
+import * as Actions from '../actions/actions';
 import * as constants from '../constants/constants';
 import Browser from 'bowser';
 import localForage from 'localForage';
@@ -14,7 +15,8 @@ import rootReducer from '../reducers/reducer';
 import thunk from 'redux-thunk';
 
 // Required! Enable Redux DevTools with the monitors you chose
-const composeEnhancers = Meteor.isDevelopment ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose;
+const composeEnhancers = Meteor.isDevelopment ?
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose;
 
 const enhancer = composeEnhancers(
   // Middleware you want to use in development:
@@ -29,7 +31,7 @@ const store = createStore(
 
 // force/unforce login depending on browser
 AccountsGuest.enabled = true;
-if(!Browser.mobile && !Browser.tablet){
+if(!Browser.mobile && !Browser.tablet) {
   AccountsGuest.forced = true;
 } else {
   AccountsGuest.forced = false;
@@ -38,11 +40,12 @@ if(!Browser.mobile && !Browser.tablet){
 // add persistence to store
 persistStore(store, {storage: localForage});
 
-// super simplified tracker -- we get all the users all the time under one subscription
+// super simplified tracker -- we get all the users all the time under one sub
 let currentUser;
 Tracker.autorun(()=> {
   let available = Session.get('availableUsers');
   let room = Session.get('currentRoom');
+
   const sub = Meteor.subscribe('users', {
     room,
     available,
@@ -57,22 +60,26 @@ Tracker.autorun(()=> {
   if (sub.ready()) {
     const users = Meteor.users.find().fetch();
     const newUser = Meteor.user();
-    if(!!newUser && (!currentUser || !currentUser._id || currentUser._id !== newUser._id) && !!newUser.services && !!newUser.services.google){
+    if(!!newUser && !!newUser.services && !!newUser.services.google &&
+      (!currentUser || !currentUser._id || currentUser._id !== newUser._id)) {
       Meteor.call('getContacts', (err, contacts)=> {
         if (err) {
-
+          console.error(err);
         } else {
-          console.log('contacts', contacts);
+          // received contacts
         }
       });
+      store.dispatch(Actions.subscribeToNotifications(newUser));
+    } else if(!!currentUser && !newUser) {
+      store.dispatch(Actions.unsubscribeToNotifications());
     }
     currentUser = newUser;
 
     store.dispatch({
       type: constants.SET_USERS,
       users: {
-        available: _.reject(users, user => (!!currentUser && user._id === currentUser._id)),
-        active: _.filter(users, user => {
+        available: _.reject(users, (user) => (!!currentUser && user._id === currentUser._id)),
+        active: _.filter(users, (user) => {
           return !!user.roles;
         }),
         user: currentUser,
@@ -81,7 +88,7 @@ Tracker.autorun(()=> {
   }
 });
 
-// super simplified tracker -- we get all the rooms all the time under one subscription
+// super simplified tracker -- we get all the rooms all the time under one sub
 Tracker.autorun(()=> {
   const sub = Meteor.subscribe('rooms', {
     room: Session.get('currentRoom'),
@@ -96,7 +103,7 @@ Tracker.autorun(()=> {
   }
 });
 
-// super simplified tracker -- we get all the chat messages for the room on one subscription
+// super simplified tracker -- we get all chat messages for the room on one sub
 Tracker.autorun(()=> {
   const sub = Meteor.subscribe('messages', Session.get('currentRoom'));
   if (sub.ready()) {

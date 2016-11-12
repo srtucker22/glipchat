@@ -5,7 +5,7 @@ import GlobalStyles from '../styles/global.styles';
 const styles = {
   css: {
     width: '100%',
-  }
+  },
 };
 
 const FooterComponent = ({company})=> {
@@ -15,7 +15,7 @@ const FooterComponent = ({company})=> {
       style={[
         GlobalStyles.table,
         styles.css,
-        {height: GlobalStyles.footerHeight}
+        {height: GlobalStyles.footerHeight},
       ]}>
       <div className='text-left' style={[GlobalStyles.cell]}>
         Copyright <a href={company.href} target='_blank'>
@@ -27,7 +27,7 @@ const FooterComponent = ({company})=> {
 };
 
 FooterComponent.propTypes = {
-  company: React.PropTypes.object.isRequired
+  company: React.PropTypes.object.isRequired,
 };
 
 export default Radium(FooterComponent);

@@ -1,5 +1,5 @@
 import ThrottledRequester from './throttled-requester';
-import { chai } from 'meteor/practicalmeteor:chai';
+import {chai} from 'meteor/practicalmeteor:chai';
 import moment from 'moment';
 
 describe('ThrottledRequester', ()=> {
@@ -11,7 +11,7 @@ describe('ThrottledRequester', ()=> {
     chai.assert.equal(testRequester.busy, false);
 
     let state = {
-      calls: []
+      calls: [],
     };
 
     function faker() {

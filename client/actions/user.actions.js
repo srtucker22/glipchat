@@ -6,7 +6,7 @@ import Browser from 'bowser';
 export const loginAsGuest = ()=> {
   return (dispatch, getState)=> {
     dispatch({
-      type: constants.LOGIN_AS_GUEST
+      type: constants.LOGIN_AS_GUEST,
     });
 
     Meteor.loginVisitor(undefined, (error)=> {
@@ -16,21 +16,21 @@ export const loginAsGuest = ()=> {
           error,
         });
       }
-    })
+    });
   };
 };
 
 export const loginWithGoogle = ()=> {
   return (dispatch, getState)=> {
     dispatch({
-      type: constants.LOGIN_WITH_GOOGLE
+      type: constants.LOGIN_WITH_GOOGLE,
     });
 
     Meteor.loginWithGoogle({
       requestPermissions: GOOGLE_PERMISSIONS,
       loginStyle: (Browser.mobile || Browser.tablet) ? 'redirect' : 'popup',
       requestOfflineToken: true,
-      forceApprovalPrompt: true
+      forceApprovalPrompt: true,
     }, (error)=> {
       if (error) {
         return dispatch({
@@ -44,14 +44,14 @@ export const loginWithGoogle = ()=> {
 
 export const loginWithPassword = ()=> {
   return {
-    type: constants.LOGIN_WITH_PASSWORD
+    type: constants.LOGIN_WITH_PASSWORD,
   };
 };
 
 export const logout = ()=> {
   return (dispatch, getState)=> {
     dispatch({
-      type: 'LOGOUT'
+      type: 'LOGOUT',
     });
 
     Meteor.logout((error)=> {
@@ -79,7 +79,7 @@ export const updateProfileName = (name)=> {
         if (error) {
           return dispatch({
             type: constants.AUTH_ERROR,
-            error
+            error,
           });
         }
       }

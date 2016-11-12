@@ -1,8 +1,7 @@
-import { _ } from 'meteor/underscore';
-import { browserHistory } from 'react-router';
+import {_} from 'meteor/underscore';
+import {browserHistory} from 'react-router';
 import * as Actions from '../actions/actions';
 import Colors from 'material-ui/styles/colors';
-import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import GlobalStyles from '../styles/global.styles';
 import IconButton from 'material-ui/IconButton';
@@ -13,11 +12,11 @@ import React from 'react';
 const styles = {
   css: {
     ':hover': {},
-    height: '100px',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 4,
+    'height': '100px',
+    'position': 'absolute',
+    'top': 0,
+    'width': '100%',
+    'zIndex': 4,
   },
 
   controls: {
@@ -33,16 +32,16 @@ const styles = {
         ':hover': {
           backgroundColor: Colors.grey900,
         },
-      }
+      },
     },
 
     red: {
       css: {
-        backgroundColor: Colors.red800,
+        'backgroundColor': Colors.red800,
         ':hover': {
           backgroundColor: Colors.red900,
         },
-      }
+      },
     },
 
     visible: {
@@ -63,7 +62,7 @@ export class ControlsComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
     };
   }
 
@@ -105,7 +104,7 @@ export class ControlsComponent extends React.Component {
             onTouchTap={this.toggleLocalVideo.bind(this)} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
-            !this.props.isLocalVideoEnabled && styles.controls.red.css
+            !this.props.isLocalVideoEnabled && styles.controls.red.css,
           ]}>
             <IconButton>
               <FontIcon
@@ -118,7 +117,7 @@ export class ControlsComponent extends React.Component {
             onTouchTap={this.toggleLocalAudio.bind(this)} style={[
             GlobalStyles.cell,
             styles.controls.button.css,
-            !this.props.isLocalAudioEnabled && styles.controls.red.css
+            !this.props.isLocalAudioEnabled && styles.controls.red.css,
           ]}>
             <IconButton>
               <FontIcon
@@ -126,7 +125,7 @@ export class ControlsComponent extends React.Component {
                 color={Colors.fullWhite}>mic_off</FontIcon>
             </IconButton>
           </div>
-          {/*<div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
+          {/* <div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
             <IconButton>
               <FontIcon className='material-icons' color={Colors.fullWhite}>settings</FontIcon>
             </IconButton>
@@ -136,7 +135,7 @@ export class ControlsComponent extends React.Component {
             style={[
               GlobalStyles.cell,
               styles.controls.button.css,
-              styles.controls.buttonEnd.css
+              styles.controls.buttonEnd.css,
             ]}
             onTouchTap={this.leave.bind(this)}>
             <IconButton>

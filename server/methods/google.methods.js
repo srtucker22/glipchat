@@ -6,12 +6,12 @@ Meteor.methods({
   exchangeRefreshToken: function() {
     this.unblock();
 
-    var user;
+    let user;
     if (this.userId) {
       user = Meteor.users.findOne({_id: this.userId});
     }
 
-    var config = Accounts.loginServiceConfiguration.findOne({service: 'google'});
+    let config = Accounts.loginServiceConfiguration.findOne({service: 'google'});
     if (!config) {
       throw new Meteor.Error(500, 'Google service not configured.');
     }
@@ -27,11 +27,11 @@ Meteor.methods({
             'client_id': config.clientId,
             'client_secret': config.secret,
             'refresh_token': user.services.google.refreshToken,
-            'grant_type': 'refresh_token'
-          }
+            'grant_type': 'refresh_token',
+          },
         });
     } catch (e) {
-      var code = e.response ? e.response.statusCode : 500;
+      let code = e.response ? e.response.statusCode : 500;
       throw new Meteor.Error(code, 'Unable to exchange google refresh token.', e.response);
     }
 
@@ -43,12 +43,12 @@ Meteor.methods({
         '$set': {
           'services.google.accessToken': result.data.access_token,
           'services.google.expiresAt': (+new Date) + (1000 * result.data.expires_in),
-        }
+        },
       });
 
       return result.data;
     } else {
       throw new Meteor.Error(result.statusCode, 'Unable to exchange google refresh token.', result);
     }
-  }
+  },
 });

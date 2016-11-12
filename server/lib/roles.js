@@ -1,8 +1,8 @@
-import { Accounts } from 'meteor/accounts-base';
-import { Meteor } from 'meteor/meteor';
-import { Roles } from 'meteor/alanning:roles';
-import { MANAGER_ROLES } from '../../lib/roles';
-import { check, Match } from 'meteor/check';
+import {Accounts} from 'meteor/accounts-base';
+import {Meteor} from 'meteor/meteor';
+import {Roles} from 'meteor/alanning:roles';
+import {MANAGER_ROLES} from '../../lib/roles';
+import {check, Match} from 'meteor/check';
 
 // update a users permissions
 Meteor.methods({
@@ -21,7 +21,7 @@ Meteor.methods({
     let loggedInUser = Meteor.user();
 
     if (!loggedInUser ||
-        !Roles.userIsInRole(loggedInUser, ['manage-users','admin'], group)) {
+        !Roles.userIsInRole(loggedInUser, ['manage-users', 'admin'], group)) {
       throw new Meteor.Error(403, 'Access denied');
     }
 
@@ -41,7 +41,7 @@ Meteor.methods({
     let loggedInUser = Meteor.user();
 
     if (!loggedInUser ||
-      (!Roles.userIsInRole(loggedInUser, ['manage-users','admin'], group) &&
+      (!Roles.userIsInRole(loggedInUser, ['manage-users', 'admin'], group) &&
         Meteor.userId() != targetUserId)) {
       throw new Meteor.Error(403, 'Access denied');
     }
@@ -56,11 +56,10 @@ Meteor.methods({
 
 // don't allow existing low level user to create new users other than themselves
 Accounts.validateNewUser((user) => {
-
   let loggedInUser = this.userId;
 
   if (!loggedInUser ||
-    Roles.userIsInRole(loggedInUser, ['admin','manage-users'])) {
+    Roles.userIsInRole(loggedInUser, ['admin', 'manage-users'])) {
     return true;
   }
 
