@@ -6,7 +6,6 @@ import 'react-select/dist/react-select.css';
 import '../styles/react-select-override.css';
 
 import {_} from 'meteor/underscore';
-import Actions from '../actions/actions';
 import createFilterOptions from 'react-select-fast-filter-options';
 import React from 'react';
 import ContactListItemComponent from './contact-list-item.component';
@@ -21,7 +20,7 @@ function addLabelKey(contacts) {
     return Object.assign({}, user, {labelKey: [
       user.name, // name
       user.email, // email addresses
-    ].join(' '), });
+    ].join(' ')});
   });
 };
 
@@ -72,6 +71,12 @@ export class ContactListComponent extends React.Component {
     this.setState({selectValues});
   }
 
+  /**
+   * [valueRenderer description]
+   * @param  {Object} option contact object
+   * @param  {Number} index index of the contact in list
+   * @return {Component} list row component
+   */
   valueRenderer(option, index) {
     return (
       <ContactListChipComponent

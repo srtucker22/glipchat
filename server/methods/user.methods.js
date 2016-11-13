@@ -91,6 +91,7 @@ const storeContactImages = (user, contacts)=> {
               console.error(error);
               rej(error);
             } else {
+              console.log(fileRef);
               contact.src = Images.link(fileRef);
               res(fileRef);
             }

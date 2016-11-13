@@ -18,6 +18,7 @@ export const sendNotifications = (ids, notification)=> {
       return subscriptionIds.map((subscriptionId)=> ({
         actions,
         body,
+        createdAt: new Date(),
         data,
         icon: !!icon ? icon: APP_ICON,
         owner: user._id,

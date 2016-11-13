@@ -40,7 +40,6 @@ meson:electron
 ostrio:files
 long:google-contacts
 simple:rest
-simple:authenticate-user-by-token
 simple:json-routes
 simple:rest-bearer-token-parser
 mikowals:batch-insert

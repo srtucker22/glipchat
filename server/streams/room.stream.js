@@ -84,7 +84,6 @@ roomStream.on('join', function(roomId) {
 
 // send messages between people in the room
 roomStream.on('msg', function(data) {
-  console.log('data', data);
   // check the data for proper values
   check(data, Match.ObjectIncluding({type: String, room: String}));
   check(data.to, Match.OneOf(null, String, undefined));

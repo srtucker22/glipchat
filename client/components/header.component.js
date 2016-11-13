@@ -11,10 +11,9 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import GlobalStyles from '../styles/global.styles';
 import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import moment from 'moment';
+import Popover from 'material-ui/Popover/Popover';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
@@ -163,8 +162,24 @@ NotificationDropdownComponent = Radium(NotificationDropdownComponent);
 export class ProfileDropdownComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
     this.shouldComponentUpdate =
       PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
+  togglePopover(event) {
+    event.preventDefault();
+
+    this.setState({
+      open: !this.state.open,
+      anchorEl: event.currentTarget,
+    });
+  }
+
+  closePopover() {
+    this.setState({
+      open: false,
+    });
   }
 
   render() {
@@ -174,23 +189,31 @@ export class ProfileDropdownComponent extends React.Component {
       <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
         {dropdownStyleComponent}
         <Avatar
-          className='dropdown-toggle'
-          data-toggle='dropdown'
-          src={user.services.google.picture}/>
-        <Card className='dropdown-menu'>
-          <CardText>
-            {user.profile.name}
-          </CardText>
-          {!!user.services.google &&
-            !!user.services.google.email &&
+          src={user.services.google.picture}
+          onTouchTap={this.togglePopover.bind(this)}
+        />
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          onRequestClose={this.closePopover.bind(this)}
+        >
+          <Card>
             <CardText>
-              {user.services.google.email}
+              {user.profile.name}
             </CardText>
-          }
-          <CardActions className='text-center' expandable={false}>
-            <FlatButton onTouchTap={logout} label='Sign out'/>
-          </CardActions>
-        </Card>
+            {!!user.services.google &&
+              !!user.services.google.email &&
+              <CardText>
+                {user.services.google.email}
+              </CardText>
+            }
+            <CardActions expandable={false} style={{textAlign: 'center'}}>
+              <FlatButton onTouchTap={logout} label='Sign out'/>
+            </CardActions>
+          </Card>
+        </Popover>
       </div>
     );
   }

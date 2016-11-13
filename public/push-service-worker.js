@@ -27,13 +27,12 @@ self.addEventListener('message', function(event) {
     case 'SET_USER':
       try {
         var user = event.data.user;
-        console.log(user);
         self.token = user.services.resume.loginTokens.pop().hashedToken;
-        console.log('self.token', self.token);
+        event.ports[0].postMessage(self.token);
       } catch (e) {
-        console.error(e);
+        console.log(e);
+        event.ports[0].postMessage({error: e});
       }
-      event.ports[0].postMessage(user);
       break;
     default:
       event.ports[0].postMessage(event.data);
@@ -56,10 +55,12 @@ self.addEventListener('push', function(event) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            subscriptionId: endpointWorkaround(subscription)
+            subscriptionId: endpointWorkaround(subscription),
           }),
         })
-        .then(function(response) { return response.json(); })
+        .then(function(response) {
+          return response.json();
+        })
         .then(function(data) {
           console.log(data);
           self.registration.showNotification(data.title, {
@@ -78,7 +79,6 @@ self.addEventListener('push', function(event) {
 });
 
 self.addEventListener('notificationclick', function(event) {
-  console.log('On notification click: ', event.notification.tag);
   // Android doesn’t close the notification when you click on it
   // See: http://crbug.com/463146
   event.notification.close();
@@ -86,23 +86,21 @@ self.addEventListener('notificationclick', function(event) {
   // This looks to see if the current is already open and
   // focuses if it is
   event.waitUntil(clients.matchAll({
-    type: 'window'
+    type: 'window',
   }).then(function(clientList) {
+    console.log('clientList', clientList);
     var client = null;
     for (var i = 0; i < clientList.length; i++) {
-      var swClient = clientList[i];
-      if (swClient.url === '/' && 'focus' in swClient) {
-        client = swClient;
+      var client = clientList[i];
+      console.log('client', client);
+      if ('focus' in client) {
+        return client.navigate(event.notification.data)
+          .then(function(client) {
+            return client.focus();
+          });
       }
     }
 
-    if (client) {
-      return client.navigate(event.notification.data)
-        .then(function(client) {
-          return client.focus();
-        });
-    } else if (clients.openWindow) {
-      return clients.openWindow(event.notification.data);
-    }
+    return clients.openWindow(event.notification.data);
   }));
 });

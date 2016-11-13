@@ -13,15 +13,7 @@ export const subscribeToNotifications = (user)=> (dispatch)=> {
       if(err) {
         console.error(err);
       } else {
-        console.log('updated user with subscriptionId', res);
-        // Meteor.call('sendNotifications', [user._id], {
-        //   actions: ['join'],
-        //   body: 'We have received a push message.',
-        //   data: '/room',
-        //   icon: '/android-icon-192x192.png',
-        //   tag: 'simple-push-demo-notification-tag',
-        //   title: 'Yay a message.',
-        // });
+        console.log('updated user with subscriptionId', subscriptionId);
       }
     });
   }, (err)=> {

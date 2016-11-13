@@ -72,6 +72,15 @@ function showCurlCommand(mergedEndpoint) {
   console.log('curlCommand', curlCommand);
 }
 
+export const isSubscribed = ()=> {
+  if(!Meteor.isCordova && 'serviceWorker' in navigator) {
+    return navigator.serviceWorker.ready.then((serviceWorkerRegistration)=> {
+      // returns Promise that resolves to a PushSubscription object.
+      serviceWorkerRegistration.pushManager.getSubscription();
+    });
+  }
+};
+
 export const subscribe = (user)=> {
   // browser gets a push manifest and service worker
   if(!Meteor.isCordova && 'serviceWorker' in navigator) {
