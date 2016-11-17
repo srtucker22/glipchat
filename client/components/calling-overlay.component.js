@@ -23,10 +23,6 @@ export class CallingOverlayComponent extends React.Component {
     browserHistory.push('/');
   }
 
-  retry() {
-    // RoomActions.retry();
-  }
-
   render() {
     const ringingComponent = (<div>
       <h3>Contacting...</h3>
@@ -39,13 +35,18 @@ export class CallingOverlayComponent extends React.Component {
       </div>
     </div>);
 
+    const connectingComponent = (<div>
+      <h3>{'Connecting...'}</h3>
+      <CircularProgress mode='indeterminate'/>
+    </div>);
+
     const contactsUnavailableComponent = (<div>
       <h3>{`Contacts Unavailable`}</h3>
       <h5>{`No contacts connected`}</h5>
       <div style={{margin: 'auto', width: '100%'}}>
         {this.props.invitees ? <RaisedButton label='Retry'
           secondary={true}
-          onTouchTap={this.retry.bind(this)}
+          onTouchTap={this.props.retry}
           style={{margin: '0 10px'}}>
         </RaisedButton> : ''}
         <RaisedButton label={this.props.invitees ? 'Cancel' : 'Leave'}
@@ -55,13 +56,18 @@ export class CallingOverlayComponent extends React.Component {
       </div>
     </div>);
 
+    const components = {
+      connecting: connectingComponent,
+      failed: contactsUnavailableComponent,
+      ringing: ringingComponent,
+    };
+
     // TODO: add back ringing
     return (
       <div onTouchTap={this.props.onTouchTap}>
         <div style={[GlobalStyles.table, styles.css]}>
           <div className='text-center' style={[GlobalStyles.cell]}>
-            {!!this.props.ringing ?
-              ringingComponent : contactsUnavailableComponent}
+            {components[this.props.status]}
           </div>
         </div>
       </div>
@@ -72,7 +78,7 @@ CallingOverlayComponent.propTypes = {
   invitees: React.PropTypes.array,
   onTouchTap: React.PropTypes.func,
   retry: React.PropTypes.func,
-  ringing: React.PropTypes.bool,
+  status: React.PropTypes.string,
 };
 
 export default Radium(CallingOverlayComponent);

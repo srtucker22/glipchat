@@ -1,7 +1,9 @@
-import {connect} from 'react-redux';
 import {APP_NAME} from '../../lib/config';
+import {connect} from 'react-redux';
+import * as Actions from '../actions/actions';
 import AnswerDialogComponent from './answer-dialog.component';
 import Colors from 'material-ui/styles/colors';
+import ContactListComponent from './contact-list.component';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import HeaderComponent from './header.component';
@@ -11,8 +13,6 @@ import LoadingDialogComponent from './loading-dialog.component';
 import Radium from 'radium';
 import React from 'react';
 import TextField from 'material-ui/TextField';
-import ContactListComponent from './contact-list.component';
-import * as Actions from '../actions/actions';
 
 const styles = {
   css: {
@@ -145,23 +145,12 @@ export class HomeMobileComponent extends React.Component {
 HomeMobileComponent.propTypes = {
   dispatch: React.PropTypes.func,
   contacts: React.PropTypes.array,
-  currentRoom: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.bool,
-  ]),
   invitations: React.PropTypes.array,
   user: React.PropTypes.object,
 };
 
 HomeMobileComponent = Radium(HomeMobileComponent);
 
-const mapStateToProps = ({rooms: {available}, users: {user}}) => {
-  return {
-    currentRoom: !available || _.first(available),  // TODO: a little hacky way of getting the room and knowing we are subscribed
-    user,
-  };
-};
+const mapStateToProps = ({users: {user}}) => ({user});
 
-export default connect(
-  mapStateToProps,
-)(HomeMobileComponent);
+export default connect(mapStateToProps)(HomeMobileComponent);

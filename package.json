@@ -1,5 +1,6 @@
 {
-  "name": "quasar2",
+  "name": "glipchat",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "meteor --settings settings.json",
@@ -38,12 +39,55 @@
     "url-join": "^1.1.0",
     "webrtc-adapter": "^2.0.5"
   },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": [
+      "meteor",
+      "react",
+      "html"
+    ],
+    "extends": [
+      "google",
+      "plugin:meteor/recommended",
+      "plugin:react/recommended"
+    ],
+    "globals": {
+      "server": false,
+      "browser": false,
+      "expect": false
+    },
+    "rules": {
+      "import/no-unresolved": 0,
+      "semi": [
+        2,
+        "always"
+      ],
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allow": [
+            "_id",
+            "_ensureIndex",
+            "_verifyEmailToken",
+            "_resetPasswordToken",
+            "_name"
+          ]
+        }
+      ]
+    }
+  },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
     "enzyme": "^2.5.1",
-    "eslint": "^3.9.1",
+    "eslint": "^3.10.2",
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-html": "^1.6.0",
+    "eslint-plugin-meteor": "^4.0.1",
     "eslint-plugin-react": "^6.6.0",
     "redux-mock-store": "^1.2.1",
     "sinon": "^1.17.6"

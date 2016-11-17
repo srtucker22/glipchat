@@ -50,8 +50,8 @@ const styles = {
 };
 
 export class RoomComponent extends React.Component {
-  constructor() {
-    super(...arguments);
+  constructor(props) {
+    super(props);
     this.state = {
       showInviteModal: false,
     };
@@ -66,11 +66,10 @@ export class RoomComponent extends React.Component {
 
   componentWillUnmount() {
     // clear the ringer timeout
-    !!this.ringerTimeout && window.clearTimeout(this.ringerTimeout);
+    !!this.ringerTimeout && clearTimeout(this.ringerTimeout);
     this.props.dispatch(Actions.leaveRoomStream());
     this.props.dispatch(Actions.stopLocalStream());
     this.props.dispatch(Actions.leaveRoom());
-    // RTCActions.disconnect();
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -81,39 +80,60 @@ export class RoomComponent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const newState = {};
     if (!nextProps.localStream.loading && this.props.localStream.loading && !nextProps.localStream.error && !!MediaStore.local) {
-      this.setState({
-        primaryStream: 'local',
-      });
+      newState.primaryStream = 'local';
+
+      console.log('local');
 
       if (!nextProps.room.connected.length) {
+        console.log('setting ringing');
+        this.ring();
+        console.log(this.state.status);
         nextProps.dispatch(Actions.joinRoomStream(nextProps.room._id));
-
-        this.setState({
-          ringing: true,
-        });
-
-        const _this = this;
-        _this.ringerTimeout = setTimeout(()=> {
-          _this.ringerTimeout = undefined;
-          _this.setState({
-            ringing: false,
-          });
-        }, RING_DURATION);
-      } else if(nextProps.room.connected.length > 1) {
-        this.setState({
-          ringing: false,
-        });
       }
+    } else if(this.state.status !== 'connecting' && nextProps.room.connected.length &&
+      !~nextProps.room.connected.indexOf(nextProps.user._id)) {
+      console.log('setting joining');
+      newState.status = 'joining';
+    } else if(nextProps.room.connected.length > 1) {
+      console.log('setting connecting/ed');
+      newState.status = !nextProps.remoteStreams || !_.keys(nextProps.remoteStreams) ?
+        'connecting' : 'connected';
+        !!this.ringerTimeout && clearTimeout(this.ringerTimeout);
+    } else if (this.state.status === 'connected'){
+      console.log(nextProps, this.state);
+      newState.status = 'waiting';
     }
+
+    this.setState(newState);
   }
 
   pingInvitees() {
     console.log('pingInvitees');
   }
 
+  ring() {
+    console.log('ring');
+    this.setState({
+      status: 'ringing'
+    });
+
+    const _this = this;
+    _this.ringerTimeout = setTimeout(()=> {
+      _this.ringerTimeout = undefined;
+      console.log('setting waiting');
+      _this.setState({
+        status: 'failed',
+      });
+    }, RING_DURATION);
+  }
+
   joinRoomStream(id) {
     this.props.dispatch(Actions.joinRoomStream(id));
+    this.setState({
+      status: 'connecting',
+    });
   }
 
   setPrimaryStream(id) {
@@ -135,6 +155,7 @@ export class RoomComponent extends React.Component {
   }
 
   render() {
+    console.log('status', this.state.status);
     const {
       dispatch,
       localStream,
@@ -162,29 +183,29 @@ export class RoomComponent extends React.Component {
     }
 
     let overlayComponent;
-    if (!!MediaStore.local && !!room &&
-      room.connected.length === 1 && room.connected[0] === user._id) {
-      overlayComponent = (Browser.mobile || Browser.tablet) ? (
-        <CallingOverlayComponent
-          onTouchTap={this.toggleControls.bind(this)}
-          ringing={this.state.ringing}
-          retry={this.pingInvitees.bind(this)}
-        />
-      ) : (
-        <FirstOverlayComponent
-          action={this.toggleInviteModal.bind(this)}
-          linkUrl={window.location.href}
-          onTouchTap={this.toggleControls.bind(this)}
-        />
-      );
+    if (!~['connected', 'joining'].indexOf(this.state.status)) {
+      if (Browser.mobile || Browser.tablet || this.state.status === 'connecting') {
+        overlayComponent = (
+          <CallingOverlayComponent
+            onTouchTap={this.toggleControls.bind(this)}
+            status={this.state.status}
+          />
+        );
+      } else if(this.state.status !== 'connecting') {
+        overlayComponent = (
+          <FirstOverlayComponent
+            action={this.toggleInviteModal.bind(this)}
+            linkUrl={window.location.href}
+            onTouchTap={this.toggleControls.bind(this)}
+          />
+        );
+      }
     }
 
-    const readyPromptComponent = (!!MediaStore.local) ? (
+    const readyPromptComponent = (this.state.status === 'joining') ? (
       <ReadyPromptComponent
         joinRoomStream={this.joinRoomStream.bind(this, room._id)}
         onTouchTap={this.toggleControls.bind(this)}
-        room={room}
-        user={user}
       />
     ) : undefined;
 
@@ -265,6 +286,14 @@ export class RoomComponent extends React.Component {
 
 RoomComponent = Radium(RoomComponent);
 
+RoomComponent.propTypes = {
+  dispatch: React.PropTypes.func,
+  room: React.PropTypes.object,
+  localStream: React.PropTypes.object,
+  remoteStreams: React.PropTypes.object,
+  user: React.PropTypes.object,
+};
+
 const mapStateToProps = ({
   rooms,
   rtc: {localStream, remoteStreams},
@@ -278,6 +307,4 @@ const mapStateToProps = ({
   };
 };
 
-export default connect(
-  mapStateToProps,
-)(RoomComponent);
+export default connect(mapStateToProps)(RoomComponent);

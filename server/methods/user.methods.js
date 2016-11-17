@@ -29,18 +29,19 @@ const googleContacts = (user)=> {
 
 const joinAppContacts = (user, contacts)=> {
   // get all the contacts who are existing app users
-  let appContacts = Meteor.users.find({
+  const appContacts = Meteor.users.find({
     'services.google.email': {$in: _.pluck(contacts, 'email')},
   }).fetch();
 
   // index the updatedContacts by email
-  let indexedUpdatedContacts = _.indexBy(contacts, 'email');
+  const indexedUpdatedContacts = _.indexBy(contacts, 'email');
 
   // update contacts with app userId
   _.each(appContacts, (contact)=> {
     indexedUpdatedContacts[contact.services.google.email]._id = contact._id;
   });
 
+  console.log('joinAppContacts', new Date());
   return contacts;
 };
 
@@ -63,21 +64,28 @@ const mergeContacts = (user, contacts)=> {
     });
     contacts = user.services.google.contacts.concat(newContacts);
   }
+  console.log('mergeContacts', new Date());
 
   return contacts;
 };
 
 const storeContactImages = (user, contacts)=> {
+  const _this = this;
+  console.log('starting storeContactImages', new Date());
+
   // create the google contacts object
   const gcontacts = googleContacts(user);
+  const getPhotoSync = Meteor.wrapAsync(gcontacts.getPhoto, gcontacts);
 
   // create array of promises for contacts without profile photos
   const promises = _.map(_.filter(contacts, (c) => !c.src), (contact)=> {
+    console.log(contact);
     const fileName = `${user.services.google.id}_${_.last(contact.photoUrl.split('/'))}.png`;
 
     return new Promise((res, rej)=> {
       // callback creates Image from binaryData
-      let callback = Meteor.bindEnvironment((err, binaryData)=> {
+      const callback = (err, binaryData)=> {
+        console.log(fileName + ' callback');
         if (err) {
           console.error(err);
           res(null);
@@ -97,12 +105,12 @@ const storeContactImages = (user, contacts)=> {
             }
           });
         }
-      });
+      };
 
       // add the request to a queue that will execute without getting throttled
       // get the binary image data from google
       contactsRequester.makeRequest(
-        gcontacts.getPhoto, gcontacts, [contact.photoUrl, callback]
+        getPhotoSync, _this, [contact.photoUrl, callback]
       );
     });
   });
@@ -112,6 +120,7 @@ const storeContactImages = (user, contacts)=> {
       {_id: user._id},
       {$set: {'services.google.contacts': contacts}}
     );
+    console.log('storeContactImages', new Date());
     return contacts;
   });
 };
@@ -123,6 +132,7 @@ const getContacts = (user) => {
     // callback updates the user with their contacts from Google
     let callback = Meteor.bindEnvironment((err, contacts)=> {
       // return the contacts
+      console.log('getContacts', new Date());
       res(contacts);
     });
 
@@ -149,15 +159,18 @@ Meteor.methods({
       // join app users with google contacts
       return Promise.resolve(joinAppContacts(user, contacts));
     }).then((contacts)=> {
-      // download and store all the contact images
-      Meteor.defer(storeContactImages.bind(this, user, contacts));
-
       // update the user model's contacts
+      console.log('updating', new Date());
       const res = Meteor.users.update(
         {_id: user._id},
         {$set: {'services.google.contacts': contacts}}
       );
 
+      console.log('deferring', new Date());
+      // download and store all the contact images
+      Meteor.defer(storeContactImages.bind(this, user, contacts));
+
+      console.log('returning', new Date());
       // currently just return the contacts
       return res;
     });

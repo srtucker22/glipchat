@@ -21,6 +21,16 @@ Meteor.methods({
       sent: false,
     });
 
+    // // TODO: get all the notifications for this subscriptionId
+    // mark all as sent
+    // send a single notification 'you have received 2 notificaitons etc.'
+    // Notifications.update({
+    //   owner: this.userId,
+    //   subscriptionId,
+    //   sent: false,
+    //   sort: {createdAt: -1},
+    // }, {$set: {sent: true}}, {multi: true});
+
     if(!notification) {
       throw new Meteor.Error(400, 'notification not found');
     }

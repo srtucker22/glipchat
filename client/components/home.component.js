@@ -1,12 +1,9 @@
-import {_} from 'meteor/underscore';
-import {browserHistory} from 'react-router';
-import {COMPANY, GITHUB_URL} from '../../lib/config';
+import {APP_NAME, COMPANY, GITHUB_URL} from '../../lib/config';
 import {connect} from 'react-redux';
 import * as Actions from '../actions/actions';
 import Browser from 'bowser';
 import Colors from 'material-ui/styles/colors';
 import DownloadButtonComponent from './download-button.component';
-import FontIcon from 'material-ui/FontIcon';
 import FooterComponent from './footer.component';
 import GithubComponent from './github.component';
 import GlobalStyles from '../styles/global.styles';
@@ -44,13 +41,6 @@ export class HomeComponent extends React.Component {
       loading: false,
     };
   }
-  componentWillMount() {
-    // NotificationActions.getPermission();
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    // push to room route if we have a room
-  }
 
   createRoom() {
     this.props.dispatch(Actions.createRoom());
@@ -71,7 +61,7 @@ export class HomeComponent extends React.Component {
           <HeaderComponent showMenuIconButton={false}/>
           <div>
             <div className='col-xs-12 text-center'>
-              <h1 style={[styles.title.css]}>{'quasar'}</h1>
+              <h1 style={[styles.title.css]}>{APP_NAME}</h1>
               <br />
               <RaisedButton
                 onClick={this.createRoom.bind(this)}
@@ -93,20 +83,8 @@ export class HomeComponent extends React.Component {
 
 HomeComponent.propTypes = {
   dispatch: React.PropTypes.func,
-  currentRoom: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.bool,
-  ]),
 };
 
 HomeComponent = Radium(HomeComponent);
 
-const mapStateToProps = ({rooms: {available}}) => {
-  return {
-    currentRoom: !available || _.first(available),  // TODO: a little hacky way of getting the room and knowing we are subscribed
-  };
-};
-
-export default connect(
-  mapStateToProps,
-)(HomeComponent);
+export default connect()(HomeComponent);

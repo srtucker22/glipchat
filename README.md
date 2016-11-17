@@ -1,10 +1,10 @@
-# quasar
+# glipchat
 
-View the project at <a href="https://quasar-meteor.herokuapp.com/" target="_blank">https://quasar-meteor.herokuapp.com/</a>
+View the project at [https://quasar-meteor.herokuapp.com/](https://quasar-meteor.herokuapp.com/)
 
-quasar is a real-time video chatroom application. The frontend is powered by React, Flux and WebRTC and the backend is powered by Meteor.
+glipchat is a real-time video chatroom application. glipchat is powered by Meteor, with React + Redux + WebRTC on the frontend.
 
-quasar has been tested on the following:
+glipchat has been tested on the following:
 - Android 4.3+ cordova app
 - Chrome
 - Chrome for Android (Android 5+)
@@ -15,16 +15,14 @@ Other browsers and operating systems may not support WebRTC.
 
 ## Motivation
 
-Quasar is intended to be a veritable open source solution for multi-user multi-platform video conferencing -- a product regular people can use and developers can modify and build into their own products.
-
-It is also an example of how to create a WebRTC video chatroom and of how to integrate React and Flux in a Meteor app.
+glipchat's mission is to be a veritable OSS solution for multi-user multi-platform video conferencing -- a product regular people can use and developers can modify and build into their own products.
 
 ## Installation
 
-1. Clone the project <code>git clone https://github.com/srtucker22/quasar.git</code>
-2. Go to the primary directory <code>cd quasar</code>
-3. Add a settings.json to the primary directory <code>touch settings.json</code>
-4. Add your personal settings for the following services included in quasar (or remove the ones you don't want)
+1. Clone the project `git clone https://github.com/srtucker22/glipchat.git`
+2. Go to the primary directory `cd glipchat`
+3. Add a `settings.json` to the primary directory `touch settings.json`
+4. Add your personal settings for the following services included in glipchat (or remove the ones you don't want)
 
         {
           "admins": [{
@@ -36,6 +34,9 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
           "google" : {
             "clientId" : "YOUR_CLIENT_ID",
             "clientSecret" : "YOUR_CLIENT_SECRET"
+            "browserKey": "YOUR_BROWSER_KEY",
+            "apiKey": "YOUR_API_KEY",
+            "projectNumber": "YOUR_PROJECT_NUMBER"
           },
           "kadira": {
             "appId": "YOUR_APP_ID",
@@ -45,9 +46,6 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
             "analyticsSettings": {
               "Google Analytics": {"trackingId": "YOUR_TRACKING_ID"},
               "Segment.io" : {"apiKey": "YOUR_API_KEY"}
-            },
-            "google": {
-              "browserKey": "YOUR_BROWSER_KEY"
             }
           },
           "electron": {
@@ -59,9 +57,9 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
             }],
             "downloadUrls": {
               "win32": "/public/downloads/win32/",
-              "darwin": "/public/downloads/osx/quasar.zip"
+              "darwin": "/public/downloads/osx/glipchat.zip"
             },
-            "name": "quasar",
+            "name": "glipchat",
             "rootUrl": "https://quasar-meteor.herokuapp.com/",
             "version": "0.0.1",
             "description": "Video Chatroom with Meteor + WebRTC + React + Flux",
@@ -71,97 +69,79 @@ It is also an example of how to create a WebRTC video chatroom and of how to int
             "title-bar-style": "hidden",
             "resizable": true,
             "protocols": [{
-              "name": "quasar",
-              "schemes": ["quasar"]
+              "name": "glipchat",
+              "schemes": ["glipchat"]
             }]
           }
         }
 
-5. Run the app with the settings <code>meteor --settings settings.json</code>
+5. Run the app with the settings `npm start`
 
 ### Deployment Notes:
 
-To deploy to a remote server, consider using a package like <a href="https://github.com/arunoda/meteor-up">Meteor Up</a>
+To deploy to a remote server, consider using a package like [Meteor Up](https://github.com/arunoda/meteor-up)
 
 ### Android Cordova Notes:
 
-In order to run video conferencing on quasar as a cordova app, you will to have the latest version of Android Studio installed and **you will need to use an actual Android device** (currently tested with devices 4.3+). Plug in your device to your computer via USB and run
+In order to run video conferencing on glipchat as a cordova app, you will to have the latest version of Android Studio installed and **you will need to use an actual Android device** (currently tested with devices 4.3+). Plug in your device to your computer via USB and run
 
-<code>meteor run android-device -p {local port} --settings settings.json</code>
+`meteor run android-device -p {local port} --settings settings.json`
 
-In order to use Google auth, you will need to run the application from a live mobiles server (see <a href="https://github.com/meteor/meteor/wiki/OAuth-for-mobile-Meteor-clients">OAuth for Mobile Meteor Clients</a> for details). To do this, first deploy your meteor application to a live server.
+In order to use Google auth, you will need to run the application from a live mobiles server (see [OAuth for Mobile Meteor Clients](https://github.com/meteor/meteor/wiki/OAuth-for-mobile-Meteor-clients] for details). To do this, first deploy your meteor application to a live server.
 
-(e.g. <code>meteor deploy {your-server-url} --settings settings.json</code>)
+(e.g. `meteor deploy {your-server-url} --settings settings.json`)
 
 Once the app is successfully deployed, run:
 
-<code>meteor run android-device --mobile-server {your-server-url} --settings settings.json</code>
+`meteor run android-device --mobile-server {your-server-url} --settings settings.json`
 
 nice additional flags might be:
-<code>--verbose
---production</code>
+`--verbose
+--production`
 
-Please read the <a href="https://github.com/meteor/meteor/wiki/Meteor-Cordova-integration">Meteor Cordova Integration</a> docs for more details.
+Please read the [Meteor Cordova Integration](https://github.com/meteor/meteor/wiki/Meteor-Cordova-integration) docs for more details.
 
 ### Electron Notes:
 
-*Do NOT include the 'electron' field in your settings.json file if you are not running quasar from a Windows or Mac machine. meteor-electron will throw errors if you try and build from a Linux machine.*
+*Do NOT include the 'electron' field in your settings.json file if you are not running glipchat from a Windows or Mac machine. meteor-electron will throw errors if you try and build from a Linux machine.*
 
-quasar uses <a href="https://github.com/mixmaxhq/meteor-electron" target="_blank">meteor-electron</a> to easily transform into a downloadable desktop app and update as you develop. For <code>settings.json</code> configuration for this feature, please refer to the <a href="https://github.com/mixmaxhq/meteor-electron" target="_blank">meteor-electron documentation</a>.
+glipchat uses [meteor-electron](https://github.com/mixmaxhq/meteor-electron) to easily transform into a downloadable desktop app and update as you develop. For `settings.json` configuration for this feature, please refer to the [meteor-electron documentation](https://github.com/mixmaxhq/meteor-electron).
 
-meteor-electron has been modified to build a compressed version of the quasar desktop app at <code>quasar/public/downloads/{platform}-{arch}/quasar.zip</code>, which browser versions can reference for easy downloading. See <a href="https://github.com/srtucker22/quasar/blob/master/client/components/modules/download-button.component.jsx#L57" target="_blank">download-button.component.jsx</a> for how components reference this directory.
+meteor-electron has been modified to build a compressed version of the glipchat desktop app at `glipchat/public/downloads/{platform}-{arch}/glipchat.zip`, which browser versions can reference for easy downloading. See [download-button.component.js](https://github.com/srtucker22/glipchat/blob/master/client/components/modules/download-button.component.jsx#L57) for how components reference this directory.
 
-To run the Electron app pointing to localhost, exclude the <code>rootUrl</code> parameter from <code>settings.json</code>, otherwise the Electron app will point to https://quasar-meteor.herokuapp.com/.
+To run the Electron app pointing to localhost, exclude the `rootUrl` parameter from `settings.json`, otherwise the Electron app will point to https://quasar-meteor.herokuapp.com/.
 
 ## Application Design Overview
 
-Quasar is an example of how to create a WebRTC video chatroom and also of how to integrate React and Flux in a Meteor app.
+glipchat is an example of how to create a WebRTC video chatroom and also of how to integrate React with Redux in a Meteor app.
 
-Don't know React or Flux? No problem!
+Don't know React or Redux? No problem!
 
 The best way to describe React is that it is a view layer only.
 
-Flux is an architectural pattern that can be used with React to enable one-way data flows to a centralized application data store using an event system.
-- Your Views "Dispatch" "Actions"
-- Your "Store" Responds to Dispatched Events
-- Your Store Emits a "Change" Event
-- Your View Responds to the "Change" Event
+Redux is a flavor of Flux, and is an architectural pattern that can be used with React to enable one-way data flows to a centralized application data store using an event system.
 
 Read these useful guides to get a quick overview:
 - [ReactJS For Stupid People](http://blog.andrewray.me/reactjs-for-stupid-people/)
 - [Flux For Stupid People](http://blog.andrewray.me/flux-for-stupid-people/)
-
-The application folder structure logically reflects the flux architecture through folders such as actions and stores.
+- [Redux Docs](http://redux.js.org/)
 
 Routing is done with [React Router](https://github.com/rackt/react-router)
 
-It's worth spending some time understanding how this router works before digging into the code.
-Check out <a href="https://github.com/srtucker22/quasar/blob/master/client/routes.jsx" target="_blank">routes.jsx</a> for the main router code.
+Routing in this application may not be obvious.
+Check out [routes.js](https://github.com/srtucker22/glipchat/blob/master/client/routes.jsx) for the main router code.
 
-quasar uses <a href="https://github.com/arunoda/meteor-streams" target="_blank">Meteor Streams</a> to power the WebRTC communication.
-[Note: Meteor Streams is now officially an inactive project]
-
-The streams are handled by RTCStore in <a href="https://github.com/srtucker22/quasar/blob/master/client/stores/rtc.store.jsx" target="_blank">rtc.store.jsx</a> on the frontend.
-
-The streams are managed by roomStream in <a href="https://github.com/srtucker22/quasar/blob/master/server/streams/room.stream.jsx" target="_blank">room.stream.jsx</a> on the backend.
+glipchat uses [RocketChat:Streamer](https://github.com/RocketChat/meteor-streamer) to power the WebRTC communication.
 
 ## Contributing
 
 This project welcomes code contributions, bug reports and feature requests.
 
-## Motivation
-
-quasar is intended to be an example of how to create a WebRTC video chatroom and of how to integrate React and Flux in a Meteor app.
-
 ## Resources
-- [quasar Meteor Lightening Talk!](https://youtu.be/C0S_QCb6HSM)
-- [Flux for Stupid People](http://blog.andrewray.me/flux-for-stupid-people/)
-- [WebRTC Demos](https://github.com/webrtc/)
+- [glipchat (formerly named quasar) meteor lightening talk @MeteorHQ ](https://youtu.be/C0S_QCb6HSM)
 
 ## Upcoming
-
--  Create a Meteor iOS app that works with quasar on the web
--  Change the name of the project to make it more accessible for projected users (suggestions welcome)
+-  React Native!!!
 
 ## License
 

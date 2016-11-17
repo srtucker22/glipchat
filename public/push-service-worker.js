@@ -21,7 +21,7 @@ function endpointWorkaround(pushSubscription) {
   return subscriptionId;
 };
 
-self.addEventListener('message', function(event) {
+function messageListener(event) {
   console.log(event.data);
   switch(event.data.type) {
     case 'SET_USER':
@@ -29,6 +29,9 @@ self.addEventListener('message', function(event) {
         var user = event.data.user;
         self.token = user.services.resume.loginTokens.pop().hashedToken;
         event.ports[0].postMessage(self.token);
+
+        // wait for token before subscribing to push
+        self.addEventListener('push', pushListener);
       } catch (e) {
         console.log(e);
         event.ports[0].postMessage({error: e});
@@ -38,9 +41,9 @@ self.addEventListener('message', function(event) {
       event.ports[0].postMessage(event.data);
       break;
   }
-});
+};
 
-self.addEventListener('push', function(event) {
+function pushListener(event) {
   console.log('Received a push message', event);
   event.waitUntil(
     self.registration.pushManager.getSubscription()
@@ -76,9 +79,9 @@ self.addEventListener('push', function(event) {
         });
       })
   );
-});
+};
 
-self.addEventListener('notificationclick', function(event) {
+function notificationClickListener(event) {
   // Android doesn’t close the notification when you click on it
   // See: http://crbug.com/463146
   event.notification.close();
@@ -103,4 +106,7 @@ self.addEventListener('notificationclick', function(event) {
 
     return clients.openWindow(event.notification.data);
   }));
-});
+};
+
+self.addEventListener('message', messageListener);
+self.addEventListener('notificationclick', notificationClickListener);

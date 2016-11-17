@@ -6,7 +6,7 @@ import {Rooms} from '../../lib/rooms';
 import urlJoin from 'url-join';
 import {APP_NAME, APP_EMAIL} from '../../lib/config';
 
-const roomURL = urlJoin(process.env.ROOT_URL, 'room/');
+const roomURL = '/room/';
 
 _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g,

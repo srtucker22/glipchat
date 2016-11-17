@@ -97,7 +97,7 @@ export class VideoOverlayComponent extends React.Component {
         ]}
         onClick={this.props.setPrimaryStream}>
         <FloatingActionButton
-          onClick={this.toggleAudio.bind(this)}
+          onTouchTap={this.toggleAudio.bind(this)}
           style={_.extend({},
             styles.mute.css,
             (Radium.getState(this.state, 'overlay', ':hover') ||
@@ -130,12 +130,14 @@ export class VideoOverlayComponent extends React.Component {
 };
 
 VideoOverlayComponent.propTypes = {
+  dispatch: React.PropTypes.func,
+  id: React.PropTypes.string,
+  isAudioEnabled: React.PropTypes.bool,
   params: React.PropTypes.object,
   isRemoteEnabled: React.PropTypes.shape({
     audio: React.PropTypes.bool,
     video: React.PropTypes.bool,
   }),
-  isAudioEnabled: React.PropTypes.bool,
 };
 
 export default Radium(VideoOverlayComponent);
