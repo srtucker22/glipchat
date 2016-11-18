@@ -36,10 +36,10 @@ mrt:smart-publish
 mizzao:user-status
 peerlibrary:reactive-publish
 okgrow:analytics
-meson:electron
 ostrio:files
 long:google-contacts
 simple:rest
 simple:json-routes
 simple:rest-bearer-token-parser
 mikowals:batch-insert
+meson:electron-modified@0.1.4

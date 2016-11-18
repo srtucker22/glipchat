@@ -1,4 +1,4 @@
-import {RING_DURATION} from '../../lib/config';
+import {PERMISSION_INTERVAL, RING_DURATION} from '../../lib/config';
 import {_} from 'meteor/underscore';
 import {browserHistory} from 'react-router';
 import {connect} from 'react-redux';
@@ -67,6 +67,7 @@ export class RoomComponent extends React.Component {
   componentWillUnmount() {
     // clear the ringer timeout
     !!this.ringerTimeout && clearTimeout(this.ringerTimeout);
+    !!this.permissionInterval && clearInterval(this.permissionInterval);
     this.props.dispatch(Actions.leaveRoomStream());
     this.props.dispatch(Actions.stopLocalStream());
     this.props.dispatch(Actions.leaveRoom());
@@ -81,10 +82,14 @@ export class RoomComponent extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const newState = {};
+
+    if(!nextProps.localStream.error && !!this.permissionInterval) {
+      clearInterval(this.permissionInterval);
+      this.permissionInterval = null;
+    }
+
     if (!nextProps.localStream.loading && this.props.localStream.loading && !nextProps.localStream.error && !!MediaStore.local) {
       newState.primaryStream = 'local';
-
-      console.log('local');
 
       if (!nextProps.room.connected.length) {
         console.log('setting ringing');
@@ -106,7 +111,24 @@ export class RoomComponent extends React.Component {
       newState.status = 'waiting';
     }
 
+    console.log(nextProps);
+    if(!!nextProps.localStream.error &&
+      ~['NotAllowedError','PermissionDeniedError']
+        .indexOf(nextProps.localStream.error.status)) {
+      this.waitForPermission();
+    }
+
     this.setState(newState);
+  }
+
+  // keep calling getUserMedia periodically to check for permission change
+  waitForPermission() {
+    if(!this.permissionInterval){
+      const _this = this;
+      _this.permissionInterval = setInterval(()=> {
+        _this.props.dispatch(Actions.getLocalStream());
+      }, PERMISSION_INTERVAL);
+    }
   }
 
   pingInvitees() {
@@ -114,7 +136,6 @@ export class RoomComponent extends React.Component {
   }
 
   ring() {
-    console.log('ring');
     this.setState({
       status: 'ringing'
     });
@@ -155,7 +176,6 @@ export class RoomComponent extends React.Component {
   }
 
   render() {
-    console.log('status', this.state.status);
     const {
       dispatch,
       localStream,
@@ -191,7 +211,7 @@ export class RoomComponent extends React.Component {
             status={this.state.status}
           />
         );
-      } else if(this.state.status !== 'connecting') {
+      } else if(this.state.status !== 'connecting' && !localStream.loading) {
         overlayComponent = (
           <FirstOverlayComponent
             action={this.toggleInviteModal.bind(this)}

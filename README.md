@@ -60,7 +60,6 @@ glipchat's mission is to be a veritable OSS solution for multi-user multi-platfo
               "darwin": "/public/downloads/osx/glipchat.zip"
             },
             "name": "glipchat",
-            "rootUrl": "https://quasar-meteor.herokuapp.com/",
             "version": "0.0.1",
             "description": "Video Chatroom with Meteor + WebRTC + React + Flux",
             "height": 768,
@@ -105,11 +104,9 @@ Please read the [Meteor Cordova Integration](https://github.com/meteor/meteor/wi
 
 *Do NOT include the 'electron' field in your settings.json file if you are not running glipchat from a Windows or Mac machine. meteor-electron will throw errors if you try and build from a Linux machine.*
 
-glipchat uses [meteor-electron](https://github.com/mixmaxhq/meteor-electron) to easily transform into a downloadable desktop app and update as you develop. For `settings.json` configuration for this feature, please refer to the [meteor-electron documentation](https://github.com/mixmaxhq/meteor-electron).
+glipchat uses [meteor-electron](https://github.com/electron-webapps/meteor-electron) to easily transform into a downloadable desktop app and update as you develop. For `settings.json` configuration for this feature, please refer to the [meteor-electron documentation](https://github.com/electron-webapps/meteor-electron).
 
 meteor-electron has been modified to build a compressed version of the glipchat desktop app at `glipchat/public/downloads/{platform}-{arch}/glipchat.zip`, which browser versions can reference for easy downloading. See [download-button.component.js](https://github.com/srtucker22/glipchat/blob/master/client/components/modules/download-button.component.jsx#L57) for how components reference this directory.
-
-To run the Electron app pointing to localhost, exclude the `rootUrl` parameter from `settings.json`, otherwise the Electron app will point to https://quasar-meteor.herokuapp.com/.
 
 ## Application Design Overview
 

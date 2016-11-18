@@ -1,12 +1,12 @@
-import Browser from 'bowser';
-import DownloadButtonComponent from './download-button.component';
 import {browserHistory} from 'react-router';
-import Radium from 'radium';
-import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
-import RaisedButton from 'material-ui/RaisedButton';
+import Browser from 'bowser';
 import Colors from 'material-ui/styles/colors';
+import DownloadButtonComponent from './download-button.component';
+import FontIcon from 'material-ui/FontIcon';
 import GlobalStyles from '../styles/global.styles';
+import Radium from 'radium';
+import RaisedButton from 'material-ui/RaisedButton';
+import React from 'react';
 
 const styles = {
   css: {
@@ -34,7 +34,6 @@ const styles = {
       fontSize: '20px',
       margin: 'auto',
       maxWidth: '800px',
-      minWidth: '520px',
     },
 
     arrow: {
@@ -75,7 +74,7 @@ export const PermissionDeniedComponent = ({action})=> {
               style={styles.permissionDenied.icon.css}
               color={Colors.red500}>
               videocam_off
-            </FontIcon> icon in the URL bar above to give access to your computers camera and microphone.
+            </FontIcon> {`icon in the URL bar above to give access to your computers camera and microphone.`}
           </div>
           <img style={[
             GlobalStyles.cell,
@@ -94,7 +93,10 @@ export const PermissionDeniedComponent = ({action})=> {
     </div>
   );
 };
-PermissionDenied = Radium(PermissionDeniedComponent);
+PermissionDeniedComponent.propTypes = {
+  action: React.PropTypes.func,
+};
+const PermissionDenied = Radium(PermissionDeniedComponent);
 
 // Warn that the user is already connected to the room in a different window, tab or browser
 export const DuplicateErrorComponent = ({action})=> {
@@ -113,7 +115,10 @@ export const DuplicateErrorComponent = ({action})=> {
     </div>
   );
 };
-DuplicateError = Radium(DuplicateErrorComponent);
+DuplicateErrorComponent.propTypes = {
+  action: React.PropTypes.func,
+};
+const DuplicateError = Radium(DuplicateErrorComponent);
 
 // Warn that there has been a general error and ask the user to refresh the session
 export const GeneralErrorComponent = ({action})=> {
@@ -134,7 +139,10 @@ export const GeneralErrorComponent = ({action})=> {
     </div>
   );
 };
-GeneralError = Radium(GeneralErrorComponent);
+GeneralErrorComponent.propTypes = {
+  action: React.PropTypes.func,
+};
+const GeneralError = Radium(GeneralErrorComponent);
 
 // Alert the user that their browser is not supported and suggest they try Chrome or Firefox
 export const NotSupportedErrorComponent = ({action})=> {
@@ -156,7 +164,10 @@ export const NotSupportedErrorComponent = ({action})=> {
     </div>
   );
 };
-NotSupportedError = Radium(NotSupportedErrorComponent);
+NotSupportedErrorComponent.propTypes ={
+  action: React.PropTypes.func,
+};
+const NotSupportedError = Radium(NotSupportedErrorComponent);
 
 // Logic for determining which error message to show when something goes wrong
 export const ErrorComponent = ({error})=> {

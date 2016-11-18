@@ -1,7 +1,7 @@
 accounts-base@1.2.14
 accounts-google@1.0.11
 accounts-oauth@1.1.15
-accounts-password@1.3.2
+accounts-password@1.3.3
 alanning:roles@1.2.15
 aldeed:collection2@2.10.0
 aldeed:collection2-core@1.2.0
@@ -12,7 +12,7 @@ allow-deny@1.0.5
 artwells:accounts-guest@0.1.13
 autoupdate@1.3.12
 babel-compiler@6.13.0
-babel-runtime@1.0.0
+babel-runtime@1.0.1
 base64@1.0.10
 binary-heap@1.0.10
 blaze@2.2.0
@@ -25,7 +25,7 @@ caching-compiler@1.1.9
 caching-html-compiler@1.0.7
 callback-hook@1.0.10
 check@1.2.4
-coffeescript@1.11.1_3
+coffeescript@1.11.1_4
 ddp@1.2.5
 ddp-client@1.3.2
 ddp-common@1.2.8
@@ -33,7 +33,7 @@ ddp-rate-limiter@1.0.6
 ddp-server@1.3.12
 deps@1.0.12
 diff-sequence@1.0.7
-ecmascript@0.6.0
+ecmascript@0.6.1
 ecmascript-runtime@0.3.15
 ejson@1.0.13
 email@1.1.18
@@ -54,13 +54,13 @@ localstorage@1.0.12
 logging@1.1.16
 long:google-contacts@0.2.1
 mdg:validation-error@0.5.1
-meson:electron@0.1.3
+meson:electron-modified@0.1.4
 meteor@1.6.0
 meteor-base@1.0.4
 mikowals:batch-insert@1.1.14
 minifier-css@1.2.15
 minifier-js@1.2.15
-minimongo@1.0.18
+minimongo@1.0.19
 mizzao:timesync@0.4.0
 mizzao:user-status@0.6.6
 mobile-experience@1.0.4

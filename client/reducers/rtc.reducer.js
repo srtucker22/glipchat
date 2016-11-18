@@ -34,7 +34,6 @@ export const rtcReducer = (state = initialState, action = {})=> {
     case constants.GET_LOCAL_STREAM: {
       const localStream = {
         loading: true,
-        error: null,
       };
       return deepExtend({}, state, {localStream});
     }
