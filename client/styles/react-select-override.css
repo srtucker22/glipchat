@@ -10,6 +10,7 @@
 }
 
 .Select-menu-outer {
+  position: relative;
   max-height: none !important;
 }
 

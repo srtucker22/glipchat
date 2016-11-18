@@ -1,4 +1,4 @@
-import {APP_NAME} from '../../../lib/config';
+import {APP_NAME} from '../../lib/config';
 import Radium from 'radium';
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';

@@ -1,8 +1,15 @@
+import stream from 'stream';
 import {check, Match} from 'meteor/check';
 import {GoogleContacts} from 'meteor/long:google-contacts';
 import {Meteor} from 'meteor/meteor';
 import ThrottledRequester from '../lib/throttled-requester';
-import Images from '../../lib/images';
+import {Images, ImageStore} from '../../lib/images';
+
+const bufferToStream = (buffer)=> {
+  let bufferStream = new stream.PassThrough();
+	bufferStream.end(buffer);
+	return bufferStream;
+}
 
 // create request queue for Google Contacts API limited to 10 req/sec
 const contactsRequester = new ThrottledRequester(10, 1000);
@@ -85,23 +92,25 @@ const storeContactImages = (user, contacts)=> {
     return new Promise((res, rej)=> {
       // callback creates Image from binaryData
       const callback = (err, binaryData)=> {
-        console.log(fileName + ' callback');
         if (err) {
           console.error(err);
           res(null);
         } else {
-          Images.write(binaryData, {
-            fileName,
+          let fileId = ImageStore.create({
+            owner: user._id,
+            name: fileName,
             type: 'image/png',
-            meta: {owner: user._id},
-          }, (error, fileRef)=> {
-            if (error) {
-              console.error(error);
-              rej(error);
-            } else {
-              console.log(fileRef);
-              contact.src = Images.link(fileRef);
-              res(fileRef);
+          });
+
+          let stream = bufferToStream(binaryData);
+
+          ImageStore.write(stream, fileId, function(err, file) {
+            if (err) {
+              console.error(err);
+            }else {
+              console.log('file saved to store', file);
+              contact.src = file.path;
+              res(file);
             }
           });
         }

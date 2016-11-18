@@ -13,21 +13,32 @@ _.templateSettings = {
 };
 
 function renderEmailTemplate(filename, vals) {
-  let template = Assets.getText(filename);
-  let templateCompiled = _.template(template);
+  const template = Assets.getText(filename);
+  const templateCompiled = _.template(template);
 
   return templateCompiled(vals);
 }
 
 function invite(user, roomId, invitees) {
   try {
-    let nonUsers = _.reject(invitees, (invitee)=> {
-      return !!invitee._id;
+    const userInvitees = Meteor.users.find({
+      'services.google.email': {$in: _.pluck(invitees, 'email')},
+    }).fetch({
+      '_id': 1,
+      'services.google.email': 1
+    }).map((invite) => ({
+      _id: invite._id,
+      email: invite.services.google.email,
+    }));
+    const indexedUserInvitees = _.indexBy(userInvitees, 'email');
+
+    const nonUsers = _.reject(invitees, (invitee)=> {
+      return !!indexedUserInvitees[invitee.email];
     });
 
     if (!!nonUsers && nonUsers.length) {
       // send invite emails to non-users
-      let subject = `${user.profile.name} has invited you to a ${APP_NAME} video chat`;
+      const subject = `${user.profile.name} has invited you to a ${APP_NAME} video chat`;
 
       const joinTemplate = renderEmailTemplate('join-template.html', {
         appName: APP_NAME,
@@ -44,7 +55,7 @@ function invite(user, roomId, invitees) {
     }
 
     // notify invitees with push notification
-    return notifyInvitees(user, roomId, invitees);
+    return notifyInvitees(user, roomId, userInvitees);
   } catch (e) {
     throw new Meteor.Error(e.message);
   }
@@ -52,14 +63,8 @@ function invite(user, roomId, invitees) {
 
 // if a user with a google account is online when invited, show them a notification
 function notifyInvitees(user, roomId, invitees) {
-  // get online invitees
-  let userInvitees = Meteor.users.find({
-    'services.google.email': {$in: _.pluck(invitees, 'email')},
-  }).fetch({_id: 1});
-
-  console.log(userInvitees);
-
-  return notificationUtils.sendNotifications(_.pluck(userInvitees, '_id'), {
+  console.log('notifyInvitees', arguments);
+  return notificationUtils.sendNotifications(_.pluck(invitees, '_id'), {
     actions: ['join'],
     body: `${user.profile.name} has invited you to chat`,
     data: urlJoin(roomURL, roomId),
@@ -116,7 +121,7 @@ Meteor.methods({
 
     this.unblock();
 
-    let currentRoom = Rooms.findOne(roomId);
+    const currentRoom = Rooms.findOne(roomId);
 
     if (!currentRoom) {
       throw new Meteor.Error(400, 'Room not found');
@@ -162,8 +167,18 @@ Meteor.methods({
       throw new Meteor.Error(401, 'No user');
     }
 
-    let user = Meteor.user();
+    const user = Meteor.user();
 
-    return notifyInvitees(user, roomId, invitees);
+    if(!user) {
+      throw new Meteor.Error(401, 'No user found');
+    }
+
+    const userInvitees = Meteor.users.find({
+      'services.google.email': {$in: _.pluck(invitees, 'email')},
+    }).fetch({
+      '_id': 1,
+    });
+
+    return notifyInvitees(user, roomId, userInvitees);
   },
 });

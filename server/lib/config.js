@@ -1,5 +1,4 @@
 import {Meteor} from 'meteor/meteor';
-import {Push} from 'meteor/raix:push';
 import {ServiceConfiguration} from 'meteor/service-configuration';
 import deepExtend from 'deep-extend';
 import pjson from '../../package.json';
@@ -29,9 +28,5 @@ Meteor.startup(() => {
       clientId: Meteor.settings.google.clientId,
       secret: Meteor.settings.google.clientSecret,
     });
-  }
-
-  if (Meteor.settings.push) {
-    Push.Configure(Meteor.settings.push);
   }
 });

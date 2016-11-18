@@ -1,7 +1,7 @@
-import {Push} from 'meteor/raix:push';
+import {Meteor} from 'meteor/meteor';
+import {Notificactions} from '../../lib/notifications';
 
-Push.allow({
-  send: function(userId, notification) {
-    return true; // Allow all users to send
-  },
+// publish all notifications
+Meteor.publish('notifications', function() {
+  return Notificactions.find({owner: this.userId});
 });

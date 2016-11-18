@@ -21,10 +21,24 @@ export const createRoom = (invitees)=> (dispatch, getState)=> {
   });
 };
 
-export const inviteUsersToRoom = (invitees)=> ({
-  type: constants.INVITE_USERS_TO_ROOM,
-  invitees,
-});
+export const inviteUsersToRoom = (invitees)=> (dispatch, getState)=> {
+  const {rooms: {current}} = getState();
+  console.log('current', current, 'invitees', invitees);
+  Meteor.call('invite', current, invitees, (error, id)=> {
+    if (error) {
+      console.error(error);
+      return dispatch({
+        type: constants.ROOM_ERROR,
+        error,
+      });
+    } else {
+      return {
+        type: constants.INVITE_USERS_TO_ROOM,
+        invitees,
+      };
+    }
+  });
+};
 
 export const leaveRoom = ()=> {
   Session.set('currentRoom', undefined);

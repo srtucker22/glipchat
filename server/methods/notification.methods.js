@@ -37,12 +37,10 @@ Meteor.methods({
 
     Notifications.update(notification._id, {$set: {sent: true}});
 
-    console.log('notification', notification);
     return notification;
   },
 
-  sendNotifications(ids, notification, ...args) {
-    console.log(args);
+  sendNotifications(ids, notification) {
     check(ids, [String]);
     check(notification, {
       actions: Match.Maybe([String]),

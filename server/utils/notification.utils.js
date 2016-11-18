@@ -10,7 +10,6 @@ export const sendNotifications = (ids, notification)=> {
   let {title, body, icon, tag, actions, data} = notification;
 
   const users = Meteor.users.find({_id: {$in: ids}});
-  console.log(users);
 
   const notifications = _.flatten(users.map((user) => {
     try {
@@ -46,7 +45,6 @@ export const sendNotifications = (ids, notification)=> {
       },
     });
 
-    console.log(result);
     if(result.statusCode == 200) {
       return true;
     } else {
