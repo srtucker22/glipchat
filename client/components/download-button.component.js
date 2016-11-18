@@ -1,3 +1,4 @@
+import {APP_NAME} from '../../../lib/config';
 import Radium from 'radium';
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -51,12 +52,12 @@ const DownloadButtonComponent = (props)=> {
   let platforms = {
     mac: {
       icon: '/images/apple.svg',
-      link: '/downloads/darwin-x64/quasar.zip',
+      link: `/downloads/darwin-x64/${APP_NAME}.zip`,
       title: 'Mac OS X',
     },
     win: {
       icon: '/images/windows.svg',
-      link: '/downloads/win-x64/quasar.zip',
+      link: `/downloads/win-x64/${APP_NAME}.zip`,
       title: 'Windows',
     },
   };

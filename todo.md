@@ -30,7 +30,7 @@
 **med**
 -  Enhance invite workflow
   - mobile -- you send an invite
-    - if an active invitee opens the app after a notification and the inviter is active, they will get a dialog asking to join the room and a notification in their quasar notification list for retrieval -- which shows 'join' cta until the users leave the room
+    - if an active invitee opens the app after a notification and the inviter is active, they will get a dialog asking to join the room and a notification in their notification list for retrieval -- which shows 'join' cta until the users leave the room
     - if you invite non-users, they will go directly to room as guest. if the room is empty, user will be directed to notifications list on mobile or homepage on desktop. ~ implement with invitation codes in email
 -  Add raix push notifications for cordova to enhance mobile support
 -  Add TURN server support to make it more useful for real-world deployment
