@@ -17,7 +17,7 @@ Meteor.methods({
 
     let notification = Notifications.findOne({
       owner: this.userId,
-      subscriptionId,
+      subscriptionIds: subscriptionId,
       sent: false,
     });
 
@@ -47,7 +47,6 @@ Meteor.methods({
       body: Match.Maybe(String),
       data: Match.Maybe(String),
       icon: Match.Maybe(String),
-      tag: Match.Maybe(String),
       title: Match.Maybe(String),
     });
 
@@ -58,5 +57,40 @@ Meteor.methods({
     }
 
     return notificationUtils.sendNotifications(ids, notification);
+  },
+
+  markAllNotificationsRead() {
+    this.unblock();
+
+    check(arguments, Match.Optional({}));
+
+    // only users can update notifications
+    if (!this.userId) {
+      throw new Meteor.Error(401, 'No user');
+    }
+
+    // update the notifications
+    return Notifications.update(
+      {owner: this.userId},
+      {$set: {unread: false}},
+      {multi: true}
+    );
+  },
+
+  markNotificationRead(id) {
+    this.unblock();
+
+    check(arguments, [String]);
+
+    // only users can update notifications
+    if (!this.userId) {
+      throw new Meteor.Error(401, 'No user');
+    }
+
+    // update the notification
+    return Notifications.update(
+      {_id: id, owner: this.userId},
+      {$set: {unread: false}}
+    );
   },
 });

@@ -1,7 +1,8 @@
-import * as Actions from '../actions/actions';
 import {_} from 'meteor/underscore';
-import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
 import {Card, CardActions, CardText} from 'material-ui/Card';
+import {connect} from 'react-redux';
+import * as Actions from '../actions/actions';
 import AppBar from 'material-ui/AppBar';
 import Avatar from 'material-ui/Avatar';
 import Colors from 'material-ui/styles/colors';
@@ -12,6 +13,7 @@ import FontIcon from 'material-ui/FontIcon';
 import GlobalStyles from '../styles/global.styles';
 import IconButton from 'material-ui/IconButton';
 import MenuItem from 'material-ui/MenuItem';
+import {List, ListItem} from 'material-ui/List';
 import moment from 'moment';
 import Popover from 'material-ui/Popover/Popover';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -81,23 +83,6 @@ const styles = {
   },
 };
 
-let Style = Radium.Style;
-let dropdownStyleComponent = (
-  <Style
-    scopeSelector='.dropdown'
-    rules={{
-      '.dropdown-menu': {
-        left: 'inherit',
-        right: 0,
-      },
-
-      '.dropdown-toggle': {
-        cursor: 'pointer',
-      },
-    }}
-  />
-);
-
 export class NotificationDropdownComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -105,56 +90,79 @@ export class NotificationDropdownComponent extends React.Component {
       PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
-  componentDidMount() {
-    let _this = this;
-    this.interval = window.setInterval(function() {
-      _this.setState({lastUpdated: new Date()});
-    }, 1000);
+  togglePopover(event) {
+    event.preventDefault();
+
+    this.setState({
+      open: !this.state.open,
+      anchorEl: event.currentTarget,
+    });
   }
 
-  componentWillUnmount() {
-    if (this.interval) {
-      window.clearInterval(this.interval);
-    }
+  closePopover() {
+    this.props.markAllNotificationsRead();
+    this.setState({
+      open: false,
+    });
   }
 
-  joinRoom(r) {
-    // RoomActions.joinRoom(r);
+  joinRoom(notification) {
+    browserHistory.push(`/room/${notification.data.room}`);
   }
 
   render() {
+    const {notifications} = this.props;
+
     return (
-      <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
-        {dropdownStyleComponent}
+      <div style={[GlobalStyles.cell, styles.menu.css]}>
         <IconButton
           iconStyle={styles.icon.css}
-          iconClassName='material-icons dropdown-toggle' data-toggle='dropdown'>
-          {(this.props.history && this.props.history.length) ?
+          iconClassName='material-icons'
+          onTouchTap={this.togglePopover.bind(this)}>
+          {(!!notifications && notifications.length) ?
             'notifications' : 'notifications_none'}
         </IconButton>
-        <Card className='dropdown-menu' style={styles.menu.paper.css}>
-          {(!!this.props.history && this.props.history.length) ?
-            _.map(this.props.history, (item, index)=> {
-              return (
-                <MenuItem
-                  key={`history-${index}`}
-                  primaryText={item.room +
-                    ' - ' + moment(item.createdAt).fromNow()}
-                  onTouchTap={this.joinRoom.bind(this, item.room)} />
-              );
-            }) :
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          onRequestClose={this.closePopover.bind(this)}
+        >
+          <Card style={styles.menu.paper.css}>
+            <List>
+            {(!!notifications && notifications.length) ?
+              _.map(notifications, (item, index)=> {
+                return (
+                  <ListItem
+                    className={item.unread && 'unread'}
+                    key={item._id}
+                    primaryText={item.data.body}
+                    rightIconButton={item.data.active ? <IconButton
+                      iconClassName='material-icons'
+                      iconStyle={{color: Colors.teal500}}
+                      onTouchTap={this.joinRoom.bind(this, item)}>
+                      {`videocam`}
+                    </IconButton> : undefined}
+                    secondaryText={moment(item.createdAt).fromNow()}
+                  />
+                );
+              }) :
 
-            <MenuItem className='text-center'>
-              No recent rooms
-            </MenuItem>}
-        </Card>
+              <ListItem className='text-center'>
+                {`No notifications`}
+              </ListItem>}
+            </List>
+          </Card>
+        </Popover>
       </div>
     );
   }
 };
 
 NotificationDropdownComponent.propTypes = {
-  history: React.PropTypes.array,
+  notifications: React.PropTypes.array,
+  markAllNotificationsRead: React.PropTypes.func,
 };
 
 NotificationDropdownComponent = Radium(NotificationDropdownComponent);
@@ -186,8 +194,7 @@ export class ProfileDropdownComponent extends React.Component {
     const {user, logout} = this.props;
 
     return (
-      <div className='dropdown' style={[GlobalStyles.cell, styles.menu.css]}>
-        {dropdownStyleComponent}
+      <div style={[GlobalStyles.cell, styles.menu.css]}>
         <Avatar
           src={user.services.google.picture}
           onTouchTap={this.togglePopover.bind(this)}
@@ -221,6 +228,7 @@ export class ProfileDropdownComponent extends React.Component {
 
 ProfileDropdownComponent.propTypes = {
   user: React.PropTypes.object,
+  logout: React.PropTypes.func,
 };
 
 ProfileDropdownComponent = Radium(ProfileDropdownComponent);
@@ -244,6 +252,10 @@ export class HeaderComponent extends React.Component {
     this.props.dispatch(Actions.logout());
   }
 
+  markAllNotificationsRead() {
+    this.props.dispatch(Actions.markAllNotificationsRead());
+  }
+
   handleToggle() {
     this.setState({open: !this.state.open});
   }
@@ -253,11 +265,10 @@ export class HeaderComponent extends React.Component {
   }
 
   render() {
-    const {mobile, user, ...other} = _.omit(this.props, [
+    const {mobile, user, notifications, ...other} = _.omit(this.props, [
       'loggingIn', 'subscribed', 'users', 'dispatch',
     ]);
 
-    let avatarButton;
     let loginButton;
     let menuItems;
     let notificationDropdown;
@@ -301,9 +312,11 @@ export class HeaderComponent extends React.Component {
     }
 
     if (!!user && !!user.services && !!user.services.google) {
-      notificationDropdown = !!user.history ? (
+      notificationDropdown = notifications ? (
         <NotificationDropdownComponent
-          history={user.history.reverse()}/>
+          notifications={notifications}
+          markAllNotificationsRead={this.markAllNotificationsRead.bind(this)}
+        />
       ) : '';
 
       profileDropdown = (
@@ -397,17 +410,19 @@ export class HeaderComponent extends React.Component {
 
 HeaderComponent.propTypes = {
   dispatch: React.PropTypes.func,
+  iconElementRight: React.PropTypes.element,
+  mobile: React.PropTypes.bool,
+  notifications: React.PropTypes.array,
   users: React.PropTypes.object,
 };
 
 HeaderComponent = Radium(HeaderComponent);
 
-const mapStateToProps = ({users: {user}}) => {
+const mapStateToProps = ({users: {user}, notifications: {notifications}}) => {
   return {
     user,
+    notifications,
   };
 };
 
-export default connect(
-  mapStateToProps,
-)(HeaderComponent);
+export default connect(mapStateToProps)(HeaderComponent);

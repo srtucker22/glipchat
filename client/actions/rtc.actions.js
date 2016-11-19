@@ -1,4 +1,4 @@
-import {ICE_CONFIG} from '../../lib/config';
+import {ICE_CONFIG, GUM_CONSTRAINTS} from '../../lib/config';
 import {Meteor} from 'meteor/meteor';
 import {roomStream} from '../../lib/streams';
 import * as constants from '../constants/constants';
@@ -7,16 +7,6 @@ import DataChannelStore from '../stores/data-channel.store';
 import MediaStore from '../stores/media.store';
 import PeerConnectionStore from '../stores/peer-connection.store';
 import store from '../stores/store';
-
-// consistent constraints for getUserMedia
-// we can modify these later for fancier things
-const GUM_CONSTRAINTS = {
-  video: true,
-  audio: {
-    googEchoCancellation: true,
-    echoCancellation: true,
-  },
-};
 
 export const getLocalStream = ()=> {
   return (dispatch, getState)=> {

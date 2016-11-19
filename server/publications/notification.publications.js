@@ -1,7 +1,7 @@
 import {Meteor} from 'meteor/meteor';
-import {Notificactions} from '../../lib/notifications';
+import {Notifications} from '../../lib/notifications';
 
 // publish all notifications
 Meteor.publish('notifications', function() {
-  return Notificactions.find({owner: this.userId});
+  return Notifications.find({owner: this.userId});
 });

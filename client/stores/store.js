@@ -10,6 +10,7 @@ import * as constants from '../constants/constants';
 import Browser from 'bowser';
 import localForage from 'localForage';
 import Messages from '../../lib/messages';
+import Notifications from '../../lib/notifications';
 import Rooms from '../../lib/rooms';
 import rootReducer from '../reducers/reducer';
 import thunk from 'redux-thunk';
@@ -114,36 +115,35 @@ Tracker.autorun(()=> {
   }
 });
 
-// super simplified tracker -- we get all the notifications all the time under one subscription
+// super simplified tracker
+// we get all the notifications all the time under one subscription
+let initialized = false;  // wait for the first batch of cursor
+const notificationsCursor = Notifications.find({}, {
+  sort: {createdAt: -1},
+});
 
-// let initialized = false;  // wait for the first batch of cursor
-// const notificationsCursor = Notifications.find({}, {
-//   sort: {createdAt: -1},
-// });
-//
-// Tracker.autorun(()=> {
-//   const sub = Meteor.subscribe('notifications');
-//   if (sub.ready()) {
-//     store.dispatch({
-//       type: constants.SET_NOTIFICATIONS,
-//       notifications: notificationsCursor.fetch(),
-//     });
-//     initialized = true; // first batch of cursor arrived
-//   }
-// });
-//
-// // track changes to determine when to display a notification alert
-// const handle = notificationsCursor.observeChanges({
-//   added: function(id, fields) {
-//     // wait for the first batch of cursor and user to be signed in
-//     if (initialized && Meteor.userId()) {
-//       // TODO: mark as read -- might need to check for unread here
-//       store.dispatch({
-//         type: constants.SET_ACTIVE_NOTIFICATION,
-//         active: Object.assign(fields, {id}),
-//       });
-//     }
-//   },
-// });
+Tracker.autorun(()=> {
+  const sub = Meteor.subscribe('notifications');
+  if (sub.ready()) {
+    store.dispatch({
+      type: constants.SET_NOTIFICATIONS,
+      notifications: notificationsCursor.fetch(),
+    });
+    initialized = true; // first batch of cursor arrived
+  }
+});
+
+// track changes to determine when to display a notification alert
+const handle = notificationsCursor.observeChanges({
+  added: function(id, fields) {
+    // wait for the first batch of cursor and user to be signed in
+    if (initialized && Meteor.userId()) {
+      store.dispatch({
+        type: constants.SET_ACTIVE_NOTIFICATION,
+        active: Object.assign(fields, {id}),
+      });
+    }
+  },
+});
 
 export default store;

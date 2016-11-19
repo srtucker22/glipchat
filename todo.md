@@ -1,32 +1,27 @@
 - rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
 
 **high**
-- reduxify
-  - **notification bug** -- sometimes first notification isn't received, probably due to new subscriptionid
-    - we should clear old subscriptionids for the same device
-    - missing a notification leads to being 1 behind in the chain
-      - batch and send unsent notifications on getNotification as a single notification (2 ppl sent you requests)
-      - make notification dropdown in main with notifications (active/inactive)
-    - clicking notification with open window should redirect without reloading page
-  - **invite modal component broken**
-  - **still need to reimplement invitations**
-    - full screen the react-select and always open!!
-    - exclude already selected contacts from list
-    - fix or replace react-select for all its bugs
-  - notifications
-    - android
-    - firefox
-    - mobile calling overlay
-- images protected bug -- see https://github.com/VeliovGroup/Meteor-Files/issues/212
-- interval in component for mic/vid rights gUM
+- **notification bug** -- sometimes first notification isn't received, probably due to new subscriptionid
+  - we should clear old subscriptionids for the same device
+  - missing a notification leads to being 1 behind in the chain
+  - batch and send unsent notifications on getNotification as a single notification (2 ppl sent you requests)
+  - make notification dropdown in main with notifications (active/inactive)
+  - single notification for all subscriptionids
+  - clicking notification with open window should redirect without reloading page
+- notifications
+  - android
+  - firefox
+  - mobile calling overlay
 - validate all error messages
-- firefox handle serviceworker code gracefully
+
+**med**
 - firefox save gum rights
 - 'connecting' dialog should start for inviter as soon as someone tries to joinroom
 - change joining connecting etc to constants
-
-**med**
--  Enhance invite workflow
+- full screen the react-select and always open!!
+- exclude already selected contacts from list
+- fix or replace react-select for all its bugs
+- Enhance invite workflow
   - mobile -- you send an invite
     - if an active invitee opens the app after a notification and the inviter is active, they will get a dialog asking to join the room and a notification in their notification list for retrieval -- which shows 'join' cta until the users leave the room
     - if you invite non-users, they will go directly to room as guest. if the room is empty, user will be directed to notifications list on mobile or homepage on desktop. ~ implement with invitation codes in email

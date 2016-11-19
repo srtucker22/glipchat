@@ -2,6 +2,39 @@ import {Meteor} from 'meteor/meteor';
 import {subscribe, unsubscribe} from '../utils/notification.utils';
 import * as constants from '../constants/constants';
 
+export const markAllNotificationsRead = () => (dispatch) => {
+  Meteor.call('markAllNotificationsRead', (error) => {
+    if (error) {
+      console.error(error);
+      return dispatch({
+        type: constants.NOTIFICATION_ERROR,
+        error,
+      });
+    }
+
+    return dispatch({
+      type: constants.MARK_ALL_NOTIFICATIONS_READ,
+    });
+  });
+};
+
+export const markNotificationRead = (id) => (dispatch) => {
+  Meteor.call('markNotificationRead', id, (error) => {
+    if (error) {
+      console.error(error);
+      return dispatch({
+        type: constants.NOTIFICATION_ERROR,
+        error,
+      });
+    }
+
+    return dispatch({
+      type: constants.MARK_NOTIFICATION_READ,
+      id,
+    });
+  });
+};
+
 export const subscribeToNotifications = (user)=> (dispatch)=> {
   console.log('subscribeToNotifications');
   subscribe(user).then((subscriptionId)=> {

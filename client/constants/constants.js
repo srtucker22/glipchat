@@ -3,10 +3,10 @@ export const CREATE_MESSAGE = 'CREATE_MESSAGE';
 export const CREATE_MESSAGE_ERROR = 'CREATE_MESSAGE_ERROR';
 export const SET_MESSAGES = 'SET_MESSAGES';
 
-// // notification constants
-// export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ';
-// export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION';
-// export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
+// notification constants
+export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ';
+export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION';
+export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
 
 // room constants
 export const CREATE_ROOM = 'CREATE_ROOM';
@@ -17,6 +17,7 @@ export const LEAVE_ROOM_STREAM = 'LEAVE_ROOM_STREAM';
 export const RETRY_INVITATIONS = 'RETRY_INVITATIONS';
 export const SET_CURRENT_ROOM = 'SET_CURRENT_ROOM';
 export const SET_ROOMS = 'SET_ROOMS';
+export const ROOM_ERROR = 'ROOM_ERROR';
 
 // rtc constants
 export const ADD_REMOTE_STREAM = 'ADD_REMOTE_STREAM';

@@ -1,5 +1,6 @@
 import {Meteor} from 'meteor/meteor';
 import {Rooms} from '../../lib/rooms';
+import {Notifications} from '../../lib/notifications';
 import {roomStream} from '../../lib/streams';
 import {UserStatus} from 'meteor/mizzao:user-status';
 import {_} from 'meteor/underscore';
@@ -15,8 +16,10 @@ roomStream.allowWrite('join', 'logged');
 roomStream.allowWrite('msg', 'logged');
 
 function disconnect(userId, roomId) {
-  let room = Rooms.findOne({_id: roomId});
-  if (room && _.contains(room.connected, userId)) {  // make sure they are still technically in the Room model
+  const room = Rooms.findOne({_id: roomId});
+
+  // make sure they are still technically in the Room model
+  if (!!room && _.contains(room.connected, userId)) {
     Rooms.update({_id: roomId}, {$pull: {connected: userId}});
 
     // tell everyone in the room the peer has disconnected
@@ -27,6 +30,13 @@ function disconnect(userId, roomId) {
       );
     });
   }
+
+  Notifications.update({
+    'data.room': roomId,
+    'owner': {$nin: _.without(room.connected, userId)},
+  },
+  {$set: {'data.active': _.without(room.connected, userId).length > 0}},
+  {multi: true});
 }
 
 // join a room
@@ -62,6 +72,21 @@ roomStream.on('join', function(roomId) {
   Rooms.update({_id: roomId}, {
     $addToSet: {connected: _this.userId},
   });
+
+  Notifications.update({
+    'owner': {$nin: room.connected},
+    'data.room': roomId,
+  },
+  {$set: {'data.active': true}},
+  {multi: true});
+
+  // mark notification as inactive and read when user joins room
+  Notifications.update({
+    'owner': _this.userId,
+    'data.room': roomId,
+  },
+  {$set: {'data.active': false, 'unread': false}},
+  {multi: true});
 
   Meteor.users.update(_this.userId,
     {$addToSet: {history: {room: roomId, createdAt: new Date}}}

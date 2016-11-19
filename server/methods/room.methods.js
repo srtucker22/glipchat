@@ -66,10 +66,11 @@ function notifyInvitees(user, roomId, invitees) {
   console.log('notifyInvitees', arguments);
   return notificationUtils.sendNotifications(_.pluck(invitees, '_id'), {
     actions: ['join'],
-    body: `${user.profile.name} has invited you to chat`,
-    data: urlJoin(roomURL, roomId),
+    body: `${user.profile.name} invited you to chat`,
+    room: roomId,
     icon: '/android-icon-192x192.png',
-    title: `New video chat invitation`,
+    title: `Video chat invitation`,
+    type: 'ROOM_INVITE',
   });
 }
 

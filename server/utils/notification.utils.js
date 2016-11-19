@@ -7,29 +7,33 @@ const API_KEY = Meteor.settings.google.apiKey;
 const GCM_ENDPOINT = 'https://fcm.googleapis.com/fcm/send';
 
 export const sendNotifications = (ids, notification)=> {
-  let {title, body, icon, tag, actions, data} = notification;
+  let {type, title, body, icon, actions, room} = notification;
 
   const users = Meteor.users.find({_id: {$in: ids}});
 
-  const notifications = _.flatten(users.map((user) => {
+  const notifications = users.map((user) => {
     try {
       const subscriptionIds = user.services.gcm.subscriptionIds;
-      return subscriptionIds.map((subscriptionId)=> ({
-        actions,
-        body,
-        createdAt: new Date(),
-        data,
-        icon: !!icon ? icon: APP_ICON,
+      return {
+        type,
         owner: user._id,
+        createdAt: new Date(),
+        data: {
+          actions,
+          active: true,
+          body,
+          icon: !!icon ? icon: APP_ICON,
+          title,
+          room,
+        },
         sent: false,
-        subscriptionId,
-        tag,
-        title,
-      }));
+        subscriptionIds,
+        unread: true,
+      };
     } catch (e) {
       return [];
     }
-  }));
+  });
 
   const notificationIds = Notifications.batchInsert(notifications);
 
@@ -40,7 +44,7 @@ export const sendNotifications = (ids, notification)=> {
         'Content-Type': 'application/json',
       },
       data: {
-        'registration_ids': _.pluck(notifications, 'subscriptionId'),
+        'registration_ids': _.flatten(_.pluck(notifications, 'subscriptionIds')),
         notification,
       },
     });

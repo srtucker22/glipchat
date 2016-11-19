@@ -64,14 +64,15 @@ function pushListener(event) {
         .then(function(response) {
           return response.json();
         })
-        .then(function(data) {
-          console.log(data);
-          self.registration.showNotification(data.title, {
-            body: data.body,
-            icon: data.icon,
-            tag: data.tag,
-            data: data.data,
-          });
+        .then(function(notification) {
+          var notificationObject = {
+            body: notification.data.body,
+            icon: notification.data.icon,
+            tag: notification._id,
+            data: '/room/' + notification.data.room,
+          };
+          console.log(notificationObject);
+          self.registration.showNotification(notification.data.title, notificationObject);
         })
         .catch(function(err) {
           console.log('err');
@@ -85,6 +86,8 @@ function notificationClickListener(event) {
   // Android doesn’t close the notification when you click on it
   // See: http://crbug.com/463146
   event.notification.close();
+
+  console.log(event.notification);
 
   // This looks to see if the current is already open and
   // focuses if it is
