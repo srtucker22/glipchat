@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {_} from 'meteor/underscore';
 import {browserHistory} from 'react-router';
 import * as Actions from '../actions/actions';
@@ -151,12 +152,12 @@ export class ControlsComponent extends React.Component {
   }
 };
 ControlsComponent.propTypes = {
-  dispatch: React.PropTypes.func,
-  controlsVisible: React.PropTypes.bool,
-  isLocalAudioEnabled: React.PropTypes.bool,
-  isLocalVideoEnabled: React.PropTypes.bool,
-  onTouchTap: React.PropTypes.func,
-  toggleInviteModal: React.PropTypes.func,
+  dispatch: PropTypes.func,
+  controlsVisible: PropTypes.bool,
+  isLocalAudioEnabled: PropTypes.bool,
+  isLocalVideoEnabled: PropTypes.bool,
+  onTouchTap: PropTypes.func,
+  toggleInviteModal: PropTypes.func,
 };
 
 export default Radium(ControlsComponent);

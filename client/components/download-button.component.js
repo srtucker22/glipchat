@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {APP_NAME} from '../../lib/config';
 import Radium from 'radium';
 import React from 'react';
@@ -52,12 +53,12 @@ const DownloadButtonComponent = (props)=> {
   let platforms = {
     mac: {
       icon: '/images/apple.svg',
-      link: `/downloads/darwin-x64/${APP_NAME}.zip`,
+      // link: `/downloads/darwin-x64/${APP_NAME}.zip`,
       title: 'Mac OS X',
     },
     win: {
       icon: '/images/windows.svg',
-      link: `/downloads/win-x64/${APP_NAME}.zip`,
+      // link: `/downloads/win-x64/${APP_NAME}.zip`,
       title: 'Windows',
     },
   };
@@ -89,7 +90,7 @@ const DownloadButtonComponent = (props)=> {
 };
 
 DownloadButtonComponent.propTypes = {
-  platform: React.PropTypes.string.isRequired,
+  platform: PropTypes.string.isRequired,
 };
 
 export default Radium(DownloadButtonComponent);

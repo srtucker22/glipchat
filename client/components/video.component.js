@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -67,13 +68,13 @@ export class VideoComponent extends React.Component {
 };
 
 VideoComponent.propTypes = {
-  flip: React.PropTypes.bool,
-  fullScreen: React.PropTypes.bool,
-  muted: React.PropTypes.bool,
-  onTouchTap: React.PropTypes.func,
-  src: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.string,
+  flip: PropTypes.bool,
+  fullScreen: PropTypes.bool,
+  muted: PropTypes.bool,
+  onTouchTap: PropTypes.func,
+  src: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
   ]),
 };
 

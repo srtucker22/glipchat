@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {chai} from 'meteor/practicalmeteor:chai';
@@ -13,7 +14,7 @@ describe('Component: LoadingDialogComponent', () => {
       super(...arguments);
 
       this.constructor.childContextTypes = {
-        muiTheme: React.PropTypes.object,
+        muiTheme: PropTypes.object,
       };
     }
     getChildContext() {

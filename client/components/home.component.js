@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {APP_NAME, COMPANY, GITHUB_URL} from '../../lib/config';
 import {connect} from 'react-redux';
 import * as Actions from '../actions/actions';
@@ -82,7 +83,7 @@ export class HomeComponent extends React.Component {
 };
 
 HomeComponent.propTypes = {
-  dispatch: React.PropTypes.func,
+  dispatch: PropTypes.func,
 };
 
 HomeComponent = Radium(HomeComponent);

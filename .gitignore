@@ -1,6 +1,5 @@
 settings.json
 .DS_Store
-.meteor-electron
 
 node_modules
 config.push.json

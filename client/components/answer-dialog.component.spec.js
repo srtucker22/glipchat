@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import ReactTestUtils from 'react-addons-test-utils';
 import {chai} from 'meteor/practicalmeteor:chai';
 import {shallow, mount} from 'enzyme';
@@ -52,7 +53,7 @@ describe('AnswerDialogComponent', () => {
         super(...arguments);
 
         this.constructor.childContextTypes = {
-          muiTheme: React.PropTypes.object,
+          muiTheme: PropTypes.object,
         };
       }
       getChildContext() {

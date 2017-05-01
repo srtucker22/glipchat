@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
 import Colors from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
@@ -40,10 +41,10 @@ const LoadingDialogComponent = (props)=> {
 };
 
 LoadingDialogComponent.propTypes = {
-  onTouchTap: React.PropTypes.func,
-  open: React.PropTypes.bool,
-  style: React.PropTypes.object,
-  title: React.PropTypes.string,
+  onTouchTap: PropTypes.func,
+  open: PropTypes.bool,
+  style: PropTypes.object,
+  title: PropTypes.string,
 };
 
 export default Radium(LoadingDialogComponent);

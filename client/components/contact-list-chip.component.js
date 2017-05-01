@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
 import GlobalStyles from '../styles/global.styles';
@@ -68,8 +69,8 @@ export const ContactListChipComponent = (props)=> {
 };
 
 ContactListChipComponent.propTypes = {
-  mobile: React.PropTypes.bool,
-  src: React.PropTypes.string,
+  mobile: PropTypes.bool,
+  src: PropTypes.string,
 };
 
 export default Radium(ContactListChipComponent);

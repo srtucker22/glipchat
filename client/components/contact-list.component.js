@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 // Make sure to import default styles.
 // This only needs to be done once; probably during bootstrapping process.
 
@@ -166,8 +168,8 @@ export class ContactListComponent extends React.Component {
 }
 
 ContactListComponent.propTypes = {
-  onChange: React.PropTypes.func,
-  contacts: React.PropTypes.array,
+  onChange: PropTypes.func,
+  contacts: PropTypes.array,
 };
 
 export default ContactListComponent;

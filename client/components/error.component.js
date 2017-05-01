@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {browserHistory} from 'react-router';
 import Browser from 'bowser';
 import Colors from 'material-ui/styles/colors';
@@ -94,7 +95,7 @@ export const PermissionDeniedComponent = ({action})=> {
   );
 };
 PermissionDeniedComponent.propTypes = {
-  action: React.PropTypes.func,
+  action: PropTypes.func,
 };
 const PermissionDenied = Radium(PermissionDeniedComponent);
 
@@ -116,7 +117,7 @@ export const DuplicateErrorComponent = ({action})=> {
   );
 };
 DuplicateErrorComponent.propTypes = {
-  action: React.PropTypes.func,
+  action: PropTypes.func,
 };
 const DuplicateError = Radium(DuplicateErrorComponent);
 
@@ -140,7 +141,7 @@ export const GeneralErrorComponent = ({action})=> {
   );
 };
 GeneralErrorComponent.propTypes = {
-  action: React.PropTypes.func,
+  action: PropTypes.func,
 };
 const GeneralError = Radium(GeneralErrorComponent);
 
@@ -165,7 +166,7 @@ export const NotSupportedErrorComponent = ({action})=> {
   );
 };
 NotSupportedErrorComponent.propTypes ={
-  action: React.PropTypes.func,
+  action: PropTypes.func,
 };
 const NotSupportedError = Radium(NotSupportedErrorComponent);
 
@@ -197,7 +198,7 @@ export const ErrorComponent = ({error})=> {
 };
 
 ErrorComponent.propTypes = {
-  error: React.PropTypes.object,
+  error: PropTypes.object,
 };
 
 export default ErrorComponent;

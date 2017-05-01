@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -88,9 +89,9 @@ export class FirstOverlayComponent extends React.Component {
   }
 };
 FirstOverlayComponent.propTypes = {
-  action: React.PropTypes.func,
-  linkUrl: React.PropTypes.string,
-  onTouchTap: React.PropTypes.func,
+  action: PropTypes.func,
+  linkUrl: PropTypes.string,
+  onTouchTap: PropTypes.func,
 };
 
 export default Radium(FirstOverlayComponent);

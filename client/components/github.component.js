@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const styles = {
@@ -22,7 +23,7 @@ const GithubComponent = ({link})=> {
 };
 
 GithubComponent.propTypes = {
-  link: React.PropTypes.string,
+  link: PropTypes.string,
 };
 
 export default GithubComponent;

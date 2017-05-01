@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Radium from 'radium';
 import GlobalStyles from '../styles/global.styles';
@@ -27,7 +28,7 @@ const FooterComponent = ({company})=> {
 };
 
 FooterComponent.propTypes = {
-  company: React.PropTypes.object.isRequired,
+  company: PropTypes.object.isRequired,
 };
 
 export default Radium(FooterComponent);

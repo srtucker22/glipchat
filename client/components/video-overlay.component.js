@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {_} from 'meteor/underscore';
 import * as Actions from '../actions/actions';
 import Colors from 'material-ui/styles/colors';
@@ -130,13 +131,13 @@ export class VideoOverlayComponent extends React.Component {
 };
 
 VideoOverlayComponent.propTypes = {
-  dispatch: React.PropTypes.func,
-  id: React.PropTypes.string,
-  isAudioEnabled: React.PropTypes.bool,
-  params: React.PropTypes.object,
-  isRemoteEnabled: React.PropTypes.shape({
-    audio: React.PropTypes.bool,
-    video: React.PropTypes.bool,
+  dispatch: PropTypes.func,
+  id: PropTypes.string,
+  isAudioEnabled: PropTypes.bool,
+  params: PropTypes.object,
+  isRemoteEnabled: PropTypes.shape({
+    audio: PropTypes.bool,
+    video: PropTypes.bool,
   }),
 };
 

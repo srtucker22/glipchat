@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Colors from 'material-ui/styles/colors';
 import GlobalStyles from '../styles/global.styles';
 import Radium from 'radium';
@@ -42,8 +43,8 @@ export class ReadyPromptComponent extends React.Component {
 }
 
 ReadyPromptComponent.propTypes = {
-  joinRoomStream: React.PropTypes.func,
-  onTouchTap: React.PropTypes.func,
+  joinRoomStream: PropTypes.func,
+  onTouchTap: PropTypes.func,
 };
 
 export default Radium(ReadyPromptComponent);

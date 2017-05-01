@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {PERMISSION_INTERVAL, RING_DURATION} from '../../lib/config';
 import {_} from 'meteor/underscore';
 import {browserHistory} from 'react-router';
@@ -307,11 +308,11 @@ export class RoomComponent extends React.Component {
 RoomComponent = Radium(RoomComponent);
 
 RoomComponent.propTypes = {
-  dispatch: React.PropTypes.func,
-  room: React.PropTypes.object,
-  localStream: React.PropTypes.object,
-  remoteStreams: React.PropTypes.object,
-  user: React.PropTypes.object,
+  dispatch: PropTypes.func,
+  room: PropTypes.object,
+  localStream: PropTypes.object,
+  remoteStreams: PropTypes.object,
+  user: PropTypes.object,
 };
 
 const mapStateToProps = ({

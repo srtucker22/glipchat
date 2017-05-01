@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Radium from 'radium';
 import GlobalStyles from '../styles/global.styles';
@@ -65,12 +66,12 @@ export const ContactListItemComponent = ({user, onClick, action})=> {
 };
 
 ContactListItemComponent.propTypes = {
-  action: React.PropTypes.oneOfType([
-    React.PropTypes.element,
-    React.PropTypes.string,
+  action: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string,
   ]),
-  user: React.PropTypes.object,
-  onTouchTap: React.PropTypes.func,
+  user: PropTypes.object,
+  onTouchTap: PropTypes.func,
 };
 
 export default Radium(ContactListItemComponent);

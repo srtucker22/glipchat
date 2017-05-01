@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {browserHistory} from 'react-router';
 import Colors from 'material-ui/styles/colors';
 import Radium from 'radium';
@@ -75,10 +76,10 @@ export class CallingOverlayComponent extends React.Component {
   }
 };
 CallingOverlayComponent.propTypes = {
-  invitees: React.PropTypes.array,
-  onTouchTap: React.PropTypes.func,
-  retry: React.PropTypes.func,
-  status: React.PropTypes.string,
+  invitees: PropTypes.array,
+  onTouchTap: PropTypes.func,
+  retry: PropTypes.func,
+  status: PropTypes.string,
 };
 
 export default Radium(CallingOverlayComponent);

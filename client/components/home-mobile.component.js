@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {APP_NAME} from '../../lib/config';
 import {connect} from 'react-redux';
 import * as Actions from '../actions/actions';
@@ -143,10 +144,10 @@ export class HomeMobileComponent extends React.Component {
   }
 };
 HomeMobileComponent.propTypes = {
-  dispatch: React.PropTypes.func,
-  contacts: React.PropTypes.array,
-  invitations: React.PropTypes.array,
-  user: React.PropTypes.object,
+  dispatch: PropTypes.func,
+  contacts: PropTypes.array,
+  invitations: PropTypes.array,
+  user: PropTypes.object,
 };
 
 HomeMobileComponent = Radium(HomeMobileComponent);

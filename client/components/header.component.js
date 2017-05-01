@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {_} from 'meteor/underscore';
 import {browserHistory} from 'react-router';
 import {Card, CardActions, CardText} from 'material-ui/Card';
@@ -161,8 +162,8 @@ export class NotificationDropdownComponent extends React.Component {
 };
 
 NotificationDropdownComponent.propTypes = {
-  notifications: React.PropTypes.array,
-  markAllNotificationsRead: React.PropTypes.func,
+  notifications: PropTypes.array,
+  markAllNotificationsRead: PropTypes.func,
 };
 
 NotificationDropdownComponent = Radium(NotificationDropdownComponent);
@@ -227,8 +228,8 @@ export class ProfileDropdownComponent extends React.Component {
 };
 
 ProfileDropdownComponent.propTypes = {
-  user: React.PropTypes.object,
-  logout: React.PropTypes.func,
+  user: PropTypes.object,
+  logout: PropTypes.func,
 };
 
 ProfileDropdownComponent = Radium(ProfileDropdownComponent);
@@ -238,7 +239,7 @@ export class HeaderComponent extends React.Component {
     super(props);
 
     this.constructor.childContextTypes = {
-      muiTheme: React.PropTypes.object,
+      muiTheme: PropTypes.object,
     };
 
     this.state = {open: false};
@@ -409,11 +410,11 @@ export class HeaderComponent extends React.Component {
 };
 
 HeaderComponent.propTypes = {
-  dispatch: React.PropTypes.func,
-  iconElementRight: React.PropTypes.element,
-  mobile: React.PropTypes.bool,
-  notifications: React.PropTypes.array,
-  users: React.PropTypes.object,
+  dispatch: PropTypes.func,
+  iconElementRight: PropTypes.element,
+  mobile: PropTypes.bool,
+  notifications: PropTypes.array,
+  users: PropTypes.object,
 };
 
 HeaderComponent = Radium(HeaderComponent);

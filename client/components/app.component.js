@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Browser from 'bowser';
 import * as Actions from '../actions/actions';
 import {connect} from 'react-redux';
@@ -16,7 +17,7 @@ export class AppComponent extends React.Component {
     super(props);
 
     this.constructor.childContextTypes = {
-      muiTheme: React.PropTypes.object,
+      muiTheme: PropTypes.object,
     };
   }
 

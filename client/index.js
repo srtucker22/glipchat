@@ -13,6 +13,7 @@ import Browser from 'bowser';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
 import Root from './components/root.component';
+import Electron from './utils/electron.utils';
 
 Browser.mac = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/
   .test(navigator.userAgent) && !Browser.ios;

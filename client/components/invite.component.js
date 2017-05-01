@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import * as Actions from '../actions/actions';
 import AppBar from 'material-ui/AppBar';
 import Colors from 'material-ui/styles/colors';
@@ -166,12 +167,12 @@ export class InviteComponent extends React.Component {
   }
 };
 InviteComponent.propTypes = {
-  dispatch: React.PropTypes.func,
-  invitees: React.PropTypes.array,
-  hideInviteModal: React.PropTypes.func,
-  showInviteModal: React.PropTypes.bool,
-  linkUrl: React.PropTypes.string,
-  user: React.PropTypes.object,
+  dispatch: PropTypes.func,
+  invitees: PropTypes.array,
+  hideInviteModal: PropTypes.func,
+  showInviteModal: PropTypes.bool,
+  linkUrl: PropTypes.string,
+  user: PropTypes.object,
 };
 
 export default Radium(InviteComponent);

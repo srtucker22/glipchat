@@ -1,22 +1,22 @@
+import {_} from 'underscore';
+
 /**
  * Defines useful client-side functionality.
  */
-Electron = {
+export const Electron = {
   /**
    * @return {Boolean} `true` if the app is running in Electron, `false` otherwise.
    */
-  isDesktop: function(){
+  isDesktop() {
     return /Electron/.test(navigator.userAgent);
   },
 
   /**
    * @return {Boolean} `true` if the app is running in Windows, `false` otherwise.
    */
-  isWindows: function(){
+  isWindows() {
     return /Windows NT/.test(navigator.userAgent);
   },
-
-
 
   // When the app is running in Electron, the following methods will be implemented by `preload.js`.
   // Stub them out in case the client tries to call them even when not running in Electron.
@@ -27,7 +27,7 @@ Electron = {
    *
    * @param {String} url - The URL to open.
    */
-  openExternal: function() {},
+  openExternal() {},
 
   /**
    * Determines if the browser window is currently in fullscreen mode.
@@ -40,7 +40,7 @@ Electron = {
    *
    * @return {Boolean} `true` if the browser window is in fullscreen mode, `false` otherwise.
    */
-  isFullScreen: function() {},
+  isFullScreen() {},
 
   /**
    * Invokes _callback_ when the specified `BrowserWindow` event is fired.
@@ -52,7 +52,7 @@ Electron = {
    * @param {Function} callback - A function to invoke when `event` is triggered. Takes no arguments
    *   and returns no value.
    */
-  onWindowEvent: function() {}
+  onWindowEvent() {},
 };
 
 // Read `ElectronImplementation` from the window vs. doing `typeof ElectronImplementation` because
@@ -61,3 +61,5 @@ if (!_.isUndefined(window.ElectronImplementation)) {
   // The app is running in Electron. Merge the implementations from `preload.js`.
   _.extend(Electron, window.ElectronImplementation);
 }
+
+export default Electron;
