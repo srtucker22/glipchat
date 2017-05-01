@@ -15,7 +15,7 @@
     "fibers": "^1.0.15",
     "gridfs-stream": "^1.1.1",
     "localforage": "^1.4.3",
-    "material-ui": "^0.16.1",
+    "material-ui": "^0.18.0",
     "meteor-node-stubs": "^0.2.3",
     "moment": "^2.15.2",
     "prop-types": "^15.5.8",
@@ -27,20 +27,20 @@
     "react-addons-shallow-compare": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-fastclick": "^2.1.2",
+    "react-fastclick": "^3.0.1",
     "react-list": "^0.8.0",
-    "react-redux": "^4.4.5",
+    "react-redux": "^5.0.4",
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.6",
     "react-select": "^1.0.0-rc.2",
-    "react-select-fast-filter-options": "0.0.5",
+    "react-select-fast-filter-options": "^0.2.1",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-persist": "^4.0.0-alpha6",
     "redux-thunk": "^2.1.0",
     "stream": "0.0.2",
     "underscore": "^1.8.3",
-    "url-join": "^1.1.0",
+    "url-join": "^2.0.1",
     "webrtc-adapter": "^2.0.5"
   },
   "eslintConfig": {
@@ -86,14 +86,14 @@
     }
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.2",
+    "babel-eslint": "^7.2.3",
     "enzyme": "^2.5.1",
     "eslint": "^3.10.2",
     "eslint-config-google": "^0.7.0",
-    "eslint-plugin-html": "^1.6.0",
+    "eslint-plugin-html": "^2.0.1",
     "eslint-plugin-meteor": "^4.0.1",
     "eslint-plugin-react": "^6.6.0",
     "redux-mock-store": "^1.2.1",
-    "sinon": "^1.17.6"
+    "sinon": "^2.1.0"
   }
 }
