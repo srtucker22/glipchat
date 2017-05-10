@@ -10,8 +10,8 @@ import LoadingDialogComponent from './loading-dialog.component';
 describe('Component: LoadingDialogComponent', () => {
   const test = 'test title';
   class ContainerComponent extends React.Component {
-    constructor() {
-      super(...arguments);
+    constructor(props) {
+      super(props);
 
       this.constructor.childContextTypes = {
         muiTheme: PropTypes.object,

@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Colors from 'material-ui/styles/colors';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
@@ -31,11 +31,11 @@ const styles = {
   },
 };
 
-export class IntroComponent extends React.Component {
+export class IntroComponent extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.loginAsGuest = this.loginAsGuest.bind(this);
+    this.loginWithGoogle = this.loginWithGoogle.bind(this);
   }
 
   loginAsGuest() {
@@ -53,21 +53,21 @@ export class IntroComponent extends React.Component {
       <div style={[GlobalStyles.table, styles.css]}>
         <GithubComponent link={GITHUB_URL} />
         <LoadingDialogComponent
-          open={!!user && !!user.loggingIn}
+          open={user && user.loggingIn}
           title="Signing in"
         />
         <div className="text-center" style={[GlobalStyles.cell]}>
           <h1 style={[styles.title.css]}>{APP_NAME}</h1>
           <br />
           <RaisedButton
-            onTouchTap={this.loginWithGoogle.bind(this)}
+            onTouchTap={this.loginWithGoogle}
             label="Sign in with Google"
             secondary
             style={{ marginBottom: '20px' }}
           />
           <br />
           <RaisedButton
-            onTouchTap={this.loginAsGuest.bind(this)}
+            onTouchTap={this.loginAsGuest}
             label="Continue as guest"
             secondary
             style={{ marginBottom: '50px' }}
@@ -77,6 +77,11 @@ export class IntroComponent extends React.Component {
     );
   }
 }
+
+IntroComponent.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  user: PropTypes.shape({ loggingIn: PropTypes.bool }).isRequired,
+};
 
 const mapStateToProps = ({ users: { user } }) => ({
   user,

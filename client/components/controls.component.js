@@ -65,6 +65,8 @@ export class ControlsComponent extends React.Component {
     this.state = {
       visible: false,
     };
+
+    this.leave = this.leave.bind(this);
   }
 
   leave() {
@@ -148,7 +150,7 @@ export class ControlsComponent extends React.Component {
               styles.controls.button.css,
               styles.controls.buttonEnd.css,
             ]}
-            onTouchTap={this.leave.bind(this)}
+            onTouchTap={this.leave}
           >
             <IconButton>
               <FontIcon

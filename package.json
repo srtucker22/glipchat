@@ -57,6 +57,11 @@
         "jsx": true
       }
     },
+    "env": {
+      "browser": true,
+      "node": true,
+      "mocha": true
+    },
     "plugins": [
       "meteor",
       "react",

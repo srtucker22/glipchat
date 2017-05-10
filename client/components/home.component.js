@@ -49,6 +49,8 @@ export class HomeComponent extends React.Component {
     this.setState({
       loading: true,
     });
+
+    this.createRoom = this.createRoom.bind(this);
   }
 
   render() {
@@ -65,7 +67,7 @@ export class HomeComponent extends React.Component {
               <h1 style={[styles.title.css]}>{APP_NAME}</h1>
               <br />
               <RaisedButton
-                onClick={this.createRoom.bind(this)}
+                onClick={this.createRoom}
                 label="Start video call"
                 secondary
                 style={{ marginBottom: '50px' }}
@@ -83,7 +85,7 @@ export class HomeComponent extends React.Component {
 }
 
 HomeComponent.propTypes = {
-  dispatch: PropTypes.func,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default connect()(Radium(HomeComponent));

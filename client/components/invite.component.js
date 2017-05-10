@@ -30,6 +30,12 @@ export class InviteComponent extends React.Component {
     this.state = {
       getName: !props.user.profile || !props.user.profile.name,
     };
+
+    this.handleClose = this.handleClose.bind(this);
+    this.invite = this.invite.bind(this);
+    this.onContactListChange = this.onContactListChange.bind(this);
+    this.updateProfileName = this.updateProfileName.bind(this);
+    this.updateProfileNameState = this.updateProfileNameState.bind(this);
   }
 
   onTypeaheadChange(state) {
@@ -60,7 +66,9 @@ export class InviteComponent extends React.Component {
   }
 
   updateProfileName() {
-    !!this.state.name && this.state.name !== this.props.user.profile.name && this.props.dispatch(Actions.updateProfileName(this.state.name));
+    if (this.state.name && this.state.name !== this.props.user.profile.name) {
+      this.props.dispatch(Actions.updateProfileName(this.state.name));
+    }
     this.setState({ getName: false });
   }
 
@@ -68,23 +76,10 @@ export class InviteComponent extends React.Component {
     const { user, dispatch } = this.props;
 
     // get the contacts
-    const contacts = !!user.services && !!user.services.google && user.services.google.contacts || [];
-
-    // Custom Actions
-    const customActions = [
-      <FlatButton
-        key="cancel"
-        label="Cancel"
-        onTouchTap={this.props.hideInviteModal}
-      />,
-      <FlatButton
-        key="invite"
-        label="Invite"
-        disabled={(!this.state.invitees || !this.state.invitees.length || !user.profile)}
-        secondary
-        onTouchTap={this.invite.bind(this)}
-      />,
-    ];
+    let contacts = [];
+    if (user && user.services && user.services.google) {
+      contacts = user.services.google.contacts;
+    }
 
     // Custom Actions
     const dialogActions = [
@@ -98,7 +93,7 @@ export class InviteComponent extends React.Component {
         label="Update"
         disabled={(!this.state.name && (!user.profile || !user.profile.name))}
         secondary
-        onTouchTap={this.updateProfileName.bind(this)}
+        onTouchTap={this.updateProfileName}
       />,
     ];
 
@@ -117,11 +112,11 @@ export class InviteComponent extends React.Component {
             actions={dialogActions}
             modal={false}
             open={this.state.getName || false}
-            onRequestClose={this.handleClose.bind(this)}
+            onRequestClose={this.handleClose}
           >
             <TextField
               defaultValue={user.profile ? user.profile.name : ''}
-              onChange={this.updateProfileNameState.bind(this)}
+              onChange={this.updateProfileNameState}
               errorText={user.profile.name ? ' ' : null}
               floatingLabelText="Your name"
             />
@@ -139,7 +134,7 @@ export class InviteComponent extends React.Component {
           <ContactListComponent
             contacts={contacts}
             dispatch={dispatch}
-            onChange={this.onContactListChange.bind(this)}
+            onChange={this.onContactListChange}
           />
           {this.state.invitees ? (
             <div
@@ -163,7 +158,7 @@ export class InviteComponent extends React.Component {
                   backgroundColor={Colors.cyan500}
                   key="invite"
                   label="Invite"
-                  onTouchTap={this.invite.bind(this)}
+                  onTouchTap={this.invite}
                   style={{ color: Colors.fullWhite, width: '100%' }}
                 />
               </div>

@@ -1,7 +1,4 @@
-import React from 'react';
-import { shallow, mount } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
-import HomeComponent from './home.component';
 
 describe('HomeComponent', () => {
   describe('when desktop browser', () => {

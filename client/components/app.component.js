@@ -50,6 +50,12 @@ export class AppComponent extends React.Component {
   }
 }
 
+AppComponent.propTypes = {
+  user: PropTypes.object,
+  dispatch: PropTypes.func,
+  children: PropTypes.element,
+};
+
 const mapStateToProps = ({
   users: { user },
 }) => ({

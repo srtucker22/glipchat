@@ -20,6 +20,11 @@ const styles = {
 };
 
 export class CallingOverlayComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.leave = this.leave.bind(this);
+  }
+
   leave() {
     browserHistory.push('/');
   }
@@ -32,7 +37,7 @@ export class CallingOverlayComponent extends React.Component {
         <RaisedButton
           label="Cancel"
           secondary
-          onTouchTap={this.leave.bind(this)}
+          onTouchTap={this.leave}
         />
       </div>
     </div>);
@@ -55,7 +60,7 @@ export class CallingOverlayComponent extends React.Component {
         <RaisedButton
           label={this.props.invitees ? 'Cancel' : 'Leave'}
           secondary
-          onTouchTap={this.leave.bind(this)}
+          onTouchTap={this.leave}
         />
       </div>
     </div>);

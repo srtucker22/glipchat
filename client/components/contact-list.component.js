@@ -30,24 +30,22 @@ export class ContactListComponent extends React.Component {
     this.state = {
       selectValues: [],
     };
-  }
 
-  componentDidMount() {
-    if (!!this.props.contacts && this.props.contacts.length) {
+    this.menuRenderer = this.menuRenderer.bind(this);
+    this.valueRenderer = this.valueRenderer.bind(this);
+    this.onInputKeyDown = this.onInputKeyDown.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onChange = this.onChange.bind(this);
+
+    if (this.props.contacts && this.props.contacts.length) {
       const contacts = addLabelKey(this.props.contacts);
-      this.setState({
-        contacts,
-        filterOptions: createFilterOptions({
-          labelKey: 'labelKey',
-          valueKey: '_id',
-          options: contacts,
-        }),
+      this.state.contacts = contacts;
+      this.state.filterOptions = createFilterOptions({
+        labelKey: 'labelKey',
+        valueKey: '_id',
+        options: contacts,
       });
     }
-  }
-
-  componentWillUnmount() {
-
   }
 
   optionRenderer(option, i) {
@@ -112,9 +110,13 @@ export class ContactListComponent extends React.Component {
     switch (event.keyCode) {
       case 9:   // TAB
       case 13: // ENTER
-        this.state.inputValue && this.onAdd({
-          email: this.state.inputValue,
-        });
+        if (this.state.inputValue) {
+          this.onAdd({
+            email: this.state.inputValue,
+          });
+        }
+        break;
+      default:
         break;
     }
   }
@@ -128,7 +130,7 @@ export class ContactListComponent extends React.Component {
     />);
   }
 
-  menuRenderer({ focusedOption, focusOption, options, selectValue, valueArray }) {
+  menuRenderer({ options }) {
     return (<div
       style={{ overflow: 'auto', maxHeight: window.innerHeight - 100 }}
     >
@@ -152,16 +154,16 @@ export class ContactListComponent extends React.Component {
         autofocus
         filterOptions={this.state.filterOptions}
         maxHeight={window.innerHeight}
-        menuRenderer={this.menuRenderer.bind(this)}
+        menuRenderer={this.menuRenderer}
         multi
-        onChange={this.onChange.bind(this)}
-        onInputChange={this.onInputChange.bind(this)}
-        onInputKeyDown={this.onInputKeyDown.bind(this)}
+        onChange={this.onChange}
+        onInputChange={this.onInputChange}
+        onInputKeyDown={this.onInputKeyDown}
         optionHeight={30}
         options={this.state.contacts}
         placeholder={'Type email or username to search...'}
         value={this.state.selectValues}
-        valueRenderer={this.valueRenderer.bind(this)}
+        valueRenderer={this.valueRenderer}
       />
     );
   }
