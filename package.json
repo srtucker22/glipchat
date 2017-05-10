@@ -96,6 +96,7 @@
           ]
         }
       ],
+      "no-bitwise": 0,
       "jsx-a11y/img-has-alt": [0]
     }
   },

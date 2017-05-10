@@ -15,10 +15,23 @@ _.templateSettings = {
 };
 
 function renderEmailTemplate(filename, vals) {
-  const template = Assets.getText(filename);
+  const template = Assets.getText(filename); // eslint-disable-line no-undef
   const templateCompiled = _.template(template);
 
   return templateCompiled(vals);
+}
+
+// if a user with a google account is online when invited, show them a notification
+function notifyInvitees(user, roomId, invitees) {
+  console.log('notifyInvitees', arguments);
+  return notificationUtils.sendNotifications(_.pluck(invitees, '_id'), {
+    actions: ['join'],
+    body: `${user.profile.name} invited you to chat`,
+    room: roomId,
+    icon: '/android-icon-192x192.png',
+    title: 'Video chat invitation',
+    type: 'ROOM_INVITE',
+  });
 }
 
 function invite(user, roomId, invitees) {
@@ -59,19 +72,6 @@ function invite(user, roomId, invitees) {
   } catch (e) {
     throw new Meteor.Error(e.message);
   }
-}
-
-// if a user with a google account is online when invited, show them a notification
-function notifyInvitees(user, roomId, invitees) {
-  console.log('notifyInvitees', arguments);
-  return notificationUtils.sendNotifications(_.pluck(invitees, '_id'), {
-    actions: ['join'],
-    body: `${user.profile.name} invited you to chat`,
-    room: roomId,
-    icon: '/android-icon-192x192.png',
-    title: 'Video chat invitation',
-    type: 'ROOM_INVITE',
-  });
 }
 
 // this is mildly insecure -- if you know a roomId, you can sneak in

@@ -34,12 +34,12 @@ Meteor.startup(() => {
   document.title = config.APP_NAME; // set the title for the app
 
   window.addEventListener('dragover', function(e) {
-    e = e || event;
+    e = e || event; // eslint-disable-line no-param-reassign
     e.preventDefault();
   }, false);
 
   window.addEventListener('drop', function(e) {
-    e = e || event;
+    e = e || event; // eslint-disable-line no-param-reassign
     e.preventDefault();
   }, false);
 });

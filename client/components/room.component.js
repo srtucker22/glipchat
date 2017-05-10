@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import Browser from 'bowser';
 import Radium from 'radium';
 import React from 'react';
-import * as Actions from '../actions/actions';
-import { PERMISSION_INTERVAL, RING_DURATION } from '../../lib/config';
-import CallingOverlayComponent from './calling-overlay.component';
 import Colors from 'material-ui/styles/colors';
+import { PERMISSION_INTERVAL, RING_DURATION } from '../../lib/config';
+import * as Actions from '../actions/actions';
+import CallingOverlayComponent from './calling-overlay.component';
 import ControlsComponent from './controls.component';
 import ErrorComponent from './error.component';
 import FirstOverlayComponent from './first-overlay.component';
@@ -70,18 +70,17 @@ export class RoomComponent extends React.Component {
 
   componentWillUnmount() {
     // clear the ringer timeout
-    !!this.ringerTimeout && clearTimeout(this.ringerTimeout);
-    !!this.permissionInterval && clearInterval(this.permissionInterval);
+    if (this.ringerTimeout) {
+      clearTimeout(this.ringerTimeout);
+    }
+
+    if (this.permissionInterval) {
+      clearInterval(this.permissionInterval);
+    }
+
     this.props.dispatch(Actions.leaveRoomStream());
     this.props.dispatch(Actions.stopLocalStream());
     this.props.dispatch(Actions.leaveRoom());
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    // if the user logs out on a different tab, leave the room
-    if (nextProps.userId !== this.props.userId) {
-      browserHistory.push('/');
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -92,7 +91,8 @@ export class RoomComponent extends React.Component {
       this.permissionInterval = null;
     }
 
-    if (!nextProps.localStream.loading && this.props.localStream.loading && !nextProps.localStream.error && !!MediaStore.local) {
+    if (!nextProps.localStream.loading && this.props.localStream.loading &&
+      !nextProps.localStream.error && !!MediaStore.local) {
       newState.primaryStream = 'local';
 
       if (!nextProps.room.connected.length) {
@@ -109,7 +109,9 @@ export class RoomComponent extends React.Component {
       console.log('setting connecting/ed');
       newState.status = !nextProps.remoteStreams || !_.keys(nextProps.remoteStreams) ?
         'connecting' : 'connected';
-      !!this.ringerTimeout && clearTimeout(this.ringerTimeout);
+      if (this.ringerTimeout) {
+        clearTimeout(this.ringerTimeout);
+      }
     } else if (this.state.status === 'connected') {
       console.log(nextProps, this.state);
       newState.status = 'waiting';
@@ -125,13 +127,10 @@ export class RoomComponent extends React.Component {
     this.setState(newState);
   }
 
-  // keep calling getUserMedia periodically to check for permission change
-  waitForPermission() {
-    if (!this.permissionInterval) {
-      const self = this;
-      self.permissionInterval = setInterval(() => {
-        self.props.dispatch(Actions.getLocalStream());
-      }, PERMISSION_INTERVAL);
+  componentWillUpdate(nextProps) {
+    // if the user logs out on a different tab, leave the room
+    if (!nextProps.user || nextProps.user.id !== this.props.user.id) {
+      browserHistory.push('/');
     }
   }
 
@@ -165,6 +164,16 @@ export class RoomComponent extends React.Component {
     this.setState({
       primaryStream: id,
     });
+  }
+
+  // keep calling getUserMedia periodically to check for permission change
+  waitForPermission() {
+    if (!this.permissionInterval) {
+      const self = this;
+      self.permissionInterval = setInterval(() => {
+        self.props.dispatch(Actions.getLocalStream());
+      }, PERMISSION_INTERVAL);
+    }
   }
 
   toggleInviteModal() {
