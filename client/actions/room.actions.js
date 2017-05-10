@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import * as constants from '../constants/constants';
 
-export const createRoom = invitees => (dispatch, getState) => {
+export const createRoom = invitees => (dispatch) => {
   dispatch({
     type: constants.CREATE_ROOM,
     invitees,
@@ -11,6 +11,7 @@ export const createRoom = invitees => (dispatch, getState) => {
 
   Meteor.call('createRoom', invitees, (error, id) => {
     if (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       return dispatch({
         type: constants.ROOM_ERROR,
@@ -26,6 +27,7 @@ export const inviteUsersToRoom = invitees => (dispatch, getState) => {
   console.log('current', current, 'invitees', invitees);
   Meteor.call('invite', current, invitees, (error, id) => {
     if (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       return dispatch({
         type: constants.ROOM_ERROR,

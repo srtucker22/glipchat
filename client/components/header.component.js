@@ -118,7 +118,7 @@ export class NotificationDropdownComponent extends React.Component {
       <div style={[GlobalStyles.cell, styles.menu.css]}>
         <IconButton
           iconStyle={styles.icon.css}
-          iconClassName='material-icons'
+          iconClassName="material-icons"
           onTouchTap={this.togglePopover.bind(this)}
         >
           {(!!notifications && notifications.length) ?
@@ -127,32 +127,31 @@ export class NotificationDropdownComponent extends React.Component {
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
           onRequestClose={this.closePopover.bind(this)}
         >
           <Card style={styles.menu.paper.css}>
             <List>
-            {(!!notifications && notifications.length) ?
-              _.map(notifications, (item, index)=> {
-                return (
-                  <ListItem
-                    className={item.unread && 'unread'}
-                    key={item._id}
-                    primaryText={item.data.body}
-                    rightIconButton={item.data.active ? <IconButton
-                      iconClassName='material-icons'
-                      iconStyle={{color: Colors.teal500}}
-                      onTouchTap={this.joinRoom.bind(this, item)}>
-                      {`videocam`}
-                    </IconButton> : undefined}
-                    secondaryText={moment(item.createdAt).fromNow()}
-                  />
-                );
-              }) :
+              {(!!notifications && notifications.length) ?
+              _.map(notifications, (item, index) => (
+                <ListItem
+                  className={item.unread && 'unread'}
+                  key={item._id}
+                  primaryText={item.data.body}
+                  rightIconButton={item.data.active ? <IconButton
+                    iconClassName="material-icons"
+                    iconStyle={{ color: Colors.teal500 }}
+                    onTouchTap={this.joinRoom.bind(this, item)}
+                  >
+                    {'videocam'}
+                  </IconButton> : undefined}
+                  secondaryText={moment(item.createdAt).fromNow()}
+                />
+                )) :
 
-              <ListItem className='text-center'>
-                {`No notifications`}
+              <ListItem className="text-center">
+                {'No notifications'}
               </ListItem>}
             </List>
           </Card>
@@ -160,7 +159,7 @@ export class NotificationDropdownComponent extends React.Component {
       </div>
     );
   }
-};
+}
 
 NotificationDropdownComponent.propTypes = {
   notifications: PropTypes.array,
@@ -204,8 +203,8 @@ export class ProfileDropdownComponent extends React.Component {
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
           onRequestClose={this.closePopover.bind(this)}
         >
           <Card>
@@ -218,15 +217,15 @@ export class ProfileDropdownComponent extends React.Component {
                 {user.services.google.email}
               </CardText>
             }
-            <CardActions expandable={false} style={{textAlign: 'center'}}>
-              <FlatButton onTouchTap={logout} label='Sign out'/>
+            <CardActions expandable={false} style={{ textAlign: 'center' }}>
+              <FlatButton onTouchTap={logout} label="Sign out" />
             </CardActions>
           </Card>
         </Popover>
       </div>
     );
   }
-};
+}
 
 ProfileDropdownComponent.propTypes = {
   user: PropTypes.object,
@@ -243,7 +242,12 @@ export class HeaderComponent extends React.Component {
       muiTheme: PropTypes.object,
     };
 
-    this.state = {open: false};
+    this.state = { open: false };
+    this.loginWithGoogle = this.loginWithGoogle.bind(this);
+    this.logout = this.logout.bind(this);
+    this.markAllNotificationsRead = this.markAllNotificationsRead.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   loginWithGoogle() {
@@ -259,15 +263,15 @@ export class HeaderComponent extends React.Component {
   }
 
   handleToggle() {
-    this.setState({open: !this.state.open});
+    this.setState({ open: !this.state.open });
   }
 
   handleClose() {
-    this.setState({open: false});
+    this.setState({ open: false });
   }
 
   render() {
-    const {mobile, user, notifications, ...other} = _.omit(this.props, [
+    const { mobile, user, notifications, ...other } = _.omit(this.props, [
       'loggingIn', 'subscribed', 'users', 'dispatch',
     ]);
 
@@ -278,38 +282,38 @@ export class HeaderComponent extends React.Component {
 
     if (mobile) {
       menuItems = [[
-          {
-            title: 'Invitations',
-            icon: 'drafts',
-          }, {
-            title: 'Snooze notifications',
-            icon: 'notifications_paused',
-          }, {
-            title: 'Status',
-            icon: 'mood',
-          },
-        ], [
-          {
-            title: 'Settings',
-            icon: 'settings',
-          }, {
-            title: 'GitHub',
-            icon: 'code',
-            href: 'https://github.com/srtucker22/quasar',
-            target: '_blank',
-          }, {
-            title: 'Feedback',
-            icon: 'announcement',
-            href: 'https://github.com/srtucker22/quasar/issues/new',
-            target: '_blank',
-          },
-        ], [
-          {
-            title: 'Logout',
-            icon: 'power_settings_new',
-            action: this.logout.bind(this),
-          },
-        ],
+        {
+          title: 'Invitations',
+          icon: 'drafts',
+        }, {
+          title: 'Snooze notifications',
+          icon: 'notifications_paused',
+        }, {
+          title: 'Status',
+          icon: 'mood',
+        },
+      ], [
+        {
+          title: 'Settings',
+          icon: 'settings',
+        }, {
+          title: 'GitHub',
+          icon: 'code',
+          href: 'https://github.com/srtucker22/quasar',
+          target: '_blank',
+        }, {
+          title: 'Feedback',
+          icon: 'announcement',
+          href: 'https://github.com/srtucker22/quasar/issues/new',
+          target: '_blank',
+        },
+      ], [
+        {
+          title: 'Logout',
+          icon: 'power_settings_new',
+          action: this.logout,
+        },
+      ],
       ];
     }
 
@@ -317,14 +321,14 @@ export class HeaderComponent extends React.Component {
       notificationDropdown = notifications ? (
         <NotificationDropdownComponent
           notifications={notifications}
-          markAllNotificationsRead={this.markAllNotificationsRead.bind(this)}
+          markAllNotificationsRead={this.markAllNotificationsRead}
         />
       ) : '';
 
       profileDropdown = (
         <ProfileDropdownComponent
           user={user}
-          logout={this.logout.bind(this)}
+          logout={this.logout}
         />
       );
 
@@ -335,10 +339,10 @@ export class HeaderComponent extends React.Component {
         </div>
       );
     } else {
-      loginButton = <FlatButton
-        label='Login with Google'
-        onTouchTap={this.loginWithGoogle.bind(this)}
-      />;
+      loginButton = (<FlatButton
+        label="Login with Google"
+        onTouchTap={this.loginWithGoogle}
+      />);
     }
 
     let drawer = '';
@@ -347,47 +351,52 @@ export class HeaderComponent extends React.Component {
       drawer = (<Drawer
         docked={false}
         open={this.state.open}
-        onRequestChange={(open) => this.setState({open})}>
-          <div style={[styles.sidenav.profile.css]}>
-            <Avatar
-              src={!!user.services && !!user.services.google && !!user.services.google.picture ?
+        onRequestChange={open => this.setState({ open })}
+      >
+        <div style={[styles.sidenav.profile.css]}>
+          <Avatar
+            src={!!user.services && !!user.services.google && !!user.services.google.picture ?
                 user.services.google.picture :
                 'images/profile-default.jpg'}
-              style={{display: 'block'}}
-              size={50}/>
-            <div style={styles.sidenav.profile.details.css}>
+            style={{ display: 'block' }}
+            size={50}
+          />
+          <div style={styles.sidenav.profile.details.css}>
+            <p style={styles.sidenav.profile.details.text.css}>
+              {user.profile ? user.profile.name : ''}
+            </p>
+            {!!user.services && !!user.services.google ?
               <p style={styles.sidenav.profile.details.text.css}>
-                {!!user.profile ? user.profile.name : ''}
-              </p>
-              {!!user.services && !!user.services.google ?
-                <p style={styles.sidenav.profile.details.text.css}>
-                  {user.services.google.email}
-                </p> : <FlatButton onTouchTap={this.loginWithGoogle} label='Sign in with Google' style={{
+                {user.services.google.email}
+              </p> : <FlatButton
+                onTouchTap={this.loginWithGoogle} label="Sign in with Google" style={{
                   color: Colors.fullWhite,
-                  marginLeft: '-10px'}}/>}
-            </div>
+                  marginLeft: '-10px' }}
+              />}
           </div>
-          {_.map(menuItems, (list, index)=> {
-            let items = (_.map(list, (item)=> {
-              return (
-                <MenuItem
-                  key={'left-nav-' + item.title.toLowerCase()}
-                  primaryText={item.title}
-                  onTouchTap={item.action}
-                  href={item.href}
-                  target={item.target}
-                  leftIcon={
-                    <FontIcon
-                      className='material-icons'
-                      color={Colors.grey600}>{item.icon}
-                    </FontIcon>
+        </div>
+        {_.map(menuItems, (list, index) => {
+          const items = (_.map(list, item => (
+            <MenuItem
+              key={`left-nav-${item.title.toLowerCase()}`}
+              primaryText={item.title}
+              onTouchTap={item.action}
+              href={item.href}
+              target={item.target}
+              leftIcon={
+                <FontIcon
+                  className="material-icons"
+                  color={Colors.grey600}
+                >{item.icon}
+                </FontIcon>
                   }
-                />
-              );
-            }));
-            index !== list.length - 1 && items.push(<Divider />);
-            return items;
-          })}
+            />
+              )));
+          if (index !== list.length - 1) {
+            items.push(<Divider />);
+          }
+          return items;
+        })}
       </Drawer>);
     }
 
@@ -395,12 +404,12 @@ export class HeaderComponent extends React.Component {
       <header>
         <AppBar
           title={''}
-          iconElementRight={!!mobile ? (
+          iconElementRight={mobile ? (
             this.props.iconElementRight
-          ) : (loginButton ? loginButton : profileButtons)}
-          onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
+          ) : (loginButton || profileButtons)}
+          onLeftIconButtonTouchTap={this.handleToggle}
           style={
-            _.extend({}, !!mobile ? styles.mobile.css : styles.css)
+            _.extend({}, mobile ? styles.mobile.css : styles.css)
           }
           {...other}
         />
@@ -418,11 +427,9 @@ HeaderComponent.propTypes = {
   users: PropTypes.object,
 };
 
-const mapStateToProps = ({ users: { user }, notifications: { notifications } }) => {
-  return {
-    user,
-    notifications,
-  };
-};
+const mapStateToProps = ({ users: { user }, notifications: { notifications } }) => ({
+  user,
+  notifications,
+});
 
 export default connect(mapStateToProps)(Radium(HeaderComponent));

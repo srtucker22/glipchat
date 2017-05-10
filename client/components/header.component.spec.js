@@ -1,17 +1,17 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
-import {chai} from 'meteor/practicalmeteor:chai';
-import {Header} from './header.component';
+import { shallow } from 'enzyme';
+import { chai } from 'meteor/practicalmeteor:chai';
+import { Header } from './header.component';
 
 describe('Component: Header', () => {
-  describe('when mobile', ()=> {
-    describe('when logging in or not subscribed', ()=> {
+  describe('when mobile', () => {
+    describe('when logging in or not subscribed', () => {
       const el = shallow(<Header
-        iconElementRight={<div></div>}
+        iconElementRight={<div />}
         loggingIn={false}
-        mobile={true}
+        mobile
         subscribed={false}
-        user={{something: 'something'}}
+        user={{ something: 'something' }}
       />);
 
       it('should render the header with iconElementRight prop', () => {
@@ -23,22 +23,22 @@ describe('Component: Header', () => {
       });
     });
 
-    describe('when logged in and subscribed', ()=> {
+    describe('when logged in and subscribed', () => {
       const el = shallow(<Header
-        iconElementRight={<div></div>}
+        iconElementRight={<div />}
         loggingIn={false}
-        mobile={true}
+        mobile
         subscribed={false}
-        user={{something: 'something'}}
+        user={{ something: 'something' }}
       />);
 
-      describe('when user is authenticated', ()=> {
+      describe('when user is authenticated', () => {
         it('should render the drawer with avatar and user deets', () => {
           chai.assert(false);
         });
       });
 
-      describe('when user is guest', ()=> {
+      describe('when user is guest', () => {
         it('should render the drawer with default avatar and offer signin', () => {
           chai.assert(false);
         });
@@ -46,22 +46,22 @@ describe('Component: Header', () => {
     });
   });
 
-  describe('when not mobile', ()=> {
-    describe('when logging in or not subscribed', ()=> {
+  describe('when not mobile', () => {
+    describe('when logging in or not subscribed', () => {
       it('should render with some configuration', () => {
         chai.assert.equal(el.node.type, 'header');
         chai.assert(false);
       });
     });
 
-    describe('when logged in and subscribed', ()=> {
-      describe('when user is authenticated', ()=> {
+    describe('when logged in and subscribed', () => {
+      describe('when user is authenticated', () => {
         it('should render with some configuration', () => {
           chai.assert(false);
         });
       });
 
-      describe('when user is guest', ()=> {
+      describe('when user is guest', () => {
         it('should render with some configuration', () => {
           chai.assert(false);
         });
@@ -69,13 +69,13 @@ describe('Component: Header', () => {
     });
   });
 
-  describe('when touching invite', ()=> {
+  describe('when touching invite', () => {
     it('should show invite modal', () => {
       chai.assert(false);
     });
   });
 
-  describe('when touching root', ()=> {
+  describe('when touching root', () => {
     it('should trigger onTouchTap', () => {
       chai.assert(false);
     });

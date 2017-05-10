@@ -93,7 +93,8 @@
             "_name"
           ]
         }
-      ]
+      ],
+      "jsx-a11y/img-has-alt": [0]
     }
   },
   "devDependencies": {

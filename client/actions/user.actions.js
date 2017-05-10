@@ -3,7 +3,7 @@ import Browser from 'bowser';
 import * as constants from '../constants/constants';
 import { GOOGLE_PERMISSIONS } from '../../lib/config';
 
-export const loginAsGuest = () => (dispatch, getState) => {
+export const loginAsGuest = () => (dispatch) => {
   dispatch({
     type: constants.LOGIN_AS_GUEST,
   });
@@ -18,7 +18,7 @@ export const loginAsGuest = () => (dispatch, getState) => {
   });
 };
 
-export const loginWithGoogle = () => (dispatch, getState) => {
+export const loginWithGoogle = () => (dispatch) => {
   dispatch({
     type: constants.LOGIN_WITH_GOOGLE,
   });
@@ -42,7 +42,7 @@ export const loginWithPassword = () => ({
   type: constants.LOGIN_WITH_PASSWORD,
 });
 
-export const logout = () => (dispatch, getState) => {
+export const logout = () => (dispatch) => {
   dispatch({
     type: 'LOGOUT',
   });
@@ -57,7 +57,7 @@ export const logout = () => (dispatch, getState) => {
   });
 };
 
-export const updateProfileName = name => (dispatch, getState) => {
+export const updateProfileName = name => (dispatch) => {
   dispatch({
     type: constants.UPDATE_PROFILE_NAME,
     name,

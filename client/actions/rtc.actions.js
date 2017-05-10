@@ -233,9 +233,11 @@ function makeOffer(id, room) {
         room,
       });
     }, (e) => {
+      // eslint-disable-next-line no-console
       console.error(e);
     });
   }, (e) => {
+    // eslint-disable-next-line no-console
     console.error(e);
   });
 }
@@ -278,12 +280,15 @@ function handleMessage(data) {
               type: 'sdp-answer',
             });
           }, (e) => {
+            // eslint-disable-next-line no-console
             console.error(e);
           });
         }, (err) => {
+          // eslint-disable-next-line no-console
           console.error(err);
         });
       }, (err) => {
+        // eslint-disable-next-line no-console
         console.error(err);
       });
 
@@ -293,6 +298,7 @@ function handleMessage(data) {
       pc.setRemoteDescription(new RTCSessionDescription(data.sdp), () => {
         console.log('Setting remote description by answer');
       }, (e) => {
+        // eslint-disable-next-line no-console
         console.error(e);
       });
       break;
@@ -306,6 +312,7 @@ function handleMessage(data) {
             pc.addIceCandidate(new RTCIceCandidate(data.ice), () => {
               // Successfully added candidate.
             }, (err) => {
+              // eslint-disable-next-line no-console
               console.error(err);
             });
           });

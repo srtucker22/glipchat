@@ -59,27 +59,31 @@ export class FirstOverlayComponent extends React.Component {
                 style={[
                   GlobalStyles.cell,
                   styles.invite.cell.css]}
-                className='text-right'>You are the only one here.
+                className="text-right"
+              >You are the only one here.
               </div>
-              <div style={[
+              <div
+                style={[
                   GlobalStyles.cell,
-                  styles.invite.cell.css]} className='text-left'>
+                  styles.invite.cell.css]} className="text-left"
+              >
                 <RaisedButton
-                  label='Invite people'
-                  secondary={true}
-                  onTouchTap={this.props.action}>
-                </RaisedButton>
+                  label="Invite people"
+                  secondary
+                  onTouchTap={this.props.action}
+                />
               </div>
             </div>
             <div>
-              <div className='text-center'>
-                {`Share the permanent link. Bookmark and come back anytime.`}
+              <div className="text-center">
+                {'Share the permanent link. Bookmark and come back anytime.'}
               </div>
               <div
                 style={[
                   GlobalStyles.table,
                   GlobalStyles.inset,
-                  styles.linkUrl.css]}>
+                  styles.linkUrl.css]}
+              >
                 {this.props.linkUrl}
               </div>
             </div>

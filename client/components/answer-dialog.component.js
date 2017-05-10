@@ -41,8 +41,7 @@ export class AnswerDialogComponent extends React.Component {
     ];
     return (
       <Dialog
-        title={this.props.invitation &&
-          `${this.props.invitation.from} is calling`}
+        title={this.props.invitation && `${this.props.invitation.from} is calling`}
         actions={actions}
         modal={false}
         open={!!this.props.invitation}

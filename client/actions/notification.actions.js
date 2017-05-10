@@ -5,6 +5,7 @@ import * as constants from '../constants/constants';
 export const markAllNotificationsRead = () => (dispatch) => {
   Meteor.call('markAllNotificationsRead', (error) => {
     if (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       return dispatch({
         type: constants.NOTIFICATION_ERROR,
@@ -21,6 +22,7 @@ export const markAllNotificationsRead = () => (dispatch) => {
 export const markNotificationRead = id => (dispatch) => {
   Meteor.call('markNotificationRead', id, (error) => {
     if (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       return dispatch({
         type: constants.NOTIFICATION_ERROR,
@@ -44,12 +46,14 @@ export const subscribeToNotifications = user => (dispatch) => {
       },
     }, (err, res) => {
       if (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
       } else {
         console.log('updated user with subscriptionId', subscriptionId);
       }
     });
   }, (err) => {
+    // eslint-disable-next-line no-console
     console.error(err);
   });  // build service worker and subscribe to fcm (gcm) notifications
 };
@@ -66,6 +70,7 @@ export const unsubscribeToNotifications = () => (dispatch) => {
       },
     }, (error, res) => {
       if (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
         dispatch({
           type: constants.AUTH_ERROR,
@@ -76,6 +81,7 @@ export const unsubscribeToNotifications = () => (dispatch) => {
       }
     });
   }, (err) => {
+    // eslint-disable-next-line no-console
     console.error(err);
   });
 };

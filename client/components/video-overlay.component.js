@@ -5,7 +5,7 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import React from 'react';
+import React, { Component } from 'react';
 import * as Actions from '../actions/actions';
 
 const ding = new Audio('/audio/ding.mp3');
@@ -62,13 +62,15 @@ const styles = {
   },
 };
 
-export class VideoOverlayComponent extends React.Component {
+export class VideoOverlayComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       shade: false,
       shadeTimer: null,
     };
+
+    this.toggleAudio = this.toggleAudio.bind(this);
   }
 
   componentDidMount() {
@@ -99,7 +101,7 @@ export class VideoOverlayComponent extends React.Component {
         onClick={this.props.setPrimaryStream}
       >
         <FloatingActionButton
-          onTouchTap={this.toggleAudio.bind(this)}
+          onTouchTap={this.toggleAudio}
           style={_.extend({},
             styles.mute.css,
             (Radium.getState(this.state, 'overlay', ':hover') ||
@@ -145,6 +147,7 @@ VideoOverlayComponent.propTypes = {
     audio: PropTypes.bool,
     video: PropTypes.bool,
   }),
+  setPrimaryStream: PropTypes.func,
 };
 
 export default Radium(VideoOverlayComponent);

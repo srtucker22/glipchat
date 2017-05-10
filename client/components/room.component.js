@@ -56,6 +56,9 @@ export class RoomComponent extends React.Component {
     this.state = {
       showInviteModal: false,
     };
+
+    this.toggleControls = this.toggleControls.bind(this);
+    this.toggleInviteModal = this.toggleInviteModal.bind(this);
   }
 
   componentDidMount() {
@@ -208,16 +211,16 @@ export class RoomComponent extends React.Component {
       if (Browser.mobile || Browser.tablet || this.state.status === 'connecting') {
         overlayComponent = (
           <CallingOverlayComponent
-            onTouchTap={this.toggleControls.bind(this)}
+            onTouchTap={this.toggleControls}
             status={this.state.status}
           />
         );
       } else if (this.state.status !== 'connecting' && !localStream.loading) {
         overlayComponent = (
           <FirstOverlayComponent
-            action={this.toggleInviteModal.bind(this)}
+            action={this.toggleInviteModal}
             linkUrl={window.location.href}
-            onTouchTap={this.toggleControls.bind(this)}
+            onTouchTap={this.toggleControls}
           />
         );
       }
@@ -226,7 +229,7 @@ export class RoomComponent extends React.Component {
     const readyPromptComponent = (this.state.status === 'joining') ? (
       <ReadyPromptComponent
         joinRoomStream={this.joinRoomStream.bind(this, room._id)}
-        onTouchTap={this.toggleControls.bind(this)}
+        onTouchTap={this.toggleControls}
       />
     ) : undefined;
 
@@ -235,7 +238,7 @@ export class RoomComponent extends React.Component {
         dispatch={dispatch}
         linkUrl={window.location.href}
         showInviteModal={this.state.showInviteModal}
-        hideInviteModal={this.toggleInviteModal.bind(this)}
+        hideInviteModal={this.toggleInviteModal}
         ref="invite"
         user={user}
       />
@@ -247,8 +250,8 @@ export class RoomComponent extends React.Component {
         dispatch={dispatch}
         isLocalAudioEnabled={localStream.audio}
         isLocalVideoEnabled={localStream.video}
-        onTouchTap={this.toggleControls.bind(this)}
-        toggleInviteModal={this.toggleInviteModal.bind(this)}
+        onTouchTap={this.toggleControls}
+        toggleInviteModal={this.toggleInviteModal}
       />
     ) : undefined;
 
@@ -259,7 +262,7 @@ export class RoomComponent extends React.Component {
             id={'local'}
             dispatch={dispatch}
             isAudioEnabled={localStream.audio}
-            setPrimaryStream={this.setPrimaryStream.bind(this, 'local')}  
+            setPrimaryStream={this.setPrimaryStream.bind(this, 'local')}
           />
           <VideoComponent
             src={MediaStore.local}
@@ -268,18 +271,19 @@ export class RoomComponent extends React.Component {
           />
         </div>
         {_.map(remoteStreams, (val, key) => (
-            <div
-              key={key}
-              style={[styles.videos.video.css]}>
-              <VideoOverlayComponent
-                id={key}
-                isAudioEnabled={!val.muted}
-                isRemoteEnabled={val}
-                dispatch={dispatch}
-                setPrimaryStream={this.setPrimaryStream.bind(this, key)}
-              />
-              <VideoComponent src={MediaStore[key]}/>
-            </div>
+          <div
+            key={key}
+            style={[styles.videos.video.css]}
+          >
+            <VideoOverlayComponent
+              id={key}
+              isAudioEnabled={!val.muted}
+              isRemoteEnabled={val}
+              dispatch={dispatch}
+              setPrimaryStream={this.setPrimaryStream.bind(this, key)}
+            />
+            <VideoComponent src={MediaStore[key]} />
+          </div>
           ))}
       </div>) : undefined;
 
@@ -291,7 +295,7 @@ export class RoomComponent extends React.Component {
             flip={(this.state.primaryStream === 'local')}
             fullScreen
             muted={(this.state.primaryStream === 'local')}
-            onTouchTap={this.toggleControls.bind(this)}  
+            onTouchTap={this.toggleControls}
           />
           ) : ''
         }
@@ -304,8 +308,6 @@ export class RoomComponent extends React.Component {
     );
   }
 }
-
-RoomComponent = Radium(RoomComponent);
 
 RoomComponent.propTypes = {
   dispatch: PropTypes.func,
@@ -326,4 +328,4 @@ const mapStateToProps = ({
   user,
 });
 
-export default connect(mapStateToProps)(RoomComponent);
+export default connect(mapStateToProps)(Radium(RoomComponent));

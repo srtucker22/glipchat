@@ -67,6 +67,8 @@ export class ControlsComponent extends React.Component {
     };
 
     this.leave = this.leave.bind(this);
+    this.toggleLocalAudio = this.toggleLocalAudio.bind(this);
+    this.toggleLocalVideo = this.toggleLocalVideo.bind(this);
   }
 
   leave() {
@@ -110,7 +112,7 @@ export class ControlsComponent extends React.Component {
           </div>
           <div
             key="video"
-            onTouchTap={this.toggleLocalVideo.bind(this)} style={[
+            onTouchTap={this.toggleLocalVideo} style={[
               GlobalStyles.cell,
               styles.controls.button.css,
               !this.props.isLocalVideoEnabled && styles.controls.red.css,
@@ -125,7 +127,8 @@ export class ControlsComponent extends React.Component {
           </div>
           <div
             key="audio"
-            onTouchTap={this.toggleLocalAudio.bind(this)} style={[
+            onTouchTap={this.toggleLocalAudio}
+            style={[
               GlobalStyles.cell,
               styles.controls.button.css,
               !this.props.isLocalAudioEnabled && styles.controls.red.css,
