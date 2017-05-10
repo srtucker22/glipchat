@@ -44,7 +44,7 @@ export const subscribeToNotifications = user => (dispatch) => {
       $addToSet: {
         'services.gcm.subscriptionIds': subscriptionId,
       },
-    }, (err, res) => {
+    }, (err) => {
       if (err) {
         // eslint-disable-next-line no-console
         console.error(err);

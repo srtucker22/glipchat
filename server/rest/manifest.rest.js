@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { JsonRoutes } from 'meteor/simple:json-routes';
 
 // return the push manifest
-JsonRoutes.add('get', '/push-manifest.json', function(req, res, next) {
+JsonRoutes.add('get', '/push-manifest.json', function(req, res) {
   JsonRoutes.sendResult(res, {
     data: {
       name: Meteor.settings.public.name,

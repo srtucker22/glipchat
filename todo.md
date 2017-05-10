@@ -1,8 +1,8 @@
 - don't show join until you have video connection
 - rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
 - closing tab isn't leaving room properly
-- props validation everywhere
 - replace ReactDOM in video component
+- reactive var to replace session
 
 **high**
 - **notification bug** -- sometimes first notification isn't received, probably due to new subscriptionid

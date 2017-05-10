@@ -6,8 +6,8 @@ import deepExtend from 'deep-extend';
 import { MANAGER_ROLES } from '../../lib/roles';
 
 // publish current user
-Meteor.publish('user', function() {
-  check(arguments, Match.OneOf({}, null, undefined));
+Meteor.publish('user', function(...args) {
+  check(args, Match.Maybe({}));
   return Meteor.users.find(
     { _id: this.userId },
     { fields: { services: 1, history: 1, status: 1 } },
@@ -31,21 +31,24 @@ Meteor.smartPublish('users', function(opts) {
   const res = [];
   res.push(Meteor.users.find(this.userId, userProjection));
 
-  !!opts.room && res.push(Roles.getUsersInRole(opts.room, Roles.GLOBAL_GROUP, deepExtend({
-    fields: {
-      'roles.__global_roles__.$': 1,
-    },
-  }, userProjection)));
+  if (opts.room) {
+    res.push(Roles.getUsersInRole(opts.room, Roles.GLOBAL_GROUP, deepExtend({
+      fields: {
+        'roles.__global_roles__.$': 1,
+      },
+    }, userProjection)));
+  }
 
-  !!opts.contacts && res.push(Meteor.users.find({
-    'services.google.email': { $in: _.pluck(contacts, 'email') },
-  }, {
-    fields: {
-      profile: 1,
-      status: 1,
-    },
-  },
-    ));
+  if (opts.contacts) {
+    res.push(Meteor.users.find({
+      'services.google.email': { $in: _.pluck(opts.contacts, 'email') },
+    }, {
+      fields: {
+        profile: 1,
+        status: 1,
+      },
+    }));
+  }
 
   return res;
 
@@ -54,7 +57,7 @@ Meteor.smartPublish('users', function(opts) {
 });
 
 Meteor.publish('contacts', function(contacts) {
-  check(arguments, [Match.Any]);
+  check(contacts, Match.Maybe([{ email: Match.Maybe(String) }]));
 
   if (!contacts || !contacts.length) {
     this.ready();

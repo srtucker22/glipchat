@@ -42,6 +42,7 @@ function disconnect(userId, roomId) {
 // join a room
 roomStream.on('join', function(roomId) {
   check(roomId, String);
+  // eslint-disable-next-line no-console
   console.log('join', roomId, this.userId);
   const self = this;
 
@@ -62,6 +63,7 @@ roomStream.on('join', function(roomId) {
   }
 
   _.each(_.without(room.connected, self.userId), (userId) => {
+    // eslint-disable-next-line no-console
     console.log('emitting', userId);
     roomStream.emit(
       userId,
@@ -101,7 +103,7 @@ roomStream.on('join', function(roomId) {
   // alternative connection tracker
   // when someone disconnects, remove them from the Room's connected list
   UserStatus.events.once('connectionLogout', ({ userId }) => {
-    if (self.userId == userId) {
+    if (self.userId === userId) {
       disconnect(self.userId, roomId);
     }
   });
@@ -133,7 +135,7 @@ roomStream.on('msg', function(data) {
   ));
 
   const self = this;
-
+  // eslint-disable-next-line no-console
   console.log(`${data.type} received from user ${self.userId}`);
 
   // user is disconnecting without closing window
@@ -144,15 +146,16 @@ roomStream.on('msg', function(data) {
 
   // find the room
   const room = Rooms.findOne({ _id: data.room });
+  // eslint-disable-next-line no-console
   console.log(`emitting ${data.type} to ${data.to}`);
 
   // emit message to recipients
   if (room) {
-    data.from = self.userId;
+    data.from = self.userId; // eslint-disable-line no-param-reassign
     if (data.to) {
       // emit message to singular recipient
       if (_.contains(room.connected, data.to)) {  // make sure the user is in the room
-        data.from = self.userId;
+        data.from = self.userId; // eslint-disable-line no-param-reassign
         roomStream.emit(data.to, data);
       }
     } else {

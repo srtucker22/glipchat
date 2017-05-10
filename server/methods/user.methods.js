@@ -69,6 +69,8 @@ const mergeContacts = (user, contacts) => {
         newContacts.push(contact);
       }
     });
+
+    // eslint-disable-next-line no-param-reassign
     contacts = user.services.google.contacts.concat(newContacts);
   }
   console.log('mergeContacts', new Date());
@@ -88,9 +90,10 @@ const storeContactImages = (user, contacts) => {
   const promises = _.map(_.filter(contacts, c => !c.src), (contact) => {
     const fileName = `${user.services.google.id}_${_.last(contact.photoUrl.split('/'))}.png`;
 
-    return new Promise((res, rej) => {
+    return new Promise((res) => {
       // callback creates Image from binaryData
       const callback = (err, binaryData) => {
+        // let errors pass through
         if (err) {
           console.error(err);
           res(null);
@@ -101,12 +104,13 @@ const storeContactImages = (user, contacts) => {
             type: 'image/png',
           });
 
-          const stream = bufferToStream(binaryData);
+          const newStream = bufferToStream(binaryData);
 
-          ImageStore.write(stream, fileId, function(err, file) {
-            if (err) {
+          ImageStore.write(newStream, fileId, function(error, file) {
+            if (error) {
               console.error(err);
             } else {
+              // eslint-disable-next-line no-param-reassign
               contact.src = file.path;
               res(file);
             }
@@ -122,7 +126,7 @@ const storeContactImages = (user, contacts) => {
     });
   });
 
-  return Promise.all(promises).then((res) => {
+  return Promise.all(promises).then(() => {
     Meteor.users.update(
       { _id: user._id },
       { $set: { 'services.google.contacts': contacts } },
@@ -132,7 +136,7 @@ const storeContactImages = (user, contacts) => {
   });
 };
 
-const getContacts = user => new Promise((res, rej) => {
+const getContacts = user => new Promise((res) => {
   const gcontacts = googleContacts(user);
 
   // callback updates the user with their contacts from Google
@@ -157,10 +161,10 @@ Meteor.methods({
 
     return getContacts(user).then(contacts =>
       // merge old google contacts with new results
-      Promise.resolve(mergeContacts(user, contacts))
+      Promise.resolve(mergeContacts(user, contacts)),
     ).then(contacts =>
       // join app users with google contacts
-      Promise.resolve(joinAppContacts(user, contacts))
+      Promise.resolve(joinAppContacts(user, contacts)),
     ).then((contacts) => {
       // update the user model's contacts
       const res = Meteor.users.update(

@@ -5,7 +5,7 @@ import { Rooms } from '../../lib/rooms';
 import { MANAGER_ROLES } from '../../lib/roles';
 
 // publish all rooms
-Meteor.publish('rooms', function(opts) {
+Meteor.publish('rooms', function(opts) { // eslint-disable-line consistent-return
   check(opts, {
     room: Match.Maybe(String),
     available: Match.Maybe(String),
@@ -15,7 +15,7 @@ Meteor.publish('rooms', function(opts) {
   if (Roles.userIsInRole(this.userId, MANAGER_ROLES)) {
     return Rooms.find();
   }
-  self.autorun((computation) => {
+  self.autorun(() => {
     const user = Meteor.users.findOne(this.userId);
     if (!user) {
       return self.ready();

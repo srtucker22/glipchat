@@ -24,7 +24,7 @@ Meteor.methods({
       throw new Meteor.Error(403, 'Access denied');
     }
 
-    Roles.setUserRoles(targetUser, roles, group);
+    Roles.setUserRoles(loggedInUser, roles, group);
   },
 
   /**
@@ -41,7 +41,7 @@ Meteor.methods({
 
     if (!loggedInUser ||
       (!Roles.userIsInRole(loggedInUser, ['manage-users', 'admin'], group) &&
-        Meteor.userId() != targetUserId)) {
+        Meteor.userId() !== targetUserId)) {
       throw new Meteor.Error(403, 'Access denied');
     }
 

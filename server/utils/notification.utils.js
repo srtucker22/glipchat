@@ -1,3 +1,4 @@
+import { HTTP } from 'meteor/http';
 import { _ } from 'underscore';
 import { Meteor } from 'meteor/meteor';
 import { APP_ICON } from '../../lib/config';
@@ -54,6 +55,7 @@ export const sendNotifications = (ids, notification) => {
     }
     throw new Meteor.Error(result.statusCode, 'something went wrong');
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     // Got a network error, time-out or HTTP error in the 400 or 500 range.
     throw new Meteor.Error(500, 'something went wrong');

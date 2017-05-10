@@ -3,28 +3,6 @@ import { JsonRoutes } from 'meteor/simple:json-routes';
 import Fiber from 'fibers';
 
 /**
- * SimpleRest middleware for validating a Meteor.user's login token
- *
- * This middleware must be processed after the request.token has been set to a
- * valid login token for a Meteor.user account (from a separate layer of
- * middleware). If authentication is successful, the request.userId will be set
- * to the ID of the authenticated user.
- *
- * @middleware
- */
-JsonRoutes.Middleware.authenticateMeteorUserByToken =
-  function(req, res, next) {
-    Fiber(function() {
-      const userId = getUserIdFromAuthToken(req.authToken);
-      if (userId) {
-        req.userId = userId;
-      }
-
-      next();
-    }).run();
-  };
-
-/**
  * Retrieves the ID of the Meteor.user that the given auth token belongs to
  *
  * @param token An unhashed auth token
@@ -45,6 +23,27 @@ function getUserIdFromAuthToken(token) {
 
   return null;
 }
+
+/**
+ * SimpleRest middleware for validating a Meteor.user's login token
+ *
+ * This middleware must be processed after the request.token has been set to a
+ * valid login token for a Meteor.user account (from a separate layer of
+ * middleware). If authentication is successful, the request.userId will be set
+ * to the ID of the authenticated user.
+ *
+ * @middleware
+ */
+JsonRoutes.Middleware.authenticateMeteorUserByToken = function(req, res, next) {
+  Fiber(function() {
+    const userId = getUserIdFromAuthToken(req.authToken);
+    if (userId) {
+      req.userId = userId;
+    }
+
+    next();
+  }).run();
+};
 
 JsonRoutes.Middleware.use(JsonRoutes.Middleware.parseBearerToken);
 JsonRoutes.Middleware.use(JsonRoutes.Middleware.authenticateMeteorUserByToken);
