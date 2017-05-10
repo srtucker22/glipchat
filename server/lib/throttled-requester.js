@@ -1,5 +1,5 @@
-import {Meteor} from 'meteor/meteor';
-import Future from 'fibers/future';
+import { _ } from 'meteor/underscore';
+import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
 
 // Function wrapping code.
@@ -21,13 +21,13 @@ export default class ThrottledRequester {
     this.fulfilled = [];
   }
 
-  makeRequest() {
-    if (!!arguments && arguments.length) {
-      this.requests.push(wrapFunction.apply(this, arguments));
+  makeRequest(...args) {
+    if (!!args && args.length) {
+      this.requests.push(wrapFunction.apply(this, args));
     }
 
     if (this.requests.length) {
-      let nextTick = this.fulfilled.length &&
+      const nextTick = this.fulfilled.length &&
         _.first(this.fulfilled).clone().add(this.milliseconds, 'milliseconds');
       if (this.fulfilled.length < this.rate ||
         (nextTick && moment().isAfter(nextTick))) {
@@ -35,15 +35,13 @@ export default class ThrottledRequester {
         this.fulfilled.push(moment());
         this.fulfilled = _.last(this.fulfilled, this.rate);
         this.makeRequest();
-      } else {
-        if (!this.busy) {
-          this.busy = true;
-          Meteor.setTimeout(()=> {
-            this.busy = false;
-            this.makeRequest();
-          }, this.milliseconds);
-        }
+      } else if (!this.busy) {
+        this.busy = true;
+        Meteor.setTimeout(() => {
+          this.busy = false;
+          this.makeRequest();
+        }, this.milliseconds);
       }
     }
   }
-};
+}

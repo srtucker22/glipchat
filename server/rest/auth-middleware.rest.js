@@ -1,4 +1,5 @@
-import {JsonRoutes} from 'meteor/simple:json-routes';
+import { Meteor } from 'meteor/meteor';
+import { JsonRoutes } from 'meteor/simple:json-routes';
 import Fiber from 'fibers';
 
 /**
@@ -14,7 +15,7 @@ import Fiber from 'fibers';
 JsonRoutes.Middleware.authenticateMeteorUserByToken =
   function(req, res, next) {
     Fiber(function() {
-      let userId = getUserIdFromAuthToken(req.authToken);
+      const userId = getUserIdFromAuthToken(req.authToken);
       if (userId) {
         req.userId = userId;
       }
@@ -35,9 +36,9 @@ function getUserIdFromAuthToken(token) {
     return null;
   }
 
-  let user = Meteor.users.findOne({
+  const user = Meteor.users.findOne({
     'services.resume.loginTokens.hashedToken': token, // we use hashedToken
-  }, {fields: {_id: 1}});
+  }, { fields: { _id: 1 } });
   if (user) {
     return user._id;
   }

@@ -1,16 +1,17 @@
-import ThrottledRequester from './throttled-requester';
-import {chai} from 'meteor/practicalmeteor:chai';
+import { Meteor } from 'meteor/meteor';
+import { chai } from 'meteor/practicalmeteor:chai';
 import moment from 'moment';
+import ThrottledRequester from './throttled-requester';
 
-describe('ThrottledRequester', ()=> {
-  it('should make throttled requests', (done)=> {
+describe('ThrottledRequester', () => {
+  it('should make throttled requests', (done) => {
     // create request queue for Google Contacts API limited to 10 req/sec
-    let testRequester = new ThrottledRequester(10, 100);
+    const testRequester = new ThrottledRequester(10, 100);
     chai.assert.equal(testRequester.fulfilled.length, 0);
     chai.assert.equal(testRequester.requests.length, 0);
     chai.assert.equal(testRequester.busy, false);
 
-    let state = {
+    const state = {
       calls: [],
     };
 
@@ -29,9 +30,9 @@ describe('ThrottledRequester', ()=> {
     chai.assert.equal(testRequester.fulfilled.length, 10);
     chai.assert.equal(state.calls.length, 10);
 
-    Meteor.setTimeout(()=> {
+    Meteor.setTimeout(() => {
       chai.assert.equal(state.calls.length, 20);
-      Meteor.setTimeout(()=> {
+      Meteor.setTimeout(() => {
         chai.assert.equal(state.calls.length, 21);
         done();
       }, 100);

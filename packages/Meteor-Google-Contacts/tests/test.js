@@ -1,15 +1,17 @@
-/*jslint indent:2*/
-/*global require: true, console: true */
-var IniReader = require('inireader').IniReader;
-var iniReader = new IniReader();
-var GoogleContacts = require('googlecontacts').GoogleContacts;
-var assert = require('assert');
-var concatsTested = false, groupsTested = false;
+/* jslint indent:2*/
+/* global require: true, console: true */
+const IniReader = require('inireader').IniReader;
+const iniReader = new IniReader();
+const GoogleContacts = require('googlecontacts').GoogleContacts;
+const assert = require('assert');
+let concatsTested = false,
+  groupsTested = false;
 iniReader.on('fileParse', function () {
-  var cfg = this.param('account'), c;
+  let cfg = this.param('account'),
+    c;
   c = new GoogleContacts({
     email: cfg.email,
-    password: cfg.password
+    password: cfg.password,
   });
   c.on('error', function (e) {
     console.log('error', e);

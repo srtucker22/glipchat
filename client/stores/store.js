@@ -45,8 +45,8 @@ persistStore(store, { storage: localForage });
 // super simplified tracker -- we get all the users all the time under one sub
 let currentUser;
 Tracker.autorun(() => {
-  let available = Session.get('availableUsers');
-  let room = Session.get('currentRoom');
+  const available = Session.get('availableUsers');
+  const room = Session.get('currentRoom');
 
   const sub = Meteor.subscribe('users', {
     room,
@@ -80,10 +80,8 @@ Tracker.autorun(() => {
     store.dispatch({
       type: constants.SET_USERS,
       users: {
-        available: _.reject(users, (user) => (!!currentUser && user._id === currentUser._id)),
-        active: _.filter(users, (user) => {
-          return !!user.roles;
-        }),
+        available: _.reject(users, user => (!!currentUser && user._id === currentUser._id)),
+        active: _.filter(users, user => !!user.roles),
         user: currentUser,
       },
     });

@@ -1,8 +1,9 @@
-import {Accounts} from 'meteor/accounts-base';
-import {Meteor} from 'meteor/meteor';
-import {SimpleSchema} from 'meteor/aldeed:simple-schema';
+import { Accounts } from 'meteor/accounts-base';
+import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-let Schema = {};
+const Schema = {};
 
 Schema.UserProfile = new SimpleSchema({
   name: {
@@ -35,7 +36,7 @@ Schema.UserProfile = new SimpleSchema({
   },
   updatedAt: {
     type: Date,
-    autoValue: function() {
+    autoValue() {
       if (this.isUpdate) {
         return new Date();
       }
@@ -47,11 +48,11 @@ Schema.UserProfile = new SimpleSchema({
 });
 
 Schema.User = new SimpleSchema({
-  'username': {
+  username: {
     type: String,
     optional: true,
   },
-  'emails': {
+  emails: {
     type: [Object],
 
     // this must be optional if you also use other login services like facebook,
@@ -65,14 +66,14 @@ Schema.User = new SimpleSchema({
   'emails.$.verified': {
     type: Boolean,
   },
-  'createdAt': {
+  createdAt: {
     type: Date,
   },
-  'profile': {
+  profile: {
     type: Schema.UserProfile,
     optional: true,
   },
-  'history': {
+  history: {
     type: [Object],
     optional: true,
   },
@@ -84,12 +85,12 @@ Schema.User = new SimpleSchema({
     type: Date,
     optional: true,
   },
-  'services': {
+  services: {
     type: Object,
     optional: true,
     blackbox: true,
   },
-  'status': {
+  status: {
     type: Object,
     blackbox: true,
     optional: true,
@@ -101,7 +102,7 @@ Schema.User = new SimpleSchema({
   // Roles.addUsersToRoles(userId, ["admin"], Roles.GLOBAL_GROUP);
   // You can't mix and match adding with and without a group since
   // you will fail validation in some cases.
-  'roles': {
+  roles: {
     type: Object,
     optional: true,
     blackbox: true,
@@ -111,27 +112,27 @@ Schema.User = new SimpleSchema({
 Meteor.users.attachSchema(Schema.User);
 
 Meteor.users.allow({
-  insert(userId, user, fields, modifier) {
+  insert(userId, user) {
     return (userId === user._id ||
       Roles.userIsInRole(userId, ['manage-users', 'admin']));
   },
 
-  remove(userId, user, fields, modifier) {
+  remove(userId, user) {
     return (userId === user._id ||
       Roles.userIsInRole(userId, ['manage-users', 'admin']));
   },
 
-  update(userId, user, fields, modifier) {
+  update(userId, user) {
     return (userId === user._id ||
       Roles.userIsInRole(userId, ['manage-users', 'admin']));
   },
 });
 
 // modify user document on creation
-Accounts.onCreateUser((options, user)=>{
+Accounts.onCreateUser((options, user) => {
     // create gcm service in user doc
-    user.services.gcm = {
-      subscriptionIds: [],
-    };
-    return user;
+  user.services.gcm = {
+    subscriptionIds: [],
+  };
+  return user;
 });

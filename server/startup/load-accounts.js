@@ -1,7 +1,12 @@
+import { _ } from 'meteor/underscore';
+import { Accounts } from 'meteor/accounts-base';
+import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
+
 // configure first upperclass users
 Meteor.startup(() => {
   if (Meteor.users.find().fetch().length === 0) {
-    let users = Meteor.settings.admins || [
+    const users = Meteor.settings.admins || [
       {
         name: 'Manage-Users User',
         email: 'manage@example.com',
@@ -15,10 +20,10 @@ Meteor.startup(() => {
     ];
 
     _.each(users, (user) => {
-      let id = Accounts.createUser({
+      const id = Accounts.createUser({
         email: user.email,
         password: user.password || 'apple1',
-        profile: {name: user.name},
+        profile: { name: user.name },
       });
 
       if (user.roles.length > 0) {

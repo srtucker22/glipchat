@@ -1,14 +1,14 @@
-import {Meteor} from 'meteor/meteor';
-import {Rooms} from '../../lib/rooms';
-import {Notifications} from '../../lib/notifications';
-import {roomStream} from '../../lib/streams';
-import {UserStatus} from 'meteor/mizzao:user-status';
-import {_} from 'meteor/underscore';
-import {check, Match} from 'meteor/check';
+import { Meteor } from 'meteor/meteor';
+import { UserStatus } from 'meteor/mizzao:user-status';
+import { _ } from 'meteor/underscore';
+import { check, Match } from 'meteor/check';
+import { Rooms } from '../../lib/rooms';
+import { Notifications } from '../../lib/notifications';
+import { roomStream } from '../../lib/streams';
 
 // room permissions
 roomStream.allowRead(function(eventName) {
-  return this.userId == eventName;
+  return this.userId === eventName;
 });
 
 // authenticated users can emit join and msg events
@@ -16,41 +16,41 @@ roomStream.allowWrite('join', 'logged');
 roomStream.allowWrite('msg', 'logged');
 
 function disconnect(userId, roomId) {
-  const room = Rooms.findOne({_id: roomId});
+  const room = Rooms.findOne({ _id: roomId });
 
   // make sure they are still technically in the Room model
   if (!!room && _.contains(room.connected, userId)) {
-    Rooms.update({_id: roomId}, {$pull: {connected: userId}});
+    Rooms.update({ _id: roomId }, { $pull: { connected: userId } });
 
     // tell everyone in the room the peer has disconnected
     _.each(_.without(room.connected, userId), function(currentUserId) {
       roomStream.emit(
         currentUserId,
-        {room: roomId, type: 'peer.disconnected', from: userId}
+        { room: roomId, type: 'peer.disconnected', from: userId },
       );
     });
   }
 
   Notifications.update({
     'data.room': roomId,
-    'owner': {$nin: _.without(room.connected, userId)},
+    owner: { $nin: _.without(room.connected, userId) },
   },
-  {$set: {'data.active': _.without(room.connected, userId).length > 0}},
-  {multi: true});
+  { $set: { 'data.active': _.without(room.connected, userId).length > 0 } },
+  { multi: true });
 }
 
 // join a room
 roomStream.on('join', function(roomId) {
   check(roomId, String);
   console.log('join', roomId, this.userId);
-  const _this = this;
+  const self = this;
 
   // notify everyone in the room that the peer has connected
-  const room = Rooms.findOne({_id: roomId});
+  const room = Rooms.findOne({ _id: roomId });
 
   // don't let connected users add connection in different browser or tab
-  if (_.contains(room.connected, _this.userId)) {
-    roomStream.emit(_this.userId, {
+  if (_.contains(room.connected, self.userId)) {
+    roomStream.emit(self.userId, {
       room: roomId,
       type: 'error.duplicate',
       error: {
@@ -61,48 +61,48 @@ roomStream.on('join', function(roomId) {
     return;
   }
 
-  _.each(_.without(room.connected, _this.userId), (userId)=> {
+  _.each(_.without(room.connected, self.userId), (userId) => {
     console.log('emitting', userId);
     roomStream.emit(
       userId,
-      {room: roomId, type: 'peer.connected', from: _this.userId}
+      { room: roomId, type: 'peer.connected', from: self.userId },
     );
   });
 
-  Rooms.update({_id: roomId}, {
-    $addToSet: {connected: _this.userId},
+  Rooms.update({ _id: roomId }, {
+    $addToSet: { connected: self.userId },
   });
 
   Notifications.update({
-    'owner': {$nin: room.connected},
+    owner: { $nin: room.connected },
     'data.room': roomId,
   },
-  {$set: {'data.active': true}},
-  {multi: true});
+  { $set: { 'data.active': true } },
+  { multi: true });
 
   // mark notification as inactive and read when user joins room
   Notifications.update({
-    'owner': _this.userId,
+    owner: self.userId,
     'data.room': roomId,
   },
-  {$set: {'data.active': false, 'unread': false}},
-  {multi: true});
+  { $set: { 'data.active': false, unread: false } },
+  { multi: true });
 
-  Meteor.users.update(_this.userId,
-    {$addToSet: {history: {room: roomId, createdAt: new Date}}}
+  Meteor.users.update(self.userId,
+    { $addToSet: { history: { room: roomId, createdAt: new Date() } } },
   );
 
   // TODO: this isn't working for whatever reason
-  // _this.connection.onClose = function () {
+  // self.connection.onClose = function () {
   //   console.log('onClose');
-  //   disconnect(_this.userId, roomId);
+  //   disconnect(self.userId, roomId);
   // };
 
   // alternative connection tracker
   // when someone disconnects, remove them from the Room's connected list
-  UserStatus.events.once('connectionLogout', ({userId})=> {
-    if (_this.userId == userId) {
-      disconnect(_this.userId, roomId);
+  UserStatus.events.once('connectionLogout', ({ userId }) => {
+    if (self.userId == userId) {
+      disconnect(self.userId, roomId);
     }
   });
 });
@@ -110,11 +110,11 @@ roomStream.on('join', function(roomId) {
 // send messages between people in the room
 roomStream.on('msg', function(data) {
   // check the data for proper values
-  check(data, Match.ObjectIncluding({type: String, room: String}));
+  check(data, Match.ObjectIncluding({ type: String, room: String }));
   check(data.to, Match.OneOf(null, String, undefined));
   check(_.omit(data, ['type', 'room', 'to']), Match.OneOf(
     {
-      sdp: {sdp: String, type: String},
+      sdp: { sdp: String, type: String },
     }, {
       ice: Match.OneOf({
         sdpMLineIndex: Number,
@@ -122,8 +122,8 @@ roomStream.on('msg', function(data) {
         candidate: String,
       },
       {},
-      null
-    )}, {
+      null,
+    ) }, {
       tracks: {
         audio: Boolean,
         video: Boolean,
@@ -132,35 +132,35 @@ roomStream.on('msg', function(data) {
     {},
   ));
 
-  let _this = this;
+  const self = this;
 
-  console.log(data.type + ' received from user ' + _this.userId);
+  console.log(`${data.type} received from user ${self.userId}`);
 
   // user is disconnecting without closing window
   if (data.type === 'disconnect') {
-    disconnect(_this.userId, data.room);
+    disconnect(self.userId, data.room);
     return;
   }
 
   // find the room
-  let room = Rooms.findOne({_id: data.room});
-  console.log('emitting ' + data.type + ' to ' + data.to);
+  const room = Rooms.findOne({ _id: data.room });
+  console.log(`emitting ${data.type} to ${data.to}`);
 
   // emit message to recipients
   if (room) {
-    data.from = _this.userId;
+    data.from = self.userId;
     if (data.to) {
       // emit message to singular recipient
       if (_.contains(room.connected, data.to)) {  // make sure the user is in the room
-        data.from = _this.userId;
+        data.from = self.userId;
         roomStream.emit(data.to, data);
       }
     } else {
       // emit the message to everyone in the room
-      _.each(_.without(room.connected, _this.userId), function(currentUserId) {
+      _.each(_.without(room.connected, self.userId), function(currentUserId) {
         roomStream.emit(
           currentUserId,
-          data
+          data,
         );
       });
     }

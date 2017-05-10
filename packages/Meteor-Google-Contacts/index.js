@@ -16,13 +16,11 @@
  * more fields than can be returned in a single response, the API truncates the feed and adds
  * a "Next" link that allows you to request the rest of the response.
  */
-var EventEmitter = Npm.require('events').EventEmitter,
-  _ = Npm.require('underscore'),
+const EventEmitter = Npm.require('events').EventEmitter,
   qs = Npm.require('querystring'),
   util = Npm.require('util'),
   url = Npm.require('url'),
-  https = Npm.require('https'),
-  querystring = Npm.require('querystring');
+  https = Npm.require('https');
 
 GoogleContacts = function (opts) {
   if (typeof opts === 'string') {
@@ -45,44 +43,43 @@ util.inherits(GoogleContacts, EventEmitter);
 
 
 GoogleContacts.prototype._get = function (params, cb) {
-  var self = this;
+  const self = this;
 
   if (typeof params === 'function') {
     cb = params;
     params = {};
   }
 
-  var req = {
+  const req = {
     host: 'www.google.com',
     port: 443,
     path: this._buildPath(params),
     method: 'GET',
     headers: {
-      'Authorization': 'OAuth ' + this.token
-    }
+      Authorization: `OAuth ${this.token}`,
+    },
   };
 
   // console.log(req);
 
   https.request(req, function (res) {
-    var data = '';
+    let data = '';
 
     res.on('end', function () {
       if (res.statusCode < 200 || res.statusCode >= 300) {
-        var error = new Error('Bad client request status: ' + res.statusCode);
+        const error = new Error(`Bad client request status: ${res.statusCode}`);
         return cb(error);
       }
       try {
         data = JSON.parse(data);
         cb(null, data);
-      }
-      catch (err) {
+      } catch (err) {
         cb(err);
       }
     });
 
     res.on('data', function (chunk) {
-      //console.log(chunk.toString());
+      // console.log(chunk.toString());
       data += chunk;
     });
 
@@ -90,47 +87,46 @@ GoogleContacts.prototype._get = function (params, cb) {
       cb(err);
     });
 
-    //res.on('close', onFinish);
+    // res.on('close', onFinish);
   }).on('error', function (err) {
     cb(err);
   }).end();
 };
 
 GoogleContacts.prototype._getPhotoData = function (params, cb) {
-  var self = this;
+  const self = this;
 
   if (typeof params === 'function') {
     cb = params;
     params = {};
   }
 
-  var req = {
+  const req = {
     host: 'www.google.com',
     port: 443,
     path: this._buildPath(params),
     method: 'GET',
     headers: {
-      'Authorization': 'OAuth ' + this.token
-    }
+      Authorization: `OAuth ${this.token}`,
+    },
   };
 
   // console.log(req);
 
   https.request(req, function (res) {
-    var data;
-    var dataType = false;
+    let data;
+    let dataType = false;
     // var data = new Buffer();
 
     res.on('end', function () {
       if (res.statusCode < 200 || res.statusCode >= 300) {
-        var error = new Error('Bad client request status: ' + res.statusCode);
+        const error = new Error(`Bad client request status: ${res.statusCode}`);
         return cb(error);
       }
       try {
         // console.log('end: ', data.length);
         cb(null, data);
-      }
-      catch (err) {
+      } catch (err) {
         cb(err);
       }
     });
@@ -153,23 +149,23 @@ GoogleContacts.prototype._getPhotoData = function (params, cb) {
       cb(err);
     });
 
-    //res.on('close', onFinish);
+    // res.on('close', onFinish);
   }).on('error', function (err) {
     cb(err);
   }).end();
 };
 
 GoogleContacts.prototype.getPhoto = function (path, cb) {
-  var self = this;
+  const self = this;
 
-  this._getPhotoData({path: path}, receivedPhotoData);
+  this._getPhotoData({ path }, receivedPhotoData);
   function receivedPhotoData(err, data) {
     cb(err, data);
   }
 };
 
 GoogleContacts.prototype.getContacts = function (cb, contacts) {
-  var self = this;
+  const self = this;
 
   this._get({ type: 'contacts' }, receivedContacts);
   function receivedContacts(err, data) {
@@ -177,12 +173,12 @@ GoogleContacts.prototype.getContacts = function (cb, contacts) {
 
     self._saveContactsFromFeed(data.feed);
 
-    var next = false;
+    let next = false;
     data.feed.link.forEach(function (link) {
       if (link.rel === 'next') {
         next = true;
-        var path = url.parse(link.href).path;
-        self._get({ path: path }, receivedContacts);
+        const path = url.parse(link.href).path;
+        self._get({ path }, receivedContacts);
       }
     });
     if (!next) {
@@ -192,29 +188,28 @@ GoogleContacts.prototype.getContacts = function (cb, contacts) {
 };
 
 GoogleContacts.prototype._saveContactsFromFeed = function (feed) {
-  var self = this;
-  //console.log(feed);
-  var i = 0;
+  const self = this;
+  // console.log(feed);
+  const i = 0;
   feed.entry.forEach(function (entry) {
-    //console.log(entry);
+    // console.log(entry);
     try {
-      var id = entry.id['$t'];
-      var name = entry.title['$t'];
-      var email = entry['gd$email'][0].address; // only save first email
-      var photoUrl;
-      var mimeType;
+      const id = entry.id.$t;
+      const name = entry.title.$t;
+      const email = entry.gd$email[0].address; // only save first email
+      let photoUrl;
+      let mimeType;
       entry.link.some(function(link) {
-        if ((link.rel) && (link.rel.indexOf('#photo') !== -1) && (link.type.indexOf('image') !== -1)){
+        if ((link.rel) && (link.rel.indexOf('#photo') !== -1) && (link.type.indexOf('image') !== -1)) {
           photoUrl = link.href;
           mimeType = link.type;
           // console.log(link);
         }
       });
-      if (photoUrl){
-        self.contacts.push({ name: name, email: email, photoUrl: photoUrl, mime_type: mimeType, id: id});
+      if (photoUrl) {
+        self.contacts.push({ name, email, photoUrl, mime_type: mimeType, id });
       }
-    }
-    catch (e) {
+    } catch (e) {
       // property not available...
     }
   });
@@ -230,16 +225,16 @@ GoogleContacts.prototype._buildPath = function (params) {
   params.email = params.email || 'default';
   params['max-results'] = params['max-results'] || 2000;
 
-  var query = {
+  const query = {
     alt: params.alt,
-    'max-results': params['max-results']
+    'max-results': params['max-results'],
   };
 
-  var path = '/m8/feeds/';
-  path += params.type + '/';
-  path += params.email + '/';
+  let path = '/m8/feeds/';
+  path += `${params.type}/`;
+  path += `${params.email}/`;
   path += params.projection;
-  path += '?' + qs.stringify(query);
+  path += `?${qs.stringify(query)}`;
 
   return path;
 };
@@ -250,49 +245,48 @@ GoogleContacts.prototype.refreshAccessToken = function (refreshToken, cb) {
     params = {};
   }
 
-  var data = {
+  const data = {
     refresh_token: refreshToken,
     client_id: this.consumerKey,
     client_secret: this.consumerSecret,
-    grant_type: 'refresh_token'
+    grant_type: 'refresh_token',
 
   };
 
-  var body = qs.stringify(data);
+  const body = qs.stringify(data);
 
-  var opts = {
+  const opts = {
     host: 'accounts.google.com',
     port: 443,
     path: '/o/oauth2/token',
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': body.length
-    }
+      'Content-Length': body.length,
+    },
   };
 
-  //console.log(opts);
-  //console.log(data);
+  // console.log(opts);
+  // console.log(data);
 
-  var req = https.request(opts, function (res) {
-    var data = '';
+  const req = https.request(opts, function (res) {
+    let data = '';
     res.on('end', function () {
       if (res.statusCode < 200 || res.statusCode >= 300) {
-        var error = new Error('Bad client request status: ' + res.statusCode);
+        const error = new Error(`Bad client request status: ${res.statusCode}`);
         return cb(error);
       }
       try {
         data = JSON.parse(data);
-        //console.log(data);
+        // console.log(data);
         cb(null, data.access_token);
-      }
-      catch (err) {
+      } catch (err) {
         cb(err);
       }
     });
 
     res.on('data', function (chunk) {
-      //console.log(chunk.toString());
+      // console.log(chunk.toString());
       data += chunk;
     });
 
@@ -300,7 +294,7 @@ GoogleContacts.prototype.refreshAccessToken = function (refreshToken, cb) {
       cb(err);
     });
 
-    //res.on('close', onFinish);
+    // res.on('close', onFinish);
   }).on('error', function (err) {
     cb(err);
   });

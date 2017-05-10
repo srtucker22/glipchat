@@ -49,7 +49,7 @@ export const sendNotifications = (ids, notification) => {
       },
     });
 
-    if (result.statusCode == 200) {
+    if (result.statusCode === 200) {
       return true;
     }
     throw new Meteor.Error(result.statusCode, 'something went wrong');

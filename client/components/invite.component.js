@@ -73,15 +73,15 @@ export class InviteComponent extends React.Component {
     // Custom Actions
     const customActions = [
       <FlatButton
-        key='cancel'
-        label='Cancel'
+        key="cancel"
+        label="Cancel"
         onTouchTap={this.props.hideInviteModal}
       />,
       <FlatButton
-        key='invite'
-        label='Invite'
+        key="invite"
+        label="Invite"
         disabled={(!this.state.invitees || !this.state.invitees.length || !user.profile)}
-        secondary={true}
+        secondary
         onTouchTap={this.invite.bind(this)}
       />,
     ];
@@ -89,82 +89,90 @@ export class InviteComponent extends React.Component {
     // Custom Actions
     const dialogActions = [
       <FlatButton
-        key='cancel'
-        label='Cancel'
+        key="cancel"
+        label="Cancel"
         onTouchTap={this.props.hideInviteModal}
       />,
       <FlatButton
-        key='update'
-        label='Update'
+        key="update"
+        label="Update"
         disabled={(!this.state.name && (!user.profile || !user.profile.name))}
-        secondary={true}
+        secondary
         onTouchTap={this.updateProfileName.bind(this)}
       />,
     ];
 
     return (<ReactCSSTransitionGroup
-      transitionName='invite-modal'
-      transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+      transitionName="invite-modal"
+      transitionEnterTimeout={300} transitionLeaveTimeout={300}
+    >
       {this.props.showInviteModal ?
-      <div
-        className='invite-modal'
-        key='invite-modal'
-        style={[styles.css]}>
-        <Dialog
-          title={'Please enter your name'}
-          actions={dialogActions}
-          modal={false}
-          open={this.state.getName || false}
-          onRequestClose={this.handleClose.bind(this)}
+        <div
+          className="invite-modal"
+          key="invite-modal"
+          style={[styles.css]}
         >
-          <TextField
-            defaultValue={!!user.profile ? user.profile.name : ''}
-            onChange={this.updateProfileNameState.bind(this)}
-            errorText={user.profile.name ? ' ' : null}
-            floatingLabelText='Your name'/>
-        </Dialog>
-        <AppBar
-          showMenuIconButton={false}
-          title={'Invite Contacts'}
-          iconElementRight={<IconButton
-            iconClassName='material-icons'
-            onTouchTap={this.props.hideInviteModal}>
+          <Dialog
+            title={'Please enter your name'}
+            actions={dialogActions}
+            modal={false}
+            open={this.state.getName || false}
+            onRequestClose={this.handleClose.bind(this)}
+          >
+            <TextField
+              defaultValue={user.profile ? user.profile.name : ''}
+              onChange={this.updateProfileNameState.bind(this)}
+              errorText={user.profile.name ? ' ' : null}
+              floatingLabelText="Your name"
+            />
+          </Dialog>
+          <AppBar
+            showMenuIconButton={false}
+            title={'Invite Contacts'}
+            iconElementRight={<IconButton
+              iconClassName="material-icons"
+              onTouchTap={this.props.hideInviteModal}
+            >
             clear
           </IconButton>}
-        />
-        <ContactListComponent
-          contacts={contacts}
-          dispatch={dispatch}
-          onChange={this.onContactListChange.bind(this)}
-        />
-        {this.state.invitees ? (
-          <div style={[GlobalStyles.table, {
-            position: 'fixed',
-            width: '100%',
-            bottom: 0,
-          }]}>
-            <div style={[GlobalStyles.cell, {width: '50%'}]}>
-              <FlatButton
-                backgroundColor={Colors.red500}
-                key='cancel'
-                label='Cancel'
-                onTouchTap={this.props.hideInviteModal}
-                style={{color: Colors.fullWhite, width: '100%'}}/>
+          />
+          <ContactListComponent
+            contacts={contacts}
+            dispatch={dispatch}
+            onChange={this.onContactListChange.bind(this)}
+          />
+          {this.state.invitees ? (
+            <div
+              style={[GlobalStyles.table, {
+                position: 'fixed',
+                width: '100%',
+                bottom: 0,
+              }]}
+            >
+              <div style={[GlobalStyles.cell, { width: '50%' }]}>
+                <FlatButton
+                  backgroundColor={Colors.red500}
+                  key="cancel"
+                  label="Cancel"
+                  onTouchTap={this.props.hideInviteModal}
+                  style={{ color: Colors.fullWhite, width: '100%' }}
+                />
+              </div>
+              <div style={[GlobalStyles.cell, { width: '50%' }]}>
+                <FlatButton
+                  backgroundColor={Colors.cyan500}
+                  key="invite"
+                  label="Invite"
+                  onTouchTap={this.invite.bind(this)}
+                  style={{ color: Colors.fullWhite, width: '100%' }}
+                />
+              </div>
             </div>
-            <div style={[GlobalStyles.cell, {width: '50%'}]}>
-              <FlatButton
-                backgroundColor={Colors.cyan500}
-                key='invite'
-                label='Invite'
-                onTouchTap={this.invite.bind(this)}
-                style={{color: Colors.fullWhite, width: '100%'}}/>
-            </div>
-          </div>
         ) : undefined}
-      </div> : undefined}
+        </div> : undefined}
     </ReactCSSTransitionGroup>);
   }
-};
+}
 InviteComponent.propTypes = {
   dispatch: PropTypes.func,
   invitees: PropTypes.array,

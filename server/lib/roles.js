@@ -1,8 +1,7 @@
 import { Accounts } from 'meteor/accounts-base';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
-import { check, Match } from 'meteor/check';
-import { MANAGER_ROLES } from '../../lib/roles';
+import { check } from 'meteor/check';
 
 // update a users permissions
 Meteor.methods({

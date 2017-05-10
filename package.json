@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "meteor --settings settings.json",
-    "test": "meteor test --driver-package practicalmeteor:mocha"
+    "test": "meteor test --driver-package practicalmeteor:mocha",
+    "lint": "eslint .",
+    "pretest": "npm run lint --silent"
   },
   "dependencies": {
     "@meteorjs/eslint-config-meteor": "^1.0.5",

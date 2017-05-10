@@ -152,33 +152,34 @@ export const subscribe = (user) => {
   }
 };
 
-export const unsubscribe = () => navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-  // To unsubscribe from push messaging, you need get the
-  // subcription object, which you can call unsubscribe() on.
-  return serviceWorkerRegistration.pushManager.getSubscription().then((sub)=> {
-    // Check we have a subscription to unsubscribe
-    if (!sub) {
-      // No subscription object, so set the state
-      // to allow the user to subscribe to push
-      return;
-    }
+export const unsubscribe = () => navigator.serviceWorker.ready
+  .then(serviceWorkerRegistration =>
+    // To unsubscribe from push messaging, you need get the
+    // subcription object, which you can call unsubscribe() on.
+    serviceWorkerRegistration.pushManager.getSubscription()
+      .then((sub) => {
+        // Check we have a subscription to unsubscribe
+        if (!sub) {
+          // No subscription object, so set the state
+          // to allow the user to subscribe to push
+          return;
+        }
 
-    // We have a subcription, so call unsubscribe on it
-    return sub.unsubscribe().then(() => {
-      const mergedEndpoint = endpointWorkaround(sub);
-      const endpointSections = mergedEndpoint.split('/');
-      const subscriptionId = endpointSections[endpointSections.length - 1];
-      return subscriptionId;
-    }).catch((e) => {
-      // We failed to unsubscribe, this can lead to
-      // an unusual state, so may be best to remove
-      // the subscription id from your data store and
-      // inform the user that you disabled push
+        // We have a subcription, so call unsubscribe on it
+        return sub.unsubscribe().then(() => {
+          const mergedEndpoint = endpointWorkaround(sub);
+          const endpointSections = mergedEndpoint.split('/');
+          const subscriptionId = endpointSections[endpointSections.length - 1];
+          return subscriptionId;
+        }).catch((e) => {
+          // We failed to unsubscribe, this can lead to
+          // an unusual state, so may be best to remove
+          // the subscription id from your data store and
+          // inform the user that you disabled push
 
-      console.error('Unsubscription error: ', e);
-    });
-  }).catch((e) => {
-    console.error('Error thrown while unsubscribing from ' +
-      'push messaging.', e);
-  });
-});
+          console.error('Unsubscription error: ', e);
+        });
+      }).catch((e) => {
+        console.error('Error thrown while unsubscribing from ' +
+          'push messaging.', e);
+      }));
