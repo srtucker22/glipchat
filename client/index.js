@@ -5,13 +5,13 @@
 import 'react-fastclick';
 import 'webrtc-adapter';
 import 'buffer';
-import {analytics} from 'meteor/okgrow:analytics';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import * as config from '../lib/config';
+import { analytics } from 'meteor/okgrow:analytics';
+import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
 import Browser from 'bowser';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
+import * as config from '../lib/config';
 import Root from './components/root.component';
 import Electron from './utils/electron.utils';
 
@@ -27,8 +27,8 @@ Meteor.startup(() => {
   }
 
   render(
-    <Root/>,
-    document.getElementById('root')
+    <Root />,
+    document.getElementById('root'),
   );
 
   document.title = config.APP_NAME; // set the title for the app

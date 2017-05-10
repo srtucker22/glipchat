@@ -1,12 +1,13 @@
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 
-const API_KEY = Meteor.settings.public.google.apiKey;  // TODO: make this a single prop in settings.json
+// TODO: make this a single prop in settings.json
+const API_KEY = Meteor.settings.public.google.apiKey;
 const GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
 
 // This method handles the removal of subscriptionId
 // in Chrome 44 by concatenating the subscription Id
 // to the subscription endpoint
-const endpointWorkaround = (pushSubscription)=> {
+const endpointWorkaround = (pushSubscription) => {
   // Make sure we only mess with GCM
   if (pushSubscription.endpoint.indexOf('https://android.googleapis.com/gcm/send') !== 0) {
     return pushSubscription.endpoint;
@@ -18,20 +19,19 @@ const endpointWorkaround = (pushSubscription)=> {
   if (pushSubscription.subscriptionId &&
     pushSubscription.endpoint.indexOf(pushSubscription.subscriptionId) === -1) {
     // Handle version 42 where you have separate subId and Endpoint
-    mergedEndpoint = pushSubscription.endpoint + '/' +
-      pushSubscription.subscriptionId;
+    mergedEndpoint = `${pushSubscription.endpoint}/${pushSubscription.subscriptionId}`;
   }
   return mergedEndpoint;
 };
 
-export const sendMessage = (message)=> {
+export const sendMessage = message => (
   // This wraps the message posting/response in a promise, which will
   // resolve if the response doesn't contain an error, and reject with
   // the error if it does. If you'd prefer, it's possible to call
   // controller.postMessage() and set up the onmessage handler
   // independently of a promise, but this is a convenient wrapper.
-  return new Promise(function(resolve, reject) {
-    let messageChannel = new MessageChannel();
+  new Promise(function(resolve, reject) {
+    const messageChannel = new MessageChannel();
     messageChannel.port1.onmessage = function(event) {
       if (event.data.error) {
         reject(event.data.error);
@@ -48,8 +48,8 @@ export const sendMessage = (message)=> {
     // See
     // https://html.spec.whatwg.org/multipage/workers.html#dom-worker-postmessage
     navigator.serviceWorker.controller.postMessage(message, [messageChannel.port2]);
-  });
-};
+  })
+);
 
 // NOTE: This code is only suitable for GCM endpoints,
 // When another browser has a working version, alter
@@ -62,35 +62,33 @@ function showCurlCommand(mergedEndpoint) {
     return;
   }
 
-  let endpointSections = mergedEndpoint.split('/');
-  let subscriptionId = endpointSections[endpointSections.length - 1];
+  const endpointSections = mergedEndpoint.split('/');
+  const subscriptionId = endpointSections[endpointSections.length - 1];
 
-  let curlCommand = 'curl --header "Authorization: key=' + API_KEY +
-    '" --header Content-Type:"application/json" ' + GCM_ENDPOINT +
-    ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"]}"';
+  const curlCommand = `curl --header "Authorization: key=${API_KEY}" --header Content-Type:"application/json" ${GCM_ENDPOINT} -d "{\\"registration_ids\\":[\\"${subscriptionId}\\"]}"`;
 
   console.log('curlCommand', curlCommand);
 }
 
-export const isSubscribed = ()=> {
-  if(!Meteor.isCordova && 'serviceWorker' in navigator) {
-    return navigator.serviceWorker.ready.then((serviceWorkerRegistration)=> {
+export const isSubscribed = () => {
+  if (!Meteor.isCordova && 'serviceWorker' in navigator) {
+    return navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
       // returns Promise that resolves to a PushSubscription object.
       serviceWorkerRegistration.pushManager.getSubscription();
     });
   }
 };
 
-export const subscribe = (user)=> {
+export const subscribe = (user) => {
   // browser gets a push manifest and service worker
-  if(!Meteor.isCordova && 'serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('message', (event)=> {
+  if (!Meteor.isCordova && 'serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', (event) => {
       console.log('serviceWorker event', event);
     });
 
     return navigator.serviceWorker
       .register('/push-service-worker.js')
-      .then((reg)=> {
+      .then((reg) => {
         if (Notification.permission === 'denied') {
           console.error('The user has blocked notifications.');
           return;
@@ -102,20 +100,20 @@ export const subscribe = (user)=> {
           return;
         }
 
-        return navigator.serviceWorker.ready.then((reg)=> {
+        return navigator.serviceWorker.ready.then((reg) => {
           sendMessage({
             type: 'SET_USER',
             user,
-          }).then((res)=> {
+          }).then((res) => {
             // If the promise resolves, just display a success message.
             console.log('message sent', res);
-          }).catch((e)=> {
+          }).catch((e) => {
             console.error(e);
           }); // If the promise rejects, show the error.;
 
           return reg.pushManager.subscribe({
             userVisibleOnly: true,
-          }).then((sub)=> {
+          }).then((sub) => {
             const mergedEndpoint = endpointWorkaround(sub);
 
             if (mergedEndpoint.indexOf(GCM_ENDPOINT) !== 0) {
@@ -133,7 +131,7 @@ export const subscribe = (user)=> {
             // This is just for demo purposes / an easy to test by
             // generating the appropriate cURL command
             // showCurlCommand(mergedEndpoint);
-          }).catch((e)=> {
+          }).catch((e) => {
             if (Notification.permission === 'denied') {
               // The user denied the notification permission which
               // means we failed to subscribe and the user will need
@@ -148,42 +146,39 @@ export const subscribe = (user)=> {
             }
           });
         });
-      }).catch((error)=> {
+      }).catch((error) => {
         console.error('push sw error :', error);
       });
   }
 };
 
-export const unsubscribe = ()=> {
-  return navigator.serviceWorker.ready.then((serviceWorkerRegistration)=> {
-    // To unsubscribe from push messaging, you need get the
-    // subcription object, which you can call unsubscribe() on.
-    return serviceWorkerRegistration.pushManager.getSubscription().then(
-      (sub)=> {
-        // Check we have a subscription to unsubscribe
-        if (!sub) {
-          // No subscription object, so set the state
-          // to allow the user to subscribe to push
-          return;
-        }
+export const unsubscribe = () => navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+  // To unsubscribe from push messaging, you need get the
+  // subcription object, which you can call unsubscribe() on.
+  return serviceWorkerRegistration.pushManager.getSubscription().then((sub)=> {
+    // Check we have a subscription to unsubscribe
+    if (!sub) {
+      // No subscription object, so set the state
+      // to allow the user to subscribe to push
+      return;
+    }
 
-        // We have a subcription, so call unsubscribe on it
-        return sub.unsubscribe().then(()=> {
-          const mergedEndpoint = endpointWorkaround(sub);
-          const endpointSections = mergedEndpoint.split('/');
-          const subscriptionId = endpointSections[endpointSections.length - 1];
-          return subscriptionId;
-        }).catch((e)=> {
-          // We failed to unsubscribe, this can lead to
-          // an unusual state, so may be best to remove
-          // the subscription id from your data store and
-          // inform the user that you disabled push
+    // We have a subcription, so call unsubscribe on it
+    return sub.unsubscribe().then(() => {
+      const mergedEndpoint = endpointWorkaround(sub);
+      const endpointSections = mergedEndpoint.split('/');
+      const subscriptionId = endpointSections[endpointSections.length - 1];
+      return subscriptionId;
+    }).catch((e) => {
+      // We failed to unsubscribe, this can lead to
+      // an unusual state, so may be best to remove
+      // the subscription id from your data store and
+      // inform the user that you disabled push
 
-          console.error('Unsubscription error: ', e);
-        });
-      }).catch((e)=> {
-        console.error('Error thrown while unsubscribing from ' +
-          'push messaging.', e);
-      });
+      console.error('Unsubscription error: ', e);
+    });
+  }).catch((e) => {
+    console.error('Error thrown while unsubscribing from ' +
+      'push messaging.', e);
   });
-};
+});

@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
 import Colors from 'material-ui/styles/colors';
-import GlobalStyles from '../styles/global.styles';
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
+import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -29,12 +29,13 @@ export class ReadyPromptComponent extends React.Component {
     return (
       <div onTouchTap={this.props.onTouchTap}>
         <div style={[GlobalStyles.table, styles.css]}>
-          <div className='text-center' style={[GlobalStyles.cell]}>
+          <div className="text-center" style={[GlobalStyles.cell]}>
             <p>Are you ready to join?</p>
-            <RaisedButton label='Join'
-              secondary={true}
-              onTouchTap={this.props.joinRoomStream}>
-            </RaisedButton>
+            <RaisedButton
+              label="Join"
+              secondary
+              onTouchTap={this.props.joinRoomStream}
+            />
           </div>
         </div>
       </div>

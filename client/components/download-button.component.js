@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import {APP_NAME} from '../../lib/config';
 import Radium from 'radium';
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -49,8 +48,8 @@ const styles = {
   },
 };
 
-const DownloadButtonComponent = (props)=> {
-  let platforms = {
+const DownloadButtonComponent = (props) => {
+  const platforms = {
     mac: {
       icon: '/images/apple.svg',
       // link: `/downloads/darwin-x64/${APP_NAME}.zip`,
@@ -63,17 +62,18 @@ const DownloadButtonComponent = (props)=> {
     },
   };
 
-  let platform = platforms[props.platform];
+  const platform = platforms[props.platform];
 
   return (
     <a href={platform.link} download>
       <RaisedButton
-        secondary={true}
-        labelPosition='after'
-        style={styles.button.css}>
+        secondary
+        labelPosition="after"
+        style={styles.button.css}
+      >
         <div style={[GlobalStyles.table, styles.button.container.css]}>
           <div style={[GlobalStyles.cell, styles.button.container.icon.css]}>
-            <img src={platform.icon} style={[{width: '100%'}]}/>
+            <img src={platform.icon} style={[{ width: '100%' }]} />
           </div>
           <div style={[GlobalStyles.cell, styles.button.container.copy.css]}>
             <div style={[styles.button.container.copy.top]}>

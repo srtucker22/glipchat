@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import {_} from 'meteor/underscore';
-import {browserHistory} from 'react-router';
-import {Card, CardActions, CardText} from 'material-ui/Card';
-import {connect} from 'react-redux';
-import * as Actions from '../actions/actions';
+import { _ } from 'meteor/underscore';
+import { browserHistory } from 'react-router';
+import { Card, CardActions, CardText } from 'material-ui/Card';
+import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Avatar from 'material-ui/Avatar';
 import Colors from 'material-ui/styles/colors';
@@ -11,15 +10,16 @@ import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-import GlobalStyles from '../styles/global.styles';
 import IconButton from 'material-ui/IconButton';
 import MenuItem from 'material-ui/MenuItem';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import moment from 'moment';
 import Popover from 'material-ui/Popover/Popover';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import React from 'react';
+import * as Actions from '../actions/actions';
+import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -112,14 +112,15 @@ export class NotificationDropdownComponent extends React.Component {
   }
 
   render() {
-    const {notifications} = this.props;
+    const { notifications } = this.props;
 
     return (
       <div style={[GlobalStyles.cell, styles.menu.css]}>
         <IconButton
           iconStyle={styles.icon.css}
           iconClassName='material-icons'
-          onTouchTap={this.togglePopover.bind(this)}>
+          onTouchTap={this.togglePopover.bind(this)}
+        >
           {(!!notifications && notifications.length) ?
             'notifications' : 'notifications_none'}
         </IconButton>
@@ -192,7 +193,7 @@ export class ProfileDropdownComponent extends React.Component {
   }
 
   render() {
-    const {user, logout} = this.props;
+    const { user, logout } = this.props;
 
     return (
       <div style={[GlobalStyles.cell, styles.menu.css]}>
@@ -407,7 +408,7 @@ export class HeaderComponent extends React.Component {
       </header>
     );
   }
-};
+}
 
 HeaderComponent.propTypes = {
   dispatch: PropTypes.func,
@@ -417,13 +418,11 @@ HeaderComponent.propTypes = {
   users: PropTypes.object,
 };
 
-HeaderComponent = Radium(HeaderComponent);
-
-const mapStateToProps = ({users: {user}, notifications: {notifications}}) => {
+const mapStateToProps = ({ users: { user }, notifications: { notifications } }) => {
   return {
     user,
     notifications,
   };
 };
 
-export default connect(mapStateToProps)(HeaderComponent);
+export default connect(mapStateToProps)(Radium(HeaderComponent));

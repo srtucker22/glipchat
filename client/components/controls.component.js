@@ -1,23 +1,23 @@
-import PropTypes from 'prop-types';
-import {_} from 'meteor/underscore';
-import {browserHistory} from 'react-router';
-import * as Actions from '../actions/actions';
+import { _ } from 'meteor/underscore';
+import { browserHistory } from 'react-router';
 import Colors from 'material-ui/styles/colors';
 import FontIcon from 'material-ui/FontIcon';
-import GlobalStyles from '../styles/global.styles';
 import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
+import * as Actions from '../actions/actions';
+import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
     ':hover': {},
-    'height': '100px',
-    'position': 'absolute',
-    'top': 0,
-    'width': '100%',
-    'zIndex': 4,
+    height: '100px',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 4,
   },
 
   controls: {
@@ -38,7 +38,7 @@ const styles = {
 
     red: {
       css: {
-        'backgroundColor': Colors.red800,
+        backgroundColor: Colors.red800,
         ':hover': {
           backgroundColor: Colors.red900,
         },
@@ -82,48 +82,58 @@ export class ControlsComponent extends React.Component {
   render() {
     return (
       <div
-        key='overlay'
+        key="overlay"
         style={[styles.css]}
-        onTouchTap={this.props.onTouchTap}>
-        <Paper zDepth={1} style={_.extend({},
+        onTouchTap={this.props.onTouchTap}
+      >
+        <Paper
+          zDepth={1} style={_.extend({},
           GlobalStyles.table,
           styles.controls.css,
           (Radium.getState(this.state, 'overlay', ':hover') ||
-            this.props.controlsVisible) ? styles.controls.visible : {}
-        )}>
+            this.props.controlsVisible) ? styles.controls.visible : {},
+        )}
+        >
           <div
-            key='invite'
+            key="invite"
             onTouchTap={this.props.toggleInviteModal}
-            style={[GlobalStyles.cell, styles.controls.button.css]}>
+            style={[GlobalStyles.cell, styles.controls.button.css]}
+          >
             <IconButton>
-              <FontIcon className='material-icons'
-                color={Colors.fullWhite}>person_add</FontIcon>
+              <FontIcon
+                className="material-icons"
+                color={Colors.fullWhite}
+              >person_add</FontIcon>
             </IconButton>
           </div>
           <div
-            key='video'
+            key="video"
             onTouchTap={this.toggleLocalVideo.bind(this)} style={[
-            GlobalStyles.cell,
-            styles.controls.button.css,
-            !this.props.isLocalVideoEnabled && styles.controls.red.css,
-          ]}>
+              GlobalStyles.cell,
+              styles.controls.button.css,
+              !this.props.isLocalVideoEnabled && styles.controls.red.css,
+            ]}
+          >
             <IconButton>
               <FontIcon
-                className='material-icons'
-                color={Colors.fullWhite}>videocam_off</FontIcon>
+                className="material-icons"
+                color={Colors.fullWhite}
+              >videocam_off</FontIcon>
             </IconButton>
           </div>
           <div
-            key='audio'
+            key="audio"
             onTouchTap={this.toggleLocalAudio.bind(this)} style={[
-            GlobalStyles.cell,
-            styles.controls.button.css,
-            !this.props.isLocalAudioEnabled && styles.controls.red.css,
-          ]}>
+              GlobalStyles.cell,
+              styles.controls.button.css,
+              !this.props.isLocalAudioEnabled && styles.controls.red.css,
+            ]}
+          >
             <IconButton>
               <FontIcon
-                className='material-icons'
-                color={Colors.fullWhite}>mic_off</FontIcon>
+                className="material-icons"
+                color={Colors.fullWhite}
+              >mic_off</FontIcon>
             </IconButton>
           </div>
           {/* <div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
@@ -132,25 +142,27 @@ export class ControlsComponent extends React.Component {
             </IconButton>
           </div>*/}
           <div
-            key='end'
+            key="end"
             style={[
               GlobalStyles.cell,
               styles.controls.button.css,
               styles.controls.buttonEnd.css,
             ]}
-            onTouchTap={this.leave.bind(this)}>
+            onTouchTap={this.leave.bind(this)}
+          >
             <IconButton>
               <FontIcon
-                className='material-icons'
+                className="material-icons"
                 color={Radium.getState(this.state, 'end', ':hover') ?
-                  Colors.fullWhite : Colors.red800}>call_end</FontIcon>
+                  Colors.fullWhite : Colors.red800}
+              >call_end</FontIcon>
             </IconButton>
           </div>
         </Paper>
       </div>
     );
   }
-};
+}
 ControlsComponent.propTypes = {
   dispatch: PropTypes.func,
   controlsVisible: PropTypes.bool,

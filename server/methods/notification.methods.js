@@ -1,5 +1,7 @@
+import { Meteor } from 'meteor/meteor';
+import { check, Match } from 'meteor/check';
 import * as notificationUtils from '../utils/notification.utils';
-import {Notifications} from '../../lib/notifications';
+import { Notifications } from '../../lib/notifications';
 
 Meteor.methods({
   getNotification(sub) {
@@ -9,13 +11,13 @@ Meteor.methods({
 
     this.unblock();
 
-    const {subscriptionId} = sub;
+    const { subscriptionId } = sub;
 
-    if(!this.userId) {
+    if (!this.userId) {
       throw new Meteor.Error(401, 'No user');
     }
 
-    let notification = Notifications.findOne({
+    const notification = Notifications.findOne({
       owner: this.userId,
       subscriptionIds: subscriptionId,
       sent: false,
@@ -31,11 +33,11 @@ Meteor.methods({
     //   sort: {createdAt: -1},
     // }, {$set: {sent: true}}, {multi: true});
 
-    if(!notification) {
+    if (!notification) {
       throw new Meteor.Error(400, 'notification not found');
     }
 
-    Notifications.update(notification._id, {$set: {sent: true}});
+    Notifications.update(notification._id, { $set: { sent: true } });
 
     return notification;
   },
@@ -52,17 +54,17 @@ Meteor.methods({
 
     this.unblock();
 
-    if(!this.userId) {
+    if (!this.userId) {
       throw new Meteor.Error(401, 'No user');
     }
 
     return notificationUtils.sendNotifications(ids, notification);
   },
 
-  markAllNotificationsRead() {
+  markAllNotificationsRead(args) {
     this.unblock();
 
-    check(arguments, Match.Optional({}));
+    check(args, Match.Optional({}));
 
     // only users can update notifications
     if (!this.userId) {
@@ -71,16 +73,16 @@ Meteor.methods({
 
     // update the notifications
     return Notifications.update(
-      {owner: this.userId},
-      {$set: {unread: false}},
-      {multi: true}
+      { owner: this.userId },
+      { $set: { unread: false } },
+      { multi: true },
     );
   },
 
   markNotificationRead(id) {
     this.unblock();
 
-    check(arguments, [String]);
+    check(id, String);
 
     // only users can update notifications
     if (!this.userId) {
@@ -89,8 +91,8 @@ Meteor.methods({
 
     // update the notification
     return Notifications.update(
-      {_id: id, owner: this.userId},
-      {$set: {unread: false}}
+      { _id: id, owner: this.userId },
+      { $set: { unread: false } },
     );
   },
 });

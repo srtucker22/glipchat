@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
-import {browserHistory} from 'react-router';
+import { browserHistory } from 'react-router';
+import CircularProgress from 'material-ui/CircularProgress';
 import Colors from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import GlobalStyles from '../styles/global.styles';
-import CircularProgress from 'material-ui/CircularProgress';
 
 const styles = {
   css: {
@@ -27,33 +27,36 @@ export class CallingOverlayComponent extends React.Component {
   render() {
     const ringingComponent = (<div>
       <h3>Contacting...</h3>
-      <CircularProgress mode='indeterminate'/>
-      <div style={{display: 'block', paddingTop: '16px'}}>
-        <RaisedButton label='Cancel'
-          secondary={true}
-          onTouchTap={this.leave.bind(this)}>
-        </RaisedButton>
+      <CircularProgress mode="indeterminate" />
+      <div style={{ display: 'block', paddingTop: '16px' }}>
+        <RaisedButton
+          label="Cancel"
+          secondary
+          onTouchTap={this.leave.bind(this)}
+        />
       </div>
     </div>);
 
     const connectingComponent = (<div>
       <h3>{'Connecting...'}</h3>
-      <CircularProgress mode='indeterminate'/>
+      <CircularProgress mode="indeterminate" />
     </div>);
 
     const contactsUnavailableComponent = (<div>
-      <h3>{`Contacts Unavailable`}</h3>
-      <h5>{`No contacts connected`}</h5>
-      <div style={{margin: 'auto', width: '100%'}}>
-        {this.props.invitees ? <RaisedButton label='Retry'
-          secondary={true}
+      <h3>{'Contacts Unavailable'}</h3>
+      <h5>{'No contacts connected'}</h5>
+      <div style={{ margin: 'auto', width: '100%' }}>
+        {this.props.invitees ? <RaisedButton
+          label="Retry"
+          secondary
           onTouchTap={this.props.retry}
-          style={{margin: '0 10px'}}>
-        </RaisedButton> : ''}
-        <RaisedButton label={this.props.invitees ? 'Cancel' : 'Leave'}
-          secondary={true}
-          onTouchTap={this.leave.bind(this)}>
-        </RaisedButton>
+          style={{ margin: '0 10px' }}
+        /> : ''}
+        <RaisedButton
+          label={this.props.invitees ? 'Cancel' : 'Leave'}
+          secondary
+          onTouchTap={this.leave.bind(this)}
+        />
       </div>
     </div>);
 
@@ -67,14 +70,14 @@ export class CallingOverlayComponent extends React.Component {
     return (
       <div onTouchTap={this.props.onTouchTap}>
         <div style={[GlobalStyles.table, styles.css]}>
-          <div className='text-center' style={[GlobalStyles.cell]}>
+          <div className="text-center" style={[GlobalStyles.cell]}>
             {components[this.props.status]}
           </div>
         </div>
       </div>
     );
   }
-};
+}
 CallingOverlayComponent.propTypes = {
   invitees: PropTypes.array,
   onTouchTap: PropTypes.func,

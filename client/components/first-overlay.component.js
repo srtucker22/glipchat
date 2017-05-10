@@ -59,7 +59,8 @@ export class FirstOverlayComponent extends React.Component {
                 style={[
                   GlobalStyles.cell,
                   styles.invite.cell.css]}
-                className='text-right'>You are the only one here.</div>
+                className='text-right'>You are the only one here.
+              </div>
               <div style={[
                   GlobalStyles.cell,
                   styles.invite.cell.css]} className='text-left'>
@@ -87,7 +88,8 @@ export class FirstOverlayComponent extends React.Component {
       </div>
     );
   }
-};
+}
+
 FirstOverlayComponent.propTypes = {
   action: PropTypes.func,
   linkUrl: PropTypes.string,

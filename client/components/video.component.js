@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 const styles = {
   css: {
@@ -26,16 +25,11 @@ const styles = {
   },
 };
 
-export class VideoComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
+export class VideoComponent extends React.PureComponent {
   componentDidMount() {
     const video = ReactDOM.findDOMNode(this.refs.video);
 
-    if (!!this.props.src) {
+    if (this.props.src) {
       video.srcObject = this.props.src;
     }
   }
@@ -49,7 +43,7 @@ export class VideoComponent extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
 
     return (
       <video
@@ -61,11 +55,11 @@ export class VideoComponent extends React.Component {
         ]}
         muted={props.muted}
         autoPlay
-        onClick={props.onTouchTap}>
-      </video>
+        onClick={props.onTouchTap}
+      />
     );
   }
-};
+}
 
 VideoComponent.propTypes = {
   flip: PropTypes.bool,

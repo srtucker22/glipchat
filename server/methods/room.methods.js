@@ -1,10 +1,12 @@
-import {Email} from 'meteor/email';
-import * as notificationUtils from '../utils/notification.utils';
-import {check, Match} from 'meteor/check';
-import {Meteor} from 'meteor/meteor';
-import {Rooms} from '../../lib/rooms';
+import { _ } from 'meteor/underscore';
+import { check, Match } from 'meteor/check';
+import { Email } from 'meteor/email';
+import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
 import urlJoin from 'url-join';
-import {APP_NAME, APP_EMAIL} from '../../lib/config';
+import * as notificationUtils from '../utils/notification.utils';
+import { Rooms } from '../../lib/rooms';
+import { APP_NAME, APP_EMAIL } from '../../lib/config';
 
 const roomURL = '/room/';
 
@@ -22,19 +24,17 @@ function renderEmailTemplate(filename, vals) {
 function invite(user, roomId, invitees) {
   try {
     const userInvitees = Meteor.users.find({
-      'services.google.email': {$in: _.pluck(invitees, 'email')},
+      'services.google.email': { $in: _.pluck(invitees, 'email') },
     }).fetch({
-      '_id': 1,
-      'services.google.email': 1
-    }).map((invite) => ({
-      _id: invite._id,
-      email: invite.services.google.email,
+      _id: 1,
+      'services.google.email': 1,
+    }).map(i => ({
+      _id: i._id,
+      email: i.services.google.email,
     }));
     const indexedUserInvitees = _.indexBy(userInvitees, 'email');
 
-    const nonUsers = _.reject(invitees, (invitee)=> {
-      return !!indexedUserInvitees[invitee.email];
-    });
+    const nonUsers = _.reject(invitees, invitee => !!indexedUserInvitees[invitee.email]);
 
     if (!!nonUsers && nonUsers.length) {
       // send invite emails to non-users
@@ -49,7 +49,7 @@ function invite(user, roomId, invitees) {
       Email.send({
         to: _.pluck(nonUsers, 'email'),
         from: APP_EMAIL,
-        subject: subject,
+        subject,
         html: joinTemplate,
       });
     }
@@ -69,13 +69,14 @@ function notifyInvitees(user, roomId, invitees) {
     body: `${user.profile.name} invited you to chat`,
     room: roomId,
     icon: '/android-icon-192x192.png',
-    title: `Video chat invitation`,
+    title: 'Video chat invitation',
     type: 'ROOM_INVITE',
   });
 }
 
 // this is mildly insecure -- if you know a roomId, you can sneak in
-// we can make rooms more private in the future by requiring auth types and tracking invites, but this can get tricky if we add more than 1 auth type, like email and google account
+// we can make rooms more private in the future by requiring auth types and tracking invites
+// but this can get tricky if we add more than 1 auth type, like email and google account
 
 // TODO: add invitees to room
 // room access server methods
@@ -95,7 +96,7 @@ Meteor.methods({
       throw new Meteor.Error(401, 'No user');
     }
 
-    const user = Meteor.users.findOne({_id: this.userId});
+    const user = Meteor.users.findOne({ _id: this.userId });
 
     if (!user) {
       throw new Meteor.Error(401, 'No user');
@@ -109,7 +110,7 @@ Meteor.methods({
     Roles.addUsersToRoles(this.userId, id, Roles.GLOBAL_GROUP);
 
     // send notifications to invitees
-    if (!!invitees) {
+    if (invitees) {
       invite(user, id, invitees);
     }
 
@@ -141,7 +142,7 @@ Meteor.methods({
 
   invite(roomId, invitees) {
     check(roomId, String);
-    check(invitees, [Match.ObjectIncluding({email: String})]);
+    check(invitees, [Match.ObjectIncluding({ email: String })]);
 
     this.unblock();
 
@@ -149,7 +150,7 @@ Meteor.methods({
       throw new Meteor.Error(401, 'No user');
     }
 
-    const user = Meteor.users.findOne({_id: this.userId});
+    const user = Meteor.users.findOne({ _id: this.userId });
 
     if (!user) {
       throw new Meteor.Error(401, 'No user');
@@ -160,7 +161,7 @@ Meteor.methods({
 
   notifyInvitees(roomId, invitees) {
     check(roomId, String);
-    check(invitees, [Match.ObjectIncluding({email: String})]);
+    check(invitees, [Match.ObjectIncluding({ email: String })]);
 
     this.unblock();
 
@@ -170,14 +171,14 @@ Meteor.methods({
 
     const user = Meteor.user();
 
-    if(!user) {
+    if (!user) {
       throw new Meteor.Error(401, 'No user found');
     }
 
     const userInvitees = Meteor.users.find({
-      'services.google.email': {$in: _.pluck(invitees, 'email')},
+      'services.google.email': { $in: _.pluck(invitees, 'email') },
     }).fetch({
-      '_id': 1,
+      _id: 1,
     });
 
     return notifyInvitees(user, roomId, userInvitees);

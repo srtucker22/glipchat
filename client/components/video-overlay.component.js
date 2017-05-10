@@ -1,39 +1,39 @@
-import PropTypes from 'prop-types';
-import {_} from 'meteor/underscore';
-import * as Actions from '../actions/actions';
+import { _ } from 'meteor/underscore';
 import Colors from 'material-ui/styles/colors';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
+import * as Actions from '../actions/actions';
 
 const ding = new Audio('/audio/ding.mp3');
 
 const styles = {
   css: {
-    'transition': 'background-color 1s ease-in-out',
-    'backgroundColor': 'rgba(0,0,0,0)',
-    'height': '100%',
-    'left': 0,
-    'position': 'absolute',
-    'top': 0,
-    'width': '100%',
-    'zIndex': 1,
+    transition: 'background-color 1s ease-in-out',
+    backgroundColor: 'rgba(0,0,0,0)',
+    height: '100%',
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 1,
     ':hover': {},
   },
 
   mute: {
     // styles for local mute icon (user mutes a peer)
     css: {
-      'backgroundColor': 'transparent',
-      'float': 'right',
-      'opacity': 0,
-      'position': 'absolute',
-      'right': '5px',
-      'top': '5px',
-      'transition': 'opacity 1s ease-in-out',
-      'zIndex': 3,
+      backgroundColor: 'transparent',
+      float: 'right',
+      opacity: 0,
+      position: 'absolute',
+      right: '5px',
+      top: '5px',
+      transition: 'opacity 1s ease-in-out',
+      zIndex: 3,
     },
 
     // styles for remote mute icon (peer mutes themself)
@@ -80,8 +80,8 @@ export class VideoOverlayComponent extends React.Component {
   }
 
   toggleAudio() {
-    const {id} = this.props;
-    if(id === 'local') {
+    const { id } = this.props;
+    if (id === 'local') {
       this.props.dispatch(Actions.toggleLocalAudio());
     } else {
       this.props.dispatch(Actions.toggleRemoteAudio(id));
@@ -91,12 +91,13 @@ export class VideoOverlayComponent extends React.Component {
   render() {
     return (
       <div
-        key='overlay'
+        key="overlay"
         style={[
           styles.css,
           (Radium.getState(this.state, 'overlay', ':hover') || this.state.shade) && styles.shade.css,
         ]}
-        onClick={this.props.setPrimaryStream}>
+        onClick={this.props.setPrimaryStream}
+      >
         <FloatingActionButton
           onTouchTap={this.toggleAudio.bind(this)}
           style={_.extend({},
@@ -105,30 +106,35 @@ export class VideoOverlayComponent extends React.Component {
             !this.props.isAudioEnabled || this.state.shade) ?
               styles.mute.visible.css : {})
           }
-          mini={true}
-          primary={false}>
+          mini
+          primary={false}
+        >
           <FontIcon
-            className='material-icons'
-            color={Colors.fullWhite}>mic_off
+            className="material-icons"
+            color={Colors.fullWhite}
+          >mic_off
           </FontIcon>
         </FloatingActionButton>
-        <IconButton style={_.extend({},
+        <IconButton
+          style={_.extend({},
             styles.mute.css,
             styles.mute.remote.css,
             (!!this.props.isRemoteEnabled && !this.props.isRemoteEnabled.audio) ?
               styles.mute.visible.css : {})
           }
-          mini={true}
-          primary={false}>
+          mini
+          primary={false}
+        >
           <FontIcon
-            className='material-icons'
-            color={Colors.fullWhite}>mic_off
+            className="material-icons"
+            color={Colors.fullWhite}
+          >mic_off
           </FontIcon>
         </IconButton>
       </div>
     );
   }
-};
+}
 
 VideoOverlayComponent.propTypes = {
   dispatch: PropTypes.func,

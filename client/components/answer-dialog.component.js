@@ -1,15 +1,8 @@
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import LoadingDialogComponent from './loading-dialog.component';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Radium from 'radium';
 import React from 'react';
-
-const styles = {
-  css: {
-
-  },
-};
+import LoadingDialogComponent from './loading-dialog.component';
 
 export class AnswerDialogComponent extends React.Component {
   constructor(props) {
@@ -35,14 +28,14 @@ export class AnswerDialogComponent extends React.Component {
   render() {
     const actions = [
       <FlatButton
-        label='Decline'
-        secondary={true}
+        label="Decline"
+        secondary
         onClick={this.reject}
       />,
       <FlatButton
-        label='Answer'
-        secondary={true}
-        keyboardFocused={true}
+        label="Answer"
+        secondary
+        keyboardFocused
         onClick={this.answer}
       />,
     ];
@@ -55,12 +48,12 @@ export class AnswerDialogComponent extends React.Component {
         open={!!this.props.invitation}
         onRequestClose={this.handleClose}
       >
-      {this.state.loading ?
-        <LoadingDialogComponent open={true} title='Starting video call'/> : ''
+        {this.state.loading ?
+          <LoadingDialogComponent open title="Starting video call" /> : ''
       }
       </Dialog>
     );
   }
-};
+}
 
-export default Radium(AnswerDialogComponent);
+export default AnswerDialogComponent;

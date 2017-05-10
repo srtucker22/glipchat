@@ -1,19 +1,20 @@
 // TODO: import Notifications from '../../lib/notifications';
-import {_} from 'meteor/underscore';
-import {createStore, applyMiddleware, compose} from 'redux';
-import {Meteor} from 'meteor/meteor';
-import {persistStore} from 'redux-persist';
-import {Session} from 'meteor/session';
-import {AccountsGuest} from 'meteor/artwells:accounts-guest';
-import * as Actions from '../actions/actions';
-import * as constants from '../constants/constants';
+import { _ } from 'meteor/underscore';
+import { AccountsGuest } from 'meteor/artwells:accounts-guest';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Meteor } from 'meteor/meteor';
+import { persistStore } from 'redux-persist';
+import { Session } from 'meteor/session';
+import { Tracker } from 'meteor/tracker';
 import Browser from 'bowser';
 import localForage from 'localForage';
+import thunk from 'redux-thunk';
+import * as Actions from '../actions/actions';
+import * as constants from '../constants/constants';
 import Messages from '../../lib/messages';
 import Notifications from '../../lib/notifications';
 import Rooms from '../../lib/rooms';
 import rootReducer from '../reducers/reducer';
-import thunk from 'redux-thunk';
 
 // Required! Enable Redux DevTools with the monitors you chose
 const composeEnhancers = Meteor.isDevelopment ?
@@ -27,23 +28,23 @@ const enhancer = composeEnhancers(
 // Note: this API requires redux@>=3.1.0
 const store = createStore(
   rootReducer,
-  enhancer
+  enhancer,
 );
 
 // force/unforce login depending on browser
 AccountsGuest.enabled = true;
-if(!Browser.mobile && !Browser.tablet) {
+if (!Browser.mobile && !Browser.tablet) {
   AccountsGuest.forced = true;
 } else {
   AccountsGuest.forced = false;
 }
 
 // add persistence to store
-persistStore(store, {storage: localForage});
+persistStore(store, { storage: localForage });
 
 // super simplified tracker -- we get all the users all the time under one sub
 let currentUser;
-Tracker.autorun(()=> {
+Tracker.autorun(() => {
   let available = Session.get('availableUsers');
   let room = Session.get('currentRoom');
 
@@ -61,9 +62,9 @@ Tracker.autorun(()=> {
   if (sub.ready()) {
     const users = Meteor.users.find().fetch();
     const newUser = Meteor.user();
-    if(!!newUser && !!newUser.services && !!newUser.services.google &&
+    if (!!newUser && !!newUser.services && !!newUser.services.google &&
       (!currentUser || !currentUser._id || currentUser._id !== newUser._id)) {
-      Meteor.call('getContacts', (err, contacts)=> {
+      Meteor.call('getContacts', (err, contacts) => {
         if (err) {
           console.error(err);
         } else {
@@ -71,7 +72,7 @@ Tracker.autorun(()=> {
         }
       });
       store.dispatch(Actions.subscribeToNotifications(newUser));
-    } else if(!!currentUser && !newUser) {
+    } else if (!!currentUser && !newUser) {
       store.dispatch(Actions.unsubscribeToNotifications());
     }
     currentUser = newUser;
@@ -90,7 +91,7 @@ Tracker.autorun(()=> {
 });
 
 // super simplified tracker -- we get all the rooms all the time under one sub
-Tracker.autorun(()=> {
+Tracker.autorun(() => {
   const sub = Meteor.subscribe('rooms', {
     room: Session.get('currentRoom'),
     available: Session.get('availableRooms'),
@@ -105,7 +106,7 @@ Tracker.autorun(()=> {
 });
 
 // super simplified tracker -- we get all chat messages for the room on one sub
-Tracker.autorun(()=> {
+Tracker.autorun(() => {
   const sub = Meteor.subscribe('messages', Session.get('currentRoom'));
   if (sub.ready()) {
     store.dispatch({
@@ -119,10 +120,10 @@ Tracker.autorun(()=> {
 // we get all the notifications all the time under one subscription
 let initialized = false;  // wait for the first batch of cursor
 const notificationsCursor = Notifications.find({}, {
-  sort: {createdAt: -1},
+  sort: { createdAt: -1 },
 });
 
-Tracker.autorun(()=> {
+Tracker.autorun(() => {
   const sub = Meteor.subscribe('notifications');
   if (sub.ready()) {
     store.dispatch({
@@ -135,12 +136,12 @@ Tracker.autorun(()=> {
 
 // track changes to determine when to display a notification alert
 const handle = notificationsCursor.observeChanges({
-  added: function(id, fields) {
+  added(id, fields) {
     // wait for the first batch of cursor and user to be signed in
     if (initialized && Meteor.userId()) {
       store.dispatch({
         type: constants.SET_ACTIVE_NOTIFICATION,
-        active: Object.assign(fields, {id}),
+        active: Object.assign(fields, { id }),
       });
     }
   },

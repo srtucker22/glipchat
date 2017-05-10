@@ -1,8 +1,8 @@
-import {check, Match} from 'meteor/check';
-import {MANAGER_ROLES} from '../../lib/roles';
-import {Meteor} from 'meteor/meteor';
-import {Roles} from 'meteor/alanning:roles';
-import {Messages} from '../../lib/messages';
+import { check, Match } from 'meteor/check';
+import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
+import { MANAGER_ROLES } from '../../lib/roles';
+import { Messages } from '../../lib/messages';
 
 // publish all messages
 Meteor.publish('messages', function(room) {
@@ -10,11 +10,11 @@ Meteor.publish('messages', function(room) {
 
   if (Roles.userIsInRole(this.userId, MANAGER_ROLES)) {
     return Messages.find();
-  } else {
-    if (!room || !Roles.userIsInRole(this.userId, room)) {
-      return this.ready();
-    }
-
-    return Messages.find({room});
   }
+
+  if (!room || !Roles.userIsInRole(this.userId, room)) {
+    return this.ready();
+  }
+
+  return Messages.find({ room });
 });

@@ -1,19 +1,19 @@
-import PropTypes from 'prop-types';
-import {APP_NAME} from '../../lib/config';
-import {connect} from 'react-redux';
-import * as Actions from '../actions/actions';
-import AnswerDialogComponent from './answer-dialog.component';
+import { connect } from 'react-redux';
 import Colors from 'material-ui/styles/colors';
-import ContactListComponent from './contact-list.component';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import React from 'react';
+import TextField from 'material-ui/TextField';
+import { APP_NAME } from '../../lib/config';
+import * as Actions from '../actions/actions';
+import AnswerDialogComponent from './answer-dialog.component';
+import ContactListComponent from './contact-list.component';
 import HeaderComponent from './header.component';
 import IconButton from 'material-ui/IconButton';
 import IntroComponent from './intro.component';
 import LoadingDialogComponent from './loading-dialog.component';
-import Radium from 'radium';
-import React from 'react';
-import TextField from 'material-ui/TextField';
 
 const styles = {
   css: {
@@ -34,8 +34,8 @@ const styles = {
 };
 
 export class HomeMobileComponent extends React.Component {
-  constructor() {
-    super(...arguments);
+  constructor(props) {
+    super(props);
     this.state = {
       loading: false,
       open: false,
@@ -46,15 +46,15 @@ export class HomeMobileComponent extends React.Component {
     // update the profile name
     !!this.state.name && this.state.name !== this.props.user.profile.name && this.props.dispatch(Actions.updateProfileName(this.state.name));
 
-    this.setState({open: false});
+    this.setState({ open: false });
   }
 
   invite() {
-    if(!!this.state.invitees && this.state.invitees.length) {
+    if (!!this.state.invitees && this.state.invitees.length) {
       !!this.state.name && this.state.name !== this.props.user.profile.name && this.props.dispatch(Actions.updateProfileName(this.state.name));
       this.props.dispatch(Actions.createRoom(this.state.invitees));
 
-      this.setState({loading: true});
+      this.setState({ loading: true });
     }
   }
 
@@ -63,11 +63,11 @@ export class HomeMobileComponent extends React.Component {
   }
 
   onContactListChange(invitees) {
-    this.setState({invitees});
+    this.setState({ invitees });
   }
 
   openInviteModal() {
-    this.setState({open: true});
+    this.setState({ open: true });
   }
 
   updateProfileNameState(e) {
@@ -77,7 +77,7 @@ export class HomeMobileComponent extends React.Component {
   }
 
   render() {
-    const {dispatch, invitations, user} = this.props;
+    const { dispatch, invitations, user } = this.props;
 
     const contacts = !!user && !!user.services && !!user.services.google && user.services.google.contacts || [];
 
@@ -97,7 +97,7 @@ export class HomeMobileComponent extends React.Component {
     ];
 
     if (!user) {
-      return <IntroComponent/>;
+      return <IntroComponent />;
     }
 
     return (<div style={[styles.css]}>
@@ -115,7 +115,7 @@ export class HomeMobileComponent extends React.Component {
             done
           </IconButton>) : null}
       />
-    <div ref={'content'} style={[styles.content.css]}>
+      <div ref={'content'} style={[styles.content.css]}>
         <ContactListComponent
           onChange={this.onContactListChange.bind(this)}
           isOpen={true}
@@ -139,10 +139,12 @@ export class HomeMobileComponent extends React.Component {
       </Dialog>
       <AnswerDialogComponent
         invitation={!!invitations && invitations.length ?
-          invitations[0] : undefined}/>
+          invitations[0] : undefined}
+      />
     </div>);
   }
-};
+}
+
 HomeMobileComponent.propTypes = {
   dispatch: PropTypes.func,
   contacts: PropTypes.array,
@@ -150,8 +152,6 @@ HomeMobileComponent.propTypes = {
   user: PropTypes.object,
 };
 
-HomeMobileComponent = Radium(HomeMobileComponent);
+const mapStateToProps = ({ users: { user } }) => ({ user });
 
-const mapStateToProps = ({users: {user}}) => ({user});
-
-export default connect(mapStateToProps)(HomeMobileComponent);
+export default connect(mapStateToProps)(Radium(HomeMobileComponent));

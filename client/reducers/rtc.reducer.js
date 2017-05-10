@@ -1,23 +1,23 @@
-import {_} from 'meteor/underscore';
-import {REHYDRATE} from 'redux-persist/constants';
-import * as constants from '../constants/constants';
+import { _ } from 'meteor/underscore';
 import deepExtend from 'deep-extend';
+import { REHYDRATE } from 'redux-persist/constants';
+import * as constants from '../constants/constants';
 
 const initialState = {
   localStream: {},
   remoteStreams: {},
 };
 
-export const rtcReducer = (state = initialState, action = {})=> {
+export const rtcReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case REHYDRATE: {
-      let incoming = action.payload;
+      const incoming = action.payload;
       return state;
     }
     case constants.SET_REMOTE_VIDEO: {
       const newStream = {};
-      newStream[action.id] = {hideVideo: action.hideVideo};
-      return deepExtend({}, state, {remoteStreams: newStream});
+      newStream[action.id] = { hideVideo: action.hideVideo };
+      return deepExtend({}, state, { remoteStreams: newStream });
     }
     case constants.ADD_REMOTE_STREAM:
     case constants.UPDATE_REMOTE_STREAM: {
@@ -35,7 +35,7 @@ export const rtcReducer = (state = initialState, action = {})=> {
       const localStream = {
         loading: true,
       };
-      return deepExtend({}, state, {localStream});
+      return deepExtend({}, state, { localStream });
     }
     case constants.SET_LOCAL_STREAM: {
       const localStream = {
@@ -44,12 +44,12 @@ export const rtcReducer = (state = initialState, action = {})=> {
         audio: true,
         video: true,
       };
-      return deepExtend({}, state, {localStream});
+      return deepExtend({}, state, { localStream });
     }
 
     case constants.STOP_LOCAL_STREAM: {
       const localStream = {};
-      return Object.assign({}, state, {localStream});
+      return Object.assign({}, state, { localStream });
     }
 
     case constants.LOCAL_STREAM_ERROR: {
@@ -58,23 +58,23 @@ export const rtcReducer = (state = initialState, action = {})=> {
         error: action.error,
       };
 
-      return deepExtend({}, state, {localStream});
+      return deepExtend({}, state, { localStream });
     }
     case constants.LEAVE_ROOM_STREAM:
-      return Object.assign({}, state, {files: {}});
+      return Object.assign({}, state, { files: {} });
 
     case constants.TOGGLE_LOCAL_AUDIO: {
-      const localStream = {audio: action.enabled};
-      return deepExtend({}, state, {localStream});
+      const localStream = { audio: action.enabled };
+      return deepExtend({}, state, { localStream });
     }
     case constants.TOGGLE_REMOTE_AUDIO: {
       const remoteStreams = {};
-      remoteStreams[action.id] = {muted: !action.enabled};
-      return deepExtend({}, state, {remoteStreams});
+      remoteStreams[action.id] = { muted: !action.enabled };
+      return deepExtend({}, state, { remoteStreams });
     }
     case constants.TOGGLE_LOCAL_VIDEO: {
-      const localStream = {video: action.enabled};
-      return deepExtend({}, state, {localStream});
+      const localStream = { video: action.enabled };
+      return deepExtend({}, state, { localStream });
     }
     case constants.JOIN_ROOM_STREAM:
     default:

@@ -1,8 +1,8 @@
-import {Accounts} from 'meteor/accounts-base';
-import {Meteor} from 'meteor/meteor';
-import {Roles} from 'meteor/alanning:roles';
-import {MANAGER_ROLES} from '../../lib/roles';
-import {check, Match} from 'meteor/check';
+import { Accounts } from 'meteor/accounts-base';
+import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
+import { check, Match } from 'meteor/check';
+import { MANAGER_ROLES } from '../../lib/roles';
 
 // update a users permissions
 Meteor.methods({
@@ -18,7 +18,7 @@ Meteor.methods({
     check(roles, [String]);
     check(group, String);
 
-    let loggedInUser = Meteor.user();
+    const loggedInUser = Meteor.user();
 
     if (!loggedInUser ||
         !Roles.userIsInRole(loggedInUser, ['manage-users', 'admin'], group)) {
@@ -38,7 +38,7 @@ Meteor.methods({
     check(targetUserId, String);
     check(group, String);
 
-    let loggedInUser = Meteor.user();
+    const loggedInUser = Meteor.user();
 
     if (!loggedInUser ||
       (!Roles.userIsInRole(loggedInUser, ['manage-users', 'admin'], group) &&
@@ -50,13 +50,13 @@ Meteor.methods({
     Roles.setUserRoles(targetUserId, [], group);
 
     // do other actions required when a user is removed...
-    return Meteor.users.remove({_id: targetUserId});
+    return Meteor.users.remove({ _id: targetUserId });
   },
 });
 
 // don't allow existing low level user to create new users other than themselves
-Accounts.validateNewUser((user) => {
-  let loggedInUser = this.userId;
+Accounts.validateNewUser(() => {
+  const loggedInUser = this.userId;
 
   if (!loggedInUser ||
     Roles.userIsInRole(loggedInUser, ['admin', 'manage-users'])) {

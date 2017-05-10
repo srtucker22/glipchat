@@ -1,5 +1,5 @@
-import {Meteor} from 'meteor/meteor';
-import {subscribe, unsubscribe} from '../utils/notification.utils';
+import { Meteor } from 'meteor/meteor';
+import { subscribe, unsubscribe } from '../utils/notification.utils';
 import * as constants from '../constants/constants';
 
 export const markAllNotificationsRead = () => (dispatch) => {
@@ -18,7 +18,7 @@ export const markAllNotificationsRead = () => (dispatch) => {
   });
 };
 
-export const markNotificationRead = (id) => (dispatch) => {
+export const markNotificationRead = id => (dispatch) => {
   Meteor.call('markNotificationRead', id, (error) => {
     if (error) {
       console.error(error);
@@ -35,21 +35,21 @@ export const markNotificationRead = (id) => (dispatch) => {
   });
 };
 
-export const subscribeToNotifications = (user)=> (dispatch)=> {
+export const subscribeToNotifications = user => (dispatch) => {
   console.log('subscribeToNotifications');
-  subscribe(user).then((subscriptionId)=> {
-    Meteor.users.update({_id: Meteor.userId()}, {
+  subscribe(user).then((subscriptionId) => {
+    Meteor.users.update({ _id: Meteor.userId() }, {
       $addToSet: {
         'services.gcm.subscriptionIds': subscriptionId,
       },
-    }, (err, res)=> {
-      if(err) {
+    }, (err, res) => {
+      if (err) {
         console.error(err);
       } else {
         console.log('updated user with subscriptionId', subscriptionId);
       }
     });
-  }, (err)=> {
+  }, (err) => {
     console.error(err);
   });  // build service worker and subscribe to fcm (gcm) notifications
 };
@@ -57,15 +57,15 @@ export const subscribeToNotifications = (user)=> (dispatch)=> {
 // Make a request to your server to remove
 // the users data from your data store so you
 // don't attempt to send them push messages anymore
-export const unsubscribeToNotifications = ()=> (dispatch)=> {
+export const unsubscribeToNotifications = () => (dispatch) => {
   console.log('unsubscribeToNotifications');
-  unsubscribe().then((subscriptionId)=> {
-    Meteor.users.update({_id: Meteor.userId()}, {
+  unsubscribe().then((subscriptionId) => {
+    Meteor.users.update({ _id: Meteor.userId() }, {
       $pull: {
         'services.gcm.subscriptionIds': subscriptionId,
       },
-    }, (error, res)=> {
-      if(error) {
+    }, (error, res) => {
+      if (error) {
         console.error(error);
         dispatch({
           type: constants.AUTH_ERROR,
@@ -75,7 +75,7 @@ export const unsubscribeToNotifications = ()=> (dispatch)=> {
         console.log('updated user removing subscriptionId', res);
       }
     });
-  }, (err)=> {
+  }, (err) => {
     console.error(err);
   });
 };

@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
-import * as Actions from '../actions/actions';
 import AppBar from 'material-ui/AppBar';
 import Colors from 'material-ui/styles/colors';
-import ContactListComponent from './contact-list.component';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import GlobalStyles from '../styles/global.styles';
 import IconButton from 'material-ui/IconButton';
 import Radium from 'radium';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TextField from 'material-ui/TextField';
+import * as Actions from '../actions/actions';
+import ContactListComponent from './contact-list.component';
+import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
@@ -31,10 +31,6 @@ export class InviteComponent extends React.Component {
       getName: !props.user.profile || !props.user.profile.name,
     };
   }
-  invite() {
-    this.props.dispatch(Actions.inviteUsersToRoom(this.state.invitees));
-    this.props.hideInviteModal();
-  }
 
   onTypeaheadChange(state) {
     this.setState({
@@ -43,7 +39,12 @@ export class InviteComponent extends React.Component {
   }
 
   onContactListChange(invitees) {
-    this.setState({invitees});
+    this.setState({ invitees });
+  }
+
+  invite() {
+    this.props.dispatch(Actions.inviteUsersToRoom(this.state.invitees));
+    this.props.hideInviteModal();
   }
 
   handleClose() {
@@ -60,13 +61,11 @@ export class InviteComponent extends React.Component {
 
   updateProfileName() {
     !!this.state.name && this.state.name !== this.props.user.profile.name && this.props.dispatch(Actions.updateProfileName(this.state.name));
-    this.setState({
-      getName: false
-    });
+    this.setState({ getName: false });
   }
 
   render() {
-    const {user, dispatch} = this.props;
+    const { user, dispatch } = this.props;
 
     // get the contacts
     const contacts = !!user.services && !!user.services.google && user.services.google.contacts || [];

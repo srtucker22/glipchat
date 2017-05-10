@@ -9,23 +9,22 @@ const styles = {
   },
 };
 
-const FooterComponent = ({company})=> {
-  return (
-    <footer
-      className='col-xs-12'
-      style={[
-        GlobalStyles.table,
-        styles.css,
-        {height: GlobalStyles.footerHeight},
-      ]}>
-      <div className='text-left' style={[GlobalStyles.cell]}>
-        Copyright <a href={company.href} target='_blank'>
+const FooterComponent = ({ company }) => (
+  <footer
+    className="col-xs-12"
+    style={[
+      GlobalStyles.table,
+      styles.css,
+        { height: GlobalStyles.footerHeight },
+    ]}
+  >
+    <div className="text-left" style={[GlobalStyles.cell]}>
+        Copyright <a href={company.href} target="_blank">
           {company.name}
         </a> 2016
       </div>
-    </footer>
-  );
-};
+  </footer>
+);
 
 FooterComponent.propTypes = {
   company: PropTypes.object.isRequired,

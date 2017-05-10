@@ -1,7 +1,7 @@
-import * as constants from '../constants/constants';
 import deepExtend from 'deep-extend';
+import * as constants from '../constants/constants';
 
-export const roomsReducer = (state = {}, action = {})=> {
+export const roomsReducer = (state = {}, action = {}) => {
   switch (action.type) {
     case constants.LEAVE_ROOM:
       return Object.assign({}, state, {

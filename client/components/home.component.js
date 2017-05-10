@@ -1,18 +1,18 @@
-import PropTypes from 'prop-types';
-import {APP_NAME, COMPANY, GITHUB_URL} from '../../lib/config';
-import {connect} from 'react-redux';
-import * as Actions from '../actions/actions';
+import { connect } from 'react-redux';
 import Browser from 'bowser';
 import Colors from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import RaisedButton from 'material-ui/RaisedButton';
+import React from 'react';
+import { APP_NAME, COMPANY, GITHUB_URL } from '../../lib/config';
+import * as Actions from '../actions/actions';
 import DownloadButtonComponent from './download-button.component';
 import FooterComponent from './footer.component';
 import GithubComponent from './github.component';
 import GlobalStyles from '../styles/global.styles';
 import HeaderComponent from './header.component';
 import LoadingDialogComponent from './loading-dialog.component';
-import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
-import React from 'react';
 
 const styles = {
   css: {
@@ -54,38 +54,36 @@ export class HomeComponent extends React.Component {
   render() {
     return (
       <div style={[styles.css]}>
-        <GithubComponent link={GITHUB_URL}/>
+        <GithubComponent link={GITHUB_URL} />
         {this.state.loading ?
-          <LoadingDialogComponent open={true} title='Starting video call'/> : ''
+          <LoadingDialogComponent open title="Starting video call" /> : ''
         }
         <div style={[GlobalStyles.stickyFooterPage]}>
-          <HeaderComponent showMenuIconButton={false}/>
+          <HeaderComponent showMenuIconButton={false} />
           <div>
-            <div className='col-xs-12 text-center'>
+            <div className="col-xs-12 text-center">
               <h1 style={[styles.title.css]}>{APP_NAME}</h1>
               <br />
               <RaisedButton
                 onClick={this.createRoom.bind(this)}
-                label='Start video call'
-                secondary={true}
-                style={{marginBottom: '50px'}}
+                label="Start video call"
+                secondary
+                style={{ marginBottom: '50px' }}
               />
               <br />
               {(Browser.mac && !Browser.electron) ?
-                <DownloadButtonComponent platform='mac' /> : ''}
+                <DownloadButtonComponent platform="mac" /> : ''}
             </div>
           </div>
         </div>
-        <FooterComponent company={COMPANY}/>
+        <FooterComponent company={COMPANY} />
       </div>
     );
   }
-};
+}
 
 HomeComponent.propTypes = {
   dispatch: PropTypes.func,
 };
 
-HomeComponent = Radium(HomeComponent);
-
-export default connect()(HomeComponent);
+export default connect()(Radium(HomeComponent));

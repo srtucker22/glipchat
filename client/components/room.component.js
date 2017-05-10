@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
-import {PERMISSION_INTERVAL, RING_DURATION} from '../../lib/config';
-import {_} from 'meteor/underscore';
-import {browserHistory} from 'react-router';
-import {connect} from 'react-redux';
-import * as Actions from '../actions/actions';
+import { _ } from 'meteor/underscore';
+import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
 import Browser from 'bowser';
+import Radium from 'radium';
+import React from 'react';
+import * as Actions from '../actions/actions';
+import { PERMISSION_INTERVAL, RING_DURATION } from '../../lib/config';
 import CallingOverlayComponent from './calling-overlay.component';
 import Colors from 'material-ui/styles/colors';
 import ControlsComponent from './controls.component';
@@ -12,8 +14,6 @@ import ErrorComponent from './error.component';
 import FirstOverlayComponent from './first-overlay.component';
 import InviteComponent from './invite.component';
 import MediaStore from '../stores/media.store';
-import Radium from 'radium';
-import React from 'react';
 import ReadyPromptComponent from './ready-prompt.component';
 import VideoComponent from './video.component';
 import VideoOverlayComponent from './video-overlay.component';
@@ -59,7 +59,7 @@ export class RoomComponent extends React.Component {
   }
 
   componentDidMount() {
-    const {localStream, dispatch} = this.props;
+    const { localStream, dispatch } = this.props;
     if (!localStream.error && !localStream.loading && !MediaStore.local) {
       dispatch(Actions.getLocalStream());
     }
@@ -84,7 +84,7 @@ export class RoomComponent extends React.Component {
   componentWillReceiveProps(nextProps) {
     const newState = {};
 
-    if(!nextProps.localStream.error && !!this.permissionInterval) {
+    if (!nextProps.localStream.error && !!this.permissionInterval) {
       clearInterval(this.permissionInterval);
       this.permissionInterval = null;
     }
@@ -98,23 +98,23 @@ export class RoomComponent extends React.Component {
         console.log(this.state.status);
         nextProps.dispatch(Actions.joinRoomStream(nextProps.room._id));
       }
-    } else if(this.state.status !== 'connecting' && nextProps.room.connected.length &&
+    } else if (this.state.status !== 'connecting' && nextProps.room.connected.length &&
       !~nextProps.room.connected.indexOf(nextProps.user._id)) {
       console.log('setting joining');
       newState.status = 'joining';
-    } else if(nextProps.room.connected.length > 1) {
+    } else if (nextProps.room.connected.length > 1) {
       console.log('setting connecting/ed');
       newState.status = !nextProps.remoteStreams || !_.keys(nextProps.remoteStreams) ?
         'connecting' : 'connected';
-        !!this.ringerTimeout && clearTimeout(this.ringerTimeout);
-    } else if (this.state.status === 'connected'){
+      !!this.ringerTimeout && clearTimeout(this.ringerTimeout);
+    } else if (this.state.status === 'connected') {
       console.log(nextProps, this.state);
       newState.status = 'waiting';
     }
 
     console.log(nextProps);
-    if(!!nextProps.localStream.error &&
-      ~['NotAllowedError','PermissionDeniedError']
+    if (!!nextProps.localStream.error &&
+      ~['NotAllowedError', 'PermissionDeniedError']
         .indexOf(nextProps.localStream.error.status)) {
       this.waitForPermission();
     }
@@ -124,10 +124,10 @@ export class RoomComponent extends React.Component {
 
   // keep calling getUserMedia periodically to check for permission change
   waitForPermission() {
-    if(!this.permissionInterval){
-      const _this = this;
-      _this.permissionInterval = setInterval(()=> {
-        _this.props.dispatch(Actions.getLocalStream());
+    if (!this.permissionInterval) {
+      const self = this;
+      self.permissionInterval = setInterval(() => {
+        self.props.dispatch(Actions.getLocalStream());
       }, PERMISSION_INTERVAL);
     }
   }
@@ -138,14 +138,14 @@ export class RoomComponent extends React.Component {
 
   ring() {
     this.setState({
-      status: 'ringing'
+      status: 'ringing',
     });
 
-    const _this = this;
-    _this.ringerTimeout = setTimeout(()=> {
-      _this.ringerTimeout = undefined;
+    const self = this;
+    self.ringerTimeout = setTimeout(() => {
+      self.ringerTimeout = undefined;
       console.log('setting waiting');
-      _this.setState({
+      self.setState({
         status: 'failed',
       });
     }, RING_DURATION);
@@ -187,12 +187,12 @@ export class RoomComponent extends React.Component {
     } = this.props;
 
     // log the errors for now
-    if (!!localStream.error) {
+    if (localStream.error) {
       console.error(localStream.error);
     }
 
     // if we have an error, just render the error component
-    if (!!localStream.error) {
+    if (localStream.error) {
       return (
         <div style={[styles.css]}>
           <ErrorComponent
@@ -212,7 +212,7 @@ export class RoomComponent extends React.Component {
             status={this.state.status}
           />
         );
-      } else if(this.state.status !== 'connecting' && !localStream.loading) {
+      } else if (this.state.status !== 'connecting' && !localStream.loading) {
         overlayComponent = (
           <FirstOverlayComponent
             action={this.toggleInviteModal.bind(this)}
@@ -236,12 +236,12 @@ export class RoomComponent extends React.Component {
         linkUrl={window.location.href}
         showInviteModal={this.state.showInviteModal}
         hideInviteModal={this.toggleInviteModal.bind(this)}
-        ref='invite'
+        ref="invite"
         user={user}
       />
     );
 
-    const controlsComponent = (!!MediaStore.local) ? (
+    const controlsComponent = (MediaStore.local) ? (
       <ControlsComponent
         controlsVisible={this.state.controlsVisible}
         dispatch={dispatch}
@@ -254,20 +254,20 @@ export class RoomComponent extends React.Component {
 
     const remoteStreamComponents = (!!remoteStreams && _.keys(remoteStreams).length) ?
       (<div style={[styles.videos.css]}>
-        <div key='local' style={[styles.videos.video.css]}>
+        <div key="local" style={[styles.videos.video.css]}>
           <VideoOverlayComponent
             id={'local'}
             dispatch={dispatch}
             isAudioEnabled={localStream.audio}
-            setPrimaryStream={this.setPrimaryStream.bind(this, 'local')}/>
+            setPrimaryStream={this.setPrimaryStream.bind(this, 'local')}  
+          />
           <VideoComponent
             src={MediaStore.local}
-            muted={true}
-            flip={true}
+            muted
+            flip
           />
         </div>
-        {_.map(remoteStreams, (val, key)=> {
-          return (
+        {_.map(remoteStreams, (val, key) => (
             <div
               key={key}
               style={[styles.videos.video.css]}>
@@ -280,19 +280,19 @@ export class RoomComponent extends React.Component {
               />
               <VideoComponent src={MediaStore[key]}/>
             </div>
-          );
-        })}
+          ))}
       </div>) : undefined;
 
     return (
       <div style={[styles.css]}>
-        {!!this.state.primaryStream ?
+        {this.state.primaryStream ?
           (<VideoComponent
             src={MediaStore[this.state.primaryStream]}
             flip={(this.state.primaryStream === 'local')}
-            fullScreen={true}
+            fullScreen
             muted={(this.state.primaryStream === 'local')}
-            onTouchTap={this.toggleControls.bind(this)}/>
+            onTouchTap={this.toggleControls.bind(this)}  
+          />
           ) : ''
         }
         {inviteComponent}
@@ -303,7 +303,7 @@ export class RoomComponent extends React.Component {
       </div>
     );
   }
-};
+}
 
 RoomComponent = Radium(RoomComponent);
 
@@ -317,15 +317,13 @@ RoomComponent.propTypes = {
 
 const mapStateToProps = ({
   rooms,
-  rtc: {localStream, remoteStreams},
-  users: {user},
-}) => {
-  return {
-    room: _.first(rooms.available), // TODO: this is a hack
-    localStream,
-    remoteStreams,
-    user,
-  };
-};
+  rtc: { localStream, remoteStreams },
+  users: { user },
+}) => ({
+  room: _.first(rooms.available), // TODO: this is a hack
+  localStream,
+  remoteStreams,
+  user,
+});
 
 export default connect(mapStateToProps)(RoomComponent);

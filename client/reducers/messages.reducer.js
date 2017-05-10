@@ -1,10 +1,10 @@
-import constants from '../constants/constants';
+import { CREATE_MESSAGE, SET_MESSAGES } from '../constants/constants';
 
-export const messagesReducer = (state = [], action = {})=> {
+export const messagesReducer = (state = [], action = {}) => {
   switch (action.type) {
-    case constants.SET_MESSAGES:
+    case SET_MESSAGES:
       return action.messages;
-    case constants.CREATE_MESSAGE:
+    case CREATE_MESSAGE:
     default:
       return state;
   }

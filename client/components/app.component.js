@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Browser from 'bowser';
-import * as Actions from '../actions/actions';
-import {connect} from 'react-redux';
-import React from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import PropTypes from 'prop-types';
+import React from 'react';
+import * as Actions from '../actions/actions';
 
 const styles = {
   css: {
@@ -22,14 +22,14 @@ export class AppComponent extends React.Component {
   }
 
   componentDidMount() {
-    const {mobile, tablet} = Browser;
+    const { mobile, tablet } = Browser;
     if (!this.props.user && !mobile && !tablet) {
       this.props.dispatch(Actions.loginAsGuest());
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const {mobile, tablet} = Browser;
+    const { mobile, tablet } = Browser;
     if (!nextProps.user && !mobile && !tablet) {
       this.props.dispatch(Actions.loginAsGuest());
     }
@@ -51,12 +51,10 @@ export class AppComponent extends React.Component {
 }
 
 const mapStateToProps = ({
-  users: {user},
-}) => {
-  return {
-    user,
-  };
-};
+  users: { user },
+}) => ({
+  user,
+});
 
 export default connect(
   mapStateToProps,

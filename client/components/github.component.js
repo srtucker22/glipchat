@@ -11,16 +11,15 @@ const styles = {
   },
 };
 
-const GithubComponent = ({link})=> {
-  return (
-    <a href={link} target='_blank'>
-      <img
-        style={styles.css}
-        src='images/github.png'
-        alt='Fork me on GitHub'/>
-    </a>
-  );
-};
+const GithubComponent = ({ link }) => (
+  <a href={link} target="_blank">
+    <img
+      style={styles.css}
+      src="images/github.png"
+      alt="Fork me on GitHub"
+    />
+  </a>
+);
 
 GithubComponent.propTypes = {
   link: PropTypes.string,

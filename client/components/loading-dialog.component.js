@@ -24,21 +24,20 @@ const styles = {
   },
 };
 
-const LoadingDialogComponent = (props)=> {
-  return (
-    <div className='LoadingDialog'>
-      <Dialog
-        onRequestClose={props.onTouchTap}
-        bodyStyle={styles.body.css}
-        contentStyle={styles.content.css}
-        open={props.open}
-        style={props.style}>
-        <h4 style={styles.content.css}>{props.title}</h4>
-        <CircularProgress mode='indeterminate'/>
-      </Dialog>
-    </div>
-  );
-};
+const LoadingDialogComponent = props => (
+  <div className="LoadingDialog">
+    <Dialog
+      onRequestClose={props.onTouchTap}
+      bodyStyle={styles.body.css}
+      contentStyle={styles.content.css}
+      open={props.open}
+      style={props.style}
+    >
+      <h4 style={styles.content.css}>{props.title}</h4>
+      <CircularProgress mode="indeterminate" />
+    </Dialog>
+  </div>
+);
 
 LoadingDialogComponent.propTypes = {
   onTouchTap: PropTypes.func,
