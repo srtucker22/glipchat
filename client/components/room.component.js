@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
 import { _ } from 'meteor/underscore';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import Browser from 'bowser';
+import Colors from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
-import Colors from 'material-ui/styles/colors';
 import { PERMISSION_INTERVAL, RING_DURATION } from '../../lib/config';
 import * as Actions from '../actions/actions';
 import CallingOverlayComponent from './calling-overlay.component';
@@ -84,6 +84,12 @@ export class RoomComponent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // if the user logs out on a different tab, leave the room
+    if (!nextProps.user || nextProps.user._id !== this.props.user._id) {
+      browserHistory.push('/');
+      return;
+    }
+
     const newState = {};
 
     if (!nextProps.localStream.error && !!this.permissionInterval) {
@@ -125,13 +131,6 @@ export class RoomComponent extends React.Component {
     }
 
     this.setState(newState);
-  }
-
-  componentWillUpdate(nextProps) {
-    // if the user logs out on a different tab, leave the room
-    if (!nextProps.user || nextProps.user.id !== this.props.user.id) {
-      browserHistory.push('/');
-    }
   }
 
   pingInvitees() {
@@ -235,7 +234,7 @@ export class RoomComponent extends React.Component {
       }
     }
 
-    const readyPromptComponent = (this.state.status === 'joining') ? (
+    const readyPromptComponent = (this.state.status === 'joining' && !localStream.loading) ? (
       <ReadyPromptComponent
         joinRoomStream={this.joinRoomStream.bind(this, room._id)}
         onTouchTap={this.toggleControls}

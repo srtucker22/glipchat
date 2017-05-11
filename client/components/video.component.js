@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 const styles = {
   css: {
@@ -27,18 +26,14 @@ const styles = {
 
 export class VideoComponent extends React.PureComponent {
   componentDidMount() {
-    const video = ReactDOM.findDOMNode(this.refs.video);
-
     if (this.props.src) {
-      video.srcObject = this.props.src;
+      this.video.srcObject = this.props.src;
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const video = ReactDOM.findDOMNode(this.refs.video);
-
     if (!!nextProps.src && nextProps.src !== this.props.src) {
-      video.srcObject = nextProps.src;
+      this.video.srcObject = nextProps.src;
     }
   }
 
@@ -47,7 +42,7 @@ export class VideoComponent extends React.PureComponent {
 
     return (
       <video
-        ref={'video'}
+        ref={(ref) => { this.video = ref; }}
         style={[
           styles.css,
           props.flip && styles.flip.css,

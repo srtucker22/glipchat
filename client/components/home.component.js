@@ -41,6 +41,8 @@ export class HomeComponent extends React.Component {
     this.state = {
       loading: false,
     };
+
+    this.createRoom = this.createRoom.bind(this);
   }
 
   createRoom() {
@@ -49,8 +51,6 @@ export class HomeComponent extends React.Component {
     this.setState({
       loading: true,
     });
-
-    this.createRoom = this.createRoom.bind(this);
   }
 
   render() {

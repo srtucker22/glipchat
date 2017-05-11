@@ -7,12 +7,12 @@ const styles = {
     top: 0,
     left: 0,
     border: 0,
-    zIndex: 6,
+    zIndex: 9999,
   },
 };
 
 const GithubComponent = ({ link }) => (
-  <a href={link} target="_blank">
+  <a href={link} target="_blank" rel="noopener noreferrer">
     <img
       style={styles.css}
       src="images/github.png"

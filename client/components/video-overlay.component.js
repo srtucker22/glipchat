@@ -109,7 +109,7 @@ export class VideoOverlayComponent extends Component {
               styles.mute.visible.css : {})
           }
           mini
-          primary={false}
+          secondary
         >
           <FontIcon
             className="material-icons"
@@ -124,8 +124,6 @@ export class VideoOverlayComponent extends Component {
             (!!this.props.isRemoteEnabled && !this.props.isRemoteEnabled.audio) ?
               styles.mute.visible.css : {})
           }
-          mini
-          primary={false}
         >
           <FontIcon
             className="material-icons"

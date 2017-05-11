@@ -1,7 +1,5 @@
-- don't show join until you have video connection
 - rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
-- closing tab isn't leaving room properly
-- replace ReactDOM in video component
+- closing tab isn't leaving room properly if you start the chat
 - reactive var to replace session
 
 **high**
