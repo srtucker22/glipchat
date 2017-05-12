@@ -38,19 +38,19 @@ export class VideoComponent extends React.PureComponent {
   }
 
   render() {
-    const { props } = this;
+    const { flip, fullScreen, muted, onTouchTap } = this.props;
 
     return (
       <video
         ref={(ref) => { this.video = ref; }}
         style={[
           styles.css,
-          props.flip && styles.flip.css,
-          props.fullScreen && styles.fullScreen.css,
+          flip && styles.flip.css,
+          fullScreen && styles.fullScreen.css,
         ]}
-        muted={props.muted}
+        muted={muted}
         autoPlay
-        onClick={props.onTouchTap}
+        onClick={onTouchTap}
       />
     );
   }

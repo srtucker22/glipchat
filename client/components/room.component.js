@@ -68,21 +68,6 @@ export class RoomComponent extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    // clear the ringer timeout
-    if (this.ringerTimeout) {
-      clearTimeout(this.ringerTimeout);
-    }
-
-    if (this.permissionInterval) {
-      clearInterval(this.permissionInterval);
-    }
-
-    this.props.dispatch(Actions.leaveRoomStream());
-    this.props.dispatch(Actions.stopLocalStream());
-    this.props.dispatch(Actions.leaveRoom());
-  }
-
   componentWillReceiveProps(nextProps) {
     // if the user logs out on a different tab, leave the room
     if (!nextProps.user || nextProps.user._id !== this.props.user._id) {
@@ -102,28 +87,22 @@ export class RoomComponent extends React.Component {
       newState.primaryStream = 'local';
 
       if (!nextProps.room.connected.length) {
-        console.log('setting ringing');
         this.ring();
-        console.log(this.state.status);
         nextProps.dispatch(Actions.joinRoomStream(nextProps.room._id));
       }
     } else if (this.state.status !== 'connecting' && nextProps.room.connected.length &&
       !~nextProps.room.connected.indexOf(nextProps.user._id)) {
-      console.log('setting joining');
       newState.status = 'joining';
     } else if (nextProps.room.connected.length > 1) {
-      console.log('setting connecting/ed');
       newState.status = !nextProps.remoteStreams || !_.keys(nextProps.remoteStreams) ?
         'connecting' : 'connected';
       if (this.ringerTimeout) {
         clearTimeout(this.ringerTimeout);
       }
     } else if (this.state.status === 'connected') {
-      console.log(nextProps, this.state);
       newState.status = 'waiting';
     }
 
-    console.log(nextProps);
     if (!!nextProps.localStream.error &&
       ~['NotAllowedError', 'PermissionDeniedError']
         .indexOf(nextProps.localStream.error.status)) {
@@ -133,8 +112,25 @@ export class RoomComponent extends React.Component {
     this.setState(newState);
   }
 
-  pingInvitees() {
-    console.log('pingInvitees');
+  componentWillUnmount() {
+    // clear the ringer timeout
+    if (this.ringerTimeout) {
+      clearTimeout(this.ringerTimeout);
+    }
+
+    if (this.permissionInterval) {
+      clearInterval(this.permissionInterval);
+    }
+
+    this.props.dispatch(Actions.leaveRoomStream());
+    this.props.dispatch(Actions.stopLocalStream());
+    this.props.dispatch(Actions.leaveRoom());
+  }
+
+  setPrimaryStream(id) {
+    this.setState({
+      primaryStream: id,
+    });
   }
 
   ring() {
@@ -145,7 +141,6 @@ export class RoomComponent extends React.Component {
     const self = this;
     self.ringerTimeout = setTimeout(() => {
       self.ringerTimeout = undefined;
-      console.log('setting waiting');
       self.setState({
         status: 'failed',
       });
@@ -159,10 +154,8 @@ export class RoomComponent extends React.Component {
     });
   }
 
-  setPrimaryStream(id) {
-    this.setState({
-      primaryStream: id,
-    });
+  pingInvitees() {
+    console.log('pingInvitees');
   }
 
   // keep calling getUserMedia periodically to check for permission change
@@ -247,7 +240,6 @@ export class RoomComponent extends React.Component {
         linkUrl={window.location.href}
         showInviteModal={this.state.showInviteModal}
         hideInviteModal={this.toggleInviteModal}
-        ref="invite"
         user={user}
       />
     );

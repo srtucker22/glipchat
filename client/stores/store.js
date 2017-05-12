@@ -4,7 +4,6 @@ import { AccountsGuest } from 'meteor/artwells:accounts-guest';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Meteor } from 'meteor/meteor';
 import { persistStore } from 'redux-persist';
-import { Session } from 'meteor/session';
 import { Tracker } from 'meteor/tracker';
 import Browser from 'bowser';
 import localForage from 'localForage';
@@ -15,6 +14,7 @@ import Messages from '../../lib/messages';
 import Notifications from '../../lib/notifications';
 import Rooms from '../../lib/rooms';
 import rootReducer from '../reducers/reducer';
+import { availableRooms, availableUsers, currentRoom } from '../stores/reactive-var.store';
 
 // Required! Enable Redux DevTools with the monitors you chose
 const composeEnhancers = Meteor.isDevelopment ?
@@ -45,8 +45,8 @@ persistStore(store, { storage: localForage });
 // super simplified tracker -- we get all the users all the time under one sub
 let currentUser;
 Tracker.autorun(() => {
-  const available = Session.get('availableUsers');
-  const room = Session.get('currentRoom');
+  const available = availableUsers.get();
+  const room = currentRoom.get();
 
   const sub = Meteor.subscribe('users', {
     room,
@@ -91,8 +91,8 @@ Tracker.autorun(() => {
 // super simplified tracker -- we get all the rooms all the time under one sub
 Tracker.autorun(() => {
   const sub = Meteor.subscribe('rooms', {
-    room: Session.get('currentRoom'),
-    available: Session.get('availableRooms'),
+    room: currentRoom.get(),
+    available: availableRooms.get(),
   });
 
   if (sub.ready()) {
@@ -105,7 +105,7 @@ Tracker.autorun(() => {
 
 // super simplified tracker -- we get all chat messages for the room on one sub
 Tracker.autorun(() => {
-  const sub = Meteor.subscribe('messages', Session.get('currentRoom'));
+  const sub = Meteor.subscribe('messages', currentRoom.get());
   if (sub.ready()) {
     store.dispatch({
       type: constants.SET_MESSAGES,

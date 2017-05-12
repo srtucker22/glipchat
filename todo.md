@@ -1,6 +1,4 @@
 - rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
-- closing tab isn't leaving room properly if you start the chat
-- reactive var to replace session
 
 **high**
 - **notification bug** -- sometimes first notification isn't received, probably due to new subscriptionid

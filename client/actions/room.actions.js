@@ -1,11 +1,11 @@
 import { Roles } from 'meteor/alanning:roles';
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
 import * as constants from '../constants/constants';
+import { currentRoom } from '../stores/reactive-var.store';
 
 export const setCurrentRoom = id => (dispatch, getState) => {
   const success = () => {
-    Session.set('currentRoom', id);
+    currentRoom.set(id);
     return dispatch({
       type: constants.SET_CURRENT_ROOM,
       id,
@@ -50,7 +50,6 @@ export const createRoom = invitees => (dispatch) => {
 
 export const inviteUsersToRoom = invitees => (dispatch, getState) => {
   const { rooms: { current } } = getState();
-  console.log('current', current, 'invitees', invitees);
   Meteor.call('invite', current, invitees, (error) => {
     if (error) {
       // eslint-disable-next-line no-console
@@ -68,7 +67,7 @@ export const inviteUsersToRoom = invitees => (dispatch, getState) => {
 };
 
 export const leaveRoom = () => {
-  Session.set('currentRoom', undefined);
+  currentRoom.set(undefined);
   return { type: constants.LEAVE_ROOM };
 };
 

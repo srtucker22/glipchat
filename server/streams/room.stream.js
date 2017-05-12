@@ -16,10 +16,11 @@ roomStream.allowWrite('join', 'logged');
 roomStream.allowWrite('msg', 'logged');
 
 function disconnect(userId, roomId) {
+  console.log('disconnect', userId, roomId);
   const room = Rooms.findOne({ _id: roomId });
 
   // make sure they are still technically in the Room model
-  if (!!room && _.contains(room.connected, userId)) {
+  if (room && _.contains(room.connected, userId)) {
     Rooms.update({ _id: roomId }, { $pull: { connected: userId } });
 
     // tell everyone in the room the peer has disconnected
@@ -102,7 +103,7 @@ roomStream.on('join', function(roomId) {
 
   // alternative connection tracker
   // when someone disconnects, remove them from the Room's connected list
-  UserStatus.events.once('connectionLogout', ({ userId }) => {
+  UserStatus.events.on('connectionLogout', ({ userId }) => {
     if (self.userId === userId) {
       disconnect(self.userId, roomId);
     }

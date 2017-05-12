@@ -94,6 +94,7 @@ export class VideoOverlayComponent extends Component {
     return (
       <div
         key="overlay"
+        role="button"
         style={[
           styles.css,
           (Radium.getState(this.state, 'overlay', ':hover') || this.state.shade) && styles.shade.css,
@@ -140,7 +141,6 @@ VideoOverlayComponent.propTypes = {
   dispatch: PropTypes.func,
   id: PropTypes.string,
   isAudioEnabled: PropTypes.bool,
-  params: PropTypes.object,
   isRemoteEnabled: PropTypes.shape({
     audio: PropTypes.bool,
     video: PropTypes.bool,
