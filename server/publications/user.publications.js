@@ -10,7 +10,7 @@ Meteor.publish('user', function(...args) {
   check(args, Match.Maybe({}));
   return Meteor.users.find(
     { _id: this.userId },
-    { fields: { services: 1, history: 1, status: 1 } },
+    { fields: { profile: 1, services: 1, history: 1, status: 1 } },
   );
 });
 
