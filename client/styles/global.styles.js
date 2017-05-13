@@ -3,7 +3,7 @@ const GlobalStyles = {
   footerHeight,
   stickyFooterPage: {
     height: 'auto',
-    margin: `${'0 auto ' + '-'}${footerHeight}`,
+    margin: `${'0 auto '}-${footerHeight}`,
     minHeight: '100%',
     padding: `0 0 ${footerHeight}`,
   },

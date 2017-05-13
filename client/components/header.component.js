@@ -83,7 +83,12 @@ const styles = {
   },
 };
 
-export class NotificationDropdownComponent extends PureComponent {
+export class NotificationDropdownComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.closePopover = this.closePopover.bind(this);
+    this.togglePopover = this.togglePopover.bind(this);
+  }
   togglePopover(event) {
     event.preventDefault();
 
@@ -112,7 +117,7 @@ export class NotificationDropdownComponent extends PureComponent {
         <IconButton
           iconStyle={styles.icon.css}
           iconClassName="material-icons"
-          onTouchTap={this.togglePopover.bind(this)}
+          onTouchTap={this.togglePopover}
         >
           {(!!notifications && notifications.length) ?
             'notifications' : 'notifications_none'}
@@ -122,7 +127,7 @@ export class NotificationDropdownComponent extends PureComponent {
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-          onRequestClose={this.closePopover.bind(this)}
+          onRequestClose={this.closePopover}
         >
           <Card style={styles.menu.paper.css}>
             <List>
@@ -165,6 +170,9 @@ export class ProfileDropdownComponent extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+
+    this.closePopover = this.closePopover.bind(this);
+    this.togglePopover = this.togglePopover.bind(this);
   }
 
   togglePopover(event) {
@@ -189,24 +197,25 @@ export class ProfileDropdownComponent extends PureComponent {
       <div style={[GlobalStyles.cell, styles.menu.css]}>
         <Avatar
           src={user.services.google.picture}
-          onTouchTap={this.togglePopover.bind(this)}
+          onTouchTap={this.togglePopover}
         />
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-          onRequestClose={this.closePopover.bind(this)}
+          onRequestClose={this.closePopover}
         >
           <Card>
             <CardText>
-              {user.profile.name}
+              {user.profile ? user.profile.name : ''}
             </CardText>
-            {!!user.services.google &&
-              !!user.services.google.email &&
-              <CardText>
-                {user.services.google.email}
-              </CardText>
+            {user.services && user.services.google &&
+              user.services.google.email ? (
+                <CardText>
+                  {user.services.google.email}
+                </CardText>
+               ) : undefined
             }
             <CardActions expandable={false} style={{ textAlign: 'center' }}>
               <FlatButton onTouchTap={logout} label="Sign out" />
