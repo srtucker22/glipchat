@@ -1,4 +1,6 @@
 **high**
+- BUG: first time push service worker fails
+- BUG: user profile isn't getting created on glipchat.herokuapp.com
 - BUG: rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
 - BUG: sometimes first notification isn't received, probably due to new subscriptionid
   - missing a notification leads to being 1 behind in the chain

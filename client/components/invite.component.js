@@ -66,7 +66,8 @@ export class InviteComponent extends React.Component {
   }
 
   updateProfileName() {
-    if (this.state.name && this.state.name !== this.props.user.profile.name) {
+    if (this.state.name &&
+      (!this.props.user.profile || this.state.name !== this.props.user.profile.name)) {
       this.props.dispatch(Actions.updateProfileName(this.state.name));
     }
     this.setState({ getName: false });
@@ -118,7 +119,7 @@ export class InviteComponent extends React.Component {
             <TextField
               defaultValue={user.profile ? user.profile.name : ''}
               onChange={this.updateProfileNameState}
-              errorText={user.profile.name ? ' ' : null}
+              errorText={user.profile && user.profile.name ? ' ' : null}
               floatingLabelText="Your name"
             />
           </Dialog>
@@ -174,7 +175,6 @@ InviteComponent.propTypes = {
   invitees: PropTypes.array,
   hideInviteModal: PropTypes.func,
   showInviteModal: PropTypes.bool,
-  linkUrl: PropTypes.string,
   user: PropTypes.object,
 };
 
