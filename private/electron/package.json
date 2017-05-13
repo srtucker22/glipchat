@@ -1,0 +1,48 @@
+{
+  "name": "glipchat",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "build": {
+    "appId": "com.simon.glipchat",
+    "mac": {
+      "category": "public.app-category.social-networking"
+    },
+    "win": {
+      "target": "squirrel"
+    },
+    "directories": {
+      "output": "dist/"
+    }
+  },
+  "updater": {
+    "url": "https://raw.githubusercontent.com/srtucker22/quasar/master/private/electron/updates.json"
+  },
+  "scripts": {
+    "start": "electron .",
+    "pack": "build --dir",
+    "dist": "build",
+    "publish": "publish",
+    "release": "npm run dist && npm run publish"
+  },
+  "repository": "https://github.com/srtucker22/quasar",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "srtucker22@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.6.7",
+    "electron-builder": "^17.5.0",
+    "electron-builder-squirrel-windows": "^17.4.0",
+    "electron-simple-publisher": "^0.4.5"
+  },
+  "dependencies": {
+    "electron-simple-updater": "^1.2.0",
+    "underscore": "^1.8.3"
+  }
+}
