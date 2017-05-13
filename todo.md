@@ -1,3 +1,9 @@
+- electron icon
+- electron auto-updater fix
+- user login is really slow again -- maybe refactor all the google stuff
+- electron download buttons
+- electron settings for file locations
+
 - rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
 
 **high**
