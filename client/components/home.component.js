@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
-import { APP_NAME, COMPANY, GITHUB_URL } from '../../lib/config';
+import { APP_NAME, COMPANY, GITHUB_URL, DOWNLOAD_URLS } from '../../lib/config';
 import * as Actions from '../actions/actions';
 import DownloadButtonComponent from './download-button.component';
 import FooterComponent from './footer.component';
@@ -74,7 +74,7 @@ export class HomeComponent extends React.Component {
               />
               <br />
               {(Browser.mac && !Browser.electron) ?
-                <DownloadButtonComponent platform="mac" /> : ''}
+                <DownloadButtonComponent platform="mac" link={DOWNLOAD_URLS.mac} /> : ''}
             </div>
           </div>
         </div>

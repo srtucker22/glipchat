@@ -3,6 +3,12 @@ const path = require('path');
 const proxyWindowEvents = require('./proxy-window-events');
 const updater = require('electron-simple-updater');
 
+let settings = {};
+
+if (process.env.NODE_ENV !== 'development') {
+  settings = require('./settings.json');
+}
+
 updater.init({
   checkUpdateOnStart: false,
   autoDownload: false,
@@ -12,8 +18,7 @@ updater.init({
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-const settings = process.env.SETTINGS || {};
-const rootUrl = settings.url || 'http://localhost:3000';
+const rootUrl = settings.rootUrl || 'http://localhost:3000';
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

@@ -19,7 +19,7 @@
     "url": "https://raw.githubusercontent.com/srtucker22/glipchat/master/private/electron/updates.json"
   },
   "scripts": {
-    "start": "electron .",
+    "start": "NODE_ENV='development' electron .",
     "pack": "build --dir",
     "dist": "build",
     "publish": "publish",

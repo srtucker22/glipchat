@@ -3,5 +3,5 @@ settings.json
 
 node_modules
 config.push.json
-public/downloads/darwin-x64/*
-public/downloads/win32-ia32/*
+public/downloads/mac/*
+public/downloads/windows/*

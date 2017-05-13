@@ -4,9 +4,8 @@
 - BUG: rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
 - BUG: sometimes first notification isn't received, probably due to new subscriptionid
   - missing a notification leads to being 1 behind in the chain
-- ENHANCEMENT: electron settings for file locations
+- ENHANCEMENT: Streamline build/publish process for Electron
 - FEATURE: electron download buttons
-- TEST: electron auto-updater/builder test
 - ENHANCEMENT: clear non-active rooms with chron job
 - ENHANCEMENT: clicking notification with open window should redirect without reloading page
 - ENHANCEMENT: handle all error messages
@@ -17,6 +16,7 @@
 - FEATURE: firefox notifications
 - FEATURE: mobile calling overlay
 - FEATURE: UI for mobile notifications
+- TEST: electron auto-updater test
 
 **med**
 - ENHANCEMENT: Add TURN server support to make it more useful for real-world deployment

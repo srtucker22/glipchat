@@ -52,12 +52,10 @@ const DownloadButtonComponent = (props) => {
   const platforms = {
     mac: {
       icon: '/images/apple.svg',
-      // link: `/downloads/darwin-x64/${APP_NAME}.zip`,
       title: 'Mac OS X',
     },
     win: {
       icon: '/images/windows.svg',
-      // link: `/downloads/win-x64/${APP_NAME}.zip`,
       title: 'Windows',
     },
   };
@@ -65,7 +63,7 @@ const DownloadButtonComponent = (props) => {
   const platform = platforms[props.platform];
 
   return (
-    <a href={platform.link} download>
+    <a href={props.link} download>
       <RaisedButton
         secondary
         labelPosition="after"
@@ -90,6 +88,7 @@ const DownloadButtonComponent = (props) => {
 };
 
 DownloadButtonComponent.propTypes = {
+  link: PropTypes.string,
   platform: PropTypes.string.isRequired,
 };
 
