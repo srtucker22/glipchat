@@ -6,7 +6,7 @@ import { Meteor } from 'meteor/meteor';
 import { persistStore } from 'redux-persist';
 import { Tracker } from 'meteor/tracker';
 import Browser from 'bowser';
-import localForage from 'localForage';
+import localForage from 'localforage';
 import thunk from 'redux-thunk';
 import * as Actions from '../actions/actions';
 import * as constants from '../constants/constants';

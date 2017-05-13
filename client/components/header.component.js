@@ -15,9 +15,8 @@ import MenuItem from 'material-ui/MenuItem';
 import { List, ListItem } from 'material-ui/List';
 import moment from 'moment';
 import Popover from 'material-ui/Popover/Popover';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
-import React from 'react';
+import React, { Component, PureComponent } from 'react';
 import * as Actions from '../actions/actions';
 import GlobalStyles from '../styles/global.styles';
 
@@ -84,13 +83,7 @@ const styles = {
   },
 };
 
-export class NotificationDropdownComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
+export class NotificationDropdownComponent extends PureComponent {
   togglePopover(event) {
     event.preventDefault();
 
@@ -168,12 +161,10 @@ NotificationDropdownComponent.propTypes = {
 
 NotificationDropdownComponent = Radium(NotificationDropdownComponent);
 
-export class ProfileDropdownComponent extends React.Component {
+export class ProfileDropdownComponent extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
   togglePopover(event) {
@@ -234,7 +225,7 @@ ProfileDropdownComponent.propTypes = {
 
 ProfileDropdownComponent = Radium(ProfileDropdownComponent);
 
-export class HeaderComponent extends React.Component {
+export class HeaderComponent extends Component {
   constructor(props) {
     super(props);
 

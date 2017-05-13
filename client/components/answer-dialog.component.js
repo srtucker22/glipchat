@@ -1,14 +1,11 @@
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
 import LoadingDialogComponent from './loading-dialog.component';
 
 export class AnswerDialogComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
       loading: false,
     };

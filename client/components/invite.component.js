@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import Radium from 'radium';
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { CSSTransitionGroup } from 'react-transition-group';
 import TextField from 'material-ui/TextField';
 import * as Actions from '../actions/actions';
 import ContactListComponent from './contact-list.component';
@@ -97,9 +97,10 @@ export class InviteComponent extends React.Component {
       />,
     ];
 
-    return (<ReactCSSTransitionGroup
+    return (<CSSTransitionGroup
       transitionName="invite-modal"
-      transitionEnterTimeout={300} transitionLeaveTimeout={300}
+      transitionEnterTimeout={300}
+      transitionLeaveTimeout={300}
     >
       {this.props.showInviteModal ?
         <div
@@ -165,7 +166,7 @@ export class InviteComponent extends React.Component {
             </div>
         ) : undefined}
         </div> : undefined}
-    </ReactCSSTransitionGroup>);
+    </CSSTransitionGroup>);
   }
 }
 InviteComponent.propTypes = {

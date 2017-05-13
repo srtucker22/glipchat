@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Radium from 'radium';
 import RaisedButton from 'material-ui/RaisedButton';
 import Colors from 'material-ui/styles/colors';
-import React from 'react';
+import React, { PureComponent } from 'react';
 import GlobalStyles from '../styles/global.styles';
 
 const styles = {
@@ -42,13 +41,7 @@ const styles = {
   },
 };
 
-export class FirstOverlayComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate =
-      PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
+export class FirstOverlayComponent extends PureComponent {
   render() {
     return (
       <div onTouchTap={this.props.onTouchTap}>
