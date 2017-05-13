@@ -15,9 +15,11 @@ roomStream.allowRead(function(eventName) {
 roomStream.allowWrite('join', 'logged');
 roomStream.allowWrite('msg', 'logged');
 
-function disconnect(userId, roomId) {
+function disconnect(userId, roomId, room) {
   console.log('disconnect', userId, roomId);
-  const room = Rooms.findOne({ _id: roomId });
+  if (!room) {
+    room = Rooms.findOne({ _id: roomId });
+  }
 
   // make sure they are still technically in the Room model
   if (room && _.contains(room.connected, userId)) {
@@ -100,14 +102,15 @@ roomStream.on('join', function(roomId) {
   //   console.log('onClose');
   //   disconnect(self.userId, roomId);
   // };
+});
 
-  // alternative connection tracker
-  // when someone disconnects, remove them from the Room's connected list
-  UserStatus.events.on('connectionLogout', ({ userId }) => {
-    if (self.userId === userId) {
-      disconnect(self.userId, roomId);
-    }
-  });
+// alternative connection tracker
+// when someone disconnects, remove them from the Room's connected list
+UserStatus.events.on('connectionLogout', ({ userId }) => {
+  const rooms = Rooms.find({ connected: userId }).fetch();
+  if (rooms.length) {
+    _.each(rooms, room => disconnect(userId, room._id, room));
+  }
 });
 
 // send messages between people in the room

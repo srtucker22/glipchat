@@ -109,7 +109,9 @@ Schema.User = new SimpleSchema({
   },
 });
 
-Meteor.users.attachSchema(Schema.User);
+// this is killing server performance
+// see https://github.com/aldeed/meteor-collection2/issues/338
+// Meteor.users.attachSchema(Schema.User);
 
 Meteor.users.allow({
   insert(userId, user) {

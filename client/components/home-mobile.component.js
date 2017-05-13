@@ -23,6 +23,7 @@ const styles = {
   content: {
     css: {
       marginTop: '64px',
+      width: '100%',
     },
   },
 
@@ -59,7 +60,8 @@ export class HomeMobileComponent extends React.Component {
 
   invite() {
     if (this.state.invitees && this.state.invitees.length) {
-      if (this.state.name && this.state.name !== this.props.user.profile.name) {
+      if (this.state.name &&
+        (!this.props.user.profile || this.state.name !== this.props.user.profile.name)) {
         this.props.dispatch(Actions.updateProfileName(this.state.name));
       }
       this.props.dispatch(Actions.createRoom(this.state.invitees));
