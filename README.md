@@ -5,7 +5,7 @@ View the project at [https://quasar-meteor.herokuapp.com/](https://quasar-meteor
 glipchat is a real-time video chatroom application. glipchat is powered by Meteor, with React + Redux + WebRTC on the frontend.
 
 glipchat has been tested on the following:
-- Android 4.3+ cordova app
+- Android 4.3+ cordova app (currently disabled)
 - Chrome
 - Chrome for Android (Android 5+)
 - Firefox
@@ -38,39 +38,11 @@ glipchat's mission is to be a veritable OSS solution for multi-user multi-platfo
             "apiKey": "YOUR_API_KEY",
             "projectNumber": "YOUR_PROJECT_NUMBER"
           },
-          "kadira": {
-            "appId": "YOUR_APP_ID",
-            "appSecret": "YOUR_APP_SECRET"
-          },
           "public": {
             "analyticsSettings": {
               "Google Analytics": {"trackingId": "YOUR_TRACKING_ID"},
               "Segment.io" : {"apiKey": "YOUR_API_KEY"}
             }
-          },
-          "electron": {
-            "autoPackage": true,
-            "builds": [{
-              "platform": "darwin", "arch": "x64"
-            },{
-              "platform": "win32", "arch": "ia32"
-            }],
-            "downloadUrls": {
-              "win32": "/public/downloads/win32/",
-              "darwin": "/public/downloads/osx/glipchat.zip"
-            },
-            "name": "glipchat",
-            "version": "0.0.1",
-            "description": "Video Chatroom with Meteor + WebRTC + React + Flux",
-            "height": 768,
-            "width": 1024,
-            "frame": true,
-            "title-bar-style": "hidden",
-            "resizable": true,
-            "protocols": [{
-              "name": "glipchat",
-              "schemes": ["glipchat"]
-            }]
           }
         }
 
@@ -102,11 +74,11 @@ Please read the [Meteor Cordova Integration](https://github.com/meteor/meteor/wi
 
 ### Electron Notes:
 
-*Do NOT include the 'electron' field in your settings.json file if you are not running glipchat from a Windows or Mac machine. meteor-electron will throw errors if you try and build from a Linux machine.*
+glipchat uses [electron](https://github.com/electron) to easily transform into a downloadable desktop app. The code for this app is located at [`private/electron`](https://github.com/srtucker22/glipchat/blob/master/private/electron)
 
-glipchat uses [meteor-electron](https://github.com/electron-webapps/meteor-electron) to easily transform into a downloadable desktop app and update as you develop. For `settings.json` configuration for this feature, please refer to the [meteor-electron documentation](https://github.com/electron-webapps/meteor-electron).
+We use [electron-simple-updater](https://github.com/megahertz/electron-simple-updater) for building, publishing, and updating the electron application. View the [README]{https://github.com/srtucker22/glipchat/blob/master/private/electron/README.md} in `private/electron` for details on how to use these tools.
 
-meteor-electron has been modified to build a compressed version of the glipchat desktop app at `glipchat/public/downloads/{platform}-{arch}/glipchat.zip`, which browser versions can reference for easy downloading. See [download-button.component.js](https://github.com/srtucker22/glipchat/blob/master/client/components/modules/download-button.component.jsx#L57) for how components reference this directory.
+See [download-button.component.js](https://github.com/srtucker22/glipchat/blob/master/client/components/modules/download-button.component.jsx#L57) for how components reference this directory.
 
 ## Application Design Overview
 
@@ -138,13 +110,15 @@ This project welcomes code contributions, bug reports and feature requests.
 - [glipchat (formerly named quasar) meteor lightening talk @MeteorHQ ](https://youtu.be/C0S_QCb6HSM)
 
 ## Upcoming
--  React Native!!!
+- plenty of fixes, features and enhancements
+- bring back the Android cordova love!
+- maybe some iOS cordova love?!
 
 ## License
 
 The MIT License
 
-Copyright (c) 2016 Glipcode http://glipcode.com
+Copyright (c) 2016 Glipcode https://glipcode.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
