@@ -1,7 +1,16 @@
 # glipchat
 
-View the project at [https://quasar-meteor.herokuapp.com/](https://quasar-meteor.herokuapp.com/)
+* [Overview](#overview)
+* [Live Demo](#live-demo)
+* [Motivation](#motivation)
+* [Installation](#installation)
+* [Electron Notes](#electron-notes)
+* [Android Cordova Notes](#android-cordova-notes)
+* [Resources](#resources)
+* [Contributing](#contributing)
+* [Licence](#licence)
 
+# Overview
 glipchat is a real-time video chatroom application. glipchat is powered by Meteor, with React + Redux + WebRTC on the frontend.
 
 glipchat has been tested on the following:
@@ -13,12 +22,13 @@ glipchat has been tested on the following:
 
 Other browsers and operating systems may not support WebRTC.
 
-## Motivation
+# Live Demo
+View the project at [https://glipchat.herokuapp.com/](https://glipchat.herokuapp.com/)
 
+# Motivation
 glipchat's mission is to be a veritable OSS solution for multi-user multi-platform video conferencing -- a product regular people can use and developers can modify and build into their own products.
 
-## Installation
-
+# Installation
 1. Clone the project `git clone https://github.com/srtucker22/glipchat.git`
 2. Go to the primary directory `cd glipchat`
 3. Add a `settings.json` to the primary directory `touch settings.json`
@@ -48,12 +58,14 @@ glipchat's mission is to be a veritable OSS solution for multi-user multi-platfo
 
 5. Run the app with the settings `npm start`
 
-### Deployment Notes:
+# Electron Notes:
+glipchat uses [electron](https://github.com/electron) to easily transform into a downloadable desktop app. The code for this app is located at [`private/electron`](https://github.com/srtucker22/glipchat/blob/master/private/electron)
 
-To deploy to a remote server, consider using a package like [Meteor Up](https://github.com/arunoda/meteor-up)
+We use [electron-simple-updater](https://github.com/megahertz/electron-simple-updater) for building, publishing, and updating the electron application. View the [README]{https://github.com/srtucker22/glipchat/blob/master/private/electron/README.md} in `private/electron` for details on how to use these tools.
 
-### Android Cordova Notes:
+See [download-button.component.js](https://github.com/srtucker22/glipchat/blob/master/client/components/modules/download-button.component.jsx#L57) for how components reference this directory.
 
+# Android Cordova Notes:
 In order to run video conferencing on glipchat as a cordova app, you will to have the latest version of Android Studio installed and **you will need to use an actual Android device** (currently tested with devices 4.3+). Plug in your device to your computer via USB and run
 
 `meteor run android-device -p {local port} --settings settings.json`
@@ -72,16 +84,7 @@ nice additional flags might be:
 
 Please read the [Meteor Cordova Integration](https://github.com/meteor/meteor/wiki/Meteor-Cordova-integration) docs for more details.
 
-### Electron Notes:
-
-glipchat uses [electron](https://github.com/electron) to easily transform into a downloadable desktop app. The code for this app is located at [`private/electron`](https://github.com/srtucker22/glipchat/blob/master/private/electron)
-
-We use [electron-simple-updater](https://github.com/megahertz/electron-simple-updater) for building, publishing, and updating the electron application. View the [README]{https://github.com/srtucker22/glipchat/blob/master/private/electron/README.md} in `private/electron` for details on how to use these tools.
-
-See [download-button.component.js](https://github.com/srtucker22/glipchat/blob/master/client/components/modules/download-button.component.jsx#L57) for how components reference this directory.
-
-## Application Design Overview
-
+# Application Design Overview
 glipchat is an example of how to create a WebRTC video chatroom and also of how to integrate React with Redux in a Meteor app.
 
 Don't know React or Redux? No problem!
@@ -102,20 +105,13 @@ Check out [routes.js](https://github.com/srtucker22/glipchat/blob/master/client/
 
 glipchat uses [RocketChat:Streamer](https://github.com/RocketChat/meteor-streamer) to power the WebRTC communication.
 
-## Contributing
-
-This project welcomes code contributions, bug reports and feature requests.
-
-## Resources
+# Resources
 - [glipchat (formerly named quasar) meteor lightening talk @MeteorHQ ](https://youtu.be/C0S_QCb6HSM)
 
-## Upcoming
-- plenty of fixes, features and enhancements
-- bring back the Android cordova love!
-- maybe some iOS cordova love?!
+# Contributing
+This project welcomes code contributions, bug reports and feature requests. Please see the guidelines in [CONTRIBUTING.MD](CONTRIBUTING.MD) if you are interested in contributing.
 
-## License
-
+# License
 The MIT License
 
 Copyright (c) 2016 Glipcode https://glipcode.com

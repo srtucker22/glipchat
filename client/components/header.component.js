@@ -299,12 +299,12 @@ export class HeaderComponent extends React.Component {
         }, {
           title: 'GitHub',
           icon: 'code',
-          href: 'https://github.com/srtucker22/quasar',
+          href: 'https://github.com/srtucker22/glipchat',
           target: '_blank',
         }, {
           title: 'Feedback',
           icon: 'announcement',
-          href: 'https://github.com/srtucker22/quasar/issues/new',
+          href: 'https://github.com/srtucker22/glipchat/issues/new',
           target: '_blank',
         },
       ], [

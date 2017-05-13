@@ -16,7 +16,7 @@
     }
   },
   "updater": {
-    "url": "https://raw.githubusercontent.com/srtucker22/quasar/master/private/electron/updates.json"
+    "url": "https://raw.githubusercontent.com/srtucker22/glipchat/master/private/electron/updates.json"
   },
   "scripts": {
     "start": "electron .",
@@ -25,7 +25,7 @@
     "publish": "publish",
     "release": "npm run dist && npm run publish"
   },
-  "repository": "https://github.com/srtucker22/quasar",
+  "repository": "https://github.com/srtucker22/glipchat",
   "keywords": [
     "Electron",
     "quick",
