@@ -1,20 +1,16 @@
-import deepExtend from 'deep-extend';
+import Immutable from 'seamless-immutable';
 import * as constants from '../constants/constants';
 
-export const roomsReducer = (state = {}, action = {}) => {
+const initialState = Immutable({});
+
+export const roomsReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case constants.LEAVE_ROOM:
-      return Object.assign({}, state, {
-        current: null,
-      });
+      return Immutable.merge(state, { current: null }, { deep: true });
     case constants.SET_CURRENT_ROOM:
-      return deepExtend({}, state, {
-        current: action.id,
-      });
+      return Immutable.merge(state, { current: action.id }, { deep: true });
     case constants.SET_ROOMS:
-      return deepExtend({}, state, {
-        available: action.available,
-      });
+      return Immutable.merge(state, { available: action.available }, { deep: true });
     case constants.CREATE_ROOM:
     default:
       return state;

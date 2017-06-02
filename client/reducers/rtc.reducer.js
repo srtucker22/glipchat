@@ -1,12 +1,12 @@
 import { _ } from 'meteor/underscore';
-import deepExtend from 'deep-extend';
+import Immutable from 'seamless-immutable';
 import { REHYDRATE } from 'redux-persist/constants';
 import * as constants from '../constants/constants';
 
-const initialState = {
+const initialState = Immutable({
   localStream: {},
   remoteStreams: {},
-};
+});
 
 export const rtcReducer = (state = initialState, action = {}) => {
   switch (action.type) {
@@ -15,27 +15,28 @@ export const rtcReducer = (state = initialState, action = {}) => {
       return state;
     }
     case constants.SET_REMOTE_VIDEO: {
-      const newStream = {};
-      newStream[action.id] = { hideVideo: action.hideVideo };
-      return deepExtend({}, state, { remoteStreams: newStream });
+      const remoteStreams = {
+        [action.id]: { hideVideo: action.hideVideo },
+      };
+      return Immutable.merge(state, { remoteStreams }, { deep: true });
     }
-    case constants.ADD_REMOTE_STREAM:
+    case constants.ADD_REMOTE_STREAM: {
+      const remoteStreams = {
+        [action.id]: Object.assign(action.tracks, { ready: true }),
+      };
+      return Immutable.merge(state, { remoteStreams }, { deep: true });
+    }
     case constants.UPDATE_REMOTE_STREAM: {
-      const newStream = {};
-      newStream[action.id] = action.tracks;
-      return deepExtend({}, state, {
-        remoteStreams: newStream,
-      });
+      const remoteStreams = {
+        [action.id]: action.tracks,
+      };
+      return Immutable.merge(state, { remoteStreams }, { deep: true });
     }
     case constants.REMOVE_REMOTE_STREAM:
-      return Object.assign({}, state, {
-        remoteStreams: _.omit(state.remoteStreams, action.id),
-      });
+      return Immutable.set(state, 'remoteStreams', _.omit(state.remoteStreams, action.id));
     case constants.GET_LOCAL_STREAM: {
-      const localStream = {
-        loading: true,
-      };
-      return deepExtend({}, state, { localStream });
+      const localStream = { loading: true };
+      return Immutable.merge(state, { localStream }, { deep: true });
     }
     case constants.SET_LOCAL_STREAM: {
       const localStream = {
@@ -44,12 +45,11 @@ export const rtcReducer = (state = initialState, action = {}) => {
         audio: true,
         video: true,
       };
-      return deepExtend({}, state, { localStream });
+      return Immutable.merge(state, { localStream }, { deep: true });
     }
 
     case constants.STOP_LOCAL_STREAM: {
-      const localStream = {};
-      return Object.assign({}, state, { localStream });
+      return Immutable.set(state, 'localStream', {});
     }
 
     case constants.LOCAL_STREAM_ERROR: {
@@ -58,23 +58,24 @@ export const rtcReducer = (state = initialState, action = {}) => {
         error: action.error,
       };
 
-      return deepExtend({}, state, { localStream });
+      return Immutable.merge(state, { localStream }, { deep: true });
     }
     case constants.LEAVE_ROOM_STREAM:
-      return Object.assign({}, state, { files: {} });
+      return Immutable.set(state, 'files', {});
 
     case constants.TOGGLE_LOCAL_AUDIO: {
       const localStream = { audio: action.enabled };
-      return deepExtend({}, state, { localStream });
+      return Immutable.merge(state, { localStream }, { deep: true });
     }
     case constants.TOGGLE_REMOTE_AUDIO: {
-      const remoteStreams = {};
-      remoteStreams[action.id] = { muted: !action.enabled };
-      return deepExtend({}, state, { remoteStreams });
+      const remoteStreams = {
+        [action.id]: { muted: !action.enabled },
+      };
+      return Immutable.merge(state, { remoteStreams }, { deep: true });
     }
     case constants.TOGGLE_LOCAL_VIDEO: {
       const localStream = { video: action.enabled };
-      return deepExtend({}, state, { localStream });
+      return Immutable.merge(state, { localStream }, { deep: true });
     }
     case constants.JOIN_ROOM_STREAM:
     default:

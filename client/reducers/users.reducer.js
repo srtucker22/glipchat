@@ -1,28 +1,29 @@
-import deepExtend from 'deep-extend';
+import Immutable from 'seamless-immutable';
 import * as constants from '../constants/constants';
 
-export const usersReducer = (state = {}, action = {}) => {
+const initialState = Immutable({});
+
+export const usersReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case constants.SET_USERS:
       return action.users;
     case constants.AUTH_ERROR:
     case constants.LOGIN_ERROR:
     case constants.LOGOUT_ERROR:
-      return deepExtend(state, {
+      return state.merge({
         authError: action.error,
       });
     case constants.LOGGING_IN:
-      return Object.assign({}, state, { user: { loggingIn: true } });
+      return state.set('user', { loggingIn: true });
     case constants.CLEAR_AUTH_ERROR:
     case constants.LOGIN:
     case constants.LOGIN_WITH_GOOGLE:
     case constants.LOGIN_WITH_PASSWORD:
     case constants.LOGOUT: {
-      const newState = Object.assign({}, state);
-      if (newState.authError) {
-        delete newState.authError;
+      if (state.authError) {
+        state.delete('authError');
       }
-      return newState;
+      return state;
     }
     default:
       return state;

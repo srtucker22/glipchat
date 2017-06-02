@@ -109,6 +109,10 @@ export class RoomComponent extends React.Component {
       this.waitForPermission();
     }
 
+    if (!nextProps.remoteStreams[this.state.primaryStream]) {
+      newState.primaryStream = 'local';
+    }
+
     this.setState(newState);
   }
 
