@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "meteor --settings settings.json",
+    "android": "meteor run android-device --settings settings.json",
     "test": "meteor test --driver-package practicalmeteor:mocha",
     "lint": "eslint .",
     "pretest": "npm run lint --silent"
@@ -14,10 +15,12 @@
     "bcrypt": "^1.0.2",
     "bowser": "^1.4.6",
     "buffer": "^5.0.0",
+    "bufferutil": "^3.0.1",
+    "emitter": "0.0.5",
     "fibers": "^1.0.15",
     "localforage": "^1.4.3",
     "material-ui": "^0.18.0",
-    "meteor-node-stubs": "^0.2.3",
+    "meteor-node-stubs": "^0.2.11",
     "moment": "^2.15.2",
     "prop-types": "^15.5.8",
     "radium": "^0.18.1",
@@ -40,6 +43,7 @@
     "stream": "0.0.2",
     "underscore": "^1.8.3",
     "url-join": "^2.0.1",
+    "utf-8-validate": "^3.0.2",
     "webrtc-adapter": "^2.0.5"
   },
   "eslintConfig": {
@@ -107,6 +111,7 @@
     "eslint-plugin-meteor": "^4.0.1",
     "eslint-plugin-react": "^7.0.0",
     "redux-mock-store": "^1.2.1",
+    "remote-redux-devtools": "^0.5.11",
     "sinon": "^2.1.0"
   }
 }

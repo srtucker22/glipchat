@@ -11,6 +11,7 @@ import { render } from 'react-dom';
 import Browser from 'bowser';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
+
 import * as config from '../lib/config';
 import Root from './components/root.component';
 import Electron from './utils/electron.utils';
