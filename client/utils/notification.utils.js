@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
 // TODO: make this a single prop in settings.json
-const API_KEY = Meteor.settings.public.google.apiKey;
+console.log(Meteor.settings);
+const API_KEY = Meteor.settings.public.google ? Meteor.settings.public.google.apiKey : undefined;
 const GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
 
 // This method handles the removal of subscriptionId

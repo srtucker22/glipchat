@@ -10,18 +10,18 @@ export const usersReducer = (state = initialState, action = {}) => {
     case constants.AUTH_ERROR:
     case constants.LOGIN_ERROR:
     case constants.LOGOUT_ERROR:
-      return state.merge({
+      return Immutable.merge(state, {
         authError: action.error,
       });
     case constants.LOGGING_IN:
-      return state.set('user', { loggingIn: true });
+      return Immutable.set(state, 'user', { loggingIn: true });
     case constants.CLEAR_AUTH_ERROR:
     case constants.LOGIN:
     case constants.LOGIN_WITH_GOOGLE:
     case constants.LOGIN_WITH_PASSWORD:
     case constants.LOGOUT: {
       if (state.authError) {
-        state.delete('authError');
+        Immutable.without(state, 'authError');
       }
       return state;
     }
