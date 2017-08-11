@@ -14,7 +14,7 @@
 glipchat is a real-time video chatroom application. glipchat is powered by Meteor, with React + Redux + WebRTC on the frontend.
 
 glipchat has been tested on the following:
-- Android 4.3+ cordova app (currently disabled)
+- Android 4.3+ cordova app
 - Chrome
 - Chrome for Android (Android 5+)
 - Firefox
@@ -66,13 +66,11 @@ We use [electron-simple-updater](https://github.com/megahertz/electron-simple-up
 See [download-button.component.js](https://github.com/srtucker22/glipchat/blob/master/client/components/modules/download-button.component.jsx#L57) for how components reference this directory.
 
 # Android Cordova Notes:
-In order to run video conferencing on glipchat as a cordova app, you will to have the latest version of Android Studio installed and **you will need to use an actual Android device** (currently tested with devices 4.3+). Plug in your device to your computer via USB and run
+In order to run video conferencing on glipchat as a cordova app, you will need to have the latest version of Android Studio installed and **you will need to use an actual Android device** (currently tested with devices 4.3+). Plug in your device to your computer via USB and run
 
-`meteor run android-device -p {local port} --settings settings.json`
+`meteor run android-device --settings settings.json`
 
 In order to use Google auth, you will need to run the application from a live mobiles server (see [OAuth for Mobile Meteor Clients](https://github.com/meteor/meteor/wiki/OAuth-for-mobile-Meteor-clients] for details). To do this, first deploy your meteor application to a live server.
-
-(e.g. `meteor deploy {your-server-url} --settings settings.json`)
 
 Once the app is successfully deployed, run:
 

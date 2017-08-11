@@ -11,7 +11,6 @@ export const roomsReducer = (state = initialState, action = {}) => {
       return Immutable.merge(state, { current: action.id }, { deep: true });
     case constants.SET_ROOMS:
       return Immutable.merge(state, { available: action.available }, { deep: true });
-    case constants.CREATE_ROOM:
     default:
       return state;
   }

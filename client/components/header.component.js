@@ -279,6 +279,7 @@ export class HeaderComponent extends Component {
     let menuItems;
     let notificationDropdown;
     let profileButtons;
+    let profileDropdown;
 
     if (mobile) {
       menuItems = [[

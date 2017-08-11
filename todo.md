@@ -1,8 +1,11 @@
 **high**
+- BUG: audio device not found Nexus 6
+- BUG: honor aspect ratio for mobile on desktop and vice versa
 - BUG: first time push service worker fails
 - BUG: rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
 - BUG: sometimes first notification isn't received, probably due to new subscriptionid
   - missing a notification leads to being 1 behind in the chain
+  - occasional
 - ENHANCEMENT: Streamline build/publish process for Electron
 - ENHANCEMENT: handle all error messages
 - ENHANCEMENT: should clear old subscriptionids for the same device
@@ -10,6 +13,9 @@
 - FEATURE: mobile calling overlay
 - FEATURE: UI for mobile notifications
 - TEST: electron auto-updater test
+- TEST: edge
+- BUG: force lowercase email
+- BUG: sending notification via email gets stuck
 
 **med**
 - ENHANCEMENT: Add TURN server support to make it more useful for real-world deployment

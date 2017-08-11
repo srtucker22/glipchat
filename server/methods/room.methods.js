@@ -14,9 +14,18 @@ _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g,
 };
 
+const joinEmailTemplate = `
+<div>
+  <p>
+    {{username}} you to a video chat. To join this chat, please go to <a href='{{url}}'>{{url}}</a> in a Chrome or Firefox browser.
+  </p>
+  <p>Cheers,</p>
+  <p>{{appName}}</p>
+</div>
+`;
+
 function renderEmailTemplate(filename, vals) {
-  const template = Assets.getText(filename); // eslint-disable-line no-undef
-  const templateCompiled = _.template(template);
+  const templateCompiled = _.template(joinEmailTemplate);
 
   return templateCompiled(vals);
 }
@@ -68,7 +77,9 @@ function invite(user, roomId, invitees) {
     }
 
     // notify invitees with push notification
-    return notifyInvitees(user, roomId, userInvitees);
+    if (userInvitees.length) {
+      return notifyInvitees(user, roomId, userInvitees);
+    }
   } catch (e) {
     throw new Meteor.Error(e.message);
   }

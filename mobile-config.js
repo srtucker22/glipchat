@@ -3,9 +3,8 @@ App.accessRule('http://api.segment.io/*');
 App.accessRule('https://fonts.googleapis.com/*');
 App.accessRule('https://fonts.gstatic.com/*');
 App.accessRule('https://lh3.googleusercontent.com/*');
-App.accessRule('https://quasar.meteor.com/*');
+App.accessRule('https://glipchat.herokuapp.com/*');
 App.accessRule('blob:*');
-App.accessRule('android-webview-video-poster:default_video_poster');
 
 // Make the app fullscreen
 App.setPreference('fullscreen', 'true');

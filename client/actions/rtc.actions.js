@@ -97,7 +97,7 @@ export const getLocalStream = () => (dispatch, getState) => {
     }
 
     return cordovaPromise.then(() => {
-      console.log('cordovaPromise resolved');
+      console.log('cordovaPromise resolved', GUM_CONSTRAINTS);
       return navigator.mediaDevices.getUserMedia(GUM_CONSTRAINTS)
         .then((s) => {
           console.log('received local stream');
