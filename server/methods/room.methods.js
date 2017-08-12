@@ -43,7 +43,9 @@ function notifyInvitees(user, roomId, invitees) {
   });
 }
 
-function invite(user, roomId, invitees) {
+function invite(user, roomId, rawInvitees) {
+  const invitees = _.map(rawInvitees, x => Object.assign(x, { email: x.email.toLowerCase() }));
+
   try {
     const userInvitees = Meteor.users.find({
       'services.google.email': { $in: _.pluck(invitees, 'email') },

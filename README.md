@@ -56,7 +56,18 @@ glipchat's mission is to be a veritable OSS solution for multi-user multi-platfo
           }
         }
 
-5. Run the app with the settings `npm start`
+5. Inside `.meteor/local/cordova-build/platforms/android/AndroidManifest.xml ` include the following permissions:
+
+```
+<manifest>
+  ...
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+</manifest>
+```
+
+6. Run the app with the settings `npm start`
 
 # Electron Notes:
 glipchat uses [electron](https://github.com/electron) to easily transform into a downloadable desktop app. The code for this app is located at [`private/electron`](https://github.com/srtucker22/glipchat/blob/master/private/electron)

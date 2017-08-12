@@ -28,8 +28,7 @@ export const getLocalStream = () => (dispatch, getState) => {
       });
     }
 
-    const runGUM = () => {
-      return navigator.mediaDevices.getUserMedia(GUM_CONSTRAINTS)
+    const runGUM = () => navigator.mediaDevices.getUserMedia(GUM_CONSTRAINTS)
       .then((s) => {
         console.log('received local stream');
         // add the local stream to the MediaStore
@@ -47,11 +46,9 @@ export const getLocalStream = () => (dispatch, getState) => {
           error,
         });
       });
-    };
 
     // get android permissions
-    if (Meteor.isCordova) {
-      console.log(device.platform);
+    if (Meteor.isCordova && device.platform === 'Android') {
       const ANDROID_PERMISSIONS = ['CAMERA', 'RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS'];
       const permissions = cordova.plugins.permissions;
       const requestedPermissions = [];
@@ -59,9 +56,8 @@ export const getLocalStream = () => (dispatch, getState) => {
       const success = () => {
         runGUM();
       };
-      const error = () => console.log('error');
+      const error = e => console.log('error', e);
       permissions.requestPermissions(requestedPermissions, success, error);
-      // });
     } else {
       runGUM();
     }

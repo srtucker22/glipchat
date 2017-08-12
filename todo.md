@@ -1,5 +1,4 @@
 **high**
-- BUG: audio device not found Nexus 6
 - BUG: honor aspect ratio for mobile on desktop and vice versa
 - BUG: first time push service worker fails
 - BUG: rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
@@ -16,6 +15,11 @@
 - TEST: edge
 - BUG: force lowercase email
 - BUG: sending notification via email gets stuck
+- BUG: closing tag on android is broken
+- BUG: tag --> dupes when typinge email and then press tab you get email plus user
+- BUG: tag --> need to clear text when you add a tag
+- ENHANCEMENT: need a place to change username after setting on desktop
+- ENHANCEMENT: create simple cordova plugin for permissions
 
 **med**
 - ENHANCEMENT: Add TURN server support to make it more useful for real-world deployment

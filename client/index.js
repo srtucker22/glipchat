@@ -27,6 +27,11 @@ Meteor.startup(() => {
     analytics.debug();  // show the analytics debug log if testing locally
   }
 
+  if (Meteor.isCordova) {
+    StatusBar.overlaysWebView(false);
+    StatusBar.hide();
+  }
+
   render(
     <Root />,
     document.getElementById('root'),
