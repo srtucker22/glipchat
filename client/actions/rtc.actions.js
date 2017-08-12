@@ -28,95 +28,43 @@ export const getLocalStream = () => (dispatch, getState) => {
       });
     }
 
-    let cordovaPromise = Promise.resolve();
-
-    if (Meteor.isCordova) {
-      console.log('promises', cordova);
-      const cameraPromise = new Promise((res, rej) => {
-        cordova.plugins.diagnostic.isCameraAuthorized(
-          (authorized) => {
-            console.log('camera authorized', authorized);
-            if (!authorized) {
-              cordova.plugins.diagnostic.requestCameraAuthorization(
-                (granted) => {
-                  console.log(`Authorization request for camera use was ${
-                    granted ? 'granted' : 'denied'}`);
-                  if (!granted) {
-                    rej('not granted');
-                  } else {
-                    res(granted);
-                  }
-                },
-                (error) => {
-                  console.error(error);
-                  rej(error);
-                },
-              );
-            } else {
-              res(true);
-            }
-          },
-          (error) => { console.error(error); },
-        );
-      });
-
-      const microphonePromise = new Promise((res, rej) => {
-        cordova.plugins.diagnostic.isMicrophoneAuthorized(
-          (authorized) => {
-            console.log('microphone authorized', authorized);
-            if (!authorized) {
-              cordova.plugins.diagnostic.requestMicrophoneAuthorization(
-                (granted) => {
-                  console.log(`Authorization request for microphone use was ${
-                    granted ? 'granted' : 'denied'}`);
-                  if (!granted) {
-                    rej('not granted');
-                  } else {
-                    res(granted);
-                  }
-                },
-                (error) => {
-                  console.error(error);
-                  rej(error);
-                },
-              );
-            } else {
-              res(true);
-            }
-          },
-          (error) => {
-            console.error(error);
-            rej(error);
-          },
-        );
-      });
-
-      cordovaPromise = cameraPromise.then(() => {
-        return microphonePromise;
-      });
-    }
-
-    return cordovaPromise.then(() => {
-      console.log('cordovaPromise resolved', GUM_CONSTRAINTS);
+    const runGUM = () => {
       return navigator.mediaDevices.getUserMedia(GUM_CONSTRAINTS)
-        .then((s) => {
-          console.log('received local stream');
-          // add the local stream to the MediaStore
-          // this store holds MediaStream objects outside of redux
-          MediaStore.local = s;
-          return dispatch({
-            type: constants.SET_LOCAL_STREAM,
-          });
-        })
-        .catch((error) => {
-          console.error('error', error);
-          error.status = error.status || error.name;
-          return dispatch({
-            type: constants.LOCAL_STREAM_ERROR,
-            error,
-          });
+      .then((s) => {
+        console.log('received local stream');
+        // add the local stream to the MediaStore
+        // this store holds MediaStream objects outside of redux
+        MediaStore.local = s;
+        return dispatch({
+          type: constants.SET_LOCAL_STREAM,
         });
-    });
+      })
+      .catch((error) => {
+        console.error('error', error);
+        error.status = error.status || error.name;
+        return dispatch({
+          type: constants.LOCAL_STREAM_ERROR,
+          error,
+        });
+      });
+    };
+
+    // get android permissions
+    if (Meteor.isCordova) {
+      console.log(device.platform);
+      const ANDROID_PERMISSIONS = ['CAMERA', 'RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS'];
+      const permissions = cordova.plugins.permissions;
+      const requestedPermissions = [];
+      _.each(ANDROID_PERMISSIONS, p => requestedPermissions.push(permissions[p]));
+      const success = () => {
+        runGUM();
+      };
+      const error = () => console.log('error');
+      permissions.requestPermissions(requestedPermissions, success, error);
+      // });
+    } else {
+      runGUM();
+    }
   }
 };
 
