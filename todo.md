@@ -5,21 +5,23 @@
 - BUG: sometimes first notification isn't received, probably due to new subscriptionid
   - missing a notification leads to being 1 behind in the chain
   - occasional
-- ENHANCEMENT: Streamline build/publish process for Electron
-- ENHANCEMENT: handle all error messages
-- ENHANCEMENT: should clear old subscriptionids for the same device
-- ENHANCEMENT: single notification for all subscriptionids
-- FEATURE: mobile calling overlay
-- FEATURE: UI for mobile notifications
-- TEST: electron auto-updater test
-- TEST: edge
 - BUG: force lowercase email
 - BUG: sending notification via email gets stuck
 - BUG: closing tag on android is broken
 - BUG: tag --> dupes when typinge email and then press tab you get email plus user
 - BUG: tag --> need to clear text when you add a tag
+- ENHANCEMENT: Streamline build/publish process for Electron
+- ENHANCEMENT: handle all error messages
+- ENHANCEMENT: should clear old subscriptionids for the same device
+- ENHANCEMENT: single notification for all subscriptionids
 - ENHANCEMENT: need a place to change username after setting on desktop
 - ENHANCEMENT: create simple cordova plugin for permissions
+- FEATURE: mobile calling overlay
+- FEATURE: UI for mobile notifications
+- TEST: understand old throttled requester code and try enhancing
+- TEST: all reducer tests
+- TEST: electron auto-updater test
+- TEST: edge
 
 **med**
 - ENHANCEMENT: Add TURN server support to make it more useful for real-world deployment
@@ -44,9 +46,10 @@
 **low**
 - BUG: firefox ui when leaving stream can be funky ~ something abrupt is happening with unmounting
 - ENHANCEMENT: clicking notification with open window should redirect without reloading page
-- ENHANCEMENT: bookmark needs to be instantly selected for copying
+- ENHANCEMENT: bookmark url needs to be instantly selected for copying
 - ENHANCEMENT: full screen the react-select and always open!!
 - ENHANCEMENT: improve tags input css
+- ENHANCEMENT: dynamic imports
 - FEATURE: show contact photo in answer-overlay
 - FEATURE: snooze notifications functionality
 - FEATURE: transition the intro page nicely ~ maybe have the typeahead popup/down like in view mode
