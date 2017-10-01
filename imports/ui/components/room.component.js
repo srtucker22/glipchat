@@ -2,7 +2,7 @@ import { _ } from 'meteor/underscore';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import Browser from 'bowser';
-import Colors from 'material-ui/styles/colors';
+import Colors from 'material-ui/colors';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';

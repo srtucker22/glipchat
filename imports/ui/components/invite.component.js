@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
-import Colors from 'material-ui/styles/colors';
+import Colors from 'material-ui/colors';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import Radium from 'radium';
 import React from 'react';
@@ -14,7 +14,7 @@ import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
-    background: Colors.fullWhite,
+    background: 'white',
     height: '100%',
     left: 0,
     overflow: 'scroll',
@@ -84,18 +84,20 @@ export class InviteComponent extends React.Component {
 
     // Custom Actions
     const dialogActions = [
-      <FlatButton
+      <Button
         key="cancel"
-        label="Cancel"
         onTouchTap={this.props.hideInviteModal}
-      />,
-      <FlatButton
+      >
+        {'Cancel'}
+      </Button>,
+      <Button
         key="update"
-        label="Update"
         disabled={(!this.state.name && (!user.profile || !user.profile.name))}
-        secondary
+        color="accent"
         onTouchTap={this.updateProfileName}
-      />,
+      >
+        {'Update'}
+      </Button>,
     ];
 
     return (<CSSTransitionGroup
@@ -147,22 +149,24 @@ export class InviteComponent extends React.Component {
               }]}
             >
               <div style={[GlobalStyles.cell, { width: '50%' }]}>
-                <FlatButton
+                <Button
                   backgroundColor={Colors.red500}
                   key="cancel"
-                  label="Cancel"
                   onTouchTap={this.props.hideInviteModal}
-                  style={{ color: Colors.fullWhite, width: '100%' }}
-                />
+                  style={{ color: 'white', width: '100%' }}
+                >
+                  {'Cancel'}
+                </Button>
               </div>
               <div style={[GlobalStyles.cell, { width: '50%' }]}>
-                <FlatButton
+                <Button
                   backgroundColor={Colors.cyan500}
                   key="invite"
-                  label="Invite"
                   onTouchTap={this.invite}
-                  style={{ color: Colors.fullWhite, width: '100%' }}
-                />
+                  style={{ color: 'white', width: '100%' }}
+                >
+                  {'Invite'}
+                </Button>
               </div>
             </div>
         ) : undefined}

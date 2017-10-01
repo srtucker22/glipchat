@@ -14,12 +14,6 @@ export const rtcReducer = (state = initialState, action = {}) => {
       const incoming = action.payload;
       return state;
     }
-    case constants.SET_REMOTE_VIDEO: {
-      const remoteStreams = {
-        [action.id]: { hideVideo: action.hideVideo },
-      };
-      return Immutable.merge(state, { remoteStreams }, { deep: true });
-    }
     case constants.ADD_REMOTE_STREAM: {
       const remoteStreams = {
         [action.id]: Object.assign(action.tracks, { ready: true }),

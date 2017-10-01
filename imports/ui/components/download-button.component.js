@@ -1,16 +1,11 @@
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   button: {
-    css: {
-      height: '50px',
-      marginBottom: '30px',
-    },
-
     container: {
       css: {
         height: '50px',
@@ -64,9 +59,9 @@ const DownloadButtonComponent = (props) => {
 
   return (
     <a href={props.link} download>
-      <RaisedButton
-        secondary
-        labelPosition="after"
+      <Button
+        raised
+        color="accent"
         style={styles.button.css}
       >
         <div style={[GlobalStyles.table, styles.button.container.css]}>
@@ -82,7 +77,7 @@ const DownloadButtonComponent = (props) => {
             </div>
           </div>
         </div>
-      </RaisedButton>
+      </Button>
     </a>
   );
 };

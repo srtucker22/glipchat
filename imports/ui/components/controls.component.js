@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 import { browserHistory } from 'react-router';
-import Colors from 'material-ui/styles/colors';
-import FontIcon from 'material-ui/FontIcon';
+import Colors from 'material-ui/colors';
+import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
 import PropTypes from 'prop-types';
@@ -91,12 +91,13 @@ export class ControlsComponent extends React.Component {
         onTouchTap={this.props.onTouchTap}
       >
         <Paper
-          zDepth={1} style={_.extend({},
-          GlobalStyles.table,
-          styles.controls.css,
-          (Radium.getState(this.state, 'overlay', ':hover') ||
-            this.props.controlsVisible) ? styles.controls.visible : {},
-        )}
+          zDepth={1}
+          style={_.extend({},
+            GlobalStyles.table,
+            styles.controls.css,
+            (Radium.getState(this.state, 'overlay', ':hover') ||
+              this.props.controlsVisible) ? styles.controls.visible : {},
+          )}
         >
           <div
             key="invite"
@@ -104,25 +105,26 @@ export class ControlsComponent extends React.Component {
             style={[GlobalStyles.cell, styles.controls.button.css]}
           >
             <IconButton>
-              <FontIcon
+              <Icon
                 className="material-icons"
-                color={Colors.fullWhite}
-              >person_add</FontIcon>
+                color={'white'}
+              >person_add</Icon>
             </IconButton>
           </div>
           <div
             key="video"
-            onTouchTap={this.toggleLocalVideo} style={[
+            onTouchTap={this.toggleLocalVideo}
+            style={[
               GlobalStyles.cell,
               styles.controls.button.css,
               !this.props.isLocalVideoEnabled && styles.controls.red.css,
             ]}
           >
             <IconButton>
-              <FontIcon
+              <Icon
                 className="material-icons"
-                color={Colors.fullWhite}
-              >videocam_off</FontIcon>
+                color={'white'}
+              >videocam_off</Icon>
             </IconButton>
           </div>
           <div
@@ -135,17 +137,17 @@ export class ControlsComponent extends React.Component {
             ]}
           >
             <IconButton>
-              <FontIcon
+              <Icon
                 className="material-icons"
-                color={Colors.fullWhite}
-              >mic_off</FontIcon>
+                color={'white'}
+              >mic_off</Icon>
             </IconButton>
           </div>
           {/* <div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
             <IconButton>
-              <FontIcon className='material-icons' color={Colors.fullWhite}>settings</FontIcon>
+              <Icon className='material-icons' color={'white'}>settings</Icon>
             </IconButton>
-          </div>*/}
+          </div> */}
           <div
             key="end"
             style={[
@@ -156,11 +158,11 @@ export class ControlsComponent extends React.Component {
             onTouchTap={this.leave}
           >
             <IconButton>
-              <FontIcon
+              <Icon
                 className="material-icons"
                 color={Radium.getState(this.state, 'end', ':hover') ?
-                  Colors.fullWhite : Colors.red800}
-              >call_end</FontIcon>
+                  'white' : Colors.red800}
+              >call_end</Icon>
             </IconButton>
           </div>
         </Paper>

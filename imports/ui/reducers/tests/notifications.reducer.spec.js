@@ -1,14 +1,14 @@
 import Immutable from 'seamless-immutable';
 import { chai } from 'meteor/practicalmeteor:chai';
-import * as constants from '../constants/constants';
+import * as constants from '../../constants/constants';
 
-import reducer from './notifications.reducer';
+import reducer from '../notifications.reducer';
 
 const { expect } = chai;
 
-describe('notifications reducer', () => {
+describe('Reducer: notifications', () => {
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).to.equal({
+    expect(reducer(undefined, {})).to.eql({
       active: null,
       notifications: [],
     });
@@ -23,7 +23,7 @@ describe('notifications reducer', () => {
     expect(reducer(fakeState, {
       type: constants.SET_ACTIVE_NOTIFICATION,
       active: 'chicken',
-    })).to.equal({
+    })).to.eql({
       active: 'chicken',
       notifications: [1, 2, 3],
     });
@@ -38,7 +38,7 @@ describe('notifications reducer', () => {
     expect(reducer(fakeState, {
       type: constants.SET_NOTIFICATIONS,
       notifications: [4, 5, 6],
-    })).to.equal({
+    })).to.eql({
       active: 'cheese',
       notifications: [4, 5, 6],
     });

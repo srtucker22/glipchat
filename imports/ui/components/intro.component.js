@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Colors from 'material-ui/styles/colors';
+import Colors from 'material-ui/colors';
 import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import React from 'react';
 import { APP_NAME, GITHUB_URL } from '../../api/lib/config';
 import * as Actions from '../actions/actions';
@@ -17,14 +17,14 @@ const styles = {
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    color: Colors.fullWhite,
+    color: 'white',
     height: '100%',
     width: '100%',
   },
 
   title: {
     css: {
-      color: Colors.fullWhite,
+      color: 'white',
       fontSize: '80px',
       textShadow: '2px 2px rgba(0, 0, 0, 0.5)',
     },
@@ -59,19 +59,23 @@ export class IntroComponent extends React.PureComponent {
         <div className="text-center" style={[GlobalStyles.cell]}>
           <h1 style={[styles.title.css]}>{APP_NAME}</h1>
           <br />
-          <RaisedButton
+          <Button
+            raised
             onTouchTap={this.loginWithGoogle}
-            label="Sign in with Google"
-            secondary
+            color="accent"
             style={{ marginBottom: '20px' }}
-          />
+          >
+            {'Sign in with Google'}
+          </Button>
           <br />
-          <RaisedButton
+          <Button
+            raised
             onTouchTap={this.loginAsGuest}
-            label="Continue as guest"
-            secondary
+            color="accent"
             style={{ marginBottom: '50px' }}
-          />
+          >
+            {'Continue as guest'}
+          </Button>
         </div>
       </div>
     );

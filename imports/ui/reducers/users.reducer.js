@@ -16,12 +16,11 @@ export const usersReducer = (state = initialState, action = {}) => {
     case constants.LOGGING_IN:
       return Immutable.set(state, 'user', { loggingIn: true });
     case constants.CLEAR_AUTH_ERROR:
-    case constants.LOGIN:
     case constants.LOGIN_WITH_GOOGLE:
     case constants.LOGIN_WITH_PASSWORD:
     case constants.LOGOUT: {
       if (state.authError) {
-        Immutable.without(state, 'authError');
+        return Immutable.without(state, 'authError');
       }
       return state;
     }

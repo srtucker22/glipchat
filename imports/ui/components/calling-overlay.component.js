@@ -1,15 +1,15 @@
 import { browserHistory } from 'react-router';
-import CircularProgress from 'material-ui/CircularProgress';
-import Colors from 'material-ui/styles/colors';
+import { CircularProgress } from 'material-ui/Progress';
+import Colors from 'material-ui/colors';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import React from 'react';
 import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
-    color: Colors.fullWhite,
+    color: 'white',
     height: '100%',
     left: 0,
     position: 'absolute',
@@ -34,11 +34,13 @@ export class CallingOverlayComponent extends React.Component {
       <h3>Contacting...</h3>
       <CircularProgress mode="indeterminate" />
       <div style={{ display: 'block', paddingTop: '16px' }}>
-        <RaisedButton
-          label="Cancel"
-          secondary
+        <Button
+          raised
+          color="accent"
           onTouchTap={this.leave}
-        />
+        >
+          {'Cancel'}
+        </Button>
       </div>
     </div>);
 
@@ -51,17 +53,23 @@ export class CallingOverlayComponent extends React.Component {
       <h3>{'Contacts Unavailable'}</h3>
       <h5>{'No contacts connected'}</h5>
       <div style={{ margin: 'auto', width: '100%' }}>
-        {this.props.invitees ? <RaisedButton
-          label="Retry"
-          secondary
-          onTouchTap={this.props.retry}
-          style={{ margin: '0 10px' }}
-        /> : ''}
-        <RaisedButton
-          label={this.props.invitees ? 'Cancel' : 'Leave'}
-          secondary
+        {this.props.invitees ? (
+          <Button
+            raised
+            color="accent"
+            onTouchTap={this.props.retry}
+            style={{ margin: '0 10px' }}
+          >
+            {'Retry'}
+          </Button>
+        ) : undefined}
+        <Button
+          raised
+          color="accent"
           onTouchTap={this.leave}
-        />
+        >
+          {this.props.invitees ? 'Cancel' : 'Leave'}
+        </Button>
       </div>
     </div>);
 

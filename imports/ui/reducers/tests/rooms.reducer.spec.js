@@ -1,14 +1,14 @@
 import Immutable from 'seamless-immutable';
 import { chai } from 'meteor/practicalmeteor:chai';
-import * as constants from '../constants/constants';
+import * as constants from '../../constants/constants';
 
-import reducer from './rooms.reducer';
+import reducer from '../rooms.reducer';
 
 const { expect } = chai;
 
-describe('rooms reducer', () => {
+describe('Reducer: rooms', () => {
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).to.equal({});
+    expect(reducer(undefined, {})).to.eql({});
   });
 
   it(`should handle ${constants.LEAVE_ROOM}`, () => {
@@ -20,7 +20,7 @@ describe('rooms reducer', () => {
 
     expect(reducer(fakeState, {
       type: constants.LEAVE_ROOM,
-    })).to.equal({
+    })).to.eql({
       stuff: 'cheese',
       otherStuff: false,
       current: null,
@@ -35,9 +35,9 @@ describe('rooms reducer', () => {
     };
 
     expect(reducer(fakeState, {
-      type: constants.LEAVE_ROOM,
+      type: constants.SET_CURRENT_ROOM,
       id: 4321,
-    })).to.equal({
+    })).to.eql({
       stuff: 'cheese',
       otherStuff: false,
       current: 4321,
@@ -51,9 +51,9 @@ describe('rooms reducer', () => {
     };
 
     expect(reducer(fakeState, {
-      type: constants.LEAVE_ROOM,
+      type: constants.SET_ROOMS,
       available: 'YAY!',
-    })).to.equal({
+    })).to.eql({
       stuff: 'cheese',
       otherStuff: false,
       available: 'YAY!',

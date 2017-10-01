@@ -1,22 +1,25 @@
-import PropTypes from 'prop-types';
 import { _ } from 'meteor/underscore';
 import { browserHistory } from 'react-router';
-import { Card, CardActions, CardText } from 'material-ui/Card';
 import { connect } from 'react-redux';
+import List, { ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
 import AppBar from 'material-ui/AppBar';
 import Avatar from 'material-ui/Avatar';
-import Colors from 'material-ui/styles/colors';
+import Button from 'material-ui/Button';
+import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Colors from 'material-ui/colors';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
+import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import MenuItem from 'material-ui/MenuItem';
-import { List, ListItem } from 'material-ui/List';
+import Menu, { MenuItem } from 'material-ui/Menu';
 import moment from 'moment';
 import Popover from 'material-ui/Popover/Popover';
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React, { Component, PureComponent } from 'react';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+
 import * as Actions from '../actions/actions';
 import GlobalStyles from '../styles/global.styles';
 
@@ -58,12 +61,6 @@ const styles = {
     css: {
       position: 'fixed',
       top: 0,
-    },
-  },
-
-  icon: {
-    css: {
-      color: Colors.fullWhite,
     },
   },
 
@@ -112,45 +109,60 @@ export class NotificationDropdownComponent extends Component {
   render() {
     const { notifications } = this.props;
 
+    let notificationListItems = (
+      <ListItem className="text-center">
+        <ListItemText
+          primary={'No notifications'}
+        />
+      </ListItem>
+    );
+
+    if (!!notifications && notifications.length) {
+      notificationListItems = _.map(notifications, item => (
+        <ListItem
+          button
+          className={item.unread && 'unread'}
+          key={item._id}
+        >
+          <ListItemText
+            primary={item.data.body}
+            secondary={moment(item.createdAt).fromNow()}
+          />
+          {item.data.active ? (
+            <ListItemSecondaryAction>
+              <IconButton
+                aria-label="Join Room"
+                onTouchTap={this.joinRoom.bind(this, item)}
+              >
+                {'videocam'}
+              </IconButton>
+            </ListItemSecondaryAction>
+          ) : undefined}
+        </ListItem>
+      ));
+    }
+
     return (
       <div style={[GlobalStyles.cell, styles.menu.css]}>
         <IconButton
-          iconStyle={styles.icon.css}
-          iconClassName="material-icons"
+          color="contrast"
           onTouchTap={this.togglePopover}
         >
-          {(!!notifications && notifications.length) ?
-            'notifications' : 'notifications_none'}
+          <Icon>
+            {(!!notifications && notifications.length) ?
+              'notifications' : 'notifications_none'}
+          </Icon>
         </IconButton>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           onRequestClose={this.closePopover}
         >
           <Card style={styles.menu.paper.css}>
             <List>
-              {(!!notifications && notifications.length) ?
-              _.map(notifications, (item, index) => (
-                <ListItem
-                  className={item.unread && 'unread'}
-                  key={item._id}
-                  primaryText={item.data.body}
-                  rightIconButton={item.data.active ? <IconButton
-                    iconClassName="material-icons"
-                    iconStyle={{ color: Colors.teal500 }}
-                    onTouchTap={this.joinRoom.bind(this, item)}
-                  >
-                    {'videocam'}
-                  </IconButton> : undefined}
-                  secondaryText={moment(item.createdAt).fromNow()}
-                />
-                )) :
-
-              <ListItem className="text-center">
-                {'No notifications'}
-              </ListItem>}
+              {notificationListItems}
             </List>
           </Card>
         </Popover>
@@ -160,7 +172,11 @@ export class NotificationDropdownComponent extends Component {
 }
 
 NotificationDropdownComponent.propTypes = {
-  notifications: PropTypes.array,
+  notifications: PropTypes.arrayOf(PropTypes.shape({
+    unread: PropTypes.bool,
+    data: PropTypes.object,
+    createdAt: PropTypes.date,
+  })),
   markAllNotificationsRead: PropTypes.func,
 };
 
@@ -203,22 +219,26 @@ export class ProfileDropdownComponent extends PureComponent {
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           onRequestClose={this.closePopover}
         >
           <Card>
-            <CardText>
-              {user.profile ? user.profile.name : ''}
-            </CardText>
-            {user.services && user.services.google &&
-              user.services.google.email ? (
-                <CardText>
-                  {user.services.google.email}
-                </CardText>
-               ) : undefined
-            }
-            <CardActions expandable={false} style={{ textAlign: 'center' }}>
-              <FlatButton onTouchTap={logout} label="Sign out" />
+            <CardContent>
+              <Typography>
+                {user.profile ? user.profile.name : ''}
+              </Typography>
+              {user.services && user.services.google &&
+                user.services.google.email ? (
+                  <Typography>
+                    {user.services.google.email}
+                  </Typography>
+                ) : undefined
+              }
+            </CardContent>
+            <CardActions style={{ textAlign: 'center' }}>
+              <Button onTouchTap={logout}>
+                {'Sign out'}
+              </Button>
             </CardActions>
           </Card>
         </Popover>
@@ -243,11 +263,11 @@ export class HeaderComponent extends Component {
     };
 
     this.state = { open: false };
+    this.handleClose = this.handleClose.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
     this.loginWithGoogle = this.loginWithGoogle.bind(this);
     this.logout = this.logout.bind(this);
     this.markAllNotificationsRead = this.markAllNotificationsRead.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
-    this.handleClose = this.handleClose.bind(this);
   }
 
   loginWithGoogle() {
@@ -271,18 +291,16 @@ export class HeaderComponent extends Component {
   }
 
   render() {
-    const { mobile, user, notifications, ...other } = _.omit(this.props, [
-      'loggingIn', 'subscribed', 'users', 'dispatch',
-    ]);
+    const { mobile, user, notifications } = this.props;
 
     let loginButton;
-    let menuItems;
+    let drawerItems;
     let notificationDropdown;
     let profileButtons;
     let profileDropdown;
 
     if (mobile) {
-      menuItems = [[
+      drawerItems = [[
         {
           title: 'Invitations',
           icon: 'drafts',
@@ -340,19 +358,22 @@ export class HeaderComponent extends Component {
         </div>
       );
     } else {
-      loginButton = (<FlatButton
-        label="Login with Google"
-        onTouchTap={this.loginWithGoogle}
-      />);
+      loginButton = (
+        <Button
+          onTouchTap={this.loginWithGoogle}
+        >
+          {'Login with Google'}
+        </Button>
+      );
     }
 
-    let drawer = '';
+    let drawer;
 
     if (!!user && mobile) {
       drawer = (<Drawer
-        docked={false}
         open={this.state.open}
-        onRequestChange={open => this.setState({ open })}
+        onRequestClose={this.handleClose}
+        type="temporary"
       >
         <div style={[styles.sidenav.profile.css]}>
           <Avatar
@@ -369,52 +390,69 @@ export class HeaderComponent extends Component {
             {!!user.services && !!user.services.google ?
               <p style={styles.sidenav.profile.details.text.css}>
                 {user.services.google.email}
-              </p> : <FlatButton
-                onTouchTap={this.loginWithGoogle} label="Sign in with Google" style={{
-                  color: Colors.fullWhite,
-                  marginLeft: '-10px' }}
-              />}
+              </p> : <Button
+                onTouchTap={this.loginWithGoogle}
+                style={{
+                  color: 'white',
+                  marginLeft: '-10px',
+                }}
+              >
+                {'Sign in with Google'}
+              </Button>
+            }
           </div>
         </div>
-        {_.map(menuItems, (list, index) => {
-          const items = (_.map(list, item => (
-            <MenuItem
-              key={`left-nav-${item.title.toLowerCase()}`}
-              primaryText={item.title}
-              onTouchTap={item.action}
-              href={item.href}
-              target={item.target}
-              leftIcon={
-                <FontIcon
-                  className="material-icons"
-                  color={Colors.grey600}
-                >{item.icon}
-                </FontIcon>
-                  }
-            />
-              )));
-          if (index !== list.length - 1) {
-            items.push(<Divider />);
-          }
-          return items;
-        })}
+        <List>
+          {_.map(drawerItems, (list, index) => {
+            const items = (_.map(list, item => (
+              <ListItem
+                button
+                onTouchTap={item.action}
+                key={`left-nav-${item.title.toLowerCase()}`}
+                href={item.href}
+                target={item.target}
+              >
+                {item.icon ? (
+                  <ListItemIcon>
+                    <Icon>{item.icon}</Icon>
+                  </ListItemIcon>
+                ) : undefined}
+                <ListItemText inset primary={item.title} />
+              </ListItem>
+            )));
+            if (index !== list.length - 1) {
+              items.push(<Divider />);
+            }
+            return items;
+          })}
+        </List>
       </Drawer>);
     }
 
     return (
       <header>
-        <AppBar
-          title={''}
-          iconElementRight={mobile ? (
-            this.props.iconElementRight
-          ) : (loginButton || profileButtons)}
-          onLeftIconButtonTouchTap={this.handleToggle}
-          style={
-            _.extend({}, mobile ? styles.mobile.css : styles.css)
-          }
-          {...other}
-        />
         {drawer}
+        <AppBar style={mobile ? styles.mobile.css : styles.css}>
+          <Toolbar>
+            {mobile ? (
+              <IconButton
+                color="contrast"
+                aria-label="Menu"
+                style={{
+                  marginLeft: -12,
+                  marginRight: 20,
+                }}
+                onClick={this.handleToggle}
+              >
+                {'menu'}
+              </IconButton>) : undefined
+            }
+            <Typography type="title" color="inherit" style={{ flex: 1 }} />
+            {mobile ? (
+              this.props.iconElementRight
+            ) : (loginButton || profileButtons)}
+          </Toolbar>
+        </AppBar>
       </header>
     );
   }
@@ -424,8 +462,12 @@ HeaderComponent.propTypes = {
   dispatch: PropTypes.func,
   iconElementRight: PropTypes.element,
   mobile: PropTypes.bool,
-  notifications: PropTypes.array,
-  users: PropTypes.object,
+  notifications: PropTypes.arrayOf(PropTypes.shape({
+    unread: PropTypes.bool,
+    data: PropTypes.object,
+    createdAt: PropTypes.date,
+  })),
+  user: PropTypes.object,
 };
 
 const mapStateToProps = ({ users: { user }, notifications: { notifications } }) => ({

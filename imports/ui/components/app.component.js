@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import Browser from 'bowser';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
 import * as Actions from '../actions/actions';
@@ -12,13 +11,11 @@ const styles = {
   },
 };
 
+const theme = createMuiTheme();
+
 export class AppComponent extends React.Component {
   constructor(props) {
     super(props);
-
-    this.constructor.childContextTypes = {
-      muiTheme: PropTypes.object,
-    };
   }
 
   componentDidMount() {
@@ -35,17 +32,13 @@ export class AppComponent extends React.Component {
     }
   }
 
-  getChildContext() {
-    return {
-      muiTheme: getMuiTheme(lightBaseTheme),
-    };
-  }
-
   render() {
     return (
-      <div style={styles.css}>
-        {this.props.children}
-      </div>
+      <MuiThemeProvider theme={theme}>
+        <div style={styles.css}>
+          {this.props.children}
+        </div>
+      </MuiThemeProvider>
     );
   }
 }

@@ -19,7 +19,6 @@
 - FEATURE: mobile calling overlay
 - FEATURE: UI for mobile notifications
 - TEST: understand old throttled requester code and try enhancing
-- TEST: all reducer tests
 - TEST: electron auto-updater test
 - TEST: edge
 

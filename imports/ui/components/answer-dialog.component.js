@@ -1,5 +1,5 @@
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'material-ui/Button';
 import React from 'react';
 import LoadingDialogComponent from './loading-dialog.component';
 
@@ -24,17 +24,19 @@ export class AnswerDialogComponent extends React.Component {
 
   render() {
     const actions = [
-      <FlatButton
-        label="Decline"
-        secondary
+      <Button
+        color="accent"
         onClick={this.reject}
-      />,
-      <FlatButton
-        label="Answer"
-        secondary
+      >
+        {'Decline'}
+      </Button>,
+      <Button
+        color="accent"
         keyboardFocused
         onClick={this.answer}
-      />,
+      >
+        {'Answer'}
+      </Button>,
     ];
     return (
       <Dialog

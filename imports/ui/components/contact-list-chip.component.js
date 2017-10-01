@@ -1,4 +1,4 @@
-import FontIcon from 'material-ui/FontIcon';
+import Icon from 'material-ui/Icon';
 import Paper from 'material-ui/Paper';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
@@ -72,13 +72,13 @@ export const ContactListChipComponent = props => (
         >
           {props.tag}
         </div>
-        <FontIcon
+        <Icon
           onClick={props.onRemove}
           className="material-icons"
           style={styles.icon.css}
         >
           remove_circle
-        </FontIcon>
+        </Icon>
       </div>
     </Paper>
   </div>

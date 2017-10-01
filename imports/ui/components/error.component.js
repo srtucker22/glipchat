@@ -1,10 +1,10 @@
 import { browserHistory } from 'react-router';
 import Browser from 'bowser';
-import Colors from 'material-ui/styles/colors';
-import FontIcon from 'material-ui/FontIcon';
+import Colors from 'material-ui/colors';
+import Icon from 'material-ui/Icon';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import React from 'react';
 import GlobalStyles from '../styles/global.styles';
 import DownloadButtonComponent from './download-button.component';
@@ -16,7 +16,7 @@ const styles = {
 
   general: {
     css: {
-      color: Colors.fullWhite,
+      color: 'white',
       fontSize: '20px',
       fontWeight: 'bold',
     },
@@ -31,7 +31,7 @@ const styles = {
 
   permissionDenied: {
     css: {
-      color: Colors.fullWhite,
+      color: 'white',
       fontSize: '20px',
       margin: 'auto',
       maxWidth: '800px',
@@ -72,13 +72,13 @@ export const PermissionDeniedComponent = ({ action }) => (
           src="/images/arrow-left.png"
         />
         <div style={[GlobalStyles.cell, styles.permissionDenied.cell.css]}>
-            Click the <FontIcon
+            Click the <Icon
               className="material-icons"
               style={styles.permissionDenied.icon.css}
               color={Colors.red500}
             >
               videocam_off
-            </FontIcon> {'icon in the URL bar above to give access to your computers camera and microphone.'}
+            </Icon> {'icon in the URL bar above to give access to your computers camera and microphone.'}
         </div>
         <img
           style={[
@@ -90,11 +90,13 @@ export const PermissionDeniedComponent = ({ action }) => (
       </div>
       <div className="col-xs-12 text-center">
         <br />
-        <RaisedButton
-          label="Go Back"
+        <Button
+          raised
           onClick={action}
-          secondary
-        />
+          color="accent"
+        >
+          {'Go Back'}
+        </Button>
       </div>
     </div>
   </div>
@@ -112,11 +114,13 @@ export const DuplicateErrorComponent = ({ action }) => (
       <p>{'You are already connected to this room in a different window, tab, or browser.'}</p>
       <p>{'To fix this problem you can try returning to that view of this room.'}</p>
       <br />
-      <RaisedButton
-        label="Go Back"
+      <Button
+        raised
         onClick={action}
-        secondary
-      />
+        color="accent"
+      >
+        {'Go Back'}
+      </Button>
     </div>
   </div>
 );
@@ -135,11 +139,13 @@ export const GeneralErrorComponent = ({ action }) => (
       <p>{'Something went wrong. Please try refreshing the page.'}</p>
       <p>{'If this does not fix the problem please close the tab or window and try again.'}</p>
       <br />
-      <RaisedButton
-        label="Go Back"
+      <Button
+        raised
         onClick={action}
-        secondary
-      />
+        color="accent"
+      >
+        {'Go Back'}
+      </Button>
     </div>
   </div>
   );
@@ -159,11 +165,13 @@ export const NotSupportedErrorComponent = ({ action }) => (
       {(Browser.mac && !Browser.electron) ?
         <DownloadButtonComponent platform="mac" /> : ''}
       <br />
-      <RaisedButton
-        label="Go Back"
+      <Button
+        raised
         onClick={action}
-        secondary
-      />
+        color="accent"
+      >
+        {'Go Back'}
+      </Button>
     </div>
   </div>
 );

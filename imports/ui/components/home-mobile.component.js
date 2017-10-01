@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import Colors from 'material-ui/styles/colors';
+import Colors from 'material-ui/colors';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
@@ -29,7 +29,7 @@ const styles = {
 
   icon: {
     css: {
-      color: Colors.fullWhite,
+      color: 'white',
     },
   },
 };
@@ -97,18 +97,20 @@ export class HomeMobileComponent extends React.Component {
     }
 
     const actions = [
-      <FlatButton
-        label="Cancel"
-        secondary
+      <Button
+        color="accent"
         onTouchTap={this.closeInviteModal}
-      />,
-      <FlatButton
-        label="Invite"
+      >
+        {'Cancel'}
+      </Button>,
+      <Button
         disabled={!this.state.name && (!user || !user.profile || !user.profile.name)}
-        secondary
+        color="accent"
         keyboardFocused
         onTouchTap={this.invite}
-      />,
+      >
+        {'Invite'}
+      </Button>,
     ];
 
     if (!user) {

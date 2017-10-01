@@ -1,13 +1,13 @@
-import Colors from 'material-ui/styles/colors';
+import Colors from 'material-ui/colors';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import React from 'react';
 import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
-    color: Colors.fullWhite,
+    color: 'white',
     height: '100%',
     left: 0,
     position: 'absolute',
@@ -31,11 +31,13 @@ export class ReadyPromptComponent extends React.Component {
         <div style={[GlobalStyles.table, styles.css]}>
           <div className="text-center" style={[GlobalStyles.cell]}>
             <p>Are you ready to join?</p>
-            <RaisedButton
-              label="Join"
-              secondary
+            <Button
+              raised
+              color="accent"
               onTouchTap={this.props.joinRoomStream}
-            />
+            >
+              {'Join'}
+            </Button>
           </div>
         </div>
       </div>

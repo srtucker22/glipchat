@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
-import Colors from 'material-ui/styles/colors';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import FontIcon from 'material-ui/FontIcon';
+import Colors from 'material-ui/colors';
+import Button from 'material-ui/Button';
+import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
@@ -101,7 +101,8 @@ export class VideoOverlayComponent extends Component {
         ]}
         onClick={this.props.setPrimaryStream}
       >
-        <FloatingActionButton
+        <Button
+          fab
           onTouchTap={this.toggleAudio}
           style={_.extend({},
             styles.mute.css,
@@ -110,14 +111,14 @@ export class VideoOverlayComponent extends Component {
               styles.mute.visible.css : {})
           }
           mini
-          secondary
+          color="accent"
         >
-          <FontIcon
+          <Icon
             className="material-icons"
-            color={Colors.fullWhite}
+            color={'white'}
           >mic_off
-          </FontIcon>
-        </FloatingActionButton>
+          </Icon>
+        </Button>
         <IconButton
           style={_.extend({},
             styles.mute.css,
@@ -126,11 +127,11 @@ export class VideoOverlayComponent extends Component {
               styles.mute.visible.css : {})
           }
         >
-          <FontIcon
+          <Icon
             className="material-icons"
-            color={Colors.fullWhite}
+            color={'white'}
           >mic_off
-          </FontIcon>
+          </Icon>
         </IconButton>
       </div>
     );

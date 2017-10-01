@@ -21,13 +21,16 @@ const FooterComponent = ({ company }) => (
     <div className="text-left" style={[GlobalStyles.cell]}>
         Copyright <a href={company.href} target="_blank">
           {company.name}
-        </a> 2016
+        </a> 2017
       </div>
   </footer>
 );
 
 FooterComponent.propTypes = {
-  company: PropTypes.object.isRequired,
+  company: PropTypes.shape({
+    href: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }),
 };
 
 export default Radium(FooterComponent);

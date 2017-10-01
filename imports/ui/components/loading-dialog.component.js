@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import CircularProgress from 'material-ui/CircularProgress';
-import Colors from 'material-ui/styles/colors';
+import { CircularProgress } from 'material-ui/Progress';
+import Colors from 'material-ui/colors';
 import Dialog from 'material-ui/Dialog';
 import Radium from 'radium';
 import React from 'react';
@@ -14,7 +14,7 @@ const styles = {
 
   content: {
     css: {
-      color: Colors.fullWhite,
+      color: 'white',
       background: 'none',
       borderRadius: '10px',
       maxWidth: '300px',

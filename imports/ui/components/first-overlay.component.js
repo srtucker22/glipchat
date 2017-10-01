@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import RaisedButton from 'material-ui/RaisedButton';
-import Colors from 'material-ui/styles/colors';
+import Button from 'material-ui/Button';
+import Colors from 'material-ui/colors';
 import React, { PureComponent } from 'react';
 import GlobalStyles from '../styles/global.styles';
 
 const styles = {
   css: {
-    color: Colors.fullWhite,
+    color: 'white',
     height: '100%',
     left: 0,
     position: 'absolute',
@@ -31,7 +31,7 @@ const styles = {
 
   linkUrl: {
     css: {
-      backgroundColor: Colors.fullWhite,
+      backgroundColor: 'white',
       color: Colors.fullBlack,
       margin: '10px auto',
       overflow: 'hidden',
@@ -58,13 +58,16 @@ export class FirstOverlayComponent extends PureComponent {
               <div
                 style={[
                   GlobalStyles.cell,
-                  styles.invite.cell.css]} className="text-left"
+                  styles.invite.cell.css]}
+                className="text-left"
               >
-                <RaisedButton
-                  label="Invite people"
-                  secondary
+                <Button
+                  raised
+                  color="accent"
                   onTouchTap={this.props.action}
-                />
+                >
+                  {'Invite people'}
+                </Button>
               </div>
             </div>
             <div>
