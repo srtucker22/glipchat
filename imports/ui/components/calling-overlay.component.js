@@ -19,7 +19,7 @@ const styles = {
   },
 };
 
-export class CallingOverlayComponent extends React.Component {
+export class CallingOverlay extends React.Component {
   constructor(props) {
     super(props);
     this.leave = this.leave.bind(this);
@@ -91,11 +91,11 @@ export class CallingOverlayComponent extends React.Component {
     );
   }
 }
-CallingOverlayComponent.propTypes = {
+CallingOverlay.propTypes = {
   invitees: PropTypes.array,
   onTouchTap: PropTypes.func,
   retry: PropTypes.func,
   status: PropTypes.string,
 };
 
-export default Radium(CallingOverlayComponent);
+export default Radium(CallingOverlay);

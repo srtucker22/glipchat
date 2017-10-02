@@ -27,7 +27,7 @@ const styles = {
   },
 };
 
-export const ContactListItemComponent = ({ user, onClick, action }) => (
+export const ContactListItem = ({ user, onClick, action }) => (
   <div
     style={[
       GlobalStyles.table, styles.table.css,
@@ -70,7 +70,7 @@ export const ContactListItemComponent = ({ user, onClick, action }) => (
   </div>
 );
 
-ContactListItemComponent.propTypes = {
+ContactListItem.propTypes = {
   action: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.string,
@@ -79,4 +79,4 @@ ContactListItemComponent.propTypes = {
   onTouchTap: PropTypes.func,
 };
 
-export default Radium(ContactListItemComponent);
+export default Radium(ContactListItem);

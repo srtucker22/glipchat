@@ -59,7 +59,7 @@ const styles = {
   },
 };
 
-export class ControlsComponent extends React.Component {
+export class Controls extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -177,7 +177,7 @@ export class ControlsComponent extends React.Component {
     );
   }
 }
-ControlsComponent.propTypes = {
+Controls.propTypes = {
   dispatch: PropTypes.func,
   controlsVisible: PropTypes.bool,
   isLocalAudioEnabled: PropTypes.bool,
@@ -186,4 +186,4 @@ ControlsComponent.propTypes = {
   toggleInviteModal: PropTypes.func,
 };
 
-export default Radium(ControlsComponent);
+export default Radium(Controls);

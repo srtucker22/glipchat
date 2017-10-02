@@ -8,15 +8,15 @@ import Radium from 'radium';
 import React from 'react';
 import { PERMISSION_INTERVAL, RING_DURATION } from '../../api/lib/config';
 import * as Actions from '../actions/actions';
-import CallingOverlayComponent from './calling-overlay.component';
-import ControlsComponent from './controls.component';
+import CallingOverlay from './calling-overlay.component';
+import Controls from './controls.component';
 import ErrorComponent from './error.component';
 import FirstOverlayComponent from './first-overlay.component';
-import InviteComponent from './invite.component';
+import Invite from './invite.component';
 import MediaStore from '../stores/media.store';
-import ReadyPromptComponent from './ready-prompt.component';
-import VideoComponent from './video.component';
-import VideoOverlayComponent from './video-overlay.component';
+import ReadyPrompt from './ready-prompt.component';
+import Video from './video.component';
+import VideoOverlay from './video-overlay.component';
 
 const styles = {
   css: {
@@ -50,7 +50,7 @@ const styles = {
   },
 };
 
-export class RoomComponent extends React.Component {
+export class Room extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -215,7 +215,7 @@ export class RoomComponent extends React.Component {
     if (!~['connected', 'joining'].indexOf(this.state.status)) {
       if (Browser.mobile || Browser.tablet || this.state.status === 'connecting') {
         overlayComponent = (
-          <CallingOverlayComponent
+          <CallingOverlay
             onTouchTap={this.toggleControls}
             status={this.state.status}
           />
@@ -231,15 +231,15 @@ export class RoomComponent extends React.Component {
       }
     }
 
-    const readyPromptComponent = (this.state.status === 'joining' && !localStream.loading) ? (
-      <ReadyPromptComponent
+    const readyPrompt = (this.state.status === 'joining' && !localStream.loading) ? (
+      <ReadyPrompt
         joinRoomStream={this.joinRoomStream.bind(this, room._id)}
         onTouchTap={this.toggleControls}
       />
     ) : undefined;
 
-    const inviteComponent = (
-      <InviteComponent
+    const invite = (
+      <Invite
         dispatch={dispatch}
         linkUrl={window.location.href}
         showInviteModal={this.state.showInviteModal}
@@ -248,8 +248,8 @@ export class RoomComponent extends React.Component {
       />
     );
 
-    const controlsComponent = (MediaStore.local) ? (
-      <ControlsComponent
+    const controls = (MediaStore.local) ? (
+      <Controls
         controlsVisible={this.state.controlsVisible}
         dispatch={dispatch}
         isLocalAudioEnabled={localStream.audio}
@@ -262,13 +262,13 @@ export class RoomComponent extends React.Component {
     const remoteStreamComponents = (!!remoteStreams && _.keys(remoteStreams).length) ?
       (<div style={[styles.videos.css]}>
         <div key="local" style={[styles.videos.video.css]}>
-          <VideoOverlayComponent
+          <VideoOverlay
             id={'local'}
             dispatch={dispatch}
             isAudioEnabled={localStream.audio}
             setPrimaryStream={this.setPrimaryStream.bind(this, 'local')}
           />
-          <VideoComponent
+          <Video
             src={MediaStore.local}
             muted
             flip
@@ -279,14 +279,14 @@ export class RoomComponent extends React.Component {
             key={key}
             style={[styles.videos.video.css]}
           >
-            <VideoOverlayComponent
+            <VideoOverlay
               id={key}
               isAudioEnabled={!val.muted}
               isRemoteEnabled={val}
               dispatch={dispatch}
               setPrimaryStream={this.setPrimaryStream.bind(this, key)}
             />
-            <VideoComponent src={MediaStore[key]} />
+            <Video src={MediaStore[key]} />
           </div>
           ))}
       </div>) : undefined;
@@ -294,7 +294,7 @@ export class RoomComponent extends React.Component {
     return (
       <div style={[styles.css]}>
         {this.state.primaryStream ?
-          (<VideoComponent
+          (<Video
             src={MediaStore[this.state.primaryStream]}
             flip={(this.state.primaryStream === 'local')}
             fullScreen
@@ -303,9 +303,9 @@ export class RoomComponent extends React.Component {
           />
           ) : ''
         }
-        {inviteComponent}
-        {readyPromptComponent}
-        {controlsComponent}
+        {invite}
+        {readyPrompt}
+        {controls}
         {overlayComponent}
         {remoteStreamComponents}
       </div>
@@ -313,7 +313,7 @@ export class RoomComponent extends React.Component {
   }
 }
 
-RoomComponent.propTypes = {
+Room.propTypes = {
   dispatch: PropTypes.func,
   room: PropTypes.object,
   localStream: PropTypes.object,
@@ -332,4 +332,4 @@ const mapStateToProps = ({
   user,
 });
 
-export default connect(mapStateToProps)(Radium(RoomComponent));
+export default connect(mapStateToProps)(Radium(Room));

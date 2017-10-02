@@ -10,11 +10,11 @@ import Typography from 'material-ui/Typography';
 
 import { APP_NAME } from '../../api/lib/config';
 import * as Actions from '../actions/actions';
-import AnswerDialogComponent from './answer-dialog.component';
-import ContactListComponent from './contact-list.component';
-import HeaderComponent from './header.component';
-import IntroComponent from './intro.component';
-import LoadingDialogComponent from './loading-dialog.component';
+import AnswerDialog from './answer-dialog.component';
+import ContactList from './contact-list.component';
+import Header from './header.component';
+import Intro from './intro.component';
+import LoadingDialog from './loading-dialog.component';
 
 const styles = {
   content: {
@@ -25,7 +25,7 @@ const styles = {
   },
 };
 
-export class HomeMobileComponent extends React.Component {
+export class HomeMobile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -90,15 +90,15 @@ export class HomeMobileComponent extends React.Component {
     }
 
     if (!user) {
-      return <IntroComponent />;
+      return <Intro />;
     }
 
     const loadingComponent = this.state.loading ?
-      <LoadingDialogComponent open title="Starting video call" /> : undefined;
+      <LoadingDialog open title="Starting video call" /> : undefined;
 
     return (<div style={[styles.css]}>
       {loadingComponent}
-      <HeaderComponent
+      <Header
         mobile
         iconElementRight={
           (!!this.state.invitees && this.state.invitees.length) ?
@@ -115,7 +115,7 @@ export class HomeMobileComponent extends React.Component {
         }
       />
       <div ref={'content'} style={[styles.content.css]}>
-        <ContactListComponent
+        <ContactList
           onChange={this.onContactListChange}
           isOpen
           contacts={contacts}
@@ -155,7 +155,7 @@ export class HomeMobileComponent extends React.Component {
           </Button>,
         </DialogActions>
       </Dialog>
-      <AnswerDialogComponent
+      <AnswerDialog
         invitation={!!invitations && invitations.length ?
           invitations[0] : undefined}
       />
@@ -163,7 +163,7 @@ export class HomeMobileComponent extends React.Component {
   }
 }
 
-HomeMobileComponent.propTypes = {
+HomeMobile.propTypes = {
   dispatch: PropTypes.func,
   contacts: PropTypes.array,
   invitations: PropTypes.array,
@@ -172,4 +172,4 @@ HomeMobileComponent.propTypes = {
 
 const mapStateToProps = ({ users: { user } }) => ({ user });
 
-export default connect(mapStateToProps)(Radium(HomeMobileComponent));
+export default connect(mapStateToProps)(Radium(HomeMobile));

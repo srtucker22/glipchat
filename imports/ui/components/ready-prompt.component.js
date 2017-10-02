@@ -17,7 +17,7 @@ const styles = {
   },
 };
 
-export class ReadyPromptComponent extends React.Component {
+export class ReadyPrompt extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,9 +45,9 @@ export class ReadyPromptComponent extends React.Component {
   }
 }
 
-ReadyPromptComponent.propTypes = {
+ReadyPrompt.propTypes = {
   joinRoomStream: PropTypes.func,
   onTouchTap: PropTypes.func,
 };
 
-export default Radium(ReadyPromptComponent);
+export default Radium(ReadyPrompt);

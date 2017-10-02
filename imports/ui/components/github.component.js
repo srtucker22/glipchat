@@ -11,7 +11,7 @@ const styles = {
   },
 };
 
-const GithubComponent = ({ link }) => (
+const Github = ({ link }) => (
   <a href={link} target="_blank" rel="noopener noreferrer">
     <img
       style={styles.css}
@@ -21,8 +21,8 @@ const GithubComponent = ({ link }) => (
   </a>
 );
 
-GithubComponent.propTypes = {
+Github.propTypes = {
   link: PropTypes.string,
 };
 
-export default GithubComponent;
+export default Github;

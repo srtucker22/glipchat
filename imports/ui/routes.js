@@ -2,11 +2,11 @@ import { analytics } from 'meteor/okgrow:analytics';
 import { browserHistory } from 'react-router';
 import Browser from 'bowser';
 import * as Actions from './actions/actions';
-import AppComponent from './components/app.component';
-import HomeComponent from './components/home.component';
-import HomeMobileComponent from './components/home-mobile.component';
-import NotFoundComponent from './components/not-found.component';
-import RoomComponent from './components/room.component';
+import App from './components/app.component';
+import Home from './components/home.component';
+import HomeMobile from './components/home-mobile.component';
+import NotFound from './components/not-found.component';
+import Room from './components/room.component';
 import store from './stores/store';
 
 // track current room with a subscription for auto-rerouting
@@ -32,17 +32,17 @@ const currentRoomSubscription = store.subscribe(() => {
 // route configuration
 export const routeConfig = [{
   path: '/',
-  component: AppComponent,
+  component: App,
   indexRoute: {
     component: (Browser.mobile || Browser.tablet) ?
-      HomeMobileComponent : HomeComponent,
+      HomeMobile : Home,
   },
   onEnter: (nextState, replaceState) => {
     analytics.page('home');
   },
   childRoutes: [{
     path: '/room/:roomId',
-    component: RoomComponent,
+    component: Room,
     onEnter: (nextState, replaceState, callback) => { // use a callback to make onEnter async
       // subscribe to redux changes
 
@@ -73,7 +73,7 @@ export const routeConfig = [{
   }],
 }, {
   path: '*',
-  component: NotFoundComponent,
+  component: NotFound,
   onEnter: () => {
     analytics.page('404');
   },

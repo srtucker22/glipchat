@@ -1,8 +1,5 @@
 **high**
 - IN PROGRESS: fix all components with new material-ui
-  - room components
-  - test all mobile components when calling
-  - BUG: need way to exit invite if no selection made
   - BUG: invite state is buggy when cancelling/exiting early
   - transitions for controls
 - ENHANCEMENT: replace virtualized list with something decent
@@ -12,7 +9,6 @@
 - BUG: sometimes first notification isn't received, probably due to new subscriptionid
   - missing a notification leads to being 1 behind in the chain
   - occasional
-- BUG: force lowercase email
 - BUG: sending notification via email gets stuck
 - BUG: closing tag on android is broken
 - BUG: tag --> dupes when typinge email and then press tab you get email plus user

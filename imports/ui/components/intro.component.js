@@ -6,9 +6,9 @@ import Button from 'material-ui/Button';
 import React from 'react';
 import { APP_NAME, GITHUB_URL } from '../../api/lib/config';
 import * as Actions from '../actions/actions';
-import GithubComponent from './github.component';
+import Github from './github.component';
 import GlobalStyles from '../styles/global.styles';
-import LoadingDialogComponent from './loading-dialog.component';
+import LoadingDialog from './loading-dialog.component';
 
 const styles = {
   css: {
@@ -31,7 +31,7 @@ const styles = {
   },
 };
 
-export class IntroComponent extends React.PureComponent {
+export class Intro extends React.PureComponent {
   constructor(props) {
     super(props);
     this.loginAsGuest = this.loginAsGuest.bind(this);
@@ -51,8 +51,8 @@ export class IntroComponent extends React.PureComponent {
     const { user } = this.props;
     return (
       <div style={[GlobalStyles.table, styles.css]}>
-        <GithubComponent link={GITHUB_URL} />
-        <LoadingDialogComponent
+        <Github link={GITHUB_URL} />
+        <LoadingDialog
           open={user && user.loggingIn}
           title="Signing in"
         />
@@ -82,7 +82,7 @@ export class IntroComponent extends React.PureComponent {
   }
 }
 
-IntroComponent.propTypes = {
+Intro.propTypes = {
   dispatch: PropTypes.func.isRequired,
   user: PropTypes.shape({ loggingIn: PropTypes.bool }),
 };
@@ -93,4 +93,4 @@ const mapStateToProps = ({ users: { user } }) => ({
 
 export default connect(
   mapStateToProps,
-)(Radium(IntroComponent));
+)(Radium(Intro));

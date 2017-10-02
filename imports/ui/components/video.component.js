@@ -24,7 +24,7 @@ const styles = {
   },
 };
 
-export class VideoComponent extends React.PureComponent {
+export class Video extends React.PureComponent {
   componentDidMount() {
     if (this.props.src) {
       this.video.srcObject = this.props.src;
@@ -56,7 +56,7 @@ export class VideoComponent extends React.PureComponent {
   }
 }
 
-VideoComponent.propTypes = {
+Video.propTypes = {
   flip: PropTypes.bool,
   fullScreen: PropTypes.bool,
   muted: PropTypes.bool,
@@ -67,4 +67,4 @@ VideoComponent.propTypes = {
   ]),
 };
 
-export default Radium(VideoComponent);
+export default Radium(Video);

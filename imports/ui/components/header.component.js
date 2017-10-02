@@ -254,7 +254,7 @@ ProfileDropdownComponent.propTypes = {
 
 ProfileDropdownComponent = Radium(ProfileDropdownComponent);
 
-export class HeaderComponent extends Component {
+export class Header extends Component {
   constructor(props) {
     super(props);
 
@@ -459,7 +459,7 @@ export class HeaderComponent extends Component {
   }
 }
 
-HeaderComponent.propTypes = {
+Header.propTypes = {
   dispatch: PropTypes.func,
   iconElementRight: PropTypes.element,
   mobile: PropTypes.bool,
@@ -476,4 +476,4 @@ const mapStateToProps = ({ users: { user }, notifications: { notifications } }) 
   notifications,
 });
 
-export default connect(mapStateToProps)(Radium(HeaderComponent));
+export default connect(mapStateToProps)(Radium(Header));

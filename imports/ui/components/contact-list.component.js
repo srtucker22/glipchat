@@ -11,8 +11,8 @@ import createFilterOptions from 'react-select-fast-filter-options';
 import React from 'react';
 import Select from 'react-select';
 import ReactList from 'react-list';
-import ContactListItemComponent from './contact-list-item.component';
-import ContactListChipComponent from './contact-list-chip.component';
+import ContactListItem from './contact-list-item.component';
+import ContactListChip from './contact-list-chip.component';
 import '../styles/react-select-override.css';
 
 // add a key with all the searchable strings for a given user
@@ -24,7 +24,7 @@ function addLabelKey(contacts) {
   ].join(' ') }));
 }
 
-export class ContactListComponent extends React.Component {
+export class ContactList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,7 +49,7 @@ export class ContactListComponent extends React.Component {
   }
 
   optionRenderer(option, i) {
-    return (<ContactListItemComponent
+    return (<ContactListItem
       key={option.id}
       user={option}
       onClick={this.onAdd.bind(this, option)}
@@ -77,7 +77,7 @@ export class ContactListComponent extends React.Component {
    */
   valueRenderer(option, index) {
     return (
-      <ContactListChipComponent
+      <ContactListChip
         onRemove={this.onRemove.bind(this, index)}
         mobile
         src={option.src}
@@ -123,7 +123,7 @@ export class ContactListComponent extends React.Component {
 
   renderItem(options, index, key) {
     const option = options[index];
-    return (<ContactListItemComponent
+    return (<ContactListItem
       key={key}
       user={option}
       onClick={this.onAdd.bind(this, option)}
@@ -169,9 +169,9 @@ export class ContactListComponent extends React.Component {
   }
 }
 
-ContactListComponent.propTypes = {
+ContactList.propTypes = {
   onChange: PropTypes.func,
   contacts: PropTypes.array,
 };
 
-export default ContactListComponent;
+export default ContactList;

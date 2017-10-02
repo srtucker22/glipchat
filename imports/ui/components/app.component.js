@@ -13,7 +13,7 @@ const styles = {
 
 const theme = createMuiTheme();
 
-export class AppComponent extends React.Component {
+export class App extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -43,7 +43,7 @@ export class AppComponent extends React.Component {
   }
 }
 
-AppComponent.propTypes = {
+App.propTypes = {
   user: PropTypes.object,
   dispatch: PropTypes.func,
   children: PropTypes.element,
@@ -57,4 +57,4 @@ const mapStateToProps = ({
 
 export default connect(
   mapStateToProps,
-)(AppComponent);
+)(App);

@@ -11,7 +11,7 @@ const styles = {
   },
 };
 
-export const NotFoundComponent = () => (
+export const NotFound = () => (
   <div>
     <div style={GlobalStyles.stickyFooterPage}>
       <div className="row">
@@ -24,4 +24,4 @@ export const NotFoundComponent = () => (
   </div>
 );
 
-export default NotFoundComponent;
+export default NotFound;

@@ -26,7 +26,6 @@ const styles = {
   mute: {
     // styles for local mute icon (user mutes a peer)
     css: {
-      backgroundColor: 'transparent',
       float: 'right',
       opacity: 0,
       position: 'absolute',
@@ -62,7 +61,7 @@ const styles = {
   },
 };
 
-export class VideoOverlayComponent extends Component {
+export class VideoOverlay extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -110,12 +109,11 @@ export class VideoOverlayComponent extends Component {
             !this.props.isAudioEnabled || this.state.shade) ?
               styles.mute.visible.css : {})
           }
-          mini
           color="accent"
         >
           <Icon
             className="material-icons"
-            color={'white'}
+            color={'contrast'}
           >mic_off
           </Icon>
         </Button>
@@ -129,7 +127,7 @@ export class VideoOverlayComponent extends Component {
         >
           <Icon
             className="material-icons"
-            color={'white'}
+            color={'contrast'}
           >mic_off
           </Icon>
         </IconButton>
@@ -138,7 +136,7 @@ export class VideoOverlayComponent extends Component {
   }
 }
 
-VideoOverlayComponent.propTypes = {
+VideoOverlay.propTypes = {
   dispatch: PropTypes.func,
   id: PropTypes.string,
   isAudioEnabled: PropTypes.bool,
@@ -149,4 +147,4 @@ VideoOverlayComponent.propTypes = {
   setPrimaryStream: PropTypes.func,
 };
 
-export default Radium(VideoOverlayComponent);
+export default Radium(VideoOverlay);

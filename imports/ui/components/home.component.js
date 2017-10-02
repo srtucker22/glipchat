@@ -7,12 +7,12 @@ import Button from 'material-ui/Button';
 import React from 'react';
 import { APP_NAME, COMPANY, GITHUB_URL, DOWNLOAD_URLS } from '../../api/lib/config';
 import * as Actions from '../actions/actions';
-import DownloadButtonComponent from './download-button.component';
-import FooterComponent from './footer.component';
-import GithubComponent from './github.component';
+import DownloadButton from './download-button.component';
+import Footer from './footer.component';
+import Github from './github.component';
 import GlobalStyles from '../styles/global.styles';
-import HeaderComponent from './header.component';
-import LoadingDialogComponent from './loading-dialog.component';
+import Header from './header.component';
+import LoadingDialog from './loading-dialog.component';
 
 const styles = {
   css: {
@@ -36,7 +36,7 @@ const styles = {
   },
 };
 
-export class HomeComponent extends React.Component {
+export class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,14 +56,14 @@ export class HomeComponent extends React.Component {
 
   render() {
     const loading = this.state.loading ?
-      <LoadingDialogComponent open title="Starting video call" /> : undefined;
+      <LoadingDialog open title="Starting video call" /> : undefined;
 
     return (
       <div style={[styles.css]}>
-        <GithubComponent link={GITHUB_URL} />
+        <Github link={GITHUB_URL} />
         {loading}
         <div style={[GlobalStyles.stickyFooterPage]}>
-          <HeaderComponent showMenuIconButton={false} />
+          <Header showMenuIconButton={false} />
           <div>
             <div className="col-xs-12 text-center">
               <h1 style={[styles.title.css]}>{APP_NAME}</h1>
@@ -78,18 +78,18 @@ export class HomeComponent extends React.Component {
               </Button>
               <br />
               {(Browser.mac && !Browser.electron) ?
-                <DownloadButtonComponent platform="mac" link={DOWNLOAD_URLS.mac} /> : ''}
+                <DownloadButton platform="mac" link={DOWNLOAD_URLS.mac} /> : ''}
             </div>
           </div>
         </div>
-        <FooterComponent company={COMPANY} />
+        <Footer company={COMPANY} />
       </div>
     );
   }
 }
 
-HomeComponent.propTypes = {
+Home.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect()(Radium(HomeComponent));
+export default connect()(Radium(Home));

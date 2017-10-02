@@ -6,7 +6,7 @@ import Radium from 'radium';
 import Button from 'material-ui/Button';
 import React from 'react';
 import GlobalStyles from '../styles/global.styles';
-import DownloadButtonComponent from './download-button.component';
+import DownloadButton from './download-button.component';
 
 const styles = {
   css: {
@@ -164,7 +164,7 @@ export const NotSupportedErrorComponent = ({ action }) => (
       <p>You can download <a href="https://www.google.com/chrome/">Google Chrome</a> or <a href="https://www.mozilla.org/firefox">Mozilla Firefox</a> for free to use this video chatroom.</p>
       <br />
       {(Browser.mac && !Browser.electron) ?
-        <DownloadButtonComponent platform="mac" /> : ''}
+        <DownloadButton platform="mac" /> : ''}
       <br />
       <Button
         raised

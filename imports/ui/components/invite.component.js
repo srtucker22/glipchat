@@ -16,7 +16,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 
 import * as Actions from '../actions/actions';
-import ContactListComponent from './contact-list.component';
+import ContactList from './contact-list.component';
 import GlobalStyles from '../styles/global.styles';
 
 const styles = {
@@ -31,7 +31,7 @@ const styles = {
   },
 };
 
-export class InviteComponent extends React.Component {
+export class Invite extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -101,7 +101,6 @@ export class InviteComponent extends React.Component {
           style={[styles.css]}
         >
           <Dialog
-            modal={false}
             open={this.state.getName || false}
             onRequestClose={this.handleClose}
             ignoreBackdropClick
@@ -151,7 +150,7 @@ export class InviteComponent extends React.Component {
               </IconButton>
             </Toolbar>
           </AppBar>
-          <ContactListComponent
+          <ContactList
             contacts={contacts}
             dispatch={dispatch}
             onChange={this.onContactListChange}
@@ -191,7 +190,7 @@ export class InviteComponent extends React.Component {
     </CSSTransitionGroup>);
   }
 }
-InviteComponent.propTypes = {
+Invite.propTypes = {
   dispatch: PropTypes.func,
   invitees: PropTypes.array,
   hideInviteModal: PropTypes.func,
@@ -199,4 +198,4 @@ InviteComponent.propTypes = {
   user: PropTypes.object,
 };
 
-export default Radium(InviteComponent);
+export default Radium(Invite);

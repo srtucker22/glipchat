@@ -9,7 +9,7 @@ const styles = {
   },
 };
 
-const FooterComponent = ({ company }) => (
+const Footer = ({ company }) => (
   <footer
     className="col-xs-12"
     style={[
@@ -26,11 +26,11 @@ const FooterComponent = ({ company }) => (
   </footer>
 );
 
-FooterComponent.propTypes = {
+Footer.propTypes = {
   company: PropTypes.shape({
     href: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }),
 };
 
-export default Radium(FooterComponent);
+export default Radium(Footer);

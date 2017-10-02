@@ -15,7 +15,7 @@ const styles = {
   },
 };
 
-const LoadingDialogComponent = props => (
+const LoadingDialog = props => (
   <div className="LoadingDialog">
     <Dialog
       onRequestClose={props.onTouchTap}
@@ -31,10 +31,10 @@ const LoadingDialogComponent = props => (
   </div>
 );
 
-LoadingDialogComponent.propTypes = {
+LoadingDialog.propTypes = {
   onTouchTap: PropTypes.func,
   open: PropTypes.bool,
   title: PropTypes.string,
 };
 
-export default Radium(LoadingDialogComponent);
+export default Radium(LoadingDialog);

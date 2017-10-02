@@ -43,7 +43,7 @@ const styles = {
   },
 };
 
-const DownloadButtonComponent = (props) => {
+const DownloadButton = (props) => {
   const platforms = {
     mac: {
       icon: '/images/apple.svg',
@@ -82,9 +82,9 @@ const DownloadButtonComponent = (props) => {
   );
 };
 
-DownloadButtonComponent.propTypes = {
+DownloadButton.propTypes = {
   link: PropTypes.string,
   platform: PropTypes.string.isRequired,
 };
 
-export default Radium(DownloadButtonComponent);
+export default Radium(DownloadButton);
