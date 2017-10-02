@@ -1,13 +1,20 @@
-import PropTypes from 'prop-types';
+import { CSSTransitionGroup } from 'react-transition-group';
+import { red, cyan } from 'material-ui/colors';
 import AppBar from 'material-ui/AppBar';
-import Colors from 'material-ui/colors';
-import Dialog from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
+import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
 import TextField from 'material-ui/TextField';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+
 import * as Actions from '../actions/actions';
 import ContactListComponent from './contact-list.component';
 import GlobalStyles from '../styles/global.styles';
@@ -82,24 +89,6 @@ export class InviteComponent extends React.Component {
       contacts = user.services.google.contacts;
     }
 
-    // Custom Actions
-    const dialogActions = [
-      <Button
-        key="cancel"
-        onTouchTap={this.props.hideInviteModal}
-      >
-        {'Cancel'}
-      </Button>,
-      <Button
-        key="update"
-        disabled={(!this.state.name && (!user.profile || !user.profile.name))}
-        color="accent"
-        onTouchTap={this.updateProfileName}
-      >
-        {'Update'}
-      </Button>,
-    ];
-
     return (<CSSTransitionGroup
       transitionName="invite-modal"
       transitionEnterTimeout={300}
@@ -112,64 +101,92 @@ export class InviteComponent extends React.Component {
           style={[styles.css]}
         >
           <Dialog
-            title={'Please enter your name'}
-            actions={dialogActions}
             modal={false}
             open={this.state.getName || false}
             onRequestClose={this.handleClose}
+            ignoreBackdropClick
           >
-            <TextField
-              defaultValue={user.profile ? user.profile.name : ''}
-              onChange={this.updateProfileNameState}
-              errorText={user.profile && user.profile.name ? ' ' : null}
-              floatingLabelText="Your name"
-            />
+            <DialogTitle>{'Please enter your name'}</DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                defaultValue={user.profile ? user.profile.name : undefined}
+                error={!!user.profile && !!user.profile.name}
+                label="Your name"
+                margin="dense"
+                onChange={this.updateProfileNameState}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                key="cancel"
+                onTouchTap={this.props.hideInviteModal}
+              >
+                {'Cancel'}
+              </Button>,
+              <Button
+                key="update"
+                disabled={(!this.state.name && (!user.profile || !user.profile.name))}
+                color="accent"
+                onTouchTap={this.updateProfileName}
+              >
+                {'Update'}
+              </Button>
+            </DialogActions>
           </Dialog>
-          <AppBar
-            showMenuIconButton={false}
-            title={'Invite Contacts'}
-            iconElementRight={<IconButton
-              iconClassName="material-icons"
-              onTouchTap={this.props.hideInviteModal}
-            >
-            clear
-          </IconButton>}
-          />
+          <AppBar position="static">
+            <Toolbar>
+              <Typography
+                type="title"
+                color="inherit"
+                style={{ flex: 1 }}
+              >
+                {'Invite Contacts'}
+              </Typography>
+              <IconButton
+                color="contrast"
+                onClick={this.props.hideInviteModal}
+              >
+                {'clear'}
+              </IconButton>
+            </Toolbar>
+          </AppBar>
           <ContactListComponent
             contacts={contacts}
             dispatch={dispatch}
             onChange={this.onContactListChange}
           />
-          {this.state.invitees ? (
-            <div
-              style={[GlobalStyles.table, {
-                position: 'fixed',
-                width: '100%',
-                bottom: 0,
-              }]}
-            >
-              <div style={[GlobalStyles.cell, { width: '50%' }]}>
-                <Button
-                  backgroundColor={Colors.red500}
-                  key="cancel"
-                  onTouchTap={this.props.hideInviteModal}
-                  style={{ color: 'white', width: '100%' }}
-                >
-                  {'Cancel'}
-                </Button>
-              </div>
-              <div style={[GlobalStyles.cell, { width: '50%' }]}>
-                <Button
-                  backgroundColor={Colors.cyan500}
-                  key="invite"
-                  onTouchTap={this.invite}
-                  style={{ color: 'white', width: '100%' }}
-                >
-                  {'Invite'}
-                </Button>
-              </div>
+          <div
+            style={[GlobalStyles.table, {
+              position: 'fixed',
+              width: '100%',
+              bottom: 0,
+            }]}
+          >
+            <div style={[GlobalStyles.cell, { width: '50%' }]}>
+              <Button
+                key="cancel"
+                onTouchTap={this.props.hideInviteModal}
+                style={{ color: 'white', width: '100%', background: red[500] }}
+              >
+                {'Cancel'}
+              </Button>
             </div>
-        ) : undefined}
+            <div style={[GlobalStyles.cell, { width: '50%' }]}>
+              <Button
+                disabled={!this.state.invitees}
+                key="invite"
+                onTouchTap={this.invite}
+                style={{
+                  color: 'white',
+                  width: '100%',
+                  backgroundColor: this.state.invitees ? cyan[500] : cyan[100],
+                }}
+              >
+                {'Invite'}
+              </Button>
+            </div>
+          </div>
         </div> : undefined}
     </CSSTransitionGroup>);
   }

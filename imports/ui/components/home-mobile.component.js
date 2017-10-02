@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
-import Colors from 'material-ui/colors';
-import Dialog from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import Dialog, { DialogContent, DialogActions } from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
 import TextField from 'material-ui/TextField';
+import Typography from 'material-ui/Typography';
+
 import { APP_NAME } from '../../api/lib/config';
 import * as Actions from '../actions/actions';
 import AnswerDialogComponent from './answer-dialog.component';
@@ -16,20 +17,10 @@ import IntroComponent from './intro.component';
 import LoadingDialogComponent from './loading-dialog.component';
 
 const styles = {
-  css: {
-
-  },
-
   content: {
     css: {
       marginTop: '64px',
       width: '100%',
-    },
-  },
-
-  icon: {
-    css: {
-      color: 'white',
     },
   },
 };
@@ -50,6 +41,7 @@ export class HomeMobileComponent extends React.Component {
   }
 
   closeInviteModal() {
+    console.log('closeInviteModal');
     // update the profile name
     if (this.state.name && this.state.name !== this.props.user.profile.name) {
       this.props.dispatch(Actions.updateProfileName(this.state.name));
@@ -79,6 +71,7 @@ export class HomeMobileComponent extends React.Component {
   }
 
   openInviteModal() {
+    console.log('openInviteModal');
     this.setState({ open: true });
   }
 
@@ -96,44 +89,30 @@ export class HomeMobileComponent extends React.Component {
       contacts = user.services.google.contacts;
     }
 
-    const actions = [
-      <Button
-        color="accent"
-        onTouchTap={this.closeInviteModal}
-      >
-        {'Cancel'}
-      </Button>,
-      <Button
-        disabled={!this.state.name && (!user || !user.profile || !user.profile.name)}
-        color="accent"
-        keyboardFocused
-        onTouchTap={this.invite}
-      >
-        {'Invite'}
-      </Button>,
-    ];
-
     if (!user) {
       return <IntroComponent />;
     }
 
+    const loadingComponent = this.state.loading ?
+      <LoadingDialogComponent open title="Starting video call" /> : undefined;
+
     return (<div style={[styles.css]}>
-      {this.state.loading ?
-        <LoadingDialogComponent open title="Starting video call" /> : ''
-      }
+      {loadingComponent}
       <HeaderComponent
         mobile
-        showMenuIconButton
         iconElementRight={
-          (!!this.state.invitees && this.state.invitees.length) ? (
-            <IconButton
-              iconStyle={styles.icon.css}
-              iconClassName="material-icons"
-              onTouchTap={this.openInviteModal}
-            >
-              done
-            </IconButton>
-          ) : null}
+          (!!this.state.invitees && this.state.invitees.length) ?
+            (
+              <IconButton
+                style={{ marginRight: -12 }}
+                color="contrast"
+                onClick={this.openInviteModal}
+              >
+                {'done'}
+              </IconButton>
+            ) :
+            undefined
+        }
       />
       <div ref={'content'} style={[styles.content.css]}>
         <ContactListComponent
@@ -145,19 +124,36 @@ export class HomeMobileComponent extends React.Component {
       </div>
       <Dialog
         title={'Invite to Video Call?'}
-        actions={actions}
-        modal={false}
         open={this.state.open}
         onRequestClose={this.closeInviteModal}
       >
-        {!user.services || !user.services.google ?
-          <TextField
-            defaultValue={this.state.name || (!!user.profile && user.profile.name) || ''}
-            onChange={this.updateProfileNameState}
-            errorText={(!user.profile || !user.profile.name) && !this.state.name ? ' ' : null}
-            floatingLabelText="Your name"
-          /> : ''}
-        {`Contacts who are already using ${APP_NAME} will receive a notification. New users will be sent an email request.`}
+        <DialogContent>
+          {!user.services || !user.services.google ?
+            <TextField
+              defaultValue={this.state.name || (!!user.profile && user.profile.name) || ''}
+              onChange={this.updateProfileNameState}
+              error={(!user.profile || !user.profile.name) && !this.state.name}
+              label="Your name"
+            /> : undefined}
+          <Typography>
+            {`Contacts who are already using ${APP_NAME} will receive a notification. New users will be sent an email request.`}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="accent"
+            onClick={this.closeInviteModal}
+          >
+            {'Cancel'}
+          </Button>,
+          <Button
+            disabled={!this.state.name && (!user || !user.profile || !user.profile.name)}
+            color="primary"
+            onClick={this.invite}
+          >
+            {'Invite'}
+          </Button>,
+        </DialogActions>
       </Dialog>
       <AnswerDialogComponent
         invitation={!!invitations && invitations.length ?

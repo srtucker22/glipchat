@@ -32,7 +32,7 @@ const styles = {
   linkUrl: {
     css: {
       backgroundColor: 'white',
-      color: Colors.fullBlack,
+      color: 'black',
       margin: '10px auto',
       overflow: 'hidden',
       padding: '10px',

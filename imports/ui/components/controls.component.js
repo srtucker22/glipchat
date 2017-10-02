@@ -22,7 +22,7 @@ const styles = {
 
   controls: {
     css: {
-      backgroundColor: Colors.fullBlack,
+      backgroundColor: 'black',
       margin: '50px auto',
       opacity: 0,
       overflow: 'hidden',
@@ -31,16 +31,16 @@ const styles = {
     button: {
       css: {
         ':hover': {
-          backgroundColor: Colors.grey900,
+          backgroundColor: Colors.grey[900],
         },
       },
     },
 
     red: {
       css: {
-        backgroundColor: Colors.red800,
+        backgroundColor: Colors.red[800],
         ':hover': {
-          backgroundColor: Colors.red900,
+          backgroundColor: Colors.red[900],
         },
       },
     },
@@ -52,7 +52,7 @@ const styles = {
     buttonEnd: {
       css: {
         ':hover': {
-          backgroundColor: Colors.red800,
+          backgroundColor: Colors.red[800],
         },
       },
     },
@@ -91,7 +91,6 @@ export class ControlsComponent extends React.Component {
         onTouchTap={this.props.onTouchTap}
       >
         <Paper
-          zDepth={1}
           style={_.extend({},
             GlobalStyles.table,
             styles.controls.css,
@@ -107,8 +106,10 @@ export class ControlsComponent extends React.Component {
             <IconButton>
               <Icon
                 className="material-icons"
-                color={'white'}
-              >person_add</Icon>
+                color="contrast"
+              >
+                person_add
+              </Icon>
             </IconButton>
           </div>
           <div
@@ -123,8 +124,10 @@ export class ControlsComponent extends React.Component {
             <IconButton>
               <Icon
                 className="material-icons"
-                color={'white'}
-              >videocam_off</Icon>
+                color="contrast"
+              >
+                videocam_off
+              </Icon>
             </IconButton>
           </div>
           <div
@@ -139,13 +142,15 @@ export class ControlsComponent extends React.Component {
             <IconButton>
               <Icon
                 className="material-icons"
-                color={'white'}
-              >mic_off</Icon>
+                color="contrast"
+              >
+                mic_off
+              </Icon>
             </IconButton>
           </div>
           {/* <div key='settings' style={[GlobalStyles.cell, styles.controls.button.css]}>
             <IconButton>
-              <Icon className='material-icons' color={'white'}>settings</Icon>
+              <Icon className='material-icons' color="contrast>settings</Icon>
             </IconButton>
           </div> */}
           <div
@@ -161,8 +166,10 @@ export class ControlsComponent extends React.Component {
               <Icon
                 className="material-icons"
                 color={Radium.getState(this.state, 'end', ':hover') ?
-                  'white' : Colors.red800}
-              >call_end</Icon>
+                  'contrast' : 'error'}
+              >
+                call_end
+              </Icon>
             </IconButton>
           </div>
         </Paper>

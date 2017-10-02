@@ -66,7 +66,7 @@ const styles = {
 
   menu: {
     css: {
-      color: Colors.fullBlack,
+      color: 'black',
     },
 
     paper: {
@@ -360,6 +360,7 @@ export class HeaderComponent extends Component {
     } else {
       loginButton = (
         <Button
+          color="contrast"
           onTouchTap={this.loginWithGoogle}
         >
           {'Login with Google'}

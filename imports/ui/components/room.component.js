@@ -20,7 +20,7 @@ import VideoOverlayComponent from './video-overlay.component';
 
 const styles = {
   css: {
-    backgroundColor: Colors.grey800,
+    backgroundColor: Colors.grey[800],
     height: '100%',
   },
 
@@ -204,7 +204,7 @@ export class RoomComponent extends React.Component {
       return (
         <div style={[styles.css]}>
           <ErrorComponent
-            error={localStream.error}
+            error={!!localStream.error}
             {...other}
           />
         </div>

@@ -84,7 +84,7 @@ export class IntroComponent extends React.PureComponent {
 
 IntroComponent.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  user: PropTypes.shape({ loggingIn: PropTypes.bool }).isRequired,
+  user: PropTypes.shape({ loggingIn: PropTypes.bool }),
 };
 
 const mapStateToProps = ({ users: { user } }) => ({

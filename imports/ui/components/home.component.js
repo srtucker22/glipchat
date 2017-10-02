@@ -55,12 +55,13 @@ export class HomeComponent extends React.Component {
   }
 
   render() {
+    const loading = this.state.loading ?
+      <LoadingDialogComponent open title="Starting video call" /> : undefined;
+
     return (
       <div style={[styles.css]}>
         <GithubComponent link={GITHUB_URL} />
-        {this.state.loading ?
-          <LoadingDialogComponent open title="Starting video call" /> : ''
-        }
+        {loading}
         <div style={[GlobalStyles.stickyFooterPage]}>
           <HeaderComponent showMenuIconButton={false} />
           <div>

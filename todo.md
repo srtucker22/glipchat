@@ -1,4 +1,11 @@
 **high**
+- IN PROGRESS: fix all components with new material-ui
+  - room components
+  - test all mobile components when calling
+  - BUG: need way to exit invite if no selection made
+  - BUG: invite state is buggy when cancelling/exiting early
+  - transitions for controls
+- ENHANCEMENT: replace virtualized list with something decent
 - BUG: honor aspect ratio for mobile on desktop and vice versa
 - BUG: first time push service worker fails
 - BUG: rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS

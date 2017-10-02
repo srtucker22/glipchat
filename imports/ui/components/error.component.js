@@ -1,6 +1,5 @@
 import { browserHistory } from 'react-router';
 import Browser from 'bowser';
-import Colors from 'material-ui/colors';
 import Icon from 'material-ui/Icon';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
@@ -75,7 +74,7 @@ export const PermissionDeniedComponent = ({ action }) => (
             Click the <Icon
               className="material-icons"
               style={styles.permissionDenied.icon.css}
-              color={Colors.red500}
+              color="error"
             >
               videocam_off
             </Icon> {'icon in the URL bar above to give access to your computers camera and microphone.'}
@@ -85,7 +84,8 @@ export const PermissionDeniedComponent = ({ action }) => (
             GlobalStyles.cell,
             styles.permissionDenied.cell.css,
             styles.permissionDenied.arrow.css,
-          ]} src="/images/arrow-right.png"
+          ]}
+          src="/images/arrow-right.png"
         />
       </div>
       <div className="col-xs-12 text-center">
@@ -134,7 +134,8 @@ export const GeneralErrorComponent = ({ action }) => (
   <div className="row" style={[styles.general.css]}>
     <div className="col-xs-12 text-center">
       <img
-        src="/images/atomic.png" style={[styles.general.icon.css]}
+        src="/images/atomic.png"
+style={[styles.general.icon.css]}
       />
       <p>{'Something went wrong. Please try refreshing the page.'}</p>
       <p>{'If this does not fix the problem please close the tab or window and try again.'}</p>
