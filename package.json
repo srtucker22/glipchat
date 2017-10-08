@@ -94,7 +94,8 @@
       "no-bitwise": 0,
       "jsx-a11y/img-has-alt": [
         0
-      ]
+      ],
+      "consistent-return": 0
     }
   },
   "devDependencies": {
