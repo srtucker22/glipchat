@@ -6,7 +6,6 @@ const styles = {
   css: {
     maxHeight: '100%',
     maxWidth: '100%',
-    objectFit: 'cover',
     transition: 'opacity 1s ease-in-out',
   },
 

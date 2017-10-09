@@ -1,20 +1,14 @@
 **high**
-- IN PROGRESS: fix all components with new material-ui
-  - BUG: invite state is buggy when cancelling/exiting early
-  - transitions for controls
+- ENHANCEMENT: transitions for controls
 - ENHANCEMENT: replace virtualized list with something decent
-- BUG: honor aspect ratio for mobile on desktop and vice versa
-- BUG: first time push service worker fails
 - BUG: rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
-- BUG: sometimes first notification isn't received, probably due to new subscriptionid
-  - missing a notification leads to being 1 behind in the chain
-  - occasional
-- BUG: sending notification via email gets stuck
+- FEATURE: clean stale notifications
+- BUG: sending notification via email gets stuck ~> need to test
 - BUG: closing tag on android is broken
 - BUG: tag --> dupes when typinge email and then press tab you get email plus user
 - BUG: tag --> need to clear text when you add a tag
+- BUG: joining room from same user on diff devices breaks stuff
 - ENHANCEMENT: Streamline build/publish process for Electron
-- ENHANCEMENT: handle all error messages
 - ENHANCEMENT: should clear old subscriptionids for the same device
 - ENHANCEMENT: single notification for all subscriptionids
 - ENHANCEMENT: need a place to change username after setting on desktop
@@ -24,8 +18,10 @@
 - TEST: understand old throttled requester code and try enhancing
 - TEST: electron auto-updater test
 - TEST: edge
+- BUG: invite state is buggy when cancelling/exiting early
 
 **med**
+- ENHANCEMENT: toggle objectFit: cover depending on aspect ratio of video ~ tricky?
 - ENHANCEMENT: Add TURN server support to make it more useful for real-world deployment
 - ENHANCEMENT: change joining connecting etc to constants
 - ENHANCEMENT: electron icon

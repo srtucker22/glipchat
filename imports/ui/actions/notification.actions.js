@@ -38,23 +38,39 @@ export const markNotificationRead = id => (dispatch) => {
 };
 
 export const subscribeToNotifications = user => (dispatch) => {
-  console.log('subscribeToNotifications');
+  console.log(constants.NOTIFICATIONS_SUBSCRIPTION_START);
+  dispatch({
+    type: constants.NOTIFICATIONS_SUBSCRIPTION_START,
+  });
   subscribe(user).then((subscriptionId) => {
+    dispatch({
+      type: constants.NOTIFICATIONS_SUBSCRIPTION_SUCCESS,
+      subscriptionId,
+    });
+    console.log(constants.NOTIFICATIONS_SUBSCRIPTION_SUCCESS);
     Meteor.users.update({ _id: Meteor.userId() }, {
       $addToSet: {
         'services.gcm.subscriptionIds': subscriptionId,
       },
-    }, (err) => {
-      if (err) {
+    }, (error) => {
+      if (error) {
         // eslint-disable-next-line no-console
-        console.error(err);
+        console.error(error);
+        dispatch({
+          type: constants.NOTIFICATIONS_SUBSCRIPTION_ERROR,
+          error,
+        });
       } else {
         console.log('updated user with subscriptionId', subscriptionId);
       }
     });
-  }, (err) => {
+  }, (error) => {
+    dispatch({
+      type: constants.NOTIFICATIONS_SUBSCRIPTION_ERROR,
+      error,
+    });
     // eslint-disable-next-line no-console
-    console.error(err);
+    console.error(error);
   });  // build service worker and subscribe to fcm (gcm) notifications
 };
 

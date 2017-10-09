@@ -30,21 +30,27 @@ const styles = {
       bottom: 0,
       left: 0,
       padding: '0 5px',
+      margin: '10px 0',
       position: 'absolute',
       transition: 'all 1s ease-in-out',
       width: '100%',
+      height: '15vw',
+      overflowX: 'auto',
     },
 
     video: {
       css: {
         float: 'right',
         display: 'inline-block',
-        maxHeight: '20%',
-        maxWidth: '20%',
+        height: '100%',
+        width: '20vw',
         margin: '5px',
         position: 'relative',
         bottom: '5px',
         zIndex: 2,
+        overflow: 'hidden',
+        textAlign: 'center',
+        backgroundColor: 'black',
       },
     },
   },
@@ -204,7 +210,7 @@ export class Room extends React.Component {
       return (
         <div style={[styles.css]}>
           <ErrorComponent
-            error={!!localStream.error}
+            error={localStream.error}
             {...other}
           />
         </div>

@@ -22,16 +22,13 @@ function endpointWorkaround(pushSubscription) {
 };
 
 function messageListener(event) {
-  console.log(event.data);
+  console.log('messageListener', event.data);
   switch(event.data.type) {
     case 'SET_USER':
       try {
         var user = event.data.user;
         self.token = user.services.resume.loginTokens.pop().hashedToken;
         event.ports[0].postMessage(self.token);
-
-        // wait for token before subscribing to push
-        self.addEventListener('push', pushListener);
       } catch (e) {
         console.log(e);
         event.ports[0].postMessage({error: e});
@@ -45,6 +42,11 @@ function messageListener(event) {
 
 function pushListener(event) {
   console.log('Received a push message', event);
+  console.log('token', self.token);
+  if (!self.token) {
+    return;
+  }
+
   event.waitUntil(
     self.registration.pushManager.getSubscription()
       .then(function(subscription) {
@@ -100,6 +102,8 @@ function notificationClickListener(event) {
       var client = clientList[i];
       console.log('client', client);
       if ('focus' in client) {
+        // TODO: just focus client
+        // sendMessage that will force router to change instead of page reload
         return client.navigate(event.notification.data)
           .then(function(client) {
             return client.focus();
@@ -113,3 +117,14 @@ function notificationClickListener(event) {
 
 self.addEventListener('message', messageListener);
 self.addEventListener('notificationclick', notificationClickListener);
+self.addEventListener('push', pushListener);
+
+self.addEventListener('install', function(event) {
+  console.log('Service Worker installing.');
+  event.waitUntil(self.skipWaiting()); // Activate worker immediately
+});
+
+self.addEventListener('activate', function(event) {
+  console.log('Service Worker activating.');  
+  event.waitUntil(self.clients.claim()); // Become available to all pages
+});
