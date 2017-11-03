@@ -6,12 +6,10 @@ import AppBar from 'material-ui/AppBar';
 import Avatar from 'material-ui/Avatar';
 import Button from 'material-ui/Button';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
-import Colors from 'material-ui/colors';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import Menu, { MenuItem } from 'material-ui/Menu';
 import moment from 'moment';
 import Popover from 'material-ui/Popover/Popover';
 import PropTypes from 'prop-types';
@@ -370,7 +368,7 @@ export class Header extends Component {
 
     let drawer;
 
-    if (!!user && mobile) {
+    if (mobile) {
       drawer = (<Drawer
         open={this.state.open}
         onRequestClose={this.handleClose}

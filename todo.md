@@ -3,6 +3,7 @@
 - ENHANCEMENT: replace virtualized list with something decent
 - BUG: rtc.actions.js:306 DOMException: Failed to set remote answer sdp: Called in wrong state: STATE_INPROGRESS
 - FEATURE: clean stale notifications
+- BUG: occasionally one behind in notifications. just send latest and mark all sent
 - BUG: sending notification via email gets stuck ~> need to test
 - BUG: closing tag on android is broken
 - BUG: tag --> dupes when typinge email and then press tab you get email plus user
